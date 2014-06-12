@@ -1,0 +1,59 @@
+<p class="vif-pagetitle">Suche nach Beitr&auml;gen</p>
+<p>Suchbegriffe k&ouml;nnen kombiniert und mit einer Wildcard (<code>*</code>) 
+erg&auml;nzt werden:</p>
+<table border="0" cellspacing="0" cellpadding="0">
+  <colgroup><col width="130" /><col width="*" /></colgroup>
+  <tr> 
+    <td><b class="vif-caption">Suchbegriff</b></td>
+    <td><b class="vif-caption">Erkl&auml;rung</b></td>
+  </tr>
+  <tr> 
+    <td> <code>java</code> </td>
+    <td>Findet alle Eintr&auml;ge, welche den Begriff <code>java</code> enthalten.</td>
+  </tr>
+  <tr> 
+    <td><code>java&nbsp;junit</code><br />
+      <code>java&nbsp;OR&nbsp;junit</code></td>
+    <td valign="top">Findet alle Eintr&auml;ge, welche den Begriff <code>java</code> oder <code>junit</code> 
+      oder beide enthalten.</td>
+  </tr>
+  <tr> 
+    <td><code>java&nbsp;AND&nbsp;junit</code></td>
+    <td>Findet alle Eintr&auml;ge, welche den Begriff <code>java</code> und <code>junit</code> 
+      enthalten.</td>
+  </tr>
+  <tr> 
+    <td><code>java*</code></td>
+    <td>Findet alle Eintr&auml;ge, welche mit dem Begriff <code>java</code> beginnen.</td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>  
+<p>Zus&auml;tztlich gibt es f&uuml;r Beitr&auml;ge die M&ouml;glichkeit, nach den Feldern <code>author</code>
+(Autor/in) und <code>id</code> (Frage-Nr.) zu suchen:</p>
+<table border="0" cellspacing="0" cellpadding="0">
+  <colgroup><col width="130" /><col width="*" /></colgroup>
+  <tr> 
+    <td><b class="vif-caption">Suchbegriff</b></td>
+    <td width="5px">&nbsp;</td>
+    <td><b class="vif-caption">Erkl&auml;rung</b></td>
+  </tr>
+  <tr> 
+    <td><code>author:Knuth</code></td>
+    <td width="5px">&nbsp;</td>
+    <td>Sucht alle Eintr&auml;ge des Autors/der Autorin mit dem Namen <code>Knuth</code>.</td>
+  </tr>
+  <tr> 
+    <td valign="top"><code>id:2\:1.5*</code></td>
+    <td width="5px">&nbsp;</td>
+    <td>Sucht alle Beitr&auml;ge einer Gruppe ab einem bestimmten Knoten, in 
+        diesem Fall in der Gruppe <code>2</code> alle Folgefragen der Frage <code>1.5</code>. 
+        Achtung: Der Doppelpunkt in der Frage-Nr. muss mit &quot;<code>\</code>&quot; 
+        gesch&uuml;tzt (<em>escaped</em>) werden.
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<p><b class="vif-caption">Umlaute:</b> Umlaute werden ignoriert, d.h. die Suchbegriffe <code>M&uuml;ller</code>
+wie auch <code>Muller</code> finden gleichermassen die Eintr&auml;ge, welche <em>M&uuml;ller</em>
+und/oder <em>Muller</em> enthalten.</p>

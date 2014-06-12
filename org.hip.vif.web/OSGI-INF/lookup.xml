@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="true" name="lookupManager">
+    <implementation class="org.hip.vif.web.internal.controller.LookupController"/>
+    <reference bind="addLookup" cardinality="0..n" interface="org.hip.vif.web.interfaces.ILookupWindow" name="IContentLookup" policy="dynamic" unbind="removeLookup"/>
+</scr:component>

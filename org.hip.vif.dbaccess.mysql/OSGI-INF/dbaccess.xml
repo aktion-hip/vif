@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.dbaccess.mysql" activate="start">
+   <implementation class="org.hip.vif.dbaccess.mysql.MySQLJDBCDataSourceService"/>
+   <service>
+      <provide interface="org.osgi.service.jdbc.DataSourceFactory"/>
+   </service>
+   <property name="osgi.jdbc.driver.class" type="String" value="com.mysql.jdbc.Driver"/>
+   <property name="osgi.jdbc.driver.name" type="String" value="MySQL Connector/J"/>
+   <property name="osgi.jdbc.driver.version" type="String" value="5.1.18"/>
+</scr:component>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CodeLists codeID="GroupStates">
+	<CodeList language="de">
+		<CodeListItem elementID="1" label="eröffnet"/>
+		<CodeListItem elementID="2" label="offen"/>
+		<CodeListItem elementID="3" label="aktiv"/>
+		<CodeListItem elementID="4" label="suspendiert"/>
+		<CodeListItem elementID="5" label="erledigt"/>
+		<CodeListItem elementID="6" label="geschlossen"/>
+	</CodeList>
+	<CodeList language="en">
+		<CodeListItem elementID="1" label="created"/>
+		<CodeListItem elementID="2" label="open"/>
+		<CodeListItem elementID="3" label="active"/>
+		<CodeListItem elementID="4" label="suspended"/>
+		<CodeListItem elementID="5" label="settled"/>
+		<CodeListItem elementID="6" label="closed"/>
+	</CodeList>
+</CodeLists>

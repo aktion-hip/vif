@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.core.upgrade.service.registry">
+   <implementation class="org.hip.vif.core.internal.service.UpgradeService"/>
+   <reference bind="registerUpgrader" cardinality="1..1" interface="org.hip.vif.core.interfaces.IVIFUpgradeService" name="IVIFUpgradeService" policy="dynamic"/>
+</scr:component>

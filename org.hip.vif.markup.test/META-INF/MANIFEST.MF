@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: MarkupTest
+Bundle-SymbolicName: org.hip.vif.markup.test
+Bundle-Version: 1.0.0
+Fragment-Host: org.hip.vif.markup;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

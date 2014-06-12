@@ -1,0 +1,53 @@
+<p class="vif-pagetitle">Search for contributions</p>
+<p>You can combine various query terms and add a wildcard (<code>*</code>):</p>
+<table border="0" cellspacing="0" cellpadding="0">
+  <colgroup><col width="130" /><col width="*" /></colgroup>
+  <tr> 
+    <td><b class="vif-caption">Query expression</b></td>
+    <td><b class="vif-caption">Explanation</b></td>
+  </tr>
+  <tr> 
+    <td> <code>java</code> </td>
+    <td>Matches contributions that contain the term <code>java</code>.</td>
+  </tr>
+  <tr> 
+    <td><code>java&nbsp;junit</code><br />
+      <code>java&nbsp;OR&nbsp;junit</code></td>
+    <td valign="top">Matches contributions that contain the term <code>java</code> or <code>junit</code> 
+      or both.</td>
+  </tr>
+  <tr> 
+    <td><code>java&nbsp;AND&nbsp;junit</code></td>
+    <td>Matches contributions that contain both <code>java</code> and <code>junit</code>.</td>
+  </tr>
+  <tr> 
+    <td><code>java*</code></td>
+    <td>Matches contributions that contain terms that begin with <code>java</code>.</td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+<p>In addition you can search for the fields <code>author</code> and <code>id</code>
+(Question-No.):</p>
+  
+<table border="0" cellspacing="0" cellpadding="0">
+  <colgroup><col width="130" /><col width="*" /></colgroup>
+  <tr> 
+    <td><b class="vif-caption">Query expression</b></td>
+    <td width="5px">&nbsp;</td>
+    <td><b class="vif-caption">Explanation</b></td>
+  </tr>
+  <tr> 
+    <td><code>author:Knuth</code></td>
+    <td width="5px">&nbsp;</td>
+    <td>Matches contributions that contain the name <code>Knuth</code> in the author field.</td>
+  </tr>
+  <tr> 
+    <td valign="top"><code>id:2\:1.5*</code></td>
+    <td width="5px">&nbsp;</td>
+    <td>Matches all contributions of a discussion group beyond a specified node,
+    in this case in group <code>2</code> all follow up questions of question <code>1.5</code>.
+    Note: The colon in the question No. has to be escaped by &quot;<code>\</code>&quot;.
+    </td>
+  </tr>
+</table>

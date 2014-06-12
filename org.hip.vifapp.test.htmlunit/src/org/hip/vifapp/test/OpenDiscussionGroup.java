@@ -1,0 +1,85 @@
+package org.hip.vifapp.test;
+
+import java.util.List;
+
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
+
+/**
+ * @author Luthiger
+ * Created 17.02.2009
+ */
+public class OpenDiscussionGroup extends VifTestCase {
+	private final static String GROUP_TITLE = "Walkthrough test";
+	private final static String GROUP_ID_KEY = "groupID";
+	private final static String HREF = "org.hip.vif.admin.groupedit.showGroup&groupID=%s";
+	private final static String XPATH = "//form[@name='Form']/table/tbody/tr";
+	private final static String FIELD_LBL = "State";
+	
+	public void testOpenDiscussion() throws Exception {
+		HtmlPage lPage = doLogin();
+		String lGroupID = getGroupID(lPage);
+		openGroup(lGroupID);
+	}
+
+	private void openGroup(String inGroupID) throws Exception {
+		HtmlPage lGroup = getGroupEditPage(inGroupID);
+		assertEquals("discussion group in edit mode", "Edit the discussion group", getTitle(lGroup));		
+		assertEquals("state of group before", "created", getGroupState(lGroup));
+		
+		HtmlForm lForm = lGroup.getFormByName("Form");
+		HtmlInput lButton = lForm.getInputByName("cmdOpen");
+		assertEquals("value of button", "Open", lButton.asText());
+		lButton.click();
+		
+		lGroup = getGroupEditPage(inGroupID);
+		assertEquals("state of group after", "open", getGroupState(lGroup));
+	}	
+
+	@SuppressWarnings("unchecked")
+	private String getGroupState(HtmlPage inGroup) {
+		List<HtmlTableRow> lRows = (List<HtmlTableRow>)inGroup.getByXPath(XPATH);
+		for (HtmlTableRow lRow : lRows) {
+			if (FIELD_LBL.equals(lRow.getCell(0).asText())) {
+				return lRow.getCell(1).asText();
+			}
+		}
+		return "";
+	}
+
+	private HtmlPage getGroupEditPage(String inGroupID) throws Exception {
+		HtmlPage lFrameSet = (HtmlPage)webClient.getPage(getRequestAdminBody(String.format(HREF, inGroupID)));
+		return (HtmlPage) lFrameSet.getFrameByName("body").getEnclosedPage();
+	}
+
+	private String getGroupID(HtmlPage inPage) {
+		List<HtmlTableRow> lRows = getTableRows(inPage, "odd", "even");
+		for (HtmlTableRow lRow : lRows) {
+			if (GROUP_TITLE.equals(lRow.getCell(1).asText())) {
+				return getGroupID(((HtmlAnchor) lRow.getCell(1).getFirstChild()).getHrefAttribute());
+			}
+		}
+		return "";
+	}
+	
+	private String getGroupID(String inHref) {
+		for (String lPart : inHref.split("&")) {
+			if (lPart.startsWith(GROUP_ID_KEY)) {
+				return lPart.split("=")[1].trim();
+			}
+		}
+		return "";
+	}
+
+	private HtmlPage doLogin() throws Exception {
+		final HtmlPage lFrameSet = (HtmlPage)webClient.getPage(getRequestAdmin());
+		final HtmlPage lBody = (HtmlPage) lFrameSet.getFrameByName("body").getEnclosedPage();
+		HtmlPage outSuccess = doLogin(lBody, "groupAdmin1", "groupAdmin1");
+		assertEquals("title text after group admin logged in", "Management of discussion groups", getTitle(outSuccess));
+		return outSuccess;		
+	}
+
+}

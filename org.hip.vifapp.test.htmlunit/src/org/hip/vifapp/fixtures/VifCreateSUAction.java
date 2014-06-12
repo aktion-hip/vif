@@ -1,0 +1,83 @@
+/*
+	This package is part of the application VIF.
+	Copyright (C) 2009, Benno Luthiger
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+package org.hip.vifapp.fixtures;
+
+import java.util.List;
+
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
+import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTableDataCell;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+
+/**
+ *
+ * @author Luthiger
+ * Created 27.01.2009 
+ */
+public class VifCreateSUAction extends VifAdminFixture {
+	private final static String REQUEST_TYPE = "createSU";
+
+	private List<?> tableCells;
+	private int numberOfCells = 0;
+	private int counter = 0;
+	public VifCreateSUAction(String inPort) {
+		super(inPort);
+	}
+
+	@Override
+	protected String getRequestType() {
+		return REQUEST_TYPE;
+	}
+	
+	public String pageTitle() throws Exception {
+		return getPageTitle("title2");
+	}
+	
+	public String loginFormField() throws Exception {
+		if (tableCells == null) {
+			tableCells = getSuccess().getByXPath("//td[@class='data']");
+			numberOfCells = tableCells.size();
+		}
+		return ((HtmlTableDataCell)tableCells.get(counter++ % numberOfCells)).asText();
+	}
+
+	public boolean loginWithUserNameAndPassword(String inUserName, String inPassword) throws Exception {
+		final HtmlPage lPage = getSuccess();
+		final HtmlForm lForm = lPage.getFormByName("Form");
+		final HtmlTextInput lText = (HtmlTextInput) lForm.getInputByName("userId");
+		final HtmlPasswordInput lPassword = (HtmlPasswordInput) lForm.getInputByName("passwd");
+		final HtmlPasswordInput lConfirm = (HtmlPasswordInput) lForm.getInputByName("passwd_confirm");
+		final HtmlSubmitInput lSend = (HtmlSubmitInput) lForm.getInputByName("button");
+		lText.setValueAttribute(inUserName);
+		lPassword.setValueAttribute(inPassword);
+		lConfirm.setValueAttribute(inPassword);
+		setSuccess((HtmlPage) lSend.click());
+		return true;
+	}
+	
+	public String successMessage() throws Exception {
+		if (getSuccess() == null) return "";
+		List<?> lParagraphs = getSuccess().getByXPath("//p");
+		return ((HtmlParagraph)lParagraphs.get(0)).asText();
+	}
+
+}

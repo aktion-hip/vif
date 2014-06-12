@@ -1,0 +1,98 @@
+package org.hip.vifapp.test;
+
+import java.util.List;
+
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlTableDataCell;
+import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
+
+public class CheckContributionContent extends VifTestCase {
+	private final static String CHANGE_TO = "org.hip.vif.forum.groups.showGroup&groupID=%s";
+	private final static String CHANGE_TO_QUESTION = "org.hip.vif.forum.groups.showQuestion&questionID=%s&groupID=%s";
+	private final static String GROUP_ID_KEY = "groupID";
+	private static final String QUESTION_ID_KEY = "questionID";
+
+	public void testCheckContent() throws Exception {
+		HtmlPage lGroups = doLogin();
+		HtmlPage lContribution = changeToContribution(lGroups);
+		evaluateContribution(lContribution);
+		doLogoutForum(webClient);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void evaluateContribution(HtmlPage inContribution) {
+		int i = 0;
+		int lCompletionNumber = 0;
+		List<HtmlTableDataCell> lCells = (List<HtmlTableDataCell>) inContribution.getByXPath("//td[@colspan='3']");
+		for (HtmlTableDataCell lCell : lCells) {
+			if (lCell.asText().startsWith("Completion")) {
+				lCompletionNumber = i;
+			}
+			i++;
+		}
+		String lState = "";
+		HtmlTableDataCell lStateCell = lCells.get(lCompletionNumber);
+		for (HtmlElement lChild : lStateCell.getChildElements()) {
+			if ("data".equals(lChild.getAttribute("class"))) {
+				lState = lChild.asText();
+			}
+		}
+		assertEquals("state of completion", "open", lState.split(" ")[1]);
+		assertEquals("content of completion", "You need a direction too", lCells.get(lCompletionNumber+1).asText());
+	}
+
+
+	private HtmlPage changeToContribution(HtmlPage inGroups) throws Exception {
+		String lGroupId = getGroupID(inGroups);
+		HtmlPage lGroup = changeTo(String.format(CHANGE_TO, lGroupId));
+		String lQuestionId = getQuestionId(lGroup, "Where shall we go?");
+		return changeTo(String.format(CHANGE_TO_QUESTION, lQuestionId, lGroupId));
+	}
+
+	private String getQuestionId(HtmlPage inPage, String inQuestion) {
+		List<HtmlTableRow> lRows = getTableRows(inPage, "odd", "even");
+		for (HtmlTableRow lRow : lRows) {
+			if (inQuestion.equals(lRow.getCell(1).asText())) {
+				return getID(((HtmlAnchor) lRow.getCell(1).getFirstChild()).getHrefAttribute(), QUESTION_ID_KEY);
+			}
+		}
+		return "";
+	}
+
+
+	private HtmlPage changeTo(String inURL) throws Exception {
+		HtmlPage lFrameSet = (HtmlPage)webClient.getPage(getRequestForumBody(inURL));
+		return (HtmlPage) lFrameSet.getFrameByName("body").getEnclosedPage();
+	}
+
+
+	private HtmlPage doLogin() throws Exception {
+		final HtmlPage lFrameSet = (HtmlPage)webClient.getPage(getRequestForum());
+		final HtmlPage lBody = (HtmlPage) lFrameSet.getFrameByName("body").getEnclosedPage();
+		HtmlPage outSuccess = doLogin(lBody, "testactor", "testactor");
+		assertEquals("title text after group admin logged in", "List of discussion groups", getTitle(outSuccess));
+		return outSuccess;		
+	}
+	
+	private String getGroupID(HtmlPage inPage) {
+		List<HtmlTableRow> lRows = getTableRows(inPage, "data odd", "data even");
+		for (HtmlTableRow lRow : lRows) {
+			if ("Walkthrough test".equals(lRow.getCell(0).asText())) {
+				return getID(((HtmlAnchor) lRow.getCell(0).getFirstChild()).getHrefAttribute(), GROUP_ID_KEY);
+			}
+		}
+		return "";
+	}
+	
+	private String getID(String inHref, String inKey) {
+		for (String lPart : inHref.split("&")) {
+			if (lPart.startsWith(inKey)) {
+				return lPart.split("=")[1].trim();
+			}
+		}
+		return "";
+	}
+
+}

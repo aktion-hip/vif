@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test Fragment for org.hip.vif.core bundle
+Bundle-SymbolicName: org.hip.vif.core.test
+Bundle-Version: 1.1.0
+Bundle-Vendor: RelationWare
+Fragment-Host: org.hip.vif.core
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: com.mysql.jdbc;version="5.1.18",
+ com.mysql.jdbc.jdbc2.optional;version="5.1.18",
+ com.vaadin.terminal,
+ org.apache.derby.jdbc,
+ org.osgi.service.jdbc;version="1.0.0"
+Bundle-ClassPath: .,
+ lib/jtidy-r938.jar
+Export-Package: org.hip.vif.core,
+ org.hip.vif.core.util

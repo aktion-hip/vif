@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statements>
+    <statement obj_id="tblAppVersion">
+CREATE TABLE tblAppVersion (
+    VersionID   varchar(15) not null,
+    PRIMARY KEY (VersionID)
+)
+    </statement>    
+    <statement obj_id="tblBookmark">
+CREATE TABLE tblBookmark (
+    MemberID    BIGINT not null,
+    QuestionID  BIGINT not null,
+    sBookmarktext   varchar(99) not null,
+    PRIMARY KEY (MemberID, QuestionID)
+)
+    </statement>
+    <statement obj_id="tblCompletion">
+CREATE TABLE tblCompletion (
+    CompletionID    BIGINT generated always as identity,
+    sCompletion CLOB not null,
+    nState      SMALLINT,
+    QuestionID  BIGINT not null,
+    dtMutation  timestamp not null default CURRENT_TIMESTAMP,
+    PRIMARY KEY (CompletionID)
+)       
+    </statement>
+    <statement obj_id="idxCompletion_01">
+CREATE INDEX idxCompletion_01 ON tblCompletion(QuestionID)      
+    </statement>
+    <statement obj_id="idxCompletion_02">
+CREATE INDEX idxCompletion_02 ON tblCompletion(nState)
+    </statement>
+    <statement obj_id="tblCompletionAuthorReviewer">
+CREATE TABLE tblCompletionAuthorReviewer (
+    CompletionID    BIGINT not null,
+    MemberID    BIGINT not null,
+    nType       SMALLINT not null default 0,
+    dtCreation  timestamp not null default CURRENT_TIMESTAMP,
+    PRIMARY KEY (CompletionID, MemberID)
+)       
+    </statement>
+    <statement obj_id="idxCompletionAuthorReviewer_01">
+CREATE INDEX idxCompletionAuthorReviewer_01 ON tblCompletionAuthorReviewer(MemberID, CompletionID)
+    </statement>
+    <statement obj_id="idxCompletionAuthorReviewer_02">
+CREATE INDEX idxCompletionAuthorReviewer_02 ON tblCompletionAuthorReviewer(nType, MemberID, CompletionID)
+    </statement>
+    <statement obj_id="tblCompletionHistory">
+CREATE TABLE tblCompletionHistory (
+    CompletionID    BIGINT not null,
+    dtFrom      timestamp not null,
+    dtTo        timestamp not null,
+    sCompletion CLOB not null,
+    nState      SMALLINT,
+    QuestionID  BIGINT not null,
+    MemberID    BIGINT not null,
+    PRIMARY KEY (CompletionID, dtFrom, dtTo)
+)       
+    </statement>
+    <statement obj_id="tblDownloadText">
+CREATE TABLE tblDownloadText (
+    DownloadID BIGINT generated always as identity, 
+    sLabel VARCHAR(100),
+    sUUID VARCHAR(50) NOT NULL,
+    sMime VARCHAR(150) NOT NULL,
+    sDocType VARCHAR(10) NOT NULL,
+    TextID BIGINT not null,
+    MemberID BIGINT not null,
+    PRIMARY KEY (DownloadID)
+)       
+    </statement>
+    <statement obj_id="idxDownloadText_01">
+CREATE INDEX idxDownloadText_01 ON tblDownloadText(TextID ASC)
+    </statement>
+    <statement obj_id="idxDownloadText_02">
+CREATE INDEX idxDownloadText_02 ON tblDownloadText(MemberID ASC)        
+    </statement>
+    <statement obj_id="tblGroup">
+CREATE TABLE tblGroup (
+    GroupID         BIGINT generated always as identity, 
+    sName           varchar(40) not null,
+    sDescription    varchar(100) not null,
+    nReviewer       INTEGER,
+    nGuestDepth     INTEGER,
+    nMinGroupSize   INTEGER,
+    bPrivate        SMALLINT not null default 0,
+    nState          INTEGER,
+    PRIMARY KEY (GroupID)
+)       
+    </statement>
+    <statement obj_id="idxGroup_01">
+CREATE INDEX idxGroup_01 ON tblGroup(sName)     
+    </statement>
+    <statement obj_id="tblGroupAdmin">
+CREATE TABLE tblGroupAdmin (
+    GroupID     BIGINT not null,
+    MemberID    BIGINT not null,
+    PRIMARY KEY (GroupID, MemberID)
+)       
+    </statement>
+    <statement obj_id="idxGroupAdmin_01">
+CREATE INDEX idxGroupAdmin_01 ON tblGroupAdmin(MemberID, GroupID)
+    </statement>
+    <statement obj_id="tblLinkMemberRole">
+CREATE TABLE tblLinkMemberRole (
+    MemberID    BIGINT not null,
+    RoleID      BIGINT not null, 
+    PRIMARY KEY (MemberID, RoleID)
+)       
+    </statement>
+    <statement obj_id="tblLinkPermissionRole">
+CREATE TABLE tblLinkPermissionRole (
+    PermissionID    BIGINT not null,
+    RoleID          BIGINT not null, 
+    PRIMARY KEY (PermissionID, RoleID)
+)       
+    </statement>
+    <statement obj_id="tblMember">
+CREATE TABLE tblMember (
+    MemberID    BIGINT generated always as identity, 
+    sUserID     varchar(20) not null,
+    sName       varchar(50) not null,
+    sFirstname  varchar(50),
+    sStreet     varchar(50),
+    sZIP        varchar(7),
+    sCity       varchar(50),
+    sTel        varchar(20),
+    sFax        varchar(20),
+    sMail       varchar(50),
+    bSex        SMALLINT not null default 0,
+    sLanguage   varchar(2),
+    sPassword   varchar(70),
+    sSettings   CLOB,
+    dtMutation  timestamp not null default CURRENT_TIMESTAMP,
+    PRIMARY KEY (MemberID)
+)       
+    </statement>
+    <statement obj_id="idxMember_01">
+CREATE INDEX idxMember_01 ON tblMember(sUserID)
+    </statement>
+    <statement obj_id="idxMember_02">
+CREATE INDEX idxMember_02 ON tblMember(sName, sFirstname)
+    </statement>
+    <statement obj_id="tblMemberHistory">
+CREATE TABLE tblMemberHistory (
+    MemberID    BIGINT not null, 
+    dtFrom      timestamp not null,
+    dtTo        timestamp not null,
+    sUserID     varchar(20) not null,
+    sName       varchar(50) not null,
+    sFirstname  varchar(50),
+    sStreet     varchar(50),
+    sZIP        varchar(7),
+    sCity       varchar(50),
+    sTel        varchar(20),
+    sFax        varchar(20),
+    sMail       varchar(50),
+    bSex        SMALLINT not null default 0,
+    sLanguage   varchar(2),
+    sSettings   CLOB,
+    sRemarks    varchar(99),
+    EditorID    BIGINT not null,
+    PRIMARY KEY (MemberID, dtFrom, dtTo)
+)       
+    </statement>
+    <statement obj_id="tblParticipant">
+CREATE TABLE tblParticipant (
+    MemberID        BIGINT not null,
+    GroupID         BIGINT not null,
+    dtSuspendFrom   timestamp,
+    dtSuspendTo     timestamp,
+    PRIMARY KEY (MemberID, GroupID)
+)       
+    </statement>
+    <statement obj_id="idxParticipant_01">
+CREATE INDEX idxParticipant_01 ON tblParticipant(GroupID, MemberID)
+    </statement>
+    <statement obj_id="tblPermission">
+CREATE TABLE tblPermission (
+    PermissionID        BIGINT generated always as identity,
+    sPermissionLabel    varchar(30) not null, 
+    sPermissionDescription  varchar(100) not null,
+    PRIMARY KEY (PermissionID)
+)       
+    </statement>
+    <statement obj_id="idxPermission_01">
+CREATE INDEX idxPermission_01 ON tblPermission(sPermissionLabel)
+    </statement>
+    <statement obj_id="tblQuestion">
+CREATE TABLE tblQuestion (
+    QuestionID  BIGINT generated always as identity, 
+    sQuestionID VARCHAR(1024) not null,
+    sQuestion   CLOB not null,
+    sRemark     CLOB,
+    nState      INTEGER,
+    GroupID     BIGINT not null, 
+    bRootQuestion   SMALLINT not null default 0,
+    dtMutation  timestamp not null default CURRENT_TIMESTAMP,
+    PRIMARY KEY (QuestionID)
+)       
+    </statement>
+    <statement obj_id="idxQuestion_01">
+CREATE INDEX idxQuestion_01 ON tblQuestion(sQuestionID)
+    </statement>
+    <statement obj_id="idxQuestion_03">
+CREATE INDEX idxQuestion_03 ON tblQuestion(GroupID)
+    </statement>
+    <statement obj_id="idxQuestion_04">
+CREATE INDEX idxQuestion_04 ON tblQuestion(GroupID, bRootQuestion)
+    </statement>
+    <statement obj_id="idxQuestion_05">
+CREATE INDEX idxQuestion_05 ON tblQuestion(nState)
+    </statement>
+    <statement obj_id="tblQuestionAuthorReviewer">
+CREATE TABLE tblQuestionAuthorReviewer (
+    QuestionID  BIGINT not null, 
+    MemberID    BIGINT not null, 
+    nType       SMALLINT not null default 0,
+    dtCreation  timestamp not null default CURRENT_TIMESTAMP,
+    PRIMARY KEY (QuestionID, MemberID)
+)       
+    </statement>
+    <statement obj_id="idxQuestionAuthorReviewer_01">
+CREATE INDEX idxQuestionAuthorReviewer_01 ON tblQuestionAuthorReviewer(MemberID, QuestionID)
+    </statement>
+    <statement obj_id="idxQuestionAuthorReviewer_02">
+CREATE INDEX idxQuestionAuthorReviewer_02 ON tblQuestionAuthorReviewer(nType, MemberID, QuestionID)
+    </statement>
+    <statement obj_id="tblQuestionHierarchy">
+CREATE TABLE tblQuestionHierarchy (
+    ParentID    BIGINT not null, 
+    ChildID     BIGINT not null,
+    GroupID     BIGINT not null,
+    PRIMARY KEY (ParentID, ChildID)
+)       
+    </statement>
+    <statement obj_id="idxQuestionHierarchy_01">
+CREATE INDEX idxQuestionHierarchy_01 ON tblQuestionHierarchy(ParentID)
+    </statement>
+    <statement obj_id="idxQuestionHierarchy_02">
+CREATE INDEX idxQuestionHierarchy_02 ON tblQuestionHierarchy(ChildID)
+    </statement>
+    <statement obj_id="idxQuestionHierarchy_03">
+CREATE INDEX idxQuestionHierarchy_03 ON tblQuestionHierarchy(GroupID)
+    </statement>    
+    <statement obj_id="tblQuestionHistory">
+CREATE TABLE tblQuestionHistory (
+    QuestionID  BIGINT not null,
+    dtFrom      timestamp not null,
+    dtTo        timestamp not null,
+    sQuestionID VARCHAR(1024) not null,
+    sQuestion   CLOB not null,
+    sRemark     CLOB,
+    nState      INTEGER,
+    GroupID     BIGINT not null, 
+    bRootQuestion   SMALLINT not null default 0,
+    MemberID    BIGINT not null,
+    PRIMARY KEY (QuestionID, dtFrom, dtTo)
+)       
+    </statement>
+    <statement obj_id="tblRatingEvents">
+CREATE TABLE tblRatingEvents (
+    RatingEventsID  BIGINT generated always as identity,
+    bCompleted      SMALLINT not null default 0,
+    dtCreation      timestamp,
+    PRIMARY KEY (RatingEventsID)
+)       
+    </statement>
+    <statement obj_id="tblRatings">
+CREATE TABLE tblRatings (
+    RatingEventsID  BIGINT not null,
+    RaterID         BIGINT not null, 
+    RatedID         BIGINT not null, 
+    nIsAuthor       SMALLINT not null default 0,
+    nCorrectness    DECIMAL,
+    nEfficiency     DECIMAL,
+    nEtiquette      DECIMAL,
+    sRemark         CLOB,
+    PRIMARY KEY (RatingEventsID, RaterID, RatedID)
+)       
+    </statement>
+    <statement obj_id="idxRatings_01">
+CREATE INDEX idxRatings_01 ON tblRatings(RaterID, RatedID, RatingEventsID)
+    </statement>
+    <statement obj_id="idxRatings_02">
+CREATE INDEX idxRatings_02 ON tblRatings(RatedID, RaterID, RatingEventsID)
+    </statement>
+    <statement obj_id="tblRatingsCompletion">
+CREATE TABLE tblRatingsCompletion (
+    RatingEventsID    BIGINT not null,
+    CompletionID BIGINT not null,
+    PRIMARY KEY (RatingEventsID, CompletionID)
+)       
+    </statement>
+    <statement obj_id="tblRatingsQuestion">
+CREATE TABLE tblRatingsQuestion (
+    RatingEventsID    BIGINT not null,
+    QuestionID   BIGINT not null,
+    PRIMARY KEY (RatingEventsID, QuestionID)
+)       
+    </statement>
+    <statement obj_id="tblRatingsText">
+CREATE TABLE tblRatingsText (
+    RatingEventsID BIGINT not null,
+    TextID BIGINT not null,
+    nVersion INTEGER not null,
+    PRIMARY KEY (RatingEventsID, TextID, nVersion)
+)
+    </statement>    
+    <statement obj_id="tblRole">
+CREATE TABLE tblRole (
+    RoleID              BIGINT generated always as identity,
+    sXMLRoleID          varchar(10) not null, 
+    sRoleDescription    varchar(50) not null,
+    bGroupSpecific      SMALLINT not null default 0,
+    PRIMARY KEY (RoleID)
+)       
+    </statement>
+    <statement obj_id="idxRole_01">
+CREATE INDEX idxRole_01 ON tblRole(sXMLRoleID)
+    </statement>
+    <statement obj_id="tblSubscription">
+CREATE TABLE tblSubscription (
+    MemberID    BIGINT not null,
+    QuestionID  BIGINT not null, 
+    bLocal      SMALLINT default 0,
+    PRIMARY KEY (MemberID, QuestionID)
+)       
+    </statement>
+    <statement obj_id="tblTextAuthorReviewer">
+CREATE TABLE tblTextAuthorReviewer (
+    TextID      BIGINT not null, 
+    nVersion    INTEGER not null,
+    MemberID    BIGINT not null, 
+    nType       SMALLINT not null default 0,
+    dtCreation  timestamp not null default CURRENT_TIMESTAMP,
+    PRIMARY KEY (TextID, nVersion, MemberID)
+)       
+    </statement>
+    <statement obj_id="idxTextAuthorReviewer_01">
+CREATE INDEX idxTextAuthorReviewer_01 ON tblTextAuthorReviewer(MemberID, TextID, nVersion)
+    </statement>
+    <statement obj_id="idxTextAuthorReviewer_02">
+CREATE INDEX idxTextAuthorReviewer_02 ON tblTextAuthorReviewer(nType, MemberID, TextID, nVersion)
+    </statement>
+    <statement obj_id="tblTextVersionHistory">
+CREATE TABLE tblTextVersionHistory (
+    TextID       BIGINT GENERATED BY DEFAULT as identity,
+    nVersion     INTEGER,
+    dtFrom       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    dtTo         TIMESTAMP,
+    sTitle       VARCHAR(200) not null,
+    sAuthor      VARCHAR(100),
+    sCoAuthors   VARCHAR(150),
+    sSubtitle    VARCHAR(250),
+    sYear        VARCHAR(15),
+    sPublication VARCHAR(200),
+    sPages       VARCHAR(20),
+    nVolume      VARCHAR(15),
+    nNumber      VARCHAR(15),
+    sPublisher   VARCHAR(99),
+    sPlace       VARCHAR(99),
+    sReference   VARCHAR(20),
+    sRemark      CLOB,
+    nType        SMALLINT,
+    nState       SMALLINT,
+    MemberID     BIGINT not null,
+    PRIMARY KEY (TextID, nVersion, dtFrom, dtTo)
+)       
+    </statement>
+    <statement obj_id="tblTextQuestion">
+CREATE TABLE tblTextQuestion (
+    TextID      BIGINT not null,
+    QuestionID  BIGINT not null,
+    PRIMARY KEY (TextID, QuestionID)
+)
+    </statement>
+    <statement obj_id="idxTextQuestion">
+CREATE INDEX idxTextQuestion ON tblTextQuestion(QuestionID, TextID)
+    </statement>
+    <statement obj_id="tblTextVersion">
+CREATE TABLE tblTextVersion (
+    TextID       BIGINT GENERATED BY DEFAULT as identity,
+    nVersion     INTEGER default 0,
+    sTitle       VARCHAR(200) not null,
+    sAuthor      VARCHAR(100),
+    sCoAuthors   VARCHAR(150),
+    sSubtitle    VARCHAR(250),
+    sYear        VARCHAR(15),
+    sPublication VARCHAR(200),
+    sPages       VARCHAR(20),
+    nVolume      VARCHAR(15),
+    nNumber      VARCHAR(15),
+    sPublisher   VARCHAR(99),
+    sPlace       VARCHAR(99),
+    sReference   VARCHAR(20),
+    sRemark      CLOB,
+    nType        SMALLINT,
+    nState       SMALLINT,
+    dtFrom       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    dtTo         TIMESTAMP,
+    PRIMARY KEY (TextID, nVersion)
+)
+    </statement>
+    <statement obj_id="idxTextVersion_01">
+CREATE INDEX idxTextVersion_01 ON tblTextVersion(sTitle)
+    </statement>
+    <statement obj_id="idxTextVersion_02">
+CREATE INDEX idxTextVersion_02 ON tblTextVersion(sAuthor)
+    </statement>
+    <statement obj_id="idxTextVersion_03">
+CREATE INDEX idxTextVersion_03 ON tblTextVersion(sCoAuthors)
+    </statement>
+    <statement obj_id="idxTextVersion_04">
+CREATE INDEX idxTextVersion_04 ON tblTextVersion(TextID, nState)
+    </statement>
+    <statement obj_id="data_tblPermission">
+INSERT INTO tblPermission (sPermissionLabel, sPermissionDescription) VALUES 
+('searchMembers','Administration: Search members.'),
+('editGroups','Administration: Edit groups.'),
+('editPermissions','Administration: Edit permissions.'),
+('searchForumGroup','Forum: Search discussion group.'),
+('searchForumQuestion','Forum: Search for contributions.'),
+('registerToGroup','Forum: Register to group.'),
+('suspendToGroup','Forum: Suspend participation.'),
+('editPersonal','Forum: Edit personal data.'),
+('adminGroups','Administration: Administration of discussion group.'),
+('addAdminToGroup','Administration: Add administrator to group.'),
+('removeAdminFromGroup','Administration: Remove administrator from group.'),
+('createGroup','Administration: Create new discussion group.'),
+('deleteGroup','Administration: Delete discussion group.'),
+('editQuestion','Forum: Edit a question entry.'),
+('editQuestionAdmin','Administration: Edit a question entry.'),
+('newCompletion','Forum: Add a new completion.'),
+('newCompletionAdmin','Administration: Add a new completion.'),
+('newQuestion','Forum: Add a new question.'),
+('newQuestionAdmin','Administration: Add a new question.'),
+('requestReview','Forum: Display contributions to request them reviewed.'),
+('publishAdmin','Administration: Display contributions to edit their state.'),
+('processReview','Forum: Show the participant''s requests to edit their state.'),
+('manageBookmarks','Forum: Manage the list of personal bookmarks.'),
+('manageSubscriptions','Forum: Manage the list of personal subscriptions.'),
+('addParticipantToGroup','Administration: Add participants to group. Only applicable for private groups.'),
+('listParticipants','Administration: List the group''s participants.'),
+('removeParticipantFromGroup','Administration: Remove participants from group.'),
+('requestStateChange','Forum: request the group admin to set a question answered.'),
+('showAdminTasks','Administration: Display the general administration tasks.'),
+('refreshIndex','Administration: Refresh the index for fulltext search.'),
+('selectSkin','Administration: Select the skin.'),
+('sendMail','Administration: Send mail to members or participants.'),
+('printGroup','Administration: Print content of discussion group.'),
+('lookupMembers','Forum: Lookup members.'),
+('editBibliography','Forum: Edit bibliography entry.'),
+('editBibliographyAdmin','Administration: Create bibliography entry.'),
+('applicationConfiguration','Administration: Application configuration.'),
+('applicationUpgrade','Administration: Application upgrade.')
+    </statement>
+    <statement obj_id="data_tblRole">
+INSERT INTO tblRole (sXMLRoleID, sRoleDescription, bGroupSpecific) VALUES 
+('1', 'SU', 0),
+('2', 'Administrator', 0),
+('3', 'Group-Administrator', 1),
+('4', 'Participant', 1),
+('5', 'Member', 0),
+('6', 'Guest', 0),
+('7', 'excluded Participant', 0)    
+    </statement>
+    <statement obj_id="data_tblLinkPermissionRole">
+INSERT INTO tblLinkPermissionRole 
+VALUES (1,1),
+       (1,2),
+       (2,1),
+       (2,2),
+       (2,3),
+       (3,1),
+       (3,2),
+       (4,2),
+       (4,3),
+       (4,4),
+       (4,5),
+       (4,7),
+       (5,2),
+       (5,3),
+       (5,4),
+       (5,5),
+       (5,7),
+       (6,2),
+       (6,3),
+       (6,4),
+       (6,5),
+       (7,2),
+       (7,3),
+       (7,4),
+       (8,2),
+       (8,3),
+       (8,4),
+       (8,5),
+       (8,7),
+       (9,3),
+       (10,2),
+       (11,2),
+       (12,1),
+       (12,2),
+       (13,1),
+       (13,2),
+       (14,2),
+       (14,3),
+       (14,4),
+       (15,2),
+       (15,3),
+       (16,2),
+       (16,3),
+       (16,4),
+       (17,2),
+       (17,3),
+       (18,2),
+       (18,3),
+       (18,4),
+       (19,2),
+       (19,3),
+       (20,2),
+       (20,3),
+       (20,4),
+       (21,2),
+       (21,3),
+       (22,2),
+       (22,3),
+       (22,4),
+       (23,3),
+       (23,4),
+       (23,5),
+       (24,3),
+       (24,4),
+       (24,5),
+       (25,1),
+       (25,2),
+       (25,3),
+       (26,1),
+       (26,2),
+       (26,3),
+       (27,1),
+       (27,2),
+       (27,3),
+       (28,2),
+       (28,3),
+       (28,4),
+       (29,1),
+       (29,2),
+       (30,1),
+       (30,2),
+       (31,1),
+       (31,2),
+       (31,3),
+       (32,2),
+       (32,3),
+       (33,3),
+       (34,2),
+       (34,3),
+       (34,4),
+       (34,5),
+       (35,2),
+       (35,3),
+       (35,4),
+       (36,2),
+       (36,3),
+       (37,1),
+       (37,2),       
+       (38,1),
+       (38,2)       
+    </statement>
+    <statement obj_id="data_tblAppVersion">
+        INSERT INTO tblAppVersion 
+        VALUES ('1.1')      
+    </statement>    
+</statements>

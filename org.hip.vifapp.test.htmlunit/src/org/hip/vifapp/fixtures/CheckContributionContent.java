@@ -1,0 +1,100 @@
+/*
+	This package is part of the application VIF.
+	Copyright (C) 2009, Benno Luthiger
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+package org.hip.vifapp.fixtures;
+
+import java.util.List;
+
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlTableDataCell;
+
+/**
+ *
+ * @author Luthiger
+ * Created 21.02.2009 
+ */
+public class CheckContributionContent extends VifForumFixture {
+	private final static String CHANGE_TO = "org.hip.vif.forum.groups.showGroup&groupID=%s";
+	private final static String CHANGE_TO_QUESTION = "org.hip.vif.forum.groups.showQuestion&questionID=%s&groupID=%s";
+
+	private String userName;
+	private String groupName;
+
+	/**
+	 * @param inPort
+	 * @throws Exception 
+	 */
+	public CheckContributionContent(String inPort, String inUserName, String inGroupName, String inQuestion) throws Exception {
+		super(inPort);
+		userName = inUserName;
+		groupName = inGroupName;
+
+		loginAsWithPassword(userName, userName);
+		String lGroupId = getGroupId(groupName, 0, getTableRows(String.format(XPATH_TR, "data odd"), String.format(XPATH_TR, "data even")));
+		changeTo(String.format(CHANGE_TO, lGroupId));
+		String lQuestionId = getQuestionId(inQuestion);
+		changeTo(String.format(CHANGE_TO_QUESTION, lQuestionId, lGroupId));
+	}
+
+	/* (non-Javadoc)
+	 * @see org.hip.vifapp.fixtures.VifFixture#getRequestType()
+	 */
+	@Override
+	protected String getRequestType() {
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private HtmlTableDataCell getCell(HtmlPage inPage, int inOffset) {
+		int i = 0;
+		int lCompletionNumber = 0;
+		List<HtmlTableDataCell> lCells = (List<HtmlTableDataCell>) inPage.getByXPath("//td[@colspan='3']");
+		for (HtmlTableDataCell lCell : lCells) {
+			if (lCell.asText().startsWith("Completion")) {
+				lCompletionNumber = i;
+			}
+			i++;
+		}
+		return lCells.get(lCompletionNumber + inOffset);
+	}
+	
+	public String completionText() throws Exception {		
+		return getCell(getSuccess(), 1).asText();
+	}
+	
+	public String completionState() throws Exception {
+		String lState = "";
+		HtmlTableDataCell lStateCell = getCell(getSuccess(), 0);
+		for (HtmlElement lChild : lStateCell.getChildElements()) {
+			if ("data".equals(lChild.getAttribute("class"))) {
+				lState = lChild.asText();
+			}
+		}
+		return lState.split(" ")[1];
+	}
+	
+	public String followUpNumber() throws Exception {
+		return String.valueOf(getTableRows(String.format(XPATH_TR, "data odd"), String.format(XPATH_TR, "data even")).size());
+	}
+	
+	public String followUpContent() throws Exception {
+		return getTableRows(String.format(XPATH_TR, "data odd"), String.format(XPATH_TR, "data even")).get(0).getCell(1).asText();
+	}
+
+}

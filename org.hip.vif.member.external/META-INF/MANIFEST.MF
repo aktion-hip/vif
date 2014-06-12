@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: VIF member handler for members in external database
+Bundle-SymbolicName: org.hip.vif.member.external;singleton:=true
+Bundle-Version: 1.1.0
+Eclipse-RegisterBuddy: org.hip.vifapp
+Import-Package: org.apache.lucene.queryParser,
+ org.hip.kernel.bom,
+ org.hip.kernel.bom.impl,
+ org.hip.kernel.exc,
+ org.hip.kernel.sys,
+ org.hip.vif.core.authorization;version="1.1.0",
+ org.hip.vif.core.bom;version="1.1.0",
+ org.hip.vif.core.bom.impl;version="1.1.0",
+ org.hip.vif.core.exc;version="1.1.0",
+ org.hip.vif.core.interfaces;version="1.1.0",
+ org.hip.vif.core.member;version="1.1.0",
+ org.hip.vif.core.search;version="1.1.0",
+ org.osgi.framework;version="1.5.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Vendor: RelationWare
+Service-Component: OSGI-INF/member.xml

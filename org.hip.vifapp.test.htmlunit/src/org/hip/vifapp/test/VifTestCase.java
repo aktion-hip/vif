@@ -1,0 +1,132 @@
+package org.hip.vifapp.test;
+
+import java.io.IOException;
+import java.util.List;
+
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
+import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+
+import junit.framework.TestCase;
+
+/**
+ * @author Luthiger
+ * Created 11.02.2009
+ */
+public class VifTestCase extends TestCase {
+	private final static String PORT = "8080";
+	private final static String URL_PLAIN 				= "http://localhost:%s/%s";
+	private final static String URL_WITH_REQUEST 		= "http://localhost:%s/%s?requestType=%s";
+	private final static String URL_BODY_WITH_REQUEST 	= "http://localhost:%s/%s?requestType=master&body=%s";
+	
+	private final static String XPATH_TMPL = "//tr[@class='%s']";
+
+	protected final WebClient webClient = new WebClient(BrowserVersion.FIREFOX_10);
+
+	protected void setUp() throws Exception {
+		super.setUp();
+	}
+
+	protected void tearDown() throws Exception {
+		super.tearDown();
+	}
+	
+	protected String getRequestAdmin() {
+		return String.format(URL_PLAIN, PORT, "admin");
+	}
+	
+	protected String getRequestForum() {
+		return String.format(URL_PLAIN, PORT, "forum");
+	}
+	
+	protected String getRequestAdminMaster(String inRequestType) {
+		return String.format(URL_WITH_REQUEST, PORT, "admin", inRequestType);
+	}
+	
+	protected String getRequestAdminBody(String inRequestType) {
+		return String.format(URL_BODY_WITH_REQUEST, PORT, "admin", inRequestType);
+	}
+	
+	protected String getRequestForumMaster(String inRequestType) {
+		return String.format(URL_WITH_REQUEST, PORT, "forum", inRequestType);
+	}
+	
+	protected String getRequestForumBody(String inRequestType) {
+		return String.format(URL_BODY_WITH_REQUEST, PORT, "forum", inRequestType);
+	}
+
+	protected void doLogoutAdmin(WebClient inWebClient) throws Exception {
+		HtmlPage lFareWell = (HtmlPage)inWebClient.getPage(getRequestAdminBody("logout"));
+		System.out.println(lFareWell.getWebResponse().getRequestSettings().getUrl().toString());
+	}
+
+	protected void doLogoutForum(WebClient inWebClient) throws Exception {
+		HtmlPage lFareWell = (HtmlPage)inWebClient.getPage(getRequestForumBody("logout"));
+		System.out.println(lFareWell.getWebResponse().getRequestSettings().getUrl().toString());
+	}
+
+	protected HtmlPage doLoginInAdmin() throws IOException {
+		final HtmlPage lFrameSet = (HtmlPage)webClient.getPage(getRequestAdmin());
+		final HtmlPage lBody = (HtmlPage) lFrameSet.getFrameByName("body").getEnclosedPage();
+		HtmlPage outSuccess = doLogin(lBody, "FitSU", "fit4ever");
+		assertEquals("title text after admin logged in", "Member administration", ((HtmlParagraph)outSuccess.getByXPath("//p[@class='title']").get(0)).asText());
+		return outSuccess;
+	}
+
+	protected HtmlPage doLoginInForum() throws IOException {
+		final HtmlPage lFrameSet = (HtmlPage)webClient.getPage(getRequestForum());
+		final HtmlPage lBody = (HtmlPage) lFrameSet.getFrameByName("body").getEnclosedPage();
+		return doLogin(lBody, "FitSU", "fit4ever");
+	}
+	
+	protected HtmlPage doLogin(HtmlPage inPage, String inUserName, String inPassword) throws IOException {
+		final HtmlForm lForm = inPage.getFormByName("Form");
+		final HtmlTextInput lText = (HtmlTextInput) lForm.getInputByName("userId");
+		final HtmlPasswordInput lPasswordField = (HtmlPasswordInput) lForm.getInputByName("passwd");
+		final HtmlSubmitInput lSend = (HtmlSubmitInput) lForm.getInputByName("button");
+		lText.setValueAttribute(inUserName);
+		lPasswordField.setValueAttribute(inPassword);
+		
+		final HtmlPage outSuccess = (HtmlPage)lSend.click();
+		return outSuccess;		
+	}
+
+	protected void setInput(HtmlForm inForm, String inFieldName, String inFieldValue) {
+		final HtmlTextInput lInputField = (HtmlTextInput) inForm.getInputByName(inFieldName);
+		lInputField.setValueAttribute(inFieldValue);
+	}
+
+	/**
+	 * Returns a list of <code>HtmlTableRow</code>s using the specified XPath commands.
+	 * 
+	 * @param inXPaths String[]
+	 * @return List<HtmlTableRow>
+	 */
+	@SuppressWarnings("unchecked")
+	protected List<HtmlTableRow> getTableRows(HtmlPage inPage, String... inXPaths) {
+		List<HtmlTableRow> outTableRows = null;
+		boolean lFirst = true;
+		
+		for (String lXPath : inXPaths) {
+			if (lFirst) {
+				outTableRows = (List<HtmlTableRow>) inPage.getByXPath(String.format(XPATH_TMPL, lXPath));
+				lFirst = false;
+			}
+			else {
+				outTableRows.addAll((List<HtmlTableRow>) inPage.getByXPath(String.format(XPATH_TMPL, lXPath)));
+			}
+		}
+		return outTableRows;
+	}
+	
+	protected String getTitle(HtmlPage inPage) {
+		return ((HtmlParagraph)inPage.getByXPath("//p[@class='title']").get(0)).asText();
+	}
+	
+}

@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: VIF Default Skin
+Bundle-SymbolicName: org.hip.vif.skin.default
+Bundle-Version: 1.2.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-Activator: org.hip.vif.skin.dflt.Activator
+Bundle-ActivationPolicy: lazy
+Import-Package: com.vaadin.server;version="[7.1.0,8.0.0)",
+ com.vaadin.shared.ui.label;version="[7.1.0,8.0.0)",
+ com.vaadin.ui;version="[7.1.0,8.0.0)",
+ org.osgi.framework;version="1.3.0",
+ org.ripla.interfaces;version="[1.0.0,2.0.0)",
+ org.ripla.services;version="[1.0.0,2.0.0)",
+ org.ripla.util;version="[1.0.0,2.0.0)",
+ org.ripla.web.interfaces;version="[2.0.0,3.0.0)",
+ org.ripla.web.services;version="[2.0.0,3.0.0)",
+ org.ripla.web.util;version="[2.0.0,3.0.0)",
+ org.slf4j;version="1.7.0"
+Service-Component: OSGI-INF/skin.xml
+Bundle-Vendor: RelationWare

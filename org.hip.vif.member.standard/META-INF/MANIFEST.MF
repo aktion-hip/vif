@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Standard member handler for VIF application
+Bundle-SymbolicName: org.hip.vif.member.standard
+Bundle-Version: 1.1.0
+Import-Package: org.apache.lucene.queryParser,
+ org.hip.kernel.bom,
+ org.hip.kernel.bom.impl,
+ org.hip.kernel.exc,
+ org.hip.kernel.sys,
+ org.hip.vif.core.authorization;version="1.1.0",
+ org.hip.vif.core.bom;version="1.1.0",
+ org.hip.vif.core.bom.impl;version="1.1.0",
+ org.hip.vif.core.exc;version="1.1.0",
+ org.hip.vif.core.interfaces;version="1.1.0",
+ org.hip.vif.core.member;version="1.1.0",
+ org.hip.vif.core.search;version="1.1.0",
+ org.osgi.framework;version="1.5.0"
+Service-Component: OSGI-INF/member.xml
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: RelationWare

@@ -1,0 +1,57 @@
+/*
+	This package is part of the application VIF.
+	Copyright (C) 2011, Benno Luthiger
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
+package org.hip.vif.forum.groups.tasks;
+
+import org.hip.kernel.exc.VException;
+import org.hip.vif.core.annotations.Partlet;
+import org.hip.vif.core.bom.BOMHelper;
+import org.hip.vif.core.bom.Text;
+
+import com.vaadin.ui.Component;
+
+/**
+ * For published bibliography entries:
+ * Task to display a bibliography entry in editable form.
+ * 
+ * @author Luthiger
+ * Created: 26.09.2011
+ */
+@Partlet
+public class BibliographyEditPublishedTask extends AbstractBibliographyTask {
+
+	/* (non-Javadoc)
+	 * @see org.hip.vif.web.tasks.AbstractVIFTask#runChecked()
+	 */
+	@Override
+	protected Component runChecked() throws VException {
+		try {
+			Long lTextID = getTextID();
+			int lTextVersion = getTextVersion().intValue();
+			//get text entry
+			Text lText = BOMHelper.getTextHome().getText(lTextID, lTextVersion);
+			
+			return editBibliography(lText, lTextID, lTextVersion, true);
+		} 
+		catch (Exception exc) {
+			throw createContactAdminException(exc);
+		}
+	}
+
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="true" name="org.hip.vif.core.memberService">
+    <implementation class="org.hip.vif.core.internal.service.MemberService"/>
+    <reference bind="bindAuthenticator" cardinality="0..n" interface="org.hip.vif.core.interfaces.IAuthenticatorContribution" name="IAuthenticatorContribution" policy="dynamic" unbind="unbindAuthenticator"/>
+    <reference bind="bindSearcher" cardinality="0..n" interface="org.hip.vif.core.interfaces.IMemberSearcherContribution" name="IMemberSearcherContribution" policy="dynamic" unbind="unbindSearcher"/>
+    <reference cardinality="1..1" interface="org.hip.vif.core.interfaces.IActorManager" name="IActorManager" bind="setActorManager" unbind="removeActorManager" policy="static"/>
+</scr:component>

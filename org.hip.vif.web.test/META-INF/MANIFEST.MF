@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test Fragment for org.hip.vif.web bundle
+Bundle-SymbolicName: org.hip.vif.web.test
+Bundle-Version: 1.0.0
+Fragment-Host: org.hip.vif.web
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: RelationWare
+Bundle-ClassPath: .,
+ lib/org.hip.db.provider.mysql_1.0.1.jar
+Require-Bundle: org.mockito.mockito-all;bundle-version="1.9.5",
+ org.junit;bundle-version="4.11.0"

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.hip.vif.forum.usersettings.usecase">
+   <implementation class="org.hip.vif.forum.usersettings.internal.UseCaseComponent"/>
+   <service>
+      <provide interface="org.hip.vif.web.interfaces.IUseCaseForum"/>
+      <provide interface="org.hip.vif.core.usertasks.IUserTaskAgent"/>
+   </service>
+</scr:component>

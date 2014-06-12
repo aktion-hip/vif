@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<project name="project" default="default">	
+	<description>
+            Webapp Builder
+    </description>
+	<property file="webAppBuilder.properties"/>
+
+	<!-- ================================= 
+          target: default              
+         ================================= -->
+	<target name="init">
+    	<property name="proj.dir" value="${proj.dir}" />
+		<!-- 
+    	<property name="proj.dir" value="${basedir}/.."/>
+		On windows be cautious about long file names for ${build.dir}
+		These long path problems were resolved in JRE 1.5.0_08
+		-->
+    	<property name="build.dir" value="${proj.dir}/build"/>
+    	<property name="templates.dir" value="${proj.dir}/templates"/>
+		<property name="webapp.name" value="${webapp.name}"/>
+		<!-- 
+		<property name="webapp.name" value="bridge"/>
+		the servletbridge feature can be found in the eclipse depot 
+		Repository Path: /cvsroot/eclipse
+		Module: equinox-incubator/org.eclipse.equinox.servletbridge.feature
+		--> 
+		<property name="features" value="${features}"/>
+		<available file="${proj.dir}/servletbridge.jar" property="servletbridge.jar-present"/>
+		<!--
+		<property name="features" value="org.eclipse.equinox.servletbridge.feature"/>
+		If you are using this script in a head-less build define the following properties:
+		"ignore.pdeExportFeatures" (available only in the IDE - do the feature export with PDE Build)
+		"ignore.servletbridge.jar" (if you're compiling or extracting the jar yourself)
+		-->
+	</target>
+
+	<!-- ================================= 
+          target: prepare              
+         ================================= -->	
+	<target name="prepare" depends="init">
+		<delete dir="${build.dir}/${webapp.name}"/>
+		<mkdir dir="${build.dir}/${webapp.name}/WEB-INF/lib"/>
+	</target>
+	<!-- ================================= 
+          target: default              
+         ================================= -->
+	<target name="default" depends="copyResources, servletbridge.jar, pdeExportFeatures" description="creates servlet app"/>
+	
+	<!-- ================================= 
+          target: copyResources              
+         ================================= -->	
+	<target name="copyResources" depends="prepare">
+		<copy todir="${build.dir}/${webapp.name}/WEB-INF">
+			<fileset dir="${templates.dir}" />
+		</copy>
+	</target>
+	
+	<!-- ================================= 
+          target: servletbridge.jar              
+         ================================= -->	
+	<target name="servletbridge.jar" depends="prepare" unless="ignore.servletbridge.jar">
+		<antcall target="jar-servletbridge.jar" />
+		<antcall target="copy-servletbridge.jar"/>
+	</target>
+
+	<!-- ================================= 
+          target: copy-servletbridge.jar              
+         ================================= -->	
+	<target name="copy-servletbridge.jar" if="servletbridge.jar-present">
+		<copy todir="${build.dir}/${webapp.name}/WEB-INF/lib">
+			<fileset file="${proj.dir}/servletbridge.jar"/>
+		</copy>
+	</target>
+	
+	<!-- ================================= 
+          target: jar-servletbridge.jar              
+         ================================= -->	
+	<target name="jar-servletbridge.jar" unless="servletbridge.jar-present">
+		<jar destfile="${build.dir}/${webapp.name}/WEB-INF/lib/servletbridge.jar">
+			<fileset dir="${proj.dir}/bin">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+	</target>
+	
+	<!-- ================================= 
+          target: pdeExportFeatures              
+         ================================= -->		
+	<target name="pdeExportFeatures" depends="prepare" unless="ignore.pdeExportFeatures">
+		<!-- 
+		Features get built asynchronously but this approach is sometimes convenient.
+		So that the pde.exportFeatures task is available in the IDE select 
+		"Run in the same JRE as the workspace" from the JRE tab from "Run Ant.."
+		--> 
+		<pde.exportFeatures
+			features="${features}"
+			destination="${build.dir}/${webapp.name}/WEB-INF/eclipse"
+			exportType="directory" 
+			useJARFormat="false"
+			exportSource="false"
+		/>
+	</target>
+	
+	<!-- ================================= 
+          target: create vifapp warfile              
+         ================================= -->
+	
+	<target name="vifapp.war" depends="init">
+		<war 
+			destfile="${build.dir}/${webapp.name}.war" 
+			basedir="${build.dir}/${webapp.name}" 
+			webxml="${build.dir}/${webapp.name}/WEB-INF/web.xml" />
+		<jar 
+			destfile="${build.dir}/${docs.name}.war">
+			<zipfileset dir="${docs.dir}"/>
+			<fileset file="${docs.dir}/../resources/index.html"/>
+		</jar>
+	</target>
+    
+    <!-- ================================= 
+          target: copy sql scripts for database              
+         ================================= -->
+    
+    <target name="copy.scripts" depends="vifapp.war">
+        <mkdir dir="${build.dir}/scripts"/>
+        <!-- Ensures correct end of lines for scripts -->
+        <fixcrlf 
+            srcdir="${build.dir}/scripts"
+            eol="crlf"
+            includes="**/*.bat"
+        />
+        <fixcrlf 
+            srcdir="${build.dir}/scripts"
+            eol="lf"
+            eof="remove"
+            includes="**/*.sh"
+        />
+        <!-- Copy scripts (only MySql so far) -->
+        <mkdir dir="${build.dir}/scripts/MySql"/>
+        <copy todir="${build.dir}/scripts/MySql">
+            <fileset dir="${script.dir}/MySql">
+                <exclude name="**/.project"/>
+                <exclude name="**/.cvsignore"/>
+            </fileset>
+        </copy>     
+    </target>
+	
+	<!-- ================================= 
+          target: create tarball containing all resources
+         ================================= -->
+
+	<target name="create.release.pre" depends="copy.scripts">
+		<!-- copy deployment resources into build space -->
+		<copy todir="${build.dir}">
+			<fileset 
+				dir="${resources.dir}" 
+				includes="*.txt" />
+		</copy>
+	</target>
+	
+	<target name="create.release" depends="create.release.pre">
+		<mkdir dir="${dist.dir}"/>
+		<!-- Create release tar.gz -->
+		<tar destfile="${dist.dir}/vif-Rel${app.version}.tar" compression="none">
+            <tarfileset dir="${build.dir}/scripts" prefix="scripts" mode="755">
+                <include name="**/*.sh"/>
+            </tarfileset>
+            <tarfileset dir="${build.dir}/scripts" prefix="scripts">
+                <include name="**"/>
+                <exclude name="**/*.sh"/>
+            </tarfileset>
+			<tarfileset dir="${build.dir}">
+				<include name="*.war"/>
+				<include name="*.txt"/>
+			</tarfileset>
+		</tar>
+		<gzip src="${dist.dir}/vif-Rel${app.version}.tar" zipfile="${dist.dir}/vif-Rel${app.version}.tar.gz"/>
+	</target>
+	
+    <target name="create.release.post" depends="create.release" description="clean up after release creation">
+    	<delete file="${dist.dir}/vif-Rel${app.version}.tar" />
+    	<delete>
+    		<fileset dir="${build.dir}" includes="*.txt" />
+    	</delete>
+    </target>
+	
+</project>
+
