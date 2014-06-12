@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: VIF Useradmin Bundle
+Bundle-SymbolicName: org.hip.vif.useradmin
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: RelationWare
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Import-Package: org.osgi.framework;version="1.6.0",
+ org.osgi.service.component;version="1.1.0",
+ org.osgi.service.prefs;version="1.1.1",
+ org.osgi.service.useradmin;version="1.1.0",
+ org.ripla.useradmin.admin;version="[1.0.0,2.0.0)",
+ org.slf4j;version="1.6.4"
+Service-Component: OSGI-INF/admin.xml
