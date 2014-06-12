@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CodeLists codeID="Roles">
+	<CodeList language="de">
+		<CodeListItem elementID="1" label="SU"/>
+		<CodeListItem elementID="2" label="Administrator/in"/>
+		<CodeListItem elementID="3" label="Gruppen-Administrator/in"/>
+		<CodeListItem elementID="4" label="Teilnehmer/in"/>
+		<CodeListItem elementID="5" label="Mitglied"/>
+		<CodeListItem elementID="6" label="Gast"/>
+	</CodeList>
+	<CodeList language="en">
+		<CodeListItem elementID="1" label="SU"/>
+		<CodeListItem elementID="2" label="Administrator"/>
+		<CodeListItem elementID="3" label="Group-Administrator"/>
+		<CodeListItem elementID="4" label="Participant"/>
+		<CodeListItem elementID="5" label="Member"/>
+		<CodeListItem elementID="6" label="Guest"/>
+	</CodeList>
+</CodeLists>

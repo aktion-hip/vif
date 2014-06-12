@@ -1,0 +1,8 @@
+org.hip.vif.version=0.1
+org.hip.vif.dftLanguage=de
+org.hip.vif.dftCountry=CH
+
+org.hip.vif.docs.root=./
+org.hip.vif.website.root=./
+
+org.hip.vif.error.msg.basename=VIFErrMessages
