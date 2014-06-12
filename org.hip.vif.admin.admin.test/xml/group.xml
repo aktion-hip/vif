@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Group>
+    <propertySet>
+        <ID>45</ID>
+        <Name>Test Vaadin</Name>
+        <Private>0</Private>
+        <GuestDepth>5</GuestDepth>
+        <State>3</State>
+        <Reviewers>1</Reviewers>
+        <MinGroupSize>11</MinGroupSize>
+        <Description>Neue Gruppe zu Testzwecken.</Description>
+    </propertySet>
+</Group>

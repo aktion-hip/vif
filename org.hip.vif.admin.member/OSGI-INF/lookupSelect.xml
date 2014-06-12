@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.admin.member.lookup.select">
+   <implementation class="org.hip.vif.admin.member.internal.LookupSelectComponent"/>
+   <service>
+      <provide interface="org.hip.vif.web.interfaces.ILookupWindow"/>
+   </service>
+</scr:component>

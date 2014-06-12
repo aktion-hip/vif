@@ -1,0 +1,27 @@
+            <text:p text:style-name="P1"/>
+            <text:table-of-content text:style-name="Sect1" text:protected="true" text:name="Table of Contents1">
+                <text:table-of-content-source text:outline-level="10">
+                    <text:index-title-template text:style-name="Contents_20_Heading">%s</text:index-title-template>
+                    <text:table-of-content-entry-template text:outline-level="1"
+                        text:style-name="Contents_20_1"/>
+                    <text:table-of-content-entry-template text:outline-level="2"
+                        text:style-name="Contents_20_2">
+                        <text:index-entry-chapter/>
+                        <text:index-entry-text/>
+                        <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+                        <text:index-entry-page-number/>
+                    </text:table-of-content-entry-template>
+                    <text:table-of-content-entry-template text:outline-level="3"
+                        text:style-name="Contents_20_3">
+                        <text:index-entry-chapter/>
+                        <text:index-entry-text/>
+                        <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+                        <text:index-entry-page-number/>
+                    </text:table-of-content-entry-template>
+                </text:table-of-content-source>
+                <text:index-body>
+                    <text:index-title text:style-name="Sect2" text:name="Table of Contents1_Head">
+                        <text:p text:style-name="Contents_20_Heading">%s</text:p>
+                    </text:index-title>
+                </text:index-body>
+            </text:table-of-content>

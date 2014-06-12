@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texts>
+    <JoinQuestionToText>
+        <propertySet>
+            <Publication/>
+            <CoAuthors/>
+            <QuestionID>81</QuestionID>
+            <Title>Professionell texten</Title>
+            <biblioType>0</biblioType>
+            <Version>0</Version>
+            <Subtitle/>
+            <ID>27</ID>
+            <Reference>Baumert 2011</Reference>
+            <Type>0</Type>
+            <State>4</State>
+            <bibliography>Baumert, Andreas (2011). Professionell texten. M&#252;nchen:
+                dtv.</bibliography>
+            <Author>Baumert, Andreas</Author>
+            <Place>M&#252;nchen</Place>
+            <Volume/>
+            <Pages>243</Pages>
+            <Publisher>dtv</Publisher>
+            <Year>2011</Year>
+            <Number/>
+        </propertySet>
+    </JoinQuestionToText>
+    <JoinQuestionToText>
+        <propertySet>
+            <Publication>Proceedings of the 1st International Conference on Open Source
+                Systems</Publication>
+            <CoAuthors>Scotto, Marco, Giancarlo Succi</CoAuthors>
+            <QuestionID>81</QuestionID>
+            <Title>A Cluster Analysis of Open Source Licenses</Title>
+            <biblioType>2</biblioType>
+            <Version>0</Version>
+            <Subtitle/>
+            <ID>4</ID>
+            <Reference>Ueda 2005</Reference>
+            <Type>2</Type>
+            <State>4</State>
+            <bibliography>Ueda, Masashi, Takahiro Uzuki, Chihiro Suematsu (2005). "A Cluster
+                Analysis of Open Source Licenses", in Proceedings of the 1st International
+                Conference on Open Source Systems. Hrsg. Scotto, Marco, Giancarlo Succi. Genova:
+                ECIG.</bibliography>
+            <Author>Ueda, Masashi, Takahiro Uzuki, Chihiro Suematsu</Author>
+            <Place>Genova</Place>
+            <Volume>0</Volume>
+            <Pages/>
+            <Publisher>ECIG</Publisher>
+            <Year>2005</Year>
+            <Number>0</Number>
+        </propertySet>
+    </JoinQuestionToText>
+</texts>

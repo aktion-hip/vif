@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<completion>
+    <JoinQuestionToCompletionAndContributors>
+        <propertySet>
+            <Type>0</Type>
+            <GroupID>45</GroupID>
+            <Completion>Vaadin ist ein modernes Framerwork und kann eine Anwendung
+                modernisieren.</Completion>
+            <QuestionID>81</QuestionID>
+            <Firstname>Benno</Firstname>
+            <Name>Luthiger</Name>
+            <ID>103</ID>
+            <State>4</State>
+            <MemberID>1</MemberID>
+            <Mutation>30.12.2011</Mutation>
+        </propertySet>
+    </JoinQuestionToCompletionAndContributors>
+    <contributors>
+        <propertySet>
+            <IsAuthor>1</IsAuthor>
+            <FirstName>Benno</FirstName>
+            <FamilyName>Luthiger</FamilyName>
+            <FullName>Benno Luthiger</FullName>
+        </propertySet>
+        <propertySet>
+            <IsAuthor>0</IsAuthor>
+            <FirstName>Group</FirstName>
+            <FamilyName>Admin4</FamilyName>
+            <FullName>Group Admin4</FullName>
+        </propertySet>
+    </contributors>
+</completion>

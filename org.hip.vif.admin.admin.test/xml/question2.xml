@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question>
+    <JoinQuestionToContributors>
+        <propertySet>
+            <Type>0</Type>
+            <Question>
+                <div style="text-align: left;">Wie <span style="font-style: italic;"
+                        >funktionieren</span> Stile? <br/></div>
+            </Question>
+            <GroupID>45</GroupID>
+            <RootQuestion>0</RootQuestion>
+            <CreatedDate>02.01.2012</CreatedDate>
+            <Firstname>Benno</Firstname>
+            <Name>Luthiger</Name>
+            <ID>86</ID>
+            <DecimalID>45:1.2</DecimalID>
+            <Remark>Ein <span style="font-weight: bold;">Test</span> mit <span
+                    style="text-decoration: underline;">ganz vielen</span> Stilen:
+                <br/>Mathematisches <sub>2</sub> und chemisches <sup>2</sup> und <a
+                    href="http://www.ethz.ch/">wissenschaftliches</a>. <br/>
+                <p style="text-align: center;" class="MsoNormal">Die aktuelle Schuldenkrise wurde
+                    durch die Finanzmarktkrise 2008 ausgel&#246;st. Verursacht wurde sie, weil die
+                    verantwortlichen (in diesem Fall eher die verantwortungslosen) Politiker am
+                    Geldmarkt Schulden aufnahmen, um damit die Ausgaben der &#246;ffentlichen Hand
+                    zu finanzieren. Schulden sind gerechtfertigt, wenn damit wertsch&#246;pfende
+                    Investitionen durchgef&#252;hrt werden. Werden mit Schulden eine unproduktive
+                    B&#252;rokratie oder der Konsum einer Volkswirtschaft finanziert, so f&#252;hrt
+                    das mit einer gewissen Zwangsl&#228;ufigkeit in eine Krise. <br/></p>
+                <p style="text-align: right;" class="MsoNormal">Die Krise bricht sp&#228;testens
+                    dann aus, wenn der zur Bedienung der Schulden notwendige finanzielle Aufwand die
+                    m&#246;glichen Staatseinnahmen &#252;bersteigt. Dann hat die Schuldenwirtschaft
+                    das Stadium eines Schneeballsystems erreicht. Und so, wie die Finanzmarktkrise
+                    Maddofs Ponzi-System zum Fall brachte, so brachte sie das Schneeballsystem der
+                    Schuldenstaaten in die Krise.</p>
+                <ol>
+                    <li>erstens</li>
+                    <li>zweitens</li>
+                    <li>drittens</li>
+                </ol>
+                <ul>
+                    <li>rot</li>
+                    <li>blau</li>
+                    <li>gr&#252;n</li>
+                </ul></Remark>
+            <Mail>benno.luthiger@id.ethz.ch</Mail>
+            <State>4</State>
+            <MemberID>1</MemberID>
+            <Mutation>02.01.2012</Mutation>
+        </propertySet>
+    </JoinQuestionToContributors>
+    <contributors>
+        <propertySet>
+            <IsAuthor>1</IsAuthor>
+            <FirstName>Benno</FirstName>
+            <FamilyName>Luthiger</FamilyName>
+            <FullName>Benno Luthiger</FullName>
+        </propertySet>
+    </contributors>
+</question>

@@ -1,0 +1,123 @@
+<text:h xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+	xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+	text:style-name="Heading_20_3" text:outline-level="3"> 45:1.2</text:h>
+<text:p xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+	xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+	xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+	xmlns:xlink="http://www.w3.org/1999/xlink" text:style-name="Text_20_body">
+
+</text:p>
+<text:span xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+	xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+	xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+	xmlns:xlink="http://www.w3.org/1999/xlink" text:style-name="Text_20_body">
+	Wie
+	<text:span text:style-name="T2">funktionieren</text:span>
+	Stile?
+	<text:line-break />
+</text:span>
+<text:p xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+	xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+	text:style-name="Standard">
+	<text:span text:style-name="T2">:</text:span>
+</text:p>
+<text:p xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+	xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+	xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+	xmlns:xlink="http://www.w3.org/1999/xlink" text:style-name="Text_20_body">
+	Ein
+	<text:span text:style-name="T1">Test</text:span>
+	mit
+	<text:span text:style-name="T3">ganz vielen</text:span>
+	Stilen:
+	<text:line-break />
+	Mathematisches
+	<text:span text:style-name="T4">2</text:span>
+	und chemisches
+	<text:span text:style-name="T5">2</text:span>
+	und
+	<text:a xlink:type="simple" xlink:href="http://www.ethz.ch/">
+		<text:span text:style-name="Standard">wissenschaftliches</text:span>
+	</text:a>
+	.
+	<text:line-break />
+
+
+	<text:list text:style-name="L2">
+		<text:list-item>
+			<text:p text:style-name="P7">erstens</text:p>
+		</text:list-item>
+		<text:list-item>
+			<text:p text:style-name="P7">zweitens</text:p>
+		</text:list-item>
+		<text:list-item>
+			<text:p text:style-name="P5">drittens</text:p>
+		</text:list-item>
+	</text:list>
+	<text:list text:style-name="L1">
+		<text:list-item>
+			<text:p text:style-name="P6">rot</text:p>
+		</text:list-item>
+		<text:list-item>
+			<text:p text:style-name="P6">blau</text:p>
+		</text:list-item>
+		<text:list-item>
+			<text:p text:style-name="P4">grün</text:p>
+		</text:list-item>
+	</text:list>
+</text:p>
+Ein Test mit ganz vielen Stilen:
+Mathematisches 2 und chemisches 2 und wissenschaftliches.
+<text:span xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+	xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+	xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+	xmlns:xlink="http://www.w3.org/1999/xlink" text:style-name="P8">
+	Die aktuelle Schuldenkrise wurde
+	durch die Finanzmarktkrise 2008 ausgelöst. Verursacht wurde sie, weil die
+	verantwortlichen (in diesem Fall eher die verantwortungslosen)
+	Politiker am
+	Geldmarkt Schulden aufnahmen, um damit die Ausgaben der öffentlichen Hand
+	zu finanzieren. Schulden sind gerechtfertigt, wenn damit wertschöpfende
+	Investitionen durchgeführt werden. Werden mit Schulden eine
+	unproduktive
+	Bürokratie oder der Konsum einer Volkswirtschaft finanziert, so führt
+	das mit einer gewissen Zwangsläufigkeit in eine Krise.
+	<text:line-break />
+</text:span>
+<text:span xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+	xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+	xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+	xmlns:xlink="http://www.w3.org/1999/xlink" text:style-name="P9">Die Krise
+	bricht spätestens
+	dann aus, wenn der zur Bedienung der Schulden notwendige finanzielle
+	Aufwand die
+	möglichen Staatseinnahmen übersteigt. Dann hat die Schuldenwirtschaft
+	das Stadium eines Schneeballsystems erreicht. Und so, wie die
+	Finanzmarktkrise
+	Maddofs Ponzi-System zum Fall brachte, so brachte sie das Schneeballsystem der
+	Schuldenstaaten in die Krise.
+</text:span>
+
+erstens
+zweitens
+drittens
+
+
+rot
+blau
+grün
+<text:p xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+	xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+	text:style-name="Standard">
+	<text:span text:style-name="T2">:</text:span>
+	 
+	<text:span text:style-name="Standard" />
+</text:p>
+<text:p xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+	xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+	text:style-name="Standard">
+	<text:span text:style-name="T2">:</text:span>
+	 
+	<text:span text:style-name="Standard">Benno Luthiger (02.01.2012)
+	</text:span>
+</text:p>

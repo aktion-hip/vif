@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+   <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.admin.admin.menu.contribution.reindex">
+      <implementation class="org.hip.vif.admin.admin.internal.ReindexMenu"/>
+      <service>
+         <provide interface="org.ripla.services.IExtendibleMenuContribution"/>
+      </service>
+   </scr:component>
+   <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.admin.admin.menu.contribution.mail">
+      <implementation class="org.hip.vif.admin.admin.internal.SendMailMenu"/>
+      <service>
+         <provide interface="org.ripla.services.IExtendibleMenuContribution"/>
+      </service>
+   </scr:component>
+   <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.admin.admin.menu.contribution.print">
+      <implementation class="org.hip.vif.admin.admin.internal.PrintGroupMenu"/>
+      <service>
+         <provide interface="org.ripla.services.IExtendibleMenuContribution"/>
+      </service>
+   </scr:component>
+   <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.admin.admin.menu.contribution.upgrade">
+      <implementation class="org.hip.vif.admin.admin.internal.UpgradeMenu"/>
+      <service>
+         <provide interface="org.ripla.services.IExtendibleMenuContribution"/>
+      </service>
+   </scr:component>
+   <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.admin.admin.menu.contribution.skin">
+      <implementation class="org.hip.vif.admin.admin.internal.SkinSelectMenu"/>
+      <service>
+         <provide interface="org.ripla.services.IExtendibleMenuContribution"/>
+      </service>
+   </scr:component>
+   <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.admin.admin.menu.contribution.config">
+      <implementation class="org.hip.vif.admin.admin.internal.ConfigMenu"/>
+      <service>
+         <provide interface="org.ripla.services.IExtendibleMenuContribution"/>
+      </service>
+   </scr:component>
+</components>   

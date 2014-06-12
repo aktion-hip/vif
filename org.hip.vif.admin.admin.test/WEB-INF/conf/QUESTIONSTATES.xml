@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CodeLists codeID="QuestionStates">
+	<CodeList language="de">
+		<CodeListItem elementID="1" label="privat"/>
+		<CodeListItem elementID="2" label="Review angefordert"/>
+		<CodeListItem elementID="3" label="in Revision"/>
+		<CodeListItem elementID="4" label="offen"/>
+		<CodeListItem elementID="5" label="Statusänderung beantragt"/>
+		<CodeListItem elementID="6" label="beantworted"/>
+		<CodeListItem elementID="7" label="Öffnung beantragt"/>
+		<CodeListItem elementID="8" label="gelöscht"/>
+	</CodeList>
+	<CodeList language="en">
+		<CodeListItem elementID="1" label="private"/>
+		<CodeListItem elementID="2" label="waiting for review"/>
+		<CodeListItem elementID="3" label="under revision"/>
+		<CodeListItem elementID="4" label="open"/>
+		<CodeListItem elementID="5" label="state change requested"/>
+		<CodeListItem elementID="6" label="answered"/>
+		<CodeListItem elementID="7" label="reopen requested"/>
+		<CodeListItem elementID="8" label="deleted"/>
+	</CodeList>
+</CodeLists>
+

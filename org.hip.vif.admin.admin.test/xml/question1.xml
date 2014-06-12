@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question>
+    <JoinQuestionToContributors>
+        <propertySet>
+            <Type>0</Type>
+            <Question>Wof&#252;r ein neues VIF?</Question>
+            <GroupID>45</GroupID>
+            <RootQuestion>1</RootQuestion>
+            <CreatedDate>24.11.2011</CreatedDate>
+            <Firstname>Benno</Firstname>
+            <Name>Luthiger</Name>
+            <ID>81</ID>
+            <DecimalID>45:1</DecimalID>
+            <Remark>Wegen Vaadin? Reicht das als Grund oder ist das nur ein Vorwand zum
+                Testen?</Remark>
+            <Mail>benno.luthiger@id.ethz.ch</Mail>
+            <State>4</State>
+            <MemberID>1</MemberID>
+            <Mutation>30.12.2011</Mutation>
+        </propertySet>
+    </JoinQuestionToContributors>
+    <contributors>
+        <propertySet>
+            <IsAuthor>1</IsAuthor>
+            <FirstName>Benno</FirstName>
+            <FamilyName>Luthiger</FamilyName>
+            <FullName>Benno Luthiger</FullName>
+        </propertySet>
+    </contributors>
+</question>
