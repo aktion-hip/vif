@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2007, Benno Luthiger
+	Copyright (C) 2007-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package org.hip.vif.member.external;
 
 import java.io.IOException;
@@ -42,37 +42,37 @@ import org.hip.vif.core.member.IMemberSearcher;
 import org.hip.vif.core.search.NoHitsException;
 
 /**
- * Class for searching member entries using a setup where the members are stored in an external member table.
- * Searching is done using the DB search index of the external member table.
- *
- * @author Luthiger
- * 30.06.2007
+ * Class for searching member entries using a setup where the members are stored
+ * in an external member table. Searching is done using the DB search index of
+ * the external member table.
+ * 
+ * @author Luthiger 30.06.2007
  */
 public class ExtDBMemberSearcher implements IMemberSearcher {
-	private MemberHome memberHome;
+	private final MemberHome memberHome;
 	protected KeyObject searchKey = null;
-	
+
 	public ExtDBMemberSearcher() {
 		super();
 		memberHome = getMemberAuthenticationHome();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.member.MemberSearcher#search(java.lang.String)
-	 */
-	public void prepareSearch(String inQueryTerm) throws IOException, ParseException, NoHitsException, VException, SQLException {
-		KeyObject lKey = new KeyObjectImpl();
+	@Override
+	public void prepareSearch(final String inQueryTerm) throws IOException,
+			ParseException, NoHitsException, VException, SQLException {
+		final KeyObject lKey = new KeyObjectImpl();
 		lKey.setValue(MemberHome.KEY_NAME, inQueryTerm + "%", "LIKE");
-		lKey.setValue(MemberHome.KEY_FIRSTNAME, inQueryTerm + "%", "LIKE", BinaryBooleanOperator.OR);
+		lKey.setValue(MemberHome.KEY_FIRSTNAME, inQueryTerm + "%", "LIKE",
+				BinaryBooleanOperator.OR);
 		searchKey = lKey;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.member.MemberSearcher#search(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void prepareSearch(String inName, String inFirstName, String inStreet, String inPostal, String inCity, String inMail)
-			throws NoHitsException, ParseException, IOException, VException, SQLException {
-		KeyObject lKey = new KeyObjectImpl();
+	@Override
+	public void prepareSearch(final String inName, final String inFirstName,
+			final String inStreet, final String inPostal, final String inCity,
+			final String inMail) throws NoHitsException, ParseException,
+			IOException, VException, SQLException {
+		final KeyObject lKey = new KeyObjectImpl();
 		modifySearch(lKey, inName, MemberHome.KEY_NAME);
 		modifySearch(lKey, inFirstName, MemberHome.KEY_FIRSTNAME);
 		modifySearch(lKey, inStreet, MemberHome.KEY_STREET);
@@ -82,7 +82,8 @@ public class ExtDBMemberSearcher implements IMemberSearcher {
 		searchKey = lKey;
 	}
 
-	private void modifySearch(KeyObject inKey, String inSearch, String inColumnName) throws VException {
+	private void modifySearch(final KeyObject inKey, final String inSearch,
+			final String inColumnName) throws VException {
 		if (inSearch.length() != 0) {
 			if (memberHome.getColumnNameFor(inColumnName).length() != 0) {
 				inKey.setValue(inColumnName, inSearch + "%", "LIKE");
@@ -90,38 +91,33 @@ public class ExtDBMemberSearcher implements IMemberSearcher {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.member.MemberSearcher#canShowAll()
-	 */
+	@Override
 	public boolean canShowAll() {
-		return true; 
+		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.member.MemberSearcher#reSearch()
-	 */
-	public QueryResult doSearch(OrderObject inOrder) throws VException, SQLException {
+	@Override
+	public QueryResult doSearch(final OrderObject inOrder) throws VException,
+			SQLException {
 		VSys.assertNotNull(Assert.ERROR, this, "doSearch", searchKey);
-		return memberHome.select(searchKey, inOrder);		
+		return memberHome.select(searchKey, inOrder);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.member.MemberSearcher#canReorder()
-	 */
+	@Override
 	public boolean canReorder() {
 		return true;
 	}
 
 	/**
-	 * For authentication, we call the home of the member entries residing in the external database.
-	 *  
+	 * For authentication, we call the home of the member entries residing in
+	 * the external database.
+	 * 
 	 * @see org.hip.vif.member.MemberHandlerFactory#getMemberHome()
 	 */
+	@Override
 	public MemberHome getMemberAuthenticationHome() {
-		return (MemberHome)VSys.homeManager.getHome(ExtMemberImpl.HOME_CLASS_NAME);
+		return (MemberHome) VSys.homeManager
+				.getHome(ExtMemberImpl.HOME_CLASS_NAME);
 	}
 
 	/**
@@ -129,39 +125,41 @@ public class ExtDBMemberSearcher implements IMemberSearcher {
 	 * 
 	 * @see org.hip.vif.member.MemberHandlerFactory#getMemberCacheHome()
 	 */
+	@Override
 	public MemberHome getMemberCacheHome() {
-		return (MemberHome)VSys.homeManager.getHome(MemberImpl.HOME_CLASS_NAME);
+		return (MemberHome) VSys.homeManager
+				.getHome(MemberImpl.HOME_CLASS_NAME);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.core.member.IMemberSearcher#createMemberCacheEntryChecked(java.util.Collection)
-	 */
-	public Collection<Long> createMemberCacheEntryChecked(Collection<Long> inMemberIDs) throws VException, SQLException {
-		Collection<Long> outIDs = new ArrayList<Long>(inMemberIDs.size());
-		MemberHome lHome = getMemberAuthenticationHome();
-		for (Member lMember : lHome.getMembers(inMemberIDs)) {
-			IMemberInformation lInformation = new ExtDBMemberInformation(lMember);
-			Member lCached = getMemberCacheHome().updateMemberCache(lInformation);
+	@Override
+	public Collection<Long> createMemberCacheEntryChecked(
+			final Collection<Long> inMemberIDs) throws VException, SQLException {
+		final Collection<Long> outIDs = new ArrayList<Long>(inMemberIDs.size());
+		final MemberHome lHome = getMemberAuthenticationHome();
+		for (final Member lMember : lHome.getMembers(inMemberIDs)) {
+			final IMemberInformation lInformation = new ExtDBMemberInformation(
+					lMember);
+			final Member lCached = getMemberCacheHome().updateMemberCache(
+					lInformation);
 			outIDs.add((Long) lCached.get(MemberHome.KEY_ID));
 		}
 		return outIDs;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.core.member.IMemberSearcher#getAssociatedCacheID(java.lang.Long)
-	 */
-	public Long getAssociatedCacheID(Long inMemberID) throws VException, SQLException {
-		IMemberInformation lInformation = new ExtDBMemberInformation(getMemberAuthenticationHome().getMember(new Long(inMemberID)));
-		String lUserID = lInformation.getUserID();
+	@Override
+	public Long getAssociatedCacheID(final Long inMemberID) throws VException,
+			SQLException {
+		final IMemberInformation lInformation = new ExtDBMemberInformation(
+				getMemberAuthenticationHome().getMember(new Long(inMemberID)));
+		final String lUserID = lInformation.getUserID();
 		try {
-			Member lMember = getMemberCacheHome().getMemberByUserID(lUserID);
+			final Member lMember = getMemberCacheHome().getMemberByUserID(
+					lUserID);
 			return new Long(lMember.get(MemberHome.KEY_ID).toString());
 		}
-		catch (BOMInvalidKeyException exc) {
-			//the member entry is not cached yet, therefore, we do that now
-			Member lMember = (Member) getMemberCacheHome().create();
+		catch (final BOMInvalidKeyException exc) {
+			// the member entry is not cached yet, therefore, we do that now
+			final Member lMember = (Member) getMemberCacheHome().create();
 			return lInformation.insert(lMember);
 		}
 	}

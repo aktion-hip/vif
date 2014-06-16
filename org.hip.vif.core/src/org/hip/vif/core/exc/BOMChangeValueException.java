@@ -1,8 +1,6 @@
-package org.hip.vif.core.exc;
-
-/*
+/**
 	This package is part of the persistency layer of the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,13 +15,14 @@ package org.hip.vif.core.exc;
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+package org.hip.vif.core.exc;
 
 import org.hip.kernel.bom.BOMException;
 
 /**
- * This exception is used whenever an exception caused by changing
- * a domain objects values occurs.
+ * This exception is used whenever an exception caused by changing a domain
+ * objects values occurs.
  * 
  * @author: Benno Luthiger
  */
@@ -35,12 +34,14 @@ public class BOMChangeValueException extends BOMException {
 	public BOMChangeValueException() {
 		super();
 	}
-	
+
 	/**
 	 * BOMChangeValueException constructor comment.
-	 * @param inMessage java.lang.String
+	 * 
+	 * @param inMessage
+	 *            java.lang.String
 	 */
-	public BOMChangeValueException(String inMessage) {
+	public BOMChangeValueException(final String inMessage) {
 		super(inMessage);
 	}
 }

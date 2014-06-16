@@ -18,13 +18,18 @@
  */
 package org.hip.vif.app.admin;
 
-import org.osgi.service.useradmin.Group;
-import org.osgi.service.useradmin.Role;
+import java.sql.SQLException;
+
+import org.hip.kernel.exc.VException;
+import org.hip.vif.web.util.RoleHelper;
 import org.osgi.service.useradmin.User;
 import org.osgi.service.useradmin.UserAdmin;
+import org.ripla.exceptions.LoginException;
 import org.ripla.interfaces.IAppConfiguration;
 import org.ripla.interfaces.IAuthenticator;
 import org.ripla.web.RiplaApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vaadin.annotations.Theme;
 
@@ -36,6 +41,9 @@ import com.vaadin.annotations.Theme;
 @SuppressWarnings("serial")
 @Theme(AdminApplication.DFT_SKIN_ID)
 public class AdminApplication extends RiplaApplication {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(AdminApplication.class);
+
 	public static final String DFT_SKIN_ID = "org.hip.vif.default";
 	private static final String APP_NAME = "VIF Admin";
 
@@ -46,7 +54,15 @@ public class AdminApplication extends RiplaApplication {
 			@Override
 			public IAuthenticator getLoginAuthenticator() {
 				// TODO Auto-generated method stub
-				return null;
+				return new IAuthenticator() {
+
+					@Override
+					public User authenticate(final String inName,
+							final String inPassword, final UserAdmin inUserAdmin)
+							throws LoginException {
+						return null;
+					}
+				};
 			}
 
 			@Override
@@ -69,15 +85,21 @@ public class AdminApplication extends RiplaApplication {
 	@Override
 	public void setUserAdmin(final UserAdmin inUserAdmin) {
 		super.setUserAdmin(inUserAdmin);
-
-		// TODO
-		final User lAdmin = (User) inUserAdmin.createRole("admin", Role.USER);
-		final Group lAdministrators = (Group) inUserAdmin.createRole(
-				"vif.admin", Role.GROUP);
-		if (lAdministrators != null) {
-			lAdministrators.addRequiredMember(lAdmin);
-			lAdministrators.addMember(inUserAdmin.getRole(Role.USER_ANYONE));
+		try {
+			RoleHelper.createVIFRoles(inUserAdmin);
+			initializePermissions();
 		}
-		initializePermissions();
+		catch (SQLException | VException exc) {
+			LOG.error(
+					"Error encountered while creating the OSGi roles for the VIF application!",
+					exc);
+		}
 	}
+
+	@Override
+	protected void initializePermissions() {
+		// TODO Auto-generated method stub
+		super.initializePermissions();
+	}
+
 }

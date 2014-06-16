@@ -1,6 +1,6 @@
-/*
-	This package concernes exception handling of the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+/**
+	This package concerns exception handling of the application VIF.
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by

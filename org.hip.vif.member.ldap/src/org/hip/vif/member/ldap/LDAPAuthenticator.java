@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2007, Benno Luthiger
+	Copyright (C) 2007-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package org.hip.vif.member.ldap;
 
 import java.sql.SQLException;
@@ -30,57 +30,59 @@ import org.hip.vif.core.member.IAuthenticator;
 
 /**
  * Authenticator for setups where member entries are provided by a LDAP server.
- *
- * @author Luthiger
- * 22.04.2007
+ * 
+ * @author Luthiger 22.04.2007
  */
-public class LDAPAuthenticator extends AbstractMemberAuthenticator implements IAuthenticator {	
+public class LDAPAuthenticator extends AbstractMemberAuthenticator implements
+		IAuthenticator {
 
 	public LDAPAuthenticator() throws VException {
 		super();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.member.Authenticator#checkAuthentication(java.lang.String, java.lang.String, org.hip.vif.servlets.VIFContext)
-	 */
-	public void checkAuthentication(String inUserID, String inPassword) throws InvalidAuthenticationException, VException, SQLException {
+	@Override
+	public void checkAuthentication(final String inUserID,
+			final String inPassword) throws InvalidAuthenticationException,
+			VException, SQLException {
 		Member lMember = null;
 		try {
 			authenticationHome.checkAuthentication(inUserID, inPassword);
-			
-			//authentication passed, therefore, update the member cache:
-			//default ID for guests
-			Long lActorID = VIFAuthorization.GUEST_ID;
-			
-			//but if guest login, nothing to cache
+
+			// authentication passed, therefore, update the member cache:
+			// default ID for guests
+			final Long lActorID = VIFAuthorization.GUEST_ID;
+
+			// but if guest login, nothing to cache
 			if ("".equals(inUserID)) {
 				setActorToContext(lActorID, inUserID);
 				return;
 			}
-	
-			lMember = updateMemberCache(new LDAPMemberInformation(authenticationHome.getMemberByUserID(inUserID)), inUserID);
+
+			lMember = updateMemberCache(new LDAPMemberInformation(
+					authenticationHome.getMemberByUserID(inUserID)), inUserID);
 		}
-		catch (InvalidAuthenticationException exc) {
+		catch (final InvalidAuthenticationException exc) {
 			// I'm the SU, let me in
 			lMember = checkSU(inUserID, inPassword, exc);
-		}		
-		setActorToContext(new Long(lMember.get(MemberHome.KEY_ID).toString()), inUserID);
+		}
+		setActorToContext(new Long(lMember.get(MemberHome.KEY_ID).toString()),
+				inUserID);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.member.Authenticator#isExternal()
-	 */
+	@Override
 	public boolean isExternal() {
 		return true;
 	}
 
-	public String encrypt(String inPassword) {
+	@Override
+	public String encrypt(final String inPassword) {
 		// not used in this case
 		return "";
 	}
 
-	public boolean matches(String inEncryptedPassword, String inEnteredPassword) {
+	@Override
+	public boolean matches(final String inEncryptedPassword,
+			final String inEnteredPassword) {
 		// not used in this case
 		return false;
 	}

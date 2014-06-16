@@ -18,10 +18,16 @@
  */
 package org.hip.vif.web.internal.controller;
 
+import java.sql.SQLException;
+
 import org.hip.kernel.exc.VException;
 import org.hip.vif.core.interfaces.IActorManager;
 import org.hip.vif.core.member.IActor;
 import org.hip.vif.web.bom.Actor;
+import org.hip.vif.web.util.RoleHelper;
+import org.osgi.service.useradmin.UserAdmin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vaadin.server.VaadinSession;
 
@@ -32,6 +38,10 @@ import com.vaadin.server.VaadinSession;
  * @author lbenno
  */
 public class ActorManager implements IActorManager {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(ActorManager.class);
+
+	private UserAdmin userAdmin;
 
 	@Override
 	public void setActorToContext(final Long inMemberID, final String inUserID)
@@ -43,6 +53,34 @@ public class ActorManager implements IActorManager {
 		} finally {
 			VaadinSession.getCurrent().getLockInstance().unlock();
 		}
+		try {
+			RoleHelper.mapUserToRole(lActor, userAdmin);
+		}
+		catch (final SQLException exc) {
+			LOG.error(
+					"An error encountered while creating the OSGi user object!",
+					exc);
+		}
+	}
+
+	/**
+	 * Bind the OSGi user admin object.
+	 * 
+	 * @param inUserAdmin
+	 *            {@link UserAdmin}
+	 */
+	public void setUserAdmin(final UserAdmin inUserAdmin) {
+		userAdmin = inUserAdmin;
+	}
+
+	/**
+	 * Unbind the OSGi user admin object.
+	 * 
+	 * @param inUserAdmin
+	 *            {@link UserAdmin}
+	 */
+	public void unsetUserAdmin(final UserAdmin inUserAdmin) {
+		userAdmin = null;
 	}
 
 }

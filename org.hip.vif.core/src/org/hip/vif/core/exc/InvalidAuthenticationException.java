@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the persistency layer of the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.hip.vif.core.exc;
 
 import java.util.Locale;
@@ -34,39 +33,53 @@ public class InvalidAuthenticationException extends VIFWarningException {
 	public InvalidAuthenticationException() {
 		super();
 	}
-	
+
 	/**
 	 * InvalidAuthenticationException constructor comment.
-	 * @param inSimpleMessage java.lang.String
+	 * 
+	 * @param inSimpleMessage
+	 *            java.lang.String
 	 */
-	public InvalidAuthenticationException(String inSimpleMessage) {
+	public InvalidAuthenticationException(final String inSimpleMessage) {
 		super(inSimpleMessage);
 	}
-	
+
 	/**
-	 * @param inMsgKey String
-	 * @param inLocale Locale
+	 * @param inMsgKey
+	 *            String
+	 * @param inLocale
+	 *            Locale
 	 */
-	public InvalidAuthenticationException(String inMsgKey, Locale inLocale) {
+	public InvalidAuthenticationException(final String inMsgKey,
+			final Locale inLocale) {
 		super(inMsgKey, inLocale);
 	}
-	
+
 	/**
 	 * InvalidAuthenticationException constructor comment.
-	 * @param inMsgKey java.lang.String
-	 * @param inMsgParameters java.lang.Object[]
+	 * 
+	 * @param inMsgKey
+	 *            java.lang.String
+	 * @param inMsgParameters
+	 *            java.lang.Object[]
 	 */
-	public InvalidAuthenticationException(String inMsgKey, java.lang.Object[] inMsgParameters) {
+	public InvalidAuthenticationException(final String inMsgKey,
+			final java.lang.Object[] inMsgParameters) {
 		super(inMsgKey, inMsgParameters);
 	}
-	
+
 	/**
 	 * InvalidAuthenticationException constructor comment.
-	 * @param inMsgSource java.lang.String
-	 * @param inMsgKey java.lang.String
-	 * @param inMsgParameters java.lang.Object[]
+	 * 
+	 * @param inMsgSource
+	 *            java.lang.String
+	 * @param inMsgKey
+	 *            java.lang.String
+	 * @param inMsgParameters
+	 *            java.lang.Object[]
 	 */
-	public InvalidAuthenticationException(String inMsgSource, String inMsgKey, java.lang.Object[] inMsgParameters) {
+	public InvalidAuthenticationException(final String inMsgSource,
+			final String inMsgKey, final java.lang.Object[] inMsgParameters) {
 		super(inMsgSource, inMsgKey, inMsgParameters);
 	}
 }

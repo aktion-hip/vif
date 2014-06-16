@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2007, Benno Luthiger
+	Copyright (C) 2007-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package org.hip.vif.member;
 
 import java.io.IOException;
@@ -35,85 +35,71 @@ import org.hip.vif.core.search.NoHitsException;
 import org.hip.vif.core.search.VIFMemberSearcher;
 
 /**
- * Class for searching member entries using standard VIF setups, i.e. members are stored in the internal member table.
- * Searching is done using the <code>VIFMemberSearcher</code> object.
+ * Class for searching member entries using standard VIF setups, i.e. members
+ * are stored in the internal member table. Searching is done using the
+ * <code>VIFMemberSearcher</code> object.
  * 
- * @author Luthiger
- * 30.06.2007
+ * @author Luthiger 30.06.2007
  */
 public class StandardMemberSearcher implements IMemberSearcher {
 	private static String MEMBER_HOME_CLASS_NAME = MemberImpl.HOME_CLASS_NAME;
 	private QueryResult retrieved = null;
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.member.MemberSearcher#search(java.lang.String)
-	 */
-	public void prepareSearch(String inQueryTerm) throws IOException, ParseException, NoHitsException, VException, SQLException {
+	@Override
+	public void prepareSearch(final String inQueryTerm) throws IOException,
+			ParseException, NoHitsException, VException, SQLException {
 		retrieved = (new VIFMemberSearcher()).search(inQueryTerm);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.member.MemberSearcher#search(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void prepareSearch(String inName, String inFirstName, String inStreet, String inPostal, String inCity, String inMail)
-			throws NoHitsException, ParseException, IOException, VException, SQLException {
-		retrieved = (new VIFMemberSearcher()).search(inName, inFirstName, inStreet, inPostal, inCity, inMail);
+	@Override
+	public void prepareSearch(final String inName, final String inFirstName,
+			final String inStreet, final String inPostal, final String inCity,
+			final String inMail) throws NoHitsException, ParseException,
+			IOException, VException, SQLException {
+		retrieved = (new VIFMemberSearcher()).search(inName, inFirstName,
+				inStreet, inPostal, inCity, inMail);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.member.MemberSearcher#canShowAll()
-	 */
+	@Override
 	public boolean canShowAll() {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.member.MemberSearcher#canReorder()
-	 */
+	@Override
 	public boolean canReorder() {
 		return false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.member.MemberSearcher#doSearch(org.hip.kernel.bom.OrderObject)
-	 */
-	public QueryResult doSearch(OrderObject inOrder) throws VException, SQLException {
+	@Override
+	public QueryResult doSearch(final OrderObject inOrder) throws VException,
+			SQLException {
 		VSys.assertNotNull(Assert.ERROR, this, "doSearch", retrieved);
 		return retrieved;
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.member.IMemberSearcher#getMemberCacheHome()
-	 */
+
+	@Override
 	public MemberHome getMemberCacheHome() {
 		return getMemberAuthenticationHome();
 	}
-	
+
 	/**
 	 * In the standard case, we only have one type of member entries.
 	 */
+	@Override
 	public MemberHome getMemberAuthenticationHome() {
-		return (MemberHome)VSys.homeManager.getHome(MEMBER_HOME_CLASS_NAME);
+		return (MemberHome) VSys.homeManager.getHome(MEMBER_HOME_CLASS_NAME);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.member.IMemberSearcher#createMemberCacheEntryChecked(java.lang.String[])
-	 */
-	public Collection<Long> createMemberCacheEntryChecked(Collection<Long> inMemberIDs) throws VException, SQLException {
+	@Override
+	public Collection<Long> createMemberCacheEntryChecked(
+			final Collection<Long> inMemberIDs) throws VException, SQLException {
 		// We don't have a 'member cache', therefore, nothing to do.
 		return inMemberIDs;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.member.IMemberSearcher#getAssociatedCacheID(Long)
-	 */
-	public Long getAssociatedCacheID(Long inMemberID) throws VException, SQLException {
+	@Override
+	public Long getAssociatedCacheID(final Long inMemberID) throws VException,
+			SQLException {
 		// We don't have a 'member cache', therefore, nothing to do.
 		return inMemberID;
 	}

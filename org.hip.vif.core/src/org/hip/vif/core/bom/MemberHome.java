@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the persistency layer of the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,9 +29,9 @@ import org.hip.vif.core.exc.InvalidAuthenticationException;
 import org.hip.vif.core.member.IMemberInformation;
 
 /**
- * MemberHome is responsible to manage instances
- * of class org.hip.vif.bom.Member.
- *
+ * MemberHome is responsible to manage instances of class
+ * org.hip.vif.bom.Member.
+ * 
  * @author: Benno Luthiger
  * @see org.hip.vif.core.bom.Member
  */
@@ -51,70 +51,81 @@ public interface MemberHome extends DomainObjectHome {
 	public final static String KEY_PASSWORD = "Password";
 	public final static String KEY_SETTINGS = "Settings";
 	public final static String KEY_MUTATION = "Mutation";
-	
+
 	/**
-	 * Check whether the specified user is authenticated and returns the member entry in the authentication table, possibly <code>null</code>.
+	 * Check whether the specified user is authenticated and returns the member
+	 * entry in the authentication table, possibly <code>null</code>.
 	 * 
-	 * @param inUserID java.lang.String
-	 * @param inPassword java.lang.String
+	 * @param inUserID
+	 *            java.lang.String
+	 * @param inPassword
+	 *            java.lang.String
 	 * @return Member or <code>null</code>.
 	 * @exception org.hip.vif.core.exc.bom.impl.InvalidAuthenticationException
-	 * @exception org.hip.vif.core.exc.bom.impl.BOMChangeValueException 
+	 * @exception org.hip.vif.core.exc.bom.impl.BOMChangeValueException
 	 */
-	Member checkAuthentication(String inUserID, String inPassword) throws InvalidAuthenticationException, BOMChangeValueException;
-	
+	Member checkAuthentication(String inUserID, String inPassword)
+			throws InvalidAuthenticationException, BOMChangeValueException;
+
 	/**
 	 * Returns the entry of the authentified member
-	 *
+	 * 
 	 * @return org.hip.vif.bom.Member
-	 * @exception org.hip.kernel.bom.BOMInvalidKeyException 
+	 * @exception org.hip.kernel.bom.BOMInvalidKeyException
 	 */
-	
+
 	Member getActor() throws BOMInvalidKeyException;
 
 	/**
 	 * Returns the member identified by the specified ID
 	 * 
-	 * @param inMemberID java.lang.String
+	 * @param inMemberID
+	 *            java.lang.String
 	 * @return Member
 	 * @throws org.hip.kernel.bom.BOMInvalidKeyException
 	 */
 	Member getMember(String inMemberID) throws BOMInvalidKeyException;
-	
+
 	/**
 	 * Returns the member identified by the specified ID
 	 * 
-	 * @param inMemberID java.lang.Long
+	 * @param inMemberID
+	 *            java.lang.Long
 	 * @return Member
 	 * @throws BOMInvalidKeyException
 	 */
 	Member getMember(Long inMemberID) throws BOMInvalidKeyException;
 
 	/**
-	 * Returns the member identified by the specified user ID.
-	 * The user ID is the string the user enters to authenticate.
+	 * Returns the member identified by the specified user ID. The user ID is
+	 * the string the user enters to authenticate.
 	 * 
-	 * @param inUserID java.lang.String
+	 * @param inUserID
+	 *            java.lang.String
 	 * @throws org.hip.kernel.bom.BOMInvalidKeyException
 	 */
 	Member getMemberByUserID(String inUserID) throws BOMInvalidKeyException;
-	
+
 	/**
 	 * Returns a collection of members identified by the specified array of IDs.
 	 * 
-	 * @param inMemberIDs Collection<Long>
+	 * @param inMemberIDs
+	 *            Collection<Long>
 	 * @return java.util.Collection<Member> Collection of Member domain objects.
 	 */
 	Collection<Member> getMembers(Collection<Long> inMemberIDs);
-	
+
 	/**
-	 * Updates the Member cache, i.e. uses the member table as cache to store member information stored externally.
+	 * Updates the Member cache, i.e. uses the member table as cache to store
+	 * member information stored externally.
 	 * 
 	 * @return Member member entry in table of cached members.
-	 * @param inInformation MemberInformation
+	 * @param inInformation
+	 *            MemberInformation
 	 * @throws SQLException
 	 * @throws VException
 	 */
-	Member updateMemberCache(IMemberInformation inInformation) throws SQLException, VException;
-	
+	Member updateMemberCache(IMemberInformation inInformation)
+			throws SQLException, VException;
+
 }

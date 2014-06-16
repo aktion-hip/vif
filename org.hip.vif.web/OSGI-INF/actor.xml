@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.web.actor.manager">
    <implementation class="org.hip.vif.web.internal.controller.ActorManager"/>
+   <reference cardinality="1..1" interface="org.osgi.service.useradmin.UserAdmin" bind="setUserAdmin" unbind="unsetUserAdmin" name="useradmin" policy="dynamic"/>
    <service>
       <provide interface="org.hip.vif.core.interfaces.IActorManager"/>
    </service>
