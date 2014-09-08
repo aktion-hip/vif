@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,8 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
+ */
 package org.hip.vif.admin.groupedit.tasks;
 
 import java.sql.SQLException;
@@ -28,29 +27,26 @@ import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.Group;
 import org.hip.vif.core.bom.GroupAdminHome;
 import org.hip.vif.core.exc.ExternIDNotUniqueException;
-import org.hip.vif.web.tasks.AbstractVIFTask;
+import org.hip.vif.web.tasks.AbstractWebController;
 
-/**
- * Base class of controllers for group administration. 
- * 
- * @author Luthiger
- * Created: 08.11.2011
- */
-public abstract class AbstractGroupTask extends AbstractVIFTask {	
+/** Base class of controllers for group administration.
+ *
+ * @author Luthiger Created: 08.11.2011 */
+public abstract class AbstractGroupTask extends AbstractWebController {
 
-	abstract public boolean save(Group inGroup) throws ExternIDNotUniqueException;
+    abstract public boolean save(Group inGroup) throws ExternIDNotUniqueException;
 
-	protected void deleteGroupAdmin(Long inGroupID, Long inAdminID) throws VException, SQLException {
-		KeyObject lKey = new KeyObjectImpl();
-		lKey.setValue(GroupAdminHome.KEY_GROUP_ID, inGroupID);
-		lKey.setValue(GroupAdminHome.KEY_MEMBER_ID, inAdminID);
-		GroupAdminHome lHome = BOMHelper.getGroupAdminHome();
-		//remove group admin entry
-		lHome.delete(lKey, true);
-		if (!lHome.isGroupAdmin(inAdminID)) {
-			//remove group admin role
-			BOMHelper.getLinkMemberRoleHome().deleteGroupAdminRole(inAdminID);
-		}
-	}
+    protected void deleteGroupAdmin(final Long inGroupID, final Long inAdminID) throws VException, SQLException {
+        final KeyObject lKey = new KeyObjectImpl();
+        lKey.setValue(GroupAdminHome.KEY_GROUP_ID, inGroupID);
+        lKey.setValue(GroupAdminHome.KEY_MEMBER_ID, inAdminID);
+        final GroupAdminHome lHome = BOMHelper.getGroupAdminHome();
+        // remove group admin entry
+        lHome.delete(lKey, true);
+        if (!lHome.isGroupAdmin(inAdminID)) {
+            // remove group admin role
+            BOMHelper.getLinkMemberRoleHome().deleteGroupAdminRole(inAdminID);
+        }
+    }
 
 }

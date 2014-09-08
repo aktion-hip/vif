@@ -29,8 +29,8 @@ import org.hip.vif.core.bom.CompletionHome;
 import org.hip.vif.core.bom.QuestionHome;
 import org.hip.vif.core.bom.Text;
 import org.hip.vif.core.bom.TextHome;
-import org.hip.vif.core.util.BeanWrapperHelper;
 import org.hip.vif.web.biblio.BibliographyAdapter;
+import org.hip.vif.web.util.BeanWrapperHelper;
 import org.hip.vif.web.util.BibliographyFormatter;
 import org.hip.vif.web.util.RichTextSanitizer;
 

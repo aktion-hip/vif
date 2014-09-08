@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the application VIF.
- Copyright (C) 2008, Benno Luthiger
+ Copyright (C) 2008-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -18,17 +18,13 @@
  */
 package org.hip.vif.core.interfaces;
 
-/**
- * Partlets can define and set new permissions to restrict users from performing the tasks defined in the partlet.
- * This interface defines the service the bundles can use to create bundle defined permissions for the application.
+/** Partlets can define and set new permissions to restrict users from performing the tasks defined in the partlet. This
+ * interface defines the service the bundles can use to create bundle defined permissions for the application.
  *
- * @author Luthiger
- * Created: 12.07.2009
- */
+ * @author Luthiger Created: 12.07.2009 */
 public interface IPermissionRecords {
-	
-	/**
-	 * @return IPermissionRecord[] set of {@link IPermissionRecord}, each entry in the array creates a new entry (if not existing yet) in the permission's table.
-	 */
-	public IPermissionRecord[] getPermissionRecords();
+
+    /** @return IPermissionRecord[] set of {@link IPermissionRecord}, each entry in the array creates a new entry (if not
+     *         existing yet) in the permission's table. */
+    public IPermissionRecord[] getPermissionRecords();
 }

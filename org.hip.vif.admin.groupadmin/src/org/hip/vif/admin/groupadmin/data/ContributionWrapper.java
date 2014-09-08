@@ -24,7 +24,7 @@ import org.hip.vif.core.bom.CompletionHome;
 import org.hip.vif.core.bom.QuestionHome;
 import org.hip.vif.core.bom.TextHome;
 import org.hip.vif.core.interfaces.ISelectableBean;
-import org.hip.vif.core.util.BeanWrapperHelper;
+import org.hip.vif.web.util.BeanWrapperHelper;
 
 /**
  * Bean wrapping a contribution model instance. A contribution is either a

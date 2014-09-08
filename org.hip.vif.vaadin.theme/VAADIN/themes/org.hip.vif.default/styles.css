@@ -1,5 +1,9 @@
 @import "../runo/legacy-styles.css";
 
+.vif-main,
+.ripla-main {
+    background-color:white;
+}
 .vif-window {
     background-color:white;
 }
@@ -9,16 +13,15 @@
 }
 
 .vif-head-title {
-    padding-top:25px;
     font:bold 22px arial, helvetica, sans-serif;
     color:white;
     background-color:inherit;
 }
 
-.vif-login-form {
+.ripla-login-form {
     margin-top:100px;
 }
-.vif-login-form .v-form-description {
+.ripla-login-form div.ripla-welcome {
     font-size:13pt;
     font-weight:bold;
     color:#FF9417;
@@ -32,12 +35,12 @@
     background-color:inherit;
 }
 
-.vif-servicebar {
+.ripla-toolbar {
     padding-bottom:2px;
     background-color:#E5E5E5;
 }
 
-.vif-servicebar .link .v-button-caption {
+.ripla-toolbar .link .v-button-caption {
     text-decoration:none;
 }
 
@@ -46,38 +49,44 @@
     margin-right:7px;
 }
 
+.ripla-select,
 .vif-select,
 .vif-input-config {
-    margin-left:6px;    
+    margin-left: 6px;
 }
 
 .vif-language-select .vif-servicebar-label {
     padding-top:1px;
 }
 
-.vif-toolbar, .vif-toolbar .v-menubar {
+.ripla-menubar, .ripla-menubar .v-menubar {
     background: #E5E5E5 url(images/menubar.png) repeat-x bottom left;
 }
 
-.vif-menubar {
+.ripla-menu {
     height:auto;
     background-color:#E5E5E5;
 }
 
-.vif-menubar .v-menubar-menuitem {
+.ripla-menu .v-menubar-menuitem {
     border-top:none;
+    border-bottom:none;
     padding-top:7px;
     padding-bottom:7px;
 }
 
-.vif-menubar .v-menubar-menuitem-vif-menu-active {    
+.ripla-menu .v-menubar-menuitem-ripla-menu-active {    
     background-color:#FFFFFF;
 }
 
-.vif-menubar .v-menubar-menuitem-selected {
+.ripla-menu .v-menubar-menuitem-selected {
     background-color:#FF9417;
 }
 
+.v-menubar-submenu-ripla-menu .v-menubar-menuitem {
+    line-height: 16px;
+    padding: 1px 15px 1px 10px;
+}
 .v-menubar-submenu .v-menubar-menuitem {
     background-color:#E5E5E5;
 }
@@ -89,7 +98,7 @@
 .vif-table .v-table-cell-content {
     vertical-align:text-top;
 }
-.vif-table .v-label div.vif-title {
+.vif-table .v-label div. {
     font-size:13pt;
     font-weight:bold;
     color:#FF9417;
@@ -102,13 +111,14 @@
     margin-bottom:7px;
 }
 
+.ripla-lookup .vif-title, 
 .vif-view .vif-pagetitle,
 .vif-search .vif-pagetitle,
 .vif-table .vif-pagetitle,
 .vif-view .vif-title, 
 .vif-search .vif-title, 
 .vif-view .vif-subtitle,
-.vif-lookup .vif-title {
+.ripla-lookup .vif-title {
     font-weight:bold;
     color:#FF9417;
     background-color:inherit;    
@@ -131,7 +141,7 @@
     font-size:12pt;
     margin-bottom:1px;
 }
-.vif-view .vif-label-table .vif-title  {
+.vif-view .ripla-label-table .vif-title  {
     margin-top:5px;
 }
 
@@ -173,7 +183,7 @@
     margin-right:15px;
 }
 .vif-bibliography .v-label-undef-w,
-.vif-lookup .v-label-undef-w {
+.ripla-lookup .v-label-undef-w {
     white-space:normal;
 }
 
@@ -185,52 +195,66 @@
 }
 
 .vif-view span.spaced,
-.vif-lookup span.spaced {
+.ripla-lookup span.spaced {
     margin-right:4px;
 }
 
-.vif-lookup .v-window-header {
+.ripla-lookup .v-window-header {
     color:#FF9417;
     background-color:inherit;
 }
 
-.vif-lookup div.vif-label-table .vif-label {
+.ripla-lookup div.ripla-label-table .ripla-label {
     font-style:italic;
     vertical-align:top;
     margin-right:7px;
 }
 
-.vif-lookup div.vif-label-table .vif-label,
-.vif-lookup div.vif-label-table .vif-value-emphasized {
+.ripla-lookup div.ripla-label-table .ripla-label,
+.ripla-lookup div.ripla-label-table .ripla-value-emphasized {
     white-space:nowrap;
 }
 
-.vif-lookup div.vif-search div.vif-label-table .vif-label {
+.ripla-lookup div.vif-search div.ripla-label-table .ripla-label {
     font-style:normal;
 }
 
-.vif-view div.vif-label-table .ripla-input,
-.vif-view div.vif-label-table .vif-label,
-.vif-view div.vif-label-table .vif-value-emphasized,
-.vif-search div.vif-label-table .ripla-input,
-.vif-search div.vif-label-table .vif-label,
-.vif-search div.vif-label-table .vif-value-emphasized,
-.vif-lookup div.vif-label-table .vif-label,
-.vif-lookup div.vif-label-table .vif-value, 
-.vif-lookup div.vif-label-table .vif-value-emphasized {
+.vif-view div.ripla-label-table .vif-input,
+.vif-view div.ripla-label-table .ripla-input,
+.vif-view div.ripla-label-table .ripla-label,
+.vif-view div.ripla-label-table .ripla-value-emphasized,
+.vif-search div.ripla-label-table .vif-input,
+.vif-search div.ripla-label-table .ripla-input,
+.vif-search div.ripla-label-table .ripla-label,
+.vif-search div.ripla-label-table .ripla-value-emphasized,
+.ripla-lookup div.ripla-label-table .ripla-label,
+.ripla-lookup div.ripla-label-table .ripla-value, 
+.ripla-lookup div.ripla-label-table .vif-value, 
+.ripla-lookup div.ripla-label-table .ripla-value-emphasized {
     margin-top:3px;
 }
 
-.vif-view div.vif-label-table .vif-value,
-.vif-view div.vif-label-table .ripla-input, 
-.vif-search div.vif-label-table .vif-value,
-.vif-search div.vif-label-table .ripla-input {
+.ripla-lookup div.ripla-label-table .vif-value, 
+.vif-view div.ripla-label-table .ripla-value,
+.vif-view div.ripla-label-table .ripla-input, 
+.vif-view div.ripla-label-table .vif-input, 
+.vif-search div.ripla-label-table .ripla-value,
+.vif-search div.ripla-label-table .ripla-input,
+.vif-search div.ripla-label-table .vif-input {
     margin-left:5px;    
     margin-right:5px;    
 }
 
-.vif-view div.vif-label-table .vif-value-emphasized,
-.vif-lookup div.vif-label-table .vif-value-emphasized  {
+.vif-view .ripla-form div.ripla-label-table .vif-value-emphasized {
+	margin-left:5px;
+}
+
+.vif-view .ripla-form .v-slot-ripla-input .v-caption-no-indicator {
+	display: none;
+}
+
+.vif-view div.ripla-label-table .ripla-value-emphasized,
+.ripla-lookup div.ripla-label-table .ripla-value-emphasized  {
     font-weight:bold;
 }
 
@@ -238,7 +262,7 @@
     margin-top:4px;    
 }
 
-.vif-lookup .vif-contributor {
+.ripla-lookup .vif-contributor {
     margin-top:12px;    
 }
 
@@ -247,19 +271,24 @@
     margin-left:7px;
 }
 
-.vif-submenu div.v-button {
+
+.ripla-split .ripla-contextmenu .ripla-contextmenu-item {
+	margin-bottom:17px;
+}
+
+.ripla-contextmenu div.v-button {
     margin-bottom:9px;
 }
 
-.vif-submenu .v-button-caption {
+.ripla-contextmenu .v-button-caption {
     white-space:normal;
     text-decoration:none;
 }
 
-.vif-servicebar .link .v-button-wrap,
+.ripla-toolbar .link .v-button-wrap,
 .vif-view .v-button-wrap,
-.vif-lookup .v-button-wrap,
-.vif-submenu .v-button-wrap {
+.ripla-lookup .v-button-wrap,
+.ripla-contextmenu .v-button-wrap {
     box-shadow:0 0 transparent;
 }
 
@@ -300,7 +329,7 @@
 .vif-view div.spacer,
 .vif-search div.spacer,
 .vif-table div.spacer,
-.vif-lookup div.spacer {
+.ripla-lookup div.spacer {
     margin-top:15px;
 }
 
@@ -313,7 +342,7 @@
     vertical-align:middle;
 }
 
-.vif-help {
+.ripla-help {
     padding-left:10px;
 }
 
@@ -321,13 +350,13 @@
     padding:4px;
 }
 
-.vif-view-member div.vif-label-table div.vif-value {
+.vif-view-member div.ripla-label-table div.ripla-value {
     margin-left:8px;
     margin-top:3px;
     font-style:italic;
 }
 
-.vif-view div.vif-label-table .vif-send-mail {
+.vif-view div.ripla-label-table .vif-send-mail {
     margin-left:8px;
     margin-bottom:5px;
 }
@@ -346,7 +375,7 @@
     padding-bottom:7px;    
 }
 
-.vif-lookup .vif-lookup-close {
+.ripla-lookup .ripla-lookup-close {
     position:absolute;
     bottom:25px;
     right:25px;

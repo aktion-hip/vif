@@ -19,28 +19,22 @@
 package org.hip.vif.web.bom;
 
 import org.hip.kernel.sys.VSys;
-import org.hip.vif.core.bom.GroupHome;
 import org.hip.vif.web.bom.impl.GroupImpl;
 
-/**
- * Helper class to return the various domain object homes (that need
- * <code>IMessages</code>).
- * 
- * @author lbenno
- */
+/** Helper class to return the various domain object homes (that need <code>IMessages</code>).
+ *
+ * @author lbenno */
 public final class VifBOMHelper {
 
-	private VifBOMHelper() {
-		// prevent instantiation
-	}
+    private VifBOMHelper() {
+        // prevent instantiation
+    }
 
-	/**
-	 * Returns the GroupHome
-	 * 
-	 * @return {@link GroupHome}
-	 */
-	public static GroupHome getGroupHome() {
-		return (GroupHome) VSys.homeManager.getHome(GroupImpl.HOME_CLASS_NAME);
-	}
+    /** Returns the GroupHome
+     * 
+     * @return {@link GroupHome} */
+    public static GroupHome getGroupHome() {
+        return (GroupHome) VSys.homeManager.getHome(GroupImpl.HOME_CLASS_NAME);
+    }
 
 }

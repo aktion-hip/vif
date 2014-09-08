@@ -33,7 +33,7 @@ import org.hip.vif.core.bom.GroupHome;
 import org.hip.vif.core.bom.QuestionHome;
 import org.hip.vif.core.bom.impl.JoinTextToQuestionHome;
 import org.hip.vif.core.bom.impl.TextImpl;
-import org.hip.vif.core.util.BeanWrapperHelper;
+import org.hip.vif.web.util.BeanWrapperHelper;
 
 /**
  * <p>Class to help to delete bibliography entries.</p>

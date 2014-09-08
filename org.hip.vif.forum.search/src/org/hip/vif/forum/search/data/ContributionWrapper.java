@@ -22,7 +22,7 @@ package org.hip.vif.forum.search.data;
 import org.hip.kernel.bom.GeneralDomainObject;
 import org.hip.vif.core.search.AbstractSearching;
 import org.hip.vif.core.search.ContentHitsObject;
-import org.hip.vif.core.util.BeanWrapperHelper;
+import org.hip.vif.web.util.BeanWrapperHelper;
 
 /**
  * Wrapper/adapter for <code>ContentHitsObject</code> (returned by a content search).

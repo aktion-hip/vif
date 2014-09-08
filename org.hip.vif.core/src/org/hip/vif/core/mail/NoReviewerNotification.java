@@ -18,62 +18,62 @@
  */
 package org.hip.vif.core.mail;
 
+import java.rmi.activation.Activator;
 import java.util.Collection;
 
-import org.hip.vif.core.Activator;
 import org.hip.vif.core.adapters.AddressAdapter;
-import org.hip.vif.core.interfaces.IMessages;
 import org.hip.vif.core.service.PreferencesHandler;
 
-/**
- * Mail to notify the group administrations about missing reviewers.
+/** Mail to notify the group administrations about missing reviewers.
  *
  * @author Luthiger
- * Created: 20.10.2010
- */
+ * @deprecated Use <code>org.hip.vif.web.mail.NoReviewerNotification</code> instead. */
+@Deprecated
 public class NoReviewerNotification extends AbstractNotification {
-	private final static String KEY_GREETINGS 	= "org.hip.vif.msg.mail.greetings";
-	private static final String KEY_SUBJECT 	= "org.hip.vif.msg.mail.noreviewer.subject";
-	private static final String KEY_BODY 		= "org.hip.vif.msg.mail.noreviewer.body";
-	
-	private String groupName;
-	private IMessages messages = Activator.getMessages();
+    private final static String KEY_GREETINGS = "org.hip.vif.msg.mail.greetings";
+    private static final String KEY_SUBJECT = "org.hip.vif.msg.mail.noreviewer.subject";
+    private static final String KEY_BODY = "org.hip.vif.msg.mail.noreviewer.body";
 
-	/**
-	 * Notifies the group administration that there are no reviewers available.
-	 * 
-	 * @param inReceiverMails Collection<AddressAdapter> the group administrators mail addresses
-	 * @param inGroupName String
-	 */
-	public NoReviewerNotification(Collection<AddressAdapter> inReceiverMails, String inGroupName) {
-		super(inReceiverMails, false);
-		groupName = inGroupName;
-	}
+    private final String groupName;
+    private final IMessages messages = Activator.getMessages();
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.mail.AbstractNotification#getBody()
-	 */
-	@Override
-	protected StringBuilder getBody() {
-		StringBuilder outBody = new StringBuilder(messages.getFormattedMessage(KEY_BODY, groupName));
-		outBody.append("\n\n").append(messages.getMessage(KEY_GREETINGS));
-		
-		String lNaming = getPreference(PreferencesHandler.KEY_MAIL_NAMING);
-		outBody.append("\n\n").append(lNaming);
-		return outBody;
-	}
-	
-	@Override
-	protected StringBuilder getBodyHtml() {
-		return new StringBuilder("<p>").append(new String(getBody()).replace("\n", "<br/>")).append("</p>");
-	}
+    /** Notifies the group administration that there are no reviewers available.
+     *
+     * @param inReceiverMails Collection<AddressAdapter> the group administrators mail addresses
+     * @param inGroupName String */
+    public NoReviewerNotification(final Collection<AddressAdapter> inReceiverMails, final String inGroupName) {
+        super(inReceiverMails, false);
+        groupName = inGroupName;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.mail.AbstractNotification#getSubjectText()
-	 */
-	@Override
-	protected String getSubjectText() {
-		return new String(getSubjectID().append(" ").append(messages.getMessage(KEY_SUBJECT)));
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.hip.vif.mail.AbstractNotification#getBody()
+     */
+    @Override
+    protected StringBuilder getBody() {
+        final StringBuilder outBody = new StringBuilder(messages.getFormattedMessage(KEY_BODY, groupName));
+        outBody.append("\n\n").append(messages.getMessage(KEY_GREETINGS));
+
+        final String lNaming = getPreference(PreferencesHandler.KEY_MAIL_NAMING);
+        outBody.append("\n\n").append(lNaming);
+        return outBody;
+    }
+
+    @Override
+    protected StringBuilder getBodyHtml() {
+        return new StringBuilder("<p>").append(new String(getBody()).replace("\n", "<br/>")).append("</p>");
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.hip.vif.mail.AbstractNotification#getSubjectText()
+     */
+    @Override
+    protected String getSubjectText() {
+        return new String(getSubjectID().append(" ").append(messages.getMessage(KEY_SUBJECT)));
+    }
 
 }

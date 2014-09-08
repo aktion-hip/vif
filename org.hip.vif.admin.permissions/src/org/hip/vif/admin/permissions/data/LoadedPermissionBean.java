@@ -28,7 +28,7 @@ import org.hip.vif.core.bom.PermissionHome;
 import org.hip.vif.core.bom.RoleHome;
 import org.hip.vif.core.bom.impl.LinkPermissionRoleAlternate;
 import org.hip.vif.core.interfaces.ISelectableBean;
-import org.hip.vif.core.util.BeanWrapperHelper;
+import org.hip.vif.web.util.BeanWrapperHelper;
 
 /**
  * This permission bean class is loaded (i.e. initialized) with the information 

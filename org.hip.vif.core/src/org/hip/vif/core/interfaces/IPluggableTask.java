@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.core.interfaces;
 
@@ -23,22 +23,18 @@ import org.hip.kernel.exc.VException;
 
 import com.vaadin.ui.Component;
 
-/**
- * Interface for all Task in the framework.
- * Tasks implementing this interface have basically to implement the
+/** Interface for all Task in the framework. Tasks implementing this interface have basically to implement the
  * <code>run()</code> method, which should contain all the actions of this task.
- * 
+ *
  * @author Luthiger
- * Created: 18.05.2011
- */
+ * @deprecated Use <code>org.ripla.web.interfaces.IPluggable</code> instead */
+@Deprecated
 public interface IPluggableTask extends IEventableTask {
 
-	/**
-	 * Runs this task.
-	 * 
-	 * @return {@link Component} the component created by the task.
-	 * @throws VException
-	 */
-	Component run() throws VException;
+    /** Runs this task.
+     * 
+     * @return {@link Component} the component created by the task.
+     * @throws VException */
+    Component run() throws VException;
 
 }

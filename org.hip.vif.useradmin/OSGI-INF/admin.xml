@@ -4,4 +4,5 @@
    <service>
       <provide interface="org.osgi.service.useradmin.UserAdmin"/>
    </service>
+   <reference cardinality="1..n" interface="org.osgi.service.prefs.PreferencesService" bind="setPreferences" unbind="unsetPreferences" name="preferences" policy="dynamic"/>
 </scr:component>

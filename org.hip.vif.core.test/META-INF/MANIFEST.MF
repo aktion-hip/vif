@@ -8,7 +8,6 @@ Fragment-Host: org.hip.vif.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.mysql.jdbc;version="5.1.18",
  com.mysql.jdbc.jdbc2.optional;version="5.1.18",
- com.vaadin.terminal,
  org.apache.derby.jdbc,
  org.osgi.service.jdbc;version="1.0.0"
 Bundle-ClassPath: .,

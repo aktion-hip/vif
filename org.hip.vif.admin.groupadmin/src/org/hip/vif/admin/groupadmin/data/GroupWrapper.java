@@ -22,7 +22,7 @@ package org.hip.vif.admin.groupadmin.data;
 import org.hip.kernel.bom.GeneralDomainObject;
 import org.hip.kernel.code.CodeList;
 import org.hip.vif.core.bom.GroupHome;
-import org.hip.vif.core.util.BeanWrapperHelper;
+import org.hip.vif.web.util.BeanWrapperHelper;
 
 /**
  * Bean adapting the group model instance.

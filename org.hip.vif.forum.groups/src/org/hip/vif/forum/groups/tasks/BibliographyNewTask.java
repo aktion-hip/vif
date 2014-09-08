@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,43 +15,36 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.forum.groups.tasks;
 
-import org.hip.kernel.exc.VException;
-import org.hip.vif.core.annotations.Partlet;
 import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.Text;
 import org.hip.vif.core.bom.TextHome;
-import org.hip.vif.core.util.ParameterObject;
+import org.ripla.annotations.UseCaseController;
+import org.ripla.exceptions.RiplaException;
+import org.ripla.util.ParameterObject;
 
 import com.vaadin.ui.Component;
 
-/**
- * Create a new bibliographical entry.
- * 
- * @author Luthiger
- * Created: 26.09.2011
- */
-@Partlet
+/** Create a new bibliographical entry.
+ *
+ * @author Luthiger Created: 26.09.2011 */
+@UseCaseController
 public class BibliographyNewTask extends AbstractBibliographyTask {
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.web.tasks.AbstractVIFTask#runChecked()
-	 */
-	@Override
-	protected Component runChecked() throws VException {		
-		try {
-			ParameterObject lParameters = getParameters();
-			Text lText = (Text)BOMHelper.getTextHome().create();
-			lText.set(TextHome.KEY_AUTHOR, lParameters.get(KEY_PARAMETER_AUTHOR));
-			lText.set(TextHome.KEY_TITLE, lParameters.get(KEY_PARAMETER_TITLE));
-			return editBibliography(lText, 0l, 0, true); //$NON-NLS-1$
-		} 
-		catch (Exception exc) {
-			throw createContactAdminException(exc);
-		}
-	}
+    @Override
+    protected Component runChecked() throws RiplaException {
+        try {
+            final ParameterObject lParameters = getParameters();
+            final Text lText = (Text) BOMHelper.getTextHome().create();
+            lText.set(TextHome.KEY_AUTHOR, lParameters.get(KEY_PARAMETER_AUTHOR));
+            lText.set(TextHome.KEY_TITLE, lParameters.get(KEY_PARAMETER_TITLE));
+            return editBibliography(lText, 0l, 0, true); //$NON-NLS-1$
+        } catch (final Exception exc) {
+            throw createContactAdminException(exc);
+        }
+    }
 
 }

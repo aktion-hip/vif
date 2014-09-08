@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by

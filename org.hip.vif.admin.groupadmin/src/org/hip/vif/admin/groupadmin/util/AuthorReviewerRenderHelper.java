@@ -30,8 +30,8 @@ import org.hip.vif.core.bom.Member;
 import org.hip.vif.core.bom.MemberHome;
 import org.hip.vif.core.bom.impl.JoinCompletionToMember;
 import org.hip.vif.core.bom.impl.JoinCompletionToMemberHome;
-import org.hip.vif.core.util.BeanWrapperHelper;
 import org.hip.vif.web.interfaces.IPluggableWithLookup;
+import org.hip.vif.web.util.BeanWrapperHelper;
 import org.hip.vif.web.util.LinkButtonHelper;
 import org.ripla.web.util.RiplaViewHelper;
 

@@ -25,10 +25,10 @@ import org.hip.vif.admin.groupadmin.data.GroupContentContainer;
 import org.hip.vif.admin.groupadmin.data.GroupContentWrapper;
 import org.hip.vif.admin.groupadmin.ui.GroupContentView;
 import org.hip.vif.core.bom.BOMHelper;
+import org.hip.vif.core.bom.Group;
 import org.hip.vif.core.bom.QuestionHierarchyHome;
 import org.hip.vif.core.bom.QuestionHome;
 import org.hip.vif.core.code.QuestionState;
-import org.hip.vif.web.bom.Group;
 import org.hip.vif.web.bom.VifBOMHelper;
 import org.hip.vif.web.tasks.AbstractWebController;
 import org.ripla.annotations.UseCaseController;
@@ -36,59 +36,54 @@ import org.ripla.exceptions.RiplaException;
 
 import com.vaadin.ui.Component;
 
-/**
- * Shows the list of all the group's questions.
- * 
- * @author Luthiger Created: 20.11.2011
- */
+/** Shows the list of all the group's questions.
+ *
+ * @author Luthiger Created: 20.11.2011 */
 @UseCaseController
 public class AdminQuestionListTask extends AbstractWebController {
 
-	@Override
-	protected String needsPermission() {
-		return Constants.PERMISSION_QUESTION_NEW;
-	}
+    @Override
+    protected String needsPermission() {
+        return Constants.PERMISSION_QUESTION_NEW;
+    }
 
-	@Override
-	protected Component runChecked() throws RiplaException {
-		try {
-			loadContextMenu(Constants.MENU_SET_ID_GROUP_CONTENT);
+    @Override
+    protected Component runChecked() throws RiplaException {
+        try {
+            loadContextMenu(Constants.MENU_SET_ID_GROUP_CONTENT);
 
-			final Long lGroupID = getGroupID();
-			// If no questions found, run task to create a new question
-			if (!BOMHelper.getQuestionHome().hasQuestionsInGroup(lGroupID)) {
-				setQuestionID(0l);
-				return forwardTo(AdminQuestionNewTask.class);
-			}
-			final Group lGroup = VifBOMHelper.getGroupHome().getGroup(lGroupID);
-			final QuestionHome lQuestionHome = BOMHelper.getQuestionHome();
-			final QuestionHierarchyHome lHierarchyHome = BOMHelper
-					.getQuestionHierarchyHome();
-			final CodeList lCodeList = CodeListHome.instance().getCodeList(
-					QuestionState.class, getAppLocale().getLanguage());
-			return new GroupContentView(lGroup,
-					GroupContentContainer.createData(lQuestionHome
-							.selectOfGroupFiltered(
-									lGroupID,
-									createOrder(
-											QuestionHome.KEY_QUESTION_DECIMAL,
-											false), getActor().getActorID()),
-							lHierarchyHome.getChildrenChecker(lGroupID),
-							lCodeList, 2), this);
-		}
-		catch (final Exception exc) {
-			throw createContactAdminException(exc);
-		}
-	}
+            final Long lGroupID = getGroupID();
+            // If no questions found, run task to create a new question
+            if (!BOMHelper.getQuestionHome().hasQuestionsInGroup(lGroupID)) {
+                setQuestionID(0l);
+                return forwardTo(AdminQuestionNewTask.class);
+            }
+            final Group lGroup = VifBOMHelper.getGroupHome().getGroup(lGroupID);
+            final QuestionHome lQuestionHome = BOMHelper.getQuestionHome();
+            final QuestionHierarchyHome lHierarchyHome = BOMHelper
+                    .getQuestionHierarchyHome();
+            final CodeList lCodeList = CodeListHome.instance().getCodeList(
+                    QuestionState.class, getAppLocale().getLanguage());
+            return new GroupContentView(lGroup,
+                    GroupContentContainer.createData(lQuestionHome
+                            .selectOfGroupFiltered(
+                                    lGroupID,
+                                    createOrder(
+                                            QuestionHome.KEY_QUESTION_DECIMAL,
+                                            false), getActor().getActorID()),
+                            lHierarchyHome.getChildrenChecker(lGroupID),
+                            lCodeList, 2), this);
+        } catch (final Exception exc) {
+            throw createContactAdminException(exc);
+        }
+    }
 
-	/**
-	 * Callback method
-	 * 
-	 * @param inItemId
-	 */
-	public void processSelection(final GroupContentWrapper inItemId) {
-		setQuestionID(inItemId.getQuestionID());
-		sendEvent(AdminQuestionShowTask.class);
-	}
+    /** Callback method
+     * 
+     * @param inItemId */
+    public void processSelection(final GroupContentWrapper inItemId) {
+        setQuestionID(inItemId.getQuestionID());
+        sendEvent(AdminQuestionShowTask.class);
+    }
 
 }

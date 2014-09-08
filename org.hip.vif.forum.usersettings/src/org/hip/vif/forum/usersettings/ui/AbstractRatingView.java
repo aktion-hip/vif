@@ -30,7 +30,7 @@ import org.hip.vif.core.bom.QuestionHome;
 import org.hip.vif.core.bom.TextHome;
 import org.hip.vif.core.interfaces.IEventableTask;
 import org.hip.vif.core.interfaces.IMessages;
-import org.hip.vif.core.util.BeanWrapperHelper;
+import org.hip.vif.web.util.BeanWrapperHelper;
 import org.hip.vif.web.util.LinkButtonHelper;
 import org.hip.vif.web.util.LinkButtonHelper.LookupType;
 

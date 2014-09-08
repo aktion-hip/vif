@@ -1,0 +1,362 @@
+!contents -R2 -g -p -f -h
+
+!2 A Walk Through the VIF Application
+
+!3 Preparation
+
+Having a newly created embedded VIF application, we have to create a Super User entry:
+
+!|import|
+|org.hip.vifapp.fixtures|
+
+!| script |
+|start | vif create SU action | 8081 |
+|check | page title | Create the Super User entry |
+|check | login form field | User-ID: |
+|check | login form field | Password: |
+|check | login form field | Confirmation: |
+|ensure | login with user name | FitSU | and password | fit4ever |
+|check | success message | The super user 'FitSU' has been created successfully. Please log in to VIF Administration and create forum members. |
+
+
+!3 Editing user data
+
+Note: Expected name is SU first and 'John Foo' after.
+
+!|script |
+|start | vif edit SU action | 8081 |
+|ensure | login as | FitSU | with password | fit4ever |
+|check | page title 1 | Member administration |
+|check | number of members | 1 |
+|check | userID of member | FitSU |
+|check | name of member | SU |
+|ensure | open member edit |
+|check | page title 2 | Edit a member's data |
+|ensure | edit name | Foo | first name | John | street | Highway 1 | postal | 1234 | city | Heaven | mail | test1@localhost |
+|check | success message | The data for FitSU successfully saved. |
+|ensure | logout |
+
+!3 Creating new members
+
+Log into the admin application with your super user account. Go to ''Main menu -> Search member -> Create member entry'' to create four member entries for testing purpose. Name the first one '''testactor''' and assign the mail address ''test1@my.host.org'' to this entry. Name the other three member entries '''groupAdmin1''', '''groupAdmin2''' and '''participant'''. Assign the mail address ''test2@my.host.org'' to these entries.
+
+You have to check the Member role while creating the member entries.
+
+!|script |
+|start | vif create members action | 8081 |
+|ensure | login as | FitSU | with password | fit4ever |
+|check | page title 1 | Member administration |
+|ensure | member new form |
+|check | page title 2 | Registration of a new member's data |
+|ensure | create member | testactor | name | Actor | first name | Test | street | Highway 2 | postal | 2234 | city | Heaven | mail | test1@localhost |
+|check | page title 1 | Registration of a new member's data |
+|$pw1= | password | 
+|check | success message | The data for testactor successfully saved. New password of testactor: $pw1.|
+|ensure | create member | groupAdmin1 | name | Gruber | first name | Adi | street | Stairway 2 | postal | 6666 | city | Hell | mail | test2@localhost |
+|check | page title 1 | Registration of a new member's data |
+|$pw2= | password | 
+|check | success message | The data for groupAdmin1 successfully saved. New password of groupAdmin1: $pw2.|
+|ensure | create member | groupAdmin2 | name | Gambler | first name | Pit | street | Noway 2 | postal | 8605 | city | Heaven | mail | test2@localhost |
+|check | page title 1 | Registration of a new member's data |
+|$pw3= | password | 
+|check | success message | The data for groupAdmin2 successfully saved. New password of groupAdmin2: $pw3.|
+|ensure | create member | participant | name | Cipant | first name | Parti | street | Bigstr. 8 | postal | 4321 | city | Heaven | mail | test2@localhost |
+|check | page title 1 | Registration of a new member's data |
+|$pw4= | password | 
+|check | success message | The data for participant successfully saved. New password of participant: $pw4.|
+|ensure | change to | org.hip.vif.admin.member.searchMember |
+|check | page title 1 | Member administration |
+|check | number of members | 5 |
+|ensure | logout |
+
+!3 Set new password
+
+Login to the forum application as '''groupAdmin1''' with the password created and sent to ''test2@my.host.org''. Go to ''Main menu -> Personal data'' and then to ''Change password''. Enter the old password and then a new password you can remember better. Confirm the new password and save the input.
+Do the same with '''groupAdmin2''', '''participant''' and '''testactor'''.
+
+!|script |
+|start | vif change password action | 8081 |
+|note | process 'testactor' |
+|ensure | login as | testactor | with password | $pw1 |
+|check | page title 1 | List of discussion groups |
+|ensure | change to | org.hip.vif.forum.member.editPwrd |
+|check | page title 1 | Change password for testactor |
+|ensure | change | testactor | password | $pw1 |
+|check | success message | The new password has been successfully saved. |
+|check | page title 1 | List of discussion groups |
+|ensure | logout |
+|note | process 'groupAdmin1' |
+|ensure | login as | groupAdmin1 | with password | $pw2 |
+|check | page title 1 | List of discussion groups |
+|ensure | change to | org.hip.vif.forum.member.editPwrd |
+|check | page title 1 | Change password for groupAdmin1 |
+|ensure | change | groupAdmin1 | password | $pw2 |
+|check | success message | The new password has been successfully saved. |
+|check | page title 1 | List of discussion groups |
+|ensure | logout |
+|note | process 'groupAdmin2' |
+|ensure | login as | groupAdmin2 | with password | $pw3 |
+|check | page title 1 | List of discussion groups |
+|ensure | change to | org.hip.vif.forum.member.editPwrd |
+|check | page title 1 | Change password for groupAdmin2 |
+|ensure | change | groupAdmin2 | password | $pw3 |
+|check | success message | The new password has been successfully saved. |
+|check | page title 1 | List of discussion groups |
+|ensure | logout |
+|note | process 'participant' |
+|ensure | login as | participant | with password | $pw4 |
+|check | page title 1 | List of discussion groups |
+|ensure | change to | org.hip.vif.forum.member.editPwrd |
+|check | page title 1 | Change password for participant |
+|ensure | change | participant | password | $pw4 |
+|check | success message | The new password has been successfully saved. |
+|check | page title 1 | List of discussion groups |
+|ensure | logout |
+
+!3 Status quo: overview of VIF members
+
+!|Query:vif members| 8081 | FitSU | fit4ever |
+| User ID | name | street | place | mail |
+| FitSU		| John Foo	| Highway 1	| 1234 Heaven	| test1@localhost |
+| testactor	| Test Actor	| Highway 2	| 2234 Heaven	| test1@localhost |
+| groupAdmin1	| Adi Gruber	| Stairway 2	| 6666 Hell	| test2@localhost |
+| groupAdmin2	| Pit Gambler	| Noway 2	| 8605 Heaven	| test2@localhost |
+| participant	| Parti Cipant	| Bigstr. 8	| 4321 Heaven	| test2@localhost |
+
+
+!3 Creating a new discussion group
+
+Create a new discussion group with ''Main menu -> Edit discussion groups -> Create group''.
+
+Name this group e.g. 'Walkthrough test' and add a suitable description. Set the 'Number of reviewers' to 1, 'Public to level' to 5, and the 'Minimal group size' to 3.
+
+With the number of reviewers you define the workflow. The number of reviewers set to zero means that an author can immediately publish the contributions she creates. If this value is set > 0, the author is not able to publish. Instead, reviewers have to check the content of the contribution and only after the last reviewer agrees, the contribution can be published.
+
+The value 'Public to level' tells the system how accessible the discussion group is for guest users (i.e. unauthorized users). With the minimal group size you can define when the discussion group is ready to start, i.e. when it is open for contributions.
+
+'''Assign group admins'''
+
+After having entered this data you have to assign the group administrators. To do this, click on Assign administrators to display the list of available members. Select ''groupAdmin1'' and ''groupAdmin2''. With that, you have successfully created the first discussion group.
+
+!|script |
+|start | vif create group action | 8081 | 
+|ensure | login as | FitSU | with password | fit4ever |
+|check | page title 1 | Member administration |
+|ensure | change to | org.hip.vif.admin.groupedit.newGroup |
+|check | page title 1 | Create new discussion group |
+|ensure | new group | Walkthrough test | description | Discussion group to talk about the forum in light of a walk through | reviewers | 1 | public | 5 | size | 3 |
+|check | success message | The group "Walkthrough test" has been created. |
+|check | page title 1 | Edit the discussion group |
+|ensure | change to | org.hip.vif.admin.groupedit.showGroupList |
+|check | state of | Walkthrough test | created |
+|ensure | edit | Walkthrough test |
+|check | page title 1 | Edit the discussion group |
+|ensure | assign admins | groupAdmin1 | and | groupAdmin2 |
+|ensure | logout |
+
+!3 Status quo: admins of group ''Walkthrough test''
+
+!|Query: discussion groups | 8081 | FitSU | fit4ever | Walkthrough test |
+| User ID | name | mail |
+| groupAdmin1 | Adi Gruber | test2@localhost |
+| groupAdmin2 | Pit Gambler | test2@localhost |
+
+!3 Create starting questions
+
+Login to the admin application as '''groupAdmin1'''. You'll notice that you'll have fewer features available then you had as super user. However, as group administrator you're able to edit and administer the discussion groups you're assigned to.
+
+To enter the starting questions for your discussion group, select the discussion group ''Walkthrough test'' on the administration view. You'll see two fields displayed, one for the question and the other for additional remarks.
+
+Enter a question, e.g. 'Where shall we go?' and 'A reasonable goal is prerequisite for a successful walk.' and save the data.
+Publish starting question
+
+After the first question has been saved, you'll see the question listed with private state. At this point, only you as '''groupAdmin1''' are able to see this question. However, by clicking on Publish contributions you can publish this starting question and thus make it open for the public. Therefore, the state of the question is open now.
+
+You may have noticed that a group administrator can publish her contributions immediately, i.e. without review.
+
+
+!|script |
+|start | vif create starting questions action | 8081 | 
+|ensure | login as | groupAdmin1 | with password | groupAdmin1 |
+|check | page title 1 | Management of discussion groups |
+|ensure | change to | org.hip.vif.admin.groupadmin.showAdminGroupList |
+|check | page title 1 | Administration of discussions |
+|$id= | get group id | Walkthrough test |
+|ensure | activate | Walkthrough test |
+|check | page title 1 | Create new question in group  1:  Walkthrough test | 
+|ensure | create question | Where shall we go? | with remark |A reasonable goal is prerequisite for a successful walk. |
+|check | page title 1 | Discussion group 1:  Walkthrough test |
+|check | state of question | Where shall we go? | private |
+|ensure | change to | org.hip.vif.admin.groupadmin.showPublishables&groupID=$id |
+|check | page title 1 | Publish contributions of Adi Gruber |
+|check | number of contributions | 1 |
+|ensure | publish | Where shall we go? |
+|ensure | change to | org.hip.vif.admin.groupadmin.showGroupContent&groupID=$id |
+|check | page title 1 | Discussion group 1:  Walkthrough test |
+|check | state of question | Where shall we go? | open |
+|ensure | logout |
+
+
+!3 Open the discussion group
+
+After creating the starting question, you have to open your discussion group for that the members of the discussion forum can register to the group. Up till now your discussion group is visible only for the group's administrators, but not for forum members. To change this, click on ''Main menu -> Edit discussion groups'' and select the discussion group ''Walkthrough test'' from the list displayed. Then click on the '''Open''' button to make the discussion group visible in the forum.
+
+!|script |
+|start | vif open discussion action | 8081 | 
+|ensure | login as | groupAdmin1 | with password | groupAdmin1 |
+|check | page title 1 |Management of discussion groups |
+|$id= | get group id | Walkthrough test |
+|ensure | change to | org.hip.vif.admin.groupedit.showGroup&groupID=$id |
+|check | page title 1 | Edit the discussion group |
+|check | group state | created |
+|check | group transition | Open |
+|ensure | make group open |
+|ensure | change to | org.hip.vif.admin.groupedit.showGroup&groupID=$id |
+|check | group state | open |
+|ensure | logout |
+
+!3 Register for the discussion group
+
+Login to the forum application as '''participant''' and register this member to Walkthrough test by clicking on ''Main menu -> Register to a discussion group'' and selecting the group. Do the same action to register the user '''testactor'''.
+
+Now that the number of participants of this discussion group has exceeded the threshold, i.e. the minimal group size defined above, the discussion group is automatically activated. A notification is sent to all participants of the group. Each participant can now enter completions and follow up questions.
+
+!|script |
+|start | vif register for group action | 8081 | 
+|ensure | login as | participant | with password | participant |
+|check | page title 1 | List of discussion groups |
+|check | group size | Walkthrough test | 2 (3) |
+|check | group state | Walkthrough test | open | 
+|ensure | change to | org.hip.vif.forum.register.registerGroup |
+|check | page title 1 | Register to discussion groups |
+|ensure | register to | Walkthrough test |
+|check | page title 1 | List of discussion groups |
+|check | success message | Data successfully saved. |
+|check | group size | Walkthrough test | 3 (3) |
+|check | group state | Walkthrough test | active | 
+|ensure | logout |
+|ensure | login as | testactor | with password | testactor |
+|check | page title 1 | List of discussion groups |
+|check | group size | Walkthrough test | 3 (3) |
+|check | group state | Walkthrough test | active | 
+|ensure | change to | org.hip.vif.forum.register.registerGroup |
+|check | page title 1 | Register to discussion groups |
+|ensure | register to | Walkthrough test |
+|check | page title 1 | List of discussion groups |
+|check | success message | Data successfully saved. |
+|check | group size | Walkthrough test | 4 (3) |
+|check | group state | Walkthrough test | active | 
+|ensure | logout |
+
+
+!3 Create follow-up questions and completions
+
+Login to the forum application as '''testactor''' and click on ''Walkthrough test'' in ''Discussion groups''. A list of questions, actually consisting of the starting question only, will be displayed. Click on the starting question and you see a menu with various functions displayed. Click on ''Create completion'' to create a completion. Enter a comment in the field displayed, e.g. 'You need a direction too'. After saving the input, the starting question is displayed again. You'll notice no changes so far. This is because of the workflow. The author's contribution is not yet published. However, you can click on ''Pending contributions'' and you'll find there the completion created before.
+
+But we add a follow-up question first. To do this, click on ''Create follow up question'' to display the entry fields for the follow up question. In the question field enter e.g. 'How long will this last?' and in the additional field for remarks enter 'You need an idea of the time required to attract other people.'. 
+
+After saving your input you'll notice again that nothing has changed. Clicking on ''Pending contributions'' you'll find your second contribution.
+
+You can login as '''participant''' to check that your contributions are not published and thus not readable by other users.
+
+!|script |
+|start | vif create completions action | 8081 | 
+|ensure | login as | testactor | with password | testactor |
+|check | page title 1 | List of discussion groups |
+| $id= | get group id | Walkthrough test |
+|ensure | change to | org.hip.vif.forum.groups.showGroup&groupID=$id |
+|check | page title 1 | Discussion group 1: Walkthrough test |
+|check | number of contributions | 1 |
+| $qid= | get question id | Where shall we go? |
+|ensure | change to | org.hip.vif.forum.groups.showQuestion&questionID=$qid&groupID=$id |
+|check | page title 1 | Contribution from discussion group 1: Walkthrough test |
+|ensure | change to | org.hip.vif.forum.groups.newCompletion&questionID=$qid&groupID=$id |
+|check | page title 1 | Create new completion for question 1:1 |
+|ensure | create completion | You need a direction too |
+|check | success message | The completion has been saved. You can process it under 'Pending contributions'. |
+|ensure | change to | org.hip.vif.forum.groups.newQuestion&questionID=$qid&groupID=$id |
+|check | page title 1 | Create new question in group 1: Walkthrough test |
+|ensure | create question | How long will this last? | with remark | You need an idea of the time required to attract other people. |
+|check | success message | The question has been saved. You can process it under 'Pending contributions'. |
+|ensure | change to | org.hip.vif.forum.groups.showUnpublished&groupID=$id |
+|check | page title 1 | Pending contributions of Test Actor |
+|check | number of pending | 2 |
+|ensure | change to | org.hip.vif.forum.groups.showGroup&groupID=$id |
+|check | number of contributions | 1 |
+|ensure | logout |
+|ensure | login as | participant | with password | participant |
+|ensure | change to | org.hip.vif.forum.groups.showGroup&groupID=$id |
+|check | number of contributions | 1 |
+|ensure | change to | org.hip.vif.forum.groups.showUnpublished&groupID=$id |
+|check | page title 1 | Pending contributions of Parti Cipant |
+|check | number of pending | 0 |
+|ensure | logout |
+
+
+!3 Request publication of the contributions
+
+To publish your contributions you have to let them reviewed. To do that, click on the ''Pending contributions'' menu item and select the contributions you've created. Note that the state of the contributions is still private. After clicking on the ''Request review'' button, the checkboxes disappear and the state changes to 'waiting for review'.
+
+In the background, the system chose a reviewer by chance out of the participants registered to this group. A mail is sent to the appointed reviewer to inform her about the new review task. A copy of this mail is sent to author's mailbox.
+
+You can check the two mailboxes to read the mails created by the system.
+
+!|Query: pending contributions | 8081 | testactor  | Walkthrough test |
+|contribution | state |
+| How long will this last? | private |
+| You need a direction too | private |
+
+!|script |
+|start | vif request publication action | 8081 | 
+|ensure | login as | testactor | with password | testactor |
+|check | page title 1 | List of discussion groups |
+| $id= | get group id | Walkthrough test |
+|ensure | change to | org.hip.vif.forum.groups.showUnpublished&groupID=$id |
+|check | page title 1 | Pending contributions of Test Actor |
+|check | number of pending | 2 |
+|ensure | request review | 
+|ensure | logout |
+
+
+!|Query: pending contributions | 8081 | testactor  | Walkthrough test |
+|contribution | state |
+| How long will this last? | waiting for review |
+| You need a direction too | waiting for review |
+
+
+!3 Review the contributions
+
+To carry out the review task, you have to login as reviewer. Check which participant ('''groupAdmin1''', '''groupAdmin2''' or '''participant''') has been selected. Then login to the forum application with this user account, click on the discussion group ''Walkthrough test'' and then on ''Process requests''. As designated reviewer you can accept the review task or refuse it. For this time, we accept the task. Select both contributions and click on ''Accept review task''. The state of the contributions changes to 'under revision'. At the same time, a mail is sent to the author to inform her about this change.
+
+As reviewer you are responsible for the correctness of the information, for the consistency of the argumentation, for the style in content and for orthographical mistakes. You're not able to edit the texts. However, you can make suggestions to the author. Eventually, after the author has improved the contributions according to your suggestions, you can take the responsibility for the publication of the contributions with regard to these criteria. You then want to publish them. To do this, login to the forum application, select the discussion group and click ''Process requests''. Check the contributions you want to publish and click ''Publish''.
+
+The selected items disappear from the list of requests to process. If you select the discussion group, you see the contributions published. At the same time, a mail is generated informing the author about the publication of her contributions. 
+
+!|script |
+|start | vif review action | 8081 | 
+| $reviewer= | get reviewer | groupAdmin1, groupAdmin2, participant | for | Walkthrough test |
+|ensure | login as | $reviewer | with password | $reviewer |
+| $id= | get group id | Walkthrough test |
+|ensure | change to | org.hip.vif.forum.groups.showRequests&groupID=$id |
+|check | number of | waiting for review | 2 |
+|ensure | accept review |
+|check | success message | The persons concerned have been informed about the changes of the state. |
+|check | number of | under revision | 2 |
+|ensure | publish |
+|check | success message | The persons concerned have been informed about the changes of the state. |
+|ensure | logout |
+
+!3 State after reviewer has published
+
+!|Query: contributions | 8081 | testactor |  Walkthrough test |
+| question | state |
+| Where shall we go? | open |
+| How long will this last? | open |
+
+!|script|
+|start | check contribution content | 8081 | testactor |  Walkthrough test | Where shall we go? |
+|check | completion text | You need a direction too |
+|check | completion state | open |
+|check | follow up number | 1 |
+|check | follow up content | How long will this last? |
+|ensure | logout |

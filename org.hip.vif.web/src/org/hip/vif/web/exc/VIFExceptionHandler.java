@@ -22,82 +22,77 @@ import org.hip.kernel.exc.ExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Handler for VIF exceptions.
- * 
- * @author lbenno
- */
+/** Handler for VIF exceptions.
+ *
+ * @author lbenno */
 public enum VIFExceptionHandler implements ExceptionHandler {
-	INSTANCE;
+    INSTANCE;
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(VIFExceptionHandler.class);
+    private static final Logger LOG = LoggerFactory
+            .getLogger(VIFExceptionHandler.class);
 
-	@Override
-	public Throwable convert(final Throwable inThrowable) {
-		return postProcess(inThrowable, new VIFWebException());
-	}
+    @Override
+    public Throwable convert(final Throwable inThrowable) {
+        return postProcess(inThrowable, new VIFWebException());
+    }
 
-	@Override
-	public Throwable convert(final Throwable inThrowable, final String inMessage) {
-		return postProcess(inThrowable, new VIFWebException(inMessage));
-	}
+    @Override
+    public Throwable convert(final Throwable inThrowable, final String inMessage) {
+        return postProcess(inThrowable, new VIFWebException(inMessage));
+    }
 
-	@Override
-	public void handle(final Object inCatchingObject,
-			final Throwable inThrowable) {
-		printStackTrace(inCatchingObject, inThrowable);
-	}
+    @Override
+    public void handle(final Object inCatchingObject,
+            final Throwable inThrowable) {
+        printStackTrace(inCatchingObject, inThrowable);
+    }
 
-	@Override
-	public void handle(final Object inCatchingObject,
-			final Throwable inThrowable, final boolean inPrintStackTrace) {
-		if (inPrintStackTrace) {
-			printStackTrace(inCatchingObject, inThrowable);
-		}
-	}
+    @Override
+    public void handle(final Object inCatchingObject,
+            final Throwable inThrowable, final boolean inPrintStackTrace) {
+        if (inPrintStackTrace) {
+            printStackTrace(inCatchingObject, inThrowable);
+        }
+    }
 
-	private void printStackTrace(final Object inCatchingObject,
-			final Throwable inThrowable) {
-		LOG.error("VIF application: Error catched in {}.", inCatchingObject
-				.getClass().getName(), inThrowable);
-	}
+    private void printStackTrace(final Object inCatchingObject,
+            final Throwable inThrowable) {
+        LOG.error("VIF application: Error catched in {}.", inCatchingObject
+                .getClass().getName(), inThrowable);
+    }
 
-	private void printStackTrace(final Throwable inThrowable) {
-		LOG.error("VIF application: Error handled:", inThrowable);
-	}
+    private void printStackTrace(final Throwable inThrowable) {
+        LOG.error("VIF application: Error handled:", inThrowable);
+    }
 
-	@Override
-	public void handle(final Throwable inThrowable) {
-		printStackTrace(inThrowable);
-	}
+    @Override
+    public void handle(final Throwable inThrowable) {
+        printStackTrace(inThrowable);
+    }
 
-	@Override
-	public void handle(final Throwable inThrowable,
-			final boolean inPrintStackTrace) {
-		if (inPrintStackTrace) {
-			printStackTrace(inThrowable);
-		}
-	}
+    @Override
+    public void handle(final Throwable inThrowable,
+            final boolean inPrintStackTrace) {
+        if (inPrintStackTrace) {
+            printStackTrace(inThrowable);
+        }
+    }
 
-	@Override
-	public void rethrow(final Throwable inThrowable) throws Throwable {
-		LOG.error("VIF application: Error rethrow:", inThrowable);
-		throw inThrowable;
-	}
+    @Override
+    public void rethrow(final Throwable inThrowable) throws Throwable {
+        LOG.error("VIF application: Error rethrow:", inThrowable);
+        throw inThrowable;
+    }
 
-	/**
-	 * @param inThrowableToBeConverted
-	 *            java.lang.Throwable
-	 * @param inException
-	 *            org.hip.kernel.exc.VException
-	 * @return java.lang.Throwable
-	 */
-	private Throwable postProcess(final Throwable inThrowableToBeConverted,
-			final VIFWebException inException) {
-		inException.setRootCause(inThrowableToBeConverted);
-		inException.fillInStackTrace();
-		return inException;
-	}
+    /** @param inThrowableToBeConverted java.lang.Throwable
+     * @param inException org.hip.kernel.exc.VException
+     * @return java.lang.Throwable */
+    private Throwable postProcess(final Throwable inThrowableToBeConverted,
+            final VIFWebException inException) {
+        LOG.error("Root cause:", inThrowableToBeConverted);
+        inException.setRootCause(inThrowableToBeConverted);
+        inException.fillInStackTrace();
+        return inException;
+    }
 
 }

@@ -1,6 +1,6 @@
-/*
- This package is part of the application VIF.
- Copyright (C) 2008, Benno Luthiger
+/**
+    This package is part of the application VIF.
+    Copyright (C) 2011-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -18,45 +18,40 @@
  */
 package org.hip.vif.forum.groups.tasks;
 
-import org.hip.kernel.exc.VException;
-import org.hip.vif.core.annotations.Partlet;
 import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.Text;
 import org.hip.vif.core.bom.VIFWorkflowAware;
+import org.ripla.annotations.UseCaseController;
+import org.ripla.exceptions.RiplaException;
 
 import com.vaadin.ui.Component;
 
-/**
- * For unpublished bibliography entries:
- * Task to display a bibliography entry in editable form.
+/** For unpublished bibliography entries: Task to display a bibliography entry in editable form.
  *
- * @author Luthiger
- * Created: 01.07.2010
- */
-@Partlet
+ * @author Luthiger Created: 01.07.2010 */
+@UseCaseController
 public class BibliographyEditUnpublishedTask extends AbstractBibliographyTask {
 
-	@Override
-	protected Component runChecked() throws VException {
-		try {
-			Long lTextID = getTextID();
-			int lTextVersion = getTextVersion().intValue();
+    @Override
+    protected Component runChecked() throws RiplaException {
+        try {
+            final Long lTextID = getTextID();
+            final int lTextVersion = getTextVersion().intValue();
 
-			//get text entry
-			Text lText = BOMHelper.getTextHome().getText(lTextID, lTextVersion);
-			
-			//only edit the text entry if it is not yet published
-			if (((VIFWorkflowAware)lText).isUnpublished()) {
-				return editBibliography(lText, lTextID, lTextVersion, false);
-			}
-			else {
-				sendEvent(BibliographyShowTask.class);
-				return null;
-			}
-		} 
-		catch (Exception exc) {
-			throw createContactAdminException(exc);
-		}
-	}
-	
+            // get text entry
+            final Text lText = BOMHelper.getTextHome().getText(lTextID, lTextVersion);
+
+            // only edit the text entry if it is not yet published
+            if (((VIFWorkflowAware) lText).isUnpublished()) {
+                return editBibliography(lText, lTextID, lTextVersion, false);
+            }
+            else {
+                sendEvent(BibliographyShowTask.class);
+                return null;
+            }
+        } catch (final Exception exc) {
+            throw createContactAdminException(exc);
+        }
+    }
+
 }

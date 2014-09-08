@@ -1,8 +1,6 @@
-package org.hip.vif.core.bom;
-
-/*
+/**
 	This package is part of the persistency layer of the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,18 +15,17 @@ package org.hip.vif.core.bom;
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+package org.hip.vif.core.bom;
 
 import org.hip.kernel.bom.DomainObject;
 
-/**
- * This interface defines the behaviour of the LinkPermissionRole domain object.
- * It assignes the permissions to a specific role.
- *  
+/** This interface defines the behaviour of the LinkPermissionRole domain object. It assigns the permissions to a
+ * specific role.
+ *
  * @author: Benno Luthiger
  * @see org.hip.vif.core.bom.Role
- * @see org.hip.vif.core.bom.Permission
- */
+ * @see org.hip.vif.core.bom.Permission */
 public interface LinkPermissionRole extends DomainObject {
 
 }

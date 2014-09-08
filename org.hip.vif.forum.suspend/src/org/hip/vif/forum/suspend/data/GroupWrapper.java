@@ -22,7 +22,7 @@ package org.hip.vif.forum.suspend.data;
 import org.hip.kernel.bom.GeneralDomainObject;
 import org.hip.vif.core.bom.GroupHome;
 import org.hip.vif.core.bom.impl.NestedGroupHome;
-import org.hip.vif.core.util.BeanWrapperHelper;
+import org.hip.vif.web.util.BeanWrapperHelper;
 
 /**
  * Adapter for group model instances.

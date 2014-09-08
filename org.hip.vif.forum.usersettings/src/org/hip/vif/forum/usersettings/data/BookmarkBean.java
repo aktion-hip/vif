@@ -22,7 +22,7 @@ package org.hip.vif.forum.usersettings.data;
 import org.hip.kernel.bom.GeneralDomainObject;
 import org.hip.vif.core.bom.BookmarkHome;
 import org.hip.vif.core.interfaces.ISelectableBean;
-import org.hip.vif.core.util.BeanWrapperHelper;
+import org.hip.vif.web.util.BeanWrapperHelper;
 
 /**
  * Bean class (adapter) for bookmark models.

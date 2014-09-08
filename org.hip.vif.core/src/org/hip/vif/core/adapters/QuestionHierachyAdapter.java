@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the application VIF.
- Copyright (C) 2010, Benno Luthiger
+ Copyright (C) 2010-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -24,28 +24,23 @@ import org.hip.kernel.exc.VException;
 import org.hip.vif.core.bom.impl.QuestionHierarchyVisitor;
 import org.hip.vif.core.util.QuestionHierarchyEntry;
 
-/**
- * Adapts a <code>VIFWorkflowAware</code> entry to a <code>QuestionHierarchyEntry</code>.
+/** Adapts a <code>VIFWorkflowAware</code> entry to a <code>QuestionHierarchyEntry</code>.
  *
- * @author Luthiger
- * Created: 19.10.2010
- */
+ * @author Luthiger Created: 19.10.2010 */
 public class QuestionHierachyAdapter implements QuestionHierarchyEntry {
-	private QuestionHierarchyEntry entry;
+    private QuestionHierarchyEntry entry;
 
-	public QuestionHierachyAdapter(Object inContribution) {
-		if (inContribution instanceof QuestionHierarchyEntry) {
-			entry = (QuestionHierarchyEntry) inContribution;
-		}
-	}
+    public QuestionHierachyAdapter(final Object inContribution) {
+        if (inContribution instanceof QuestionHierarchyEntry) {
+            entry = (QuestionHierarchyEntry) inContribution;
+        }
+    }
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.util.QuestionHierarchyEntry#accept(org.hip.vif.bom.impl.QuestionHierarchyVisitor)
-	 */
-	public void accept(QuestionHierarchyVisitor inVisitor) throws VException, SQLException {
-		if (entry != null) {
-			entry.accept(inVisitor);
-		}
-	}
+    @Override
+    public void accept(final QuestionHierarchyVisitor inVisitor) throws VException, SQLException {
+        if (entry != null) {
+            entry.accept(inVisitor);
+        }
+    }
 
 }

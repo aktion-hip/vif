@@ -32,7 +32,7 @@ import org.hip.vif.admin.groupadmin.util.AuthorReviewerRenderHelper;
 import org.hip.vif.admin.groupadmin.util.AuthorReviewerRenderHelper.MemberWrapper;
 import org.hip.vif.core.bom.CompletionHome;
 import org.hip.vif.core.bom.ResponsibleHome;
-import org.hip.vif.core.util.BeanWrapperHelper;
+import org.hip.vif.web.util.BeanWrapperHelper;
 
 /**
  * Helper class to handle a question's completions<br />

@@ -24,7 +24,7 @@ import org.hip.vif.core.bom.QuestionHome;
 import org.hip.vif.core.bom.SubscriptionHome;
 import org.hip.vif.core.bom.impl.JoinSubscriptionToQuestionHome;
 import org.hip.vif.core.interfaces.ISelectableBean;
-import org.hip.vif.core.util.BeanWrapperHelper;
+import org.hip.vif.web.util.BeanWrapperHelper;
 
 /**
  * Bean class (adapter) for subscription models.

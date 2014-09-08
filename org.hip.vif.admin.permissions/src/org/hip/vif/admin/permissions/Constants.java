@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the permissions editing of the application VIF.
- Copyright (C) 2008, Benno Luthiger
+ Copyright (C) 2008-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -18,13 +18,10 @@
  */
 package org.hip.vif.admin.permissions;
 
-/**
- * Bundle constants.
+/** Bundle constants.
  *
- * @author Luthiger
- * Created: 04.01.2008
- */
+ * @author Luthiger Created: 04.01.2008 */
 public class Constants {
-	public static final String PERMISSION_EDIT = "editPermissions"; //$NON-NLS-1$
-	public static final String PERMISSION_LOOKUP_MEMBERS = "lookupMembers"; //$NON-NLS-1$
+    public static final String PERMISSION_EDIT = "editPermissions"; //$NON-NLS-1$
+    public static final String PERMISSION_LOOKUP_MEMBERS = "lookupMembers"; //$NON-NLS-1$
 }

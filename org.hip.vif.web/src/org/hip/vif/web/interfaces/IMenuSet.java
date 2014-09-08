@@ -15,26 +15,22 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.web.interfaces;
 
-/**
- * Interface for a specific context menu, i.e. a context menu identified by a set ID and made up of a set of menu items.
- * 
- * @author Luthiger
- * Created: 26.06.2011
- */
+/** Interface for a specific context menu, i.e. a context menu identified by a set ID and made up of a set of menu items.
+ *
+ * @deprecated Use <code>org.ripla.web.interfaces.IMenuSet</code> instead.
+ * @author Luthiger Created: 26.06.2011 */
+@Deprecated
 public interface IMenuSet {
-	
-	/**
-	 * @return String the menu set's ID. Must be unique within a bundle.
-	 */
-	String getSetID();
 
-	/**
-	 * @return {@link IVIFContextMenuItem}[] the set of context menu configurations that make up the specific context menu.
-	 */
-	IVIFContextMenuItem[] getContextMenuItems();
-	
+    /** @return String the menu set's ID. Must be unique within a bundle. */
+    String getSetID();
+
+    /** @return {@link IVIFContextMenuItem}[] the set of context menu configurations that make up the specific context
+     *         menu. */
+    IVIFContextMenuItem[] getContextMenuItems();
+
 }

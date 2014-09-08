@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,79 +15,73 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
+ */
 package org.hip.vif.admin.groupedit.tasks;
 
 import org.hip.kernel.exc.VException;
 import org.hip.vif.admin.groupedit.Activator;
 import org.hip.vif.admin.groupedit.Constants;
 import org.hip.vif.admin.groupedit.ui.GroupView;
-import org.hip.vif.core.annotations.Partlet;
-import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.Group;
 import org.hip.vif.core.bom.GroupHome;
 import org.hip.vif.core.exc.BOMChangeValueException;
 import org.hip.vif.core.exc.ExternIDNotUniqueException;
+import org.hip.vif.web.bom.VifBOMHelper;
+import org.ripla.annotations.UseCaseController;
+import org.ripla.exceptions.RiplaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Window.Notification;
+import com.vaadin.ui.Notification.Type;
 
-/**
- * Task for creating new discussion groups.
- * 
- * @author Luthiger
- * Created: 06.11.2011
- */
-@Partlet
+/** Task for creating new discussion groups.
+ *
+ * @author Luthiger Created: 06.11.2011 */
+@UseCaseController
 public class GroupNewTask extends AbstractGroupTask {
-	private static final Logger LOG = LoggerFactory.getLogger(GroupNewTask.class);
-	
-	/* (non-Javadoc)
-	 * @see org.hip.vif.web.tasks.AbstractVIFTask#needsPermission()
-	 */
-	@Override
-	protected String needsPermission() {
-		return Constants.PERMISSION_GROUP_CREATE;
-	}
+    private static final Logger LOG = LoggerFactory.getLogger(GroupNewTask.class);
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.web.tasks.AbstractVIFTask#runChecked()
-	 */
-	@Override
-	protected Component runChecked() throws VException {
-		emptyContextMenu();
-		
-		Group lGroup = (Group)BOMHelper.getGroupHome().create();
-		//set default values
-		lGroup.set(GroupHome.KEY_PRIVATE, 0l);
-		lGroup.set(GroupHome.KEY_REVIEWERS, 1l);
-		lGroup.set(GroupHome.KEY_GUEST_DEPTH, 0l);
-		lGroup.set(GroupHome.KEY_MIN_GROUP_SIZE, 10l);
-		return new GroupView(lGroup, this);
-	}
+    @Override
+    protected String needsPermission() {
+        return Constants.PERMISSION_GROUP_CREATE;
+    }
 
-	/**
-	 * Callback method, saves the changed group data.
-	 * 
-	 * @param inGroup {@link Group}
-	 * @return boolean <code>true</code> if the group entry has been created successfully
-	 * @throws ExternIDNotUniqueException 
-	 */
-	public boolean save(Group inGroup) throws ExternIDNotUniqueException {
-		try {
-			Long lGroupID = inGroup.ucNew();
-			setGroupID(lGroupID);
-			showNotification(Activator.getMessages().getMessage("admin.group.new.ok"), Notification.TYPE_TRAY_NOTIFICATION); //$NON-NLS-1$
-			sendEvent(GroupEditTask.class);
-			return true;
-		} 
-		catch (BOMChangeValueException exc) {
-			LOG.error("Error while saving the member data.", exc); //$NON-NLS-1$
-		} 
-		return false;
-	}
+    @Override
+    protected Component runChecked() throws RiplaException {
+        emptyContextMenu();
+
+        try {
+            final Group lGroup = (Group) VifBOMHelper.getGroupHome().create();
+            // set default values
+            lGroup.set(GroupHome.KEY_PRIVATE, 0l);
+            lGroup.set(GroupHome.KEY_REVIEWERS, 1l);
+            lGroup.set(GroupHome.KEY_GUEST_DEPTH, 0l);
+            lGroup.set(GroupHome.KEY_MIN_GROUP_SIZE, 10l);
+            return new GroupView(lGroup, this);
+        } catch (final VException exc) {
+            throw createContactAdminException(exc);
+        }
+    }
+
+    /** Callback method, saves the changed group data.
+     *
+     * @param inGroup {@link Group}
+     * @return boolean <code>true</code> if the group entry has been created successfully
+     * @throws ExternIDNotUniqueException */
+    @Override
+    public boolean save(final Group inGroup) throws ExternIDNotUniqueException {
+        try {
+            final Long lGroupID = inGroup.ucNew();
+            setGroupID(lGroupID);
+            showNotification(
+                    Activator.getMessages().getMessage("admin.group.new.ok"), Type.TRAY_NOTIFICATION); //$NON-NLS-1$
+            sendEvent(GroupEditTask.class);
+            return true;
+        } catch (final BOMChangeValueException exc) {
+            LOG.error("Error while saving the member data.", exc); //$NON-NLS-1$
+        }
+        return false;
+    }
 
 }

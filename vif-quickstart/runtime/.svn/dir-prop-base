@@ -1,0 +1,12 @@
+K 10
+svn:ignore
+V 159
+org.eclipse.update.configurator_3.3.100.v20100512.jar
+
+org.eclipse.equinox.common_3.6.0.v20110523.jar
+
+org.eclipse.osgi_3.7.1.R37x_v20110808-1106.jar
+
+plugins
+
+END

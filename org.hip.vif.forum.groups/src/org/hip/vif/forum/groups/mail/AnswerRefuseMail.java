@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the application VIF.
- Copyright (C) 2008, Benno Luthiger
+ Copyright (C) 2008-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -22,64 +22,63 @@ import java.io.IOException;
 
 import org.hip.kernel.exc.VException;
 import org.hip.vif.core.bom.VIFMember;
-import org.hip.vif.core.interfaces.IMessages;
 import org.hip.vif.forum.groups.Activator;
 import org.hip.vif.forum.groups.tasks.ContributionsListTask;
 import org.hip.vif.web.util.MailWithLink;
+import org.ripla.interfaces.IMessages;
 
-/**
- * Feedback sent to the author informing that the reviewer refused the task.
- * 
+/** Feedback sent to the author informing that the reviewer refused the task.
+ *
  * Created on 15.08.2003
- * @author Luthiger
- */
+ *
+ * @author Luthiger */
 public class AnswerRefuseMail extends MailWithLink {
-	private final static String KEY_SUBJECT 	= "mail.feedback.subject"; //$NON-NLS-1$
-	private final static String KEY_INTRO 		= "mail.refuse.intro"; //$NON-NLS-1$
-	private final static String KEY_TEXT 		= "mail.refuse.text"; //$NON-NLS-1$
-	
-	private StringBuilder body = new StringBuilder();
-	private StringBuilder bodyHtml = new StringBuilder();
+    private final static String KEY_SUBJECT = "mail.feedback.subject"; //$NON-NLS-1$
+    private final static String KEY_INTRO = "mail.refuse.intro"; //$NON-NLS-1$
+    private final static String KEY_TEXT = "mail.refuse.text"; //$NON-NLS-1$
 
-	/**
-	 * AnswerAcceptMail constructor.
-	 * 
-	 * @param inAuthor VIFMember
-	 * @param inReviewer VIFMember
-	 * @param inNotificationText StringBuilder
-	 * @param inNotificationTextHtml StringBuilder
-	 * @throws VException
-	 * @throws IOException
-	 */
-	public AnswerRefuseMail(VIFMember inAuthor, VIFMember inReviewer, StringBuilder inNotificationText, StringBuilder inNotificationTextHtml) throws VException, IOException {
-		super(inAuthor, inReviewer);
-		body.append(inNotificationText);
-		bodyHtml.append(inNotificationTextHtml);
-		baseURL = createRequestedURL(ContributionsListTask.class, true);		
-	}
+    private final StringBuilder body = new StringBuilder();
+    private final StringBuilder bodyHtml = new StringBuilder();
 
-	/**
-	 * @see org.hip.vif.core.mail.AbstractMail#getBody()
-	 */
-	protected StringBuilder getBody() {
-		IMessages lMessages = Activator.getMessages();
-		StringBuilder outBody = new StringBuilder(getFormattedMessage(lMessages, KEY_INTRO, senderFullName));
-		outBody.append("\n\n").append(body).append(getFormattedMessage(lMessages, KEY_TEXT, baseURL)).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		return outBody;
-	}
-	protected StringBuilder getBodyHtml() {
-		IMessages lMessages = Activator.getMessages();
-		StringBuilder outBody = new StringBuilder("<p>").append(getFormattedMessage(lMessages, KEY_INTRO, senderFullName)).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$
-		outBody.append(HTML_HR).append(bodyHtml).append(HTML_HR).append("<p>").append(getFormattedMessage(lMessages, KEY_TEXT, baseURL)).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$
-		return outBody;
-	}
-	
-	/**
-	 * Returns the subject text, i.e. the text after the subject ID.
-	 * 
-	 * @return String
-	 */
-	protected String getSubjectText() {
-		return getMessage(Activator.getMessages(), KEY_SUBJECT);
-	}
+    /** AnswerAcceptMail constructor.
+     *
+     * @param inAuthor VIFMember
+     * @param inReviewer VIFMember
+     * @param inNotificationText StringBuilder
+     * @param inNotificationTextHtml StringBuilder
+     * @throws VException
+     * @throws IOException */
+    public AnswerRefuseMail(final VIFMember inAuthor, final VIFMember inReviewer,
+            final StringBuilder inNotificationText, final StringBuilder inNotificationTextHtml) throws VException,
+            IOException {
+        super(inAuthor, inReviewer);
+        body.append(inNotificationText);
+        bodyHtml.append(inNotificationTextHtml);
+        baseURL = createRequestedURL(ContributionsListTask.class, true);
+    }
+
+    @Override
+    protected StringBuilder getBody() {
+        final IMessages lMessages = Activator.getMessages();
+        final StringBuilder outBody = new StringBuilder(getFormattedMessage(lMessages, KEY_INTRO, senderFullName));
+        outBody.append("\n\n").append(body).append(getFormattedMessage(lMessages, KEY_TEXT, baseURL)).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
+        return outBody;
+    }
+
+    @Override
+    protected StringBuilder getBodyHtml() {
+        final IMessages lMessages = Activator.getMessages();
+        final StringBuilder outBody = new StringBuilder("<p>").append(getFormattedMessage(lMessages, KEY_INTRO, senderFullName)).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$
+        outBody.append(HTML_HR).append(bodyHtml).append(HTML_HR)
+                .append("<p>").append(getFormattedMessage(lMessages, KEY_TEXT, baseURL)).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$
+        return outBody;
+    }
+
+    /** Returns the subject text, i.e. the text after the subject ID.
+     *
+     * @return String */
+    @Override
+    protected String getSubjectText() {
+        return getMessage(Activator.getMessages(), KEY_SUBJECT);
+    }
 }

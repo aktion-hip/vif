@@ -26,10 +26,10 @@ import org.hip.kernel.exc.VException;
 import org.hip.vif.core.bom.impl.JoinRatingsToRater;
 import org.hip.vif.core.bom.impl.RatingsHome;
 import org.hip.vif.core.interfaces.IMessages;
-import org.hip.vif.core.util.BeanWrapperHelper;
 import org.hip.vif.forum.usersettings.Activator;
 import org.hip.vif.forum.usersettings.data.RatingsContainer;
 import org.hip.vif.forum.usersettings.rating.RatingUserTask;
+import org.hip.vif.web.util.BeanWrapperHelper;
 import org.hip.vif.web.util.VIFViewHelper;
 
 import com.vaadin.data.Validator.InvalidValueException;

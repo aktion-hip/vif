@@ -32,8 +32,8 @@ import org.hip.vif.core.bom.MemberHome;
 import org.hip.vif.core.bom.impl.RatingsHome;
 import org.hip.vif.core.interfaces.IEventableTask;
 import org.hip.vif.core.interfaces.IMessages;
-import org.hip.vif.core.util.BeanWrapperHelper;
 import org.hip.vif.forum.usersettings.Activator;
+import org.hip.vif.web.util.BeanWrapperHelper;
 import org.hip.vif.web.util.RatingValue;
 import org.hip.vif.web.util.VIFViewHelper;
 

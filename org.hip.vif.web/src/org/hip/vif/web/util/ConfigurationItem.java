@@ -21,172 +21,151 @@ package org.hip.vif.web.util;
 import java.io.IOException;
 
 import org.hip.vif.core.service.PreferencesHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
 
-/**
- * An <code>Item</code> implementation for the application configuration.<br />
+/** An <code>Item</code> implementation for the application configuration.<br />
  * Instances of this item contain <code>DirtyableProperty</code>s.<br />
- * Instances of this class can be used as view model for the application's
- * configuration editor.
- * 
- * @author Luthiger Created: 07.01.2012
- */
+ * Instances of this class can be used as view model for the application's configuration editor.
+ *
+ * @author Luthiger Created: 07.01.2012 */
 @SuppressWarnings("serial")
 public class ConfigurationItem extends PropertysetItem {
-	public static enum PropertyDef {
-		LANGUAGE_DEFAULT(PreferencesHandler.KEY_LANGUAGE_DFT), LANGUAGE_CONTENT(
-				PreferencesHandler.KEY_LANGUAGE_CONTENT), COUNTRY_DFT(
-				PreferencesHandler.KEY_COUNTRY_DFT), DATE_PATTERN(
-				PreferencesHandler.KEY_DATE_PATTERN), LATENCY_DAYS(
-				PreferencesHandler.KEY_LATENCY_DAYS), MEMBER_SEARCHER(
-				PreferencesHandler.KEY_MEMBER_SEARCHER), GUEST_ALLOW(
-				PreferencesHandler.KEY_GUEST_ALLOW), PW_DISPLAY(
-				PreferencesHandler.KEY_PW_DISPLAY), UPLOAD_QUOTA(
-				PreferencesHandler.KEY_UPLOAD_QUOTA), DOCS_ROOT(
-				PreferencesHandler.KEY_DOCS_ROOT), FORUM_NAME(
-				PreferencesHandler.KEY_FORUM_NAME), MAIL_HOST(
-				PreferencesHandler.KEY_MAIL_HOST), MAIL_ADDRESS(
-				PreferencesHandler.KEY_MAIL_ADDRESS), MAIL_SUBJECT_ID(
-				PreferencesHandler.KEY_MAIL_SUBJECT_ID), MAIL_SUBJECT_TEXT(
-				PreferencesHandler.KEY_MAIL_SUBJECT_TEXT), MAIL_NAMING(
-				PreferencesHandler.KEY_MAIL_NAMING), SKIN(
-				PreferencesHandler.KEY_SKIN), LOG_PATH(
-				PreferencesHandler.KEY_LOG_PATH), LOG_LEVEL(
-				PreferencesHandler.KEY_LOG_LEVEL), LOG_CONFIG(
-				PreferencesHandler.KEY_LOG_CONFIG), LOGOUT_URL(
-				PreferencesHandler.KEY_LOGOUT_URL), DB_DRIVER(
-				PreferencesHandler.KEY_DB_DRIVER), DB_SERVER(
-				PreferencesHandler.KEY_DB_SERVER), DB_SCHEMA(
-				PreferencesHandler.KEY_DB_SCHEMA), DB_USER(
-				PreferencesHandler.KEY_DB_USER), DB_PASSWD(
-				PreferencesHandler.KEY_DB_PW), DBX_DRIVER(
-				PreferencesHandler.KEY_DBX_DRIVER), DBX_SERVER(
-				PreferencesHandler.KEY_DBX_SERVER), DBX_SCHEMA(
-				PreferencesHandler.KEY_DBX_SCHEMA), DBX_USER(
-				PreferencesHandler.KEY_DBX_USER), DBX_PASSWD(
-				PreferencesHandler.KEY_DBX_PW), LDAP_URL(
-				PreferencesHandler.KEY_LDAP_URL), LDAP_MANAGER_DN(
-				PreferencesHandler.KEY_LDAP_MANAGER_DN), LDAP_MANAGER_PW(
-				PreferencesHandler.KEY_LDAP_MANAGER_PW);
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigurationItem.class);
 
-		private String pid;
+    public static enum PropertyDef {
+        LANGUAGE_DEFAULT(PreferencesHandler.KEY_LANGUAGE_DFT), LANGUAGE_CONTENT(
+                PreferencesHandler.KEY_LANGUAGE_CONTENT), COUNTRY_DFT(
+                PreferencesHandler.KEY_COUNTRY_DFT), DATE_PATTERN(
+                PreferencesHandler.KEY_DATE_PATTERN), LATENCY_DAYS(
+                PreferencesHandler.KEY_LATENCY_DAYS), MEMBER_SEARCHER(
+                PreferencesHandler.KEY_MEMBER_SEARCHER), GUEST_ALLOW(
+                PreferencesHandler.KEY_GUEST_ALLOW), PW_DISPLAY(
+                PreferencesHandler.KEY_PW_DISPLAY), UPLOAD_QUOTA(
+                PreferencesHandler.KEY_UPLOAD_QUOTA), DOCS_ROOT(
+                PreferencesHandler.KEY_DOCS_ROOT), FORUM_NAME(
+                PreferencesHandler.KEY_FORUM_NAME), MAIL_HOST(
+                PreferencesHandler.KEY_MAIL_HOST), MAIL_ADDRESS(
+                PreferencesHandler.KEY_MAIL_ADDRESS), MAIL_SUBJECT_ID(
+                PreferencesHandler.KEY_MAIL_SUBJECT_ID), MAIL_SUBJECT_TEXT(
+                PreferencesHandler.KEY_MAIL_SUBJECT_TEXT), MAIL_NAMING(
+                PreferencesHandler.KEY_MAIL_NAMING), SKIN(
+                PreferencesHandler.KEY_SKIN), LOG_PATH(
+                PreferencesHandler.KEY_LOG_PATH), LOG_LEVEL(
+                PreferencesHandler.KEY_LOG_LEVEL), LOG_CONFIG(
+                PreferencesHandler.KEY_LOG_CONFIG), LOGOUT_URL(
+                PreferencesHandler.KEY_LOGOUT_URL), DB_DRIVER(
+                PreferencesHandler.KEY_DB_DRIVER), DB_SERVER(
+                PreferencesHandler.KEY_DB_SERVER), DB_SCHEMA(
+                PreferencesHandler.KEY_DB_SCHEMA), DB_USER(
+                PreferencesHandler.KEY_DB_USER), DB_PASSWD(
+                PreferencesHandler.KEY_DB_PW), DBX_DRIVER(
+                PreferencesHandler.KEY_DBX_DRIVER), DBX_SERVER(
+                PreferencesHandler.KEY_DBX_SERVER), DBX_SCHEMA(
+                PreferencesHandler.KEY_DBX_SCHEMA), DBX_USER(
+                PreferencesHandler.KEY_DBX_USER), DBX_PASSWD(
+                PreferencesHandler.KEY_DBX_PW), LDAP_URL(
+                PreferencesHandler.KEY_LDAP_URL), LDAP_MANAGER_DN(
+                PreferencesHandler.KEY_LDAP_MANAGER_DN), LDAP_MANAGER_PW(
+                PreferencesHandler.KEY_LDAP_MANAGER_PW);
 
-		PropertyDef(final String inPID) {
-			pid = inPID;
-		}
+        private String pid;
 
-		public String getPID() {
-			return pid;
-		}
-	}
+        PropertyDef(final String inPID) {
+            pid = inPID;
+        }
 
-	/**
-	 * Private constructor.
-	 */
-	private ConfigurationItem() {
-	}
+        public String getPID() {
+            return pid;
+        }
+    }
 
-	/**
-	 * Factory method to create and initialize an instance of
-	 * <code>ConfigurationItem</code>.
-	 * 
-	 * @return {@link ConfigurationItem}
-	 * @throws IOException
-	 */
-	public static ConfigurationItem createConfiguration() throws IOException {
-		final PreferencesHandler lConfiguration = PreferencesHandler.INSTANCE;
-		final ConfigurationItem out = new ConfigurationItem();
-		for (final PropertyDef lProperty : PropertyDef.values()) {
-			out.addItemProperty(
-					lProperty.getPID(),
-					new DirtyableProperty<String>(lConfiguration.get(lProperty
-							.getPID()), String.class, lProperty));
-		}
-		return out;
-	}
+    /** Private constructor. */
+    private ConfigurationItem() {
+    }
 
-	/**
-	 * Saves the changes to the preferences service.
-	 * 
-	 * @return <code>true</code> if any changes have been stored
-	 */
-	@SuppressWarnings("rawtypes")
-	public boolean saveChanges() {
-		boolean outChanged = false;
-		final PreferencesHandler lConfiguration = PreferencesHandler.INSTANCE;
-		for (final Object lPID : getItemPropertyIds()) {
-			final Property lItemProperty = getItemProperty(lPID);
-			if (lItemProperty instanceof DirtyableProperty<?>) {
-				final DirtyableProperty<?> lProperty = (DirtyableProperty<?>) lItemProperty;
-				if (lProperty.isDirty()) {
-					outChanged = true;
-					lConfiguration.set(lProperty.getPropertyDef().getPID(),
-							lProperty.getValue().toString());
-				}
-			}
-		}
-		return outChanged;
-	}
+    /** Factory method to create and initialize an instance of <code>ConfigurationItem</code>.
+     *
+     * @return {@link ConfigurationItem}
+     * @throws IOException */
+    public static ConfigurationItem createConfiguration() throws IOException {
+        final PreferencesHandler lConfiguration = PreferencesHandler.INSTANCE;
+        final ConfigurationItem out = new ConfigurationItem();
+        for (final PropertyDef lProperty : PropertyDef.values()) {
+            out.addItemProperty(
+                    lProperty.getPID(),
+                    new DirtyableProperty<String>(lConfiguration.get(lProperty
+                            .getPID()), String.class, lProperty));
+        }
+        return out;
+    }
 
-	/**
-	 * Checks whether the property with the specified definition is dirty.
-	 * 
-	 * @param inPropertyDef
-	 *            {@link PropertyDef}
-	 * @return boolean <code>true</code> if the specified property is dirty
-	 */
-	@SuppressWarnings("unchecked")
-	public boolean isDirty(final PropertyDef inPropertyDef) {
-		final DirtyableProperty<String> lProperty = (DirtyableProperty<String>) getItemProperty(inPropertyDef
-				.getPID());
-		return lProperty.isDirty();
-	}
+    /** Saves the changes to the preferences service.
+     *
+     * @return <code>true</code> if any changes have been stored */
+    @SuppressWarnings("rawtypes")
+    public boolean saveChanges() {
+        boolean outChanged = false;
+        final PreferencesHandler lConfiguration = PreferencesHandler.INSTANCE;
+        for (final Object lPID : getItemPropertyIds()) {
+            final Property lItemProperty = getItemProperty(lPID);
+            if (lItemProperty instanceof DirtyableProperty<?>) {
+                final DirtyableProperty<?> lProperty = (DirtyableProperty<?>) lItemProperty;
+                if (lProperty.isDirty()) {
+                    outChanged = true;
+                    lConfiguration.set(lProperty.getPropertyDef().getPID(),
+                            lProperty.getValue().toString());
+                }
+            }
+        }
+        return outChanged;
+    }
 
-	// ---
+    /** Checks whether the property with the specified definition is dirty.
+     *
+     * @param inPropertyDef {@link PropertyDef}
+     * @return boolean <code>true</code> if the specified property is dirty */
+    @SuppressWarnings("unchecked")
+    public boolean isDirty(final PropertyDef inPropertyDef) {
+        final DirtyableProperty<String> lProperty = (DirtyableProperty<String>) getItemProperty(inPropertyDef
+                .getPID());
+        return lProperty.isDirty();
+    }
 
-	private static class DirtyableProperty<T> extends ObjectProperty<T> {
-		private T origValue;
-		private final PropertyDef propertyDef;
+    // ---
 
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		DirtyableProperty(final T inValue, final Class<T> inType,
-				final PropertyDef inPropertyDef) {
-			super(inValue, inType);
-			propertyDef = inPropertyDef;
-			origValue = inValue;
-			if (inValue == null) {
-				origValue = (T) new NullObject();
-				setValue(origValue);
-			}
-		}
+    private static class DirtyableProperty<T> extends ObjectProperty<T> {
+        private T origValue;
+        private final PropertyDef propertyDef;
 
-		boolean isDirty() {
-			return !origValue.equals(getValue());
-		}
+        DirtyableProperty(final T inValue, final Class<T> inType,
+                final PropertyDef inPropertyDef) {
+            super(inValue, inType);
+            propertyDef = inPropertyDef;
+            origValue = inValue;
+            if (inValue == null) {
+                try {
+                    origValue = inType.newInstance();
+                    setValue(origValue);
+                } catch (final InstantiationException exc) {
+                    LOG.error("Error encountered!", exc);
+                } catch (final IllegalAccessException exc) {
+                    LOG.error("Error encountered!", exc);
+                }
+            }
+        }
 
-		PropertyDef getPropertyDef() {
-			return propertyDef;
-		}
-	}
+        boolean isDirty() {
+            return !origValue.equals(getValue());
+        }
 
-	private static class NullObject<T> {
-		@Override
-		public String toString() {
-			return ""; //$NON-NLS-1$
-		}
-
-		@Override
-		public boolean equals(final Object inObj) {
-			if (inObj == null)
-				return true;
-			if (inObj.getClass().equals(this.getClass()))
-				return true;
-			if ("".equals(inObj))return true; //$NON-NLS-1$
-			return false;
-		}
-	}
+        PropertyDef getPropertyDef() {
+            return propertyDef;
+        }
+    }
 
 }

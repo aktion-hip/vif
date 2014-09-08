@@ -18,27 +18,25 @@
  */
 package org.hip.vif.admin.groupadmin;
 
-/**
- * Partlet constants.
- * 
- * @author Luthiger Created: 01.01.2008
- */
+/** Partlet constants.
+ *
+ * @author Luthiger Created: 01.01.2008 */
 public class Constants {
-	public static final String PERMISSION_EDIT_BIBLIOGRAPHY = "editBibliographyAdmin"; //$NON-NLS-1$
+    public static final String PERMISSION_EDIT_BIBLIOGRAPHY = "editBibliographyAdmin"; //$NON-NLS-1$
 
-	// TODO: uncomment permissions
-	public static final String PERMISSION_GROUPS_ADMIN = ""; // "adminGroups"; //$NON-NLS-1$
-	public static final String PERMISSION_QUESTION_NEW = ""; // "newQuestionAdmin"; //$NON-NLS-1$
-	public static final String PERMISSION_COMPLETION_NEW = ""; // "newCompletionAdmin"; //$NON-NLS-1$
-	public static final String PERMISSION_QUESTION_PUBLISH = ""; // "publishAdmin"; //$NON-NLS-1$
+    // TODO: uncomment permissions
+    public static final String PERMISSION_GROUPS_ADMIN = "adminGroups"; //$NON-NLS-1$
+    public static final String PERMISSION_QUESTION_NEW = "newQuestionAdmin"; //$NON-NLS-1$
+    public static final String PERMISSION_COMPLETION_NEW = "newCompletionAdmin"; //$NON-NLS-1$
+    public static final String PERMISSION_QUESTION_PUBLISH = "publishAdmin"; //$NON-NLS-1$
 
-	public static final String MENU_SET_ID_GROUP_CONTENT = "discussionGroupContent"; //$NON-NLS-1$
-	public static final String MENU_SET_ID_QUESTION_SHOW = "discussionQuestionShow"; //$NON-NLS-1$
-	public static final String MENU_SET_ID_CONTRIBUTION_EDIT = "discussionEditContribution"; //$NON-NLS-1$
-	public static final String MENU_SET_ID_BIBLIO_NEW = "discussionNewBiblio"; //$NON-NLS-1$
-	public static final String MENU_SET_ID_PUBLISH = "discussionPublish"; //$NON-NLS-1$
-	public static final String MENU_SET_ID_PENDING = "discussionPending"; //$NON-NLS-1$
-	public static final String MENU_SET_ID_BACK = "back"; //$NON-NLS-1$
+    public static final String MENU_SET_ID_GROUP_CONTENT = "discussionGroupContent"; //$NON-NLS-1$
+    public static final String MENU_SET_ID_QUESTION_SHOW = "discussionQuestionShow"; //$NON-NLS-1$
+    public static final String MENU_SET_ID_CONTRIBUTION_EDIT = "discussionEditContribution"; //$NON-NLS-1$
+    public static final String MENU_SET_ID_BIBLIO_NEW = "discussionNewBiblio"; //$NON-NLS-1$
+    public static final String MENU_SET_ID_PUBLISH = "discussionPublish"; //$NON-NLS-1$
+    public static final String MENU_SET_ID_PENDING = "discussionPending"; //$NON-NLS-1$
+    public static final String MENU_SET_ID_BACK = "back"; //$NON-NLS-1$
 
-	public static final String KEY_PARAMETER_DELETE_TEXT = "deleteTextHelper"; //$NON-NLS-1$
+    public static final String KEY_PARAMETER_DELETE_TEXT = "deleteTextHelper"; //$NON-NLS-1$
 }

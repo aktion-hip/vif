@@ -1,6 +1,6 @@
-/*
- This package is part of the member administration of the application VIF.
- Copyright (C) 2008, Benno Luthiger
+/**
+    This package is part of the application VIF.
+    Copyright (C) 2011-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -23,42 +23,40 @@ import java.io.IOException;
 import org.hip.kernel.exc.VException;
 import org.hip.vif.admin.member.Activator;
 import org.hip.vif.core.bom.VIFMember;
-import org.hip.vif.core.mail.AbstractMail;
+import org.hip.vif.web.mail.AbstractMail;
 
-/**
- * Mail sent to the user after resetting the password.
- * 
+/** Mail sent to the user after resetting the password.
+ *
  * Created on 14.08.2003
- * @author Luthiger
- */
+ *
+ * @author Luthiger */
 public class PasswordResetMail extends AbstractMail {
-	private final static String KEY_RESET = "mail.passwort.reset"; //$NON-NLS-1$
-	private String password;
+    private final static String KEY_RESET = "mail.passwort.reset"; //$NON-NLS-1$
+    private final String password;
 
-	/**
-	 * PasswordResetMail constructor.
-	 * 
-	 * @param inContext Context
-	 * @param inMember VIFMember
-	 * @param inBody StringBuffer
-	 * @throws VException
-	 * @throws IOException
-	 */
-	public PasswordResetMail(VIFMember inMember, String inPassword) throws VException, IOException {
-		super(inMember);
-		password = inPassword;
-	}
+    /** PasswordResetMail constructor.
+     *
+     * @param inContext Context
+     * @param inMember VIFMember
+     * @param inBody StringBuffer
+     * @throws VException
+     * @throws IOException */
+    public PasswordResetMail(final VIFMember inMember, final String inPassword) throws VException, IOException {
+        super(inMember);
+        password = inPassword;
+    }
 
-	/**
-	 * Hook for subclasses
-	 * 
-	 * @return StringBuilder
-	 */
-	protected StringBuilder getBody() {
-		return new StringBuilder(getFormattedMessage(Activator.getMessages(), KEY_RESET, password));
-	}
-	protected StringBuilder getBodyHtml() {
-		return getBody();
-	}
+    /** Hook for subclasses
+     *
+     * @return StringBuilder */
+    @Override
+    protected StringBuilder getBody() {
+        return new StringBuilder(getFormattedMessage(Activator.getMessages(), KEY_RESET, password));
+    }
+
+    @Override
+    protected StringBuilder getBodyHtml() {
+        return getBody();
+    }
 
 }

@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.forum.groups.internal;
 
@@ -26,64 +26,52 @@ import org.hip.vif.core.util.PermissionRecord;
 import org.hip.vif.forum.groups.Constants;
 import org.hip.vif.forum.groups.internal.submenu.HelperContextMenuForumGroups;
 import org.hip.vif.forum.groups.tasks.GroupShowListTask;
-import org.hip.vif.web.interfaces.IMenuSet;
-import org.hip.vif.web.interfaces.ITaskSet;
-import org.hip.vif.web.interfaces.IUseCaseForum;
-import org.hip.vif.web.menu.IVIFMenuItem;
-import org.hip.vif.web.util.UseCaseHelper;
+import org.ripla.interfaces.IControllerSet;
+import org.ripla.interfaces.IMenuItem;
+import org.ripla.web.interfaces.IMenuSet;
+import org.ripla.web.services.IUseCase;
+import org.ripla.web.util.UseCaseHelper;
 
-/**
- * This bundle's service provider for <code>IUseCaseForum</code>.
- * 
- * @author Luthiger
- * Created: 19.05.2011
- */
-public class UseCaseComponent implements IUseCaseForum, IPermissionRecords {
+/** This bundle's service provider for <code>IUseCaseForum</code>.
+ *
+ * @author Luthiger Created: 19.05.2011 */
+public class UseCaseComponent implements IUseCase, IPermissionRecords {
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.core.interfaces.IUseCase#getMenu()
-	 */
-	public IVIFMenuItem getMenu() {
-		return ComponentHelper.createMenu();
-	}
+    @Override
+    public IMenuItem getMenu() {
+        return ComponentHelper.createMenu();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.web.interfaces.IUseCase#getSubMenus()
-	 */
-	public IMenuSet[] getContextMenus() {
-		return new IMenuSet[] {HelperContextMenuForumGroups.createContextMenuSet1(),
-				HelperContextMenuForumGroups.createContextMenuSet2(),
-				HelperContextMenuForumGroups.createContextMenuSet3(),
-				HelperContextMenuForumGroups.createContextMenuSet4(),
-				HelperContextMenuForumGroups.createContextMenuSet5(),
-				HelperContextMenuForumGroups.createContextMenuSet6()
-				};
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.web.interfaces.IUseCase#getTaskClasses()
-	 */
-	public Package getTaskClasses() {
-		return GroupShowListTask.class.getPackage();
-	}
+    @Override
+    public IMenuSet[] getContextMenus() {
+        return new IMenuSet[] { HelperContextMenuForumGroups.createContextMenuSet1(),
+                HelperContextMenuForumGroups.createContextMenuSet2(),
+                HelperContextMenuForumGroups.createContextMenuSet3(),
+                HelperContextMenuForumGroups.createContextMenuSet4(),
+                HelperContextMenuForumGroups.createContextMenuSet5(),
+                HelperContextMenuForumGroups.createContextMenuSet6()
+        };
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.web.interfaces.IUseCase#getTaskSet()
-	 */
-	public ITaskSet getTaskSet() {
-		return UseCaseHelper.EMPTY_TASK_SET;
-	}
-	
-// ---
+    @Override
+    public Package getControllerClasses() {
+        return GroupShowListTask.class.getPackage();
+    }
 
-	public IPermissionRecord[] getPermissionRecords() {
-		IPermissionRecord[] outRecords = new IPermissionRecord[1];
-		outRecords[0] = new PermissionRecord(Constants.PERMISSION_EDIT_BIBLIOGRAPHY, "Forum: Edit bibliography entry.",  //$NON-NLS-1$
-												new int[] {RolesConstants.ADMINISTRATOR, RolesConstants.GROUP_ADMINISTRATOR, RolesConstants.PARTICIPANT});
-		return outRecords;
-	}
-	
+    @Override
+    public IControllerSet getControllerSet() {
+        return UseCaseHelper.EMPTY_CONTROLLER_SET;
+    }
+
+    // ---
+
+    @Override
+    public IPermissionRecord[] getPermissionRecords() {
+        final IPermissionRecord[] outRecords = new IPermissionRecord[1];
+        outRecords[0] = new PermissionRecord(Constants.PERMISSION_EDIT_BIBLIOGRAPHY, "Forum: Edit bibliography entry.", //$NON-NLS-1$
+                new int[] { RolesConstants.ADMINISTRATOR, RolesConstants.GROUP_ADMINISTRATOR,
+                        RolesConstants.PARTICIPANT });
+        return outRecords;
+    }
+
 }

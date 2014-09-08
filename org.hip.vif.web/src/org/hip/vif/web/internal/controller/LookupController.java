@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,34 +15,26 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.web.internal.controller;
 
 import org.hip.vif.web.controller.LookupManager;
 import org.hip.vif.web.interfaces.ILookupWindow;
 
-/**
- * OSGi service component class, declared in <code>OSGI-INF/lookup.xml</code>.
- * Forwards to <code>LookupManager</code>.
- * 
- * @author Luthiger
- * Created: 11.06.2011
- */
+/** OSGi service component class, declared in <code>OSGI-INF/lookup.xml</code>. Forwards to <code>LookupManager</code>.
+ *
+ * @author Luthiger Created: 11.06.2011 */
 public class LookupController {
-	
-	/**
-	 * @param inLookup {@link ILookupWindow} bind
-	 */
-	protected void addLookup(ILookupWindow inLookup) {
-		LookupManager.INSTANCE.setLookup(inLookup);
-	}
-	
-	/**
-	 * @param inLookup {@link ILookupWindow} unbind
-	 */
-	protected void removeLookup(ILookupWindow inLookup) {
-		LookupManager.INSTANCE.unsetLookup(inLookup);
-	}
+
+    /** @param inLookup {@link ILookupWindow} bind */
+    protected void addLookup(final ILookupWindow inLookup) {
+        LookupManager.INSTANCE.setLookup(inLookup);
+    }
+
+    /** @param inLookup {@link ILookupWindow} unbind */
+    protected void removeLookup(final ILookupWindow inLookup) {
+        LookupManager.INSTANCE.unsetLookup(inLookup);
+    }
 
 }

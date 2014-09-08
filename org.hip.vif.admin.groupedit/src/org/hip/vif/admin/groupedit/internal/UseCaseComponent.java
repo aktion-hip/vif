@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.admin.groupedit.internal;
 
@@ -23,48 +23,50 @@ import org.hip.vif.admin.groupedit.Activator;
 import org.hip.vif.admin.groupedit.Constants;
 import org.hip.vif.admin.groupedit.tasks.GroupNewTask;
 import org.hip.vif.admin.groupedit.tasks.GroupShowListTask;
-import org.hip.vif.core.interfaces.IMessages;
-import org.hip.vif.web.interfaces.IMenuSet;
-import org.hip.vif.web.interfaces.ITaskSet;
-import org.hip.vif.web.interfaces.IUseCaseAdmin;
-import org.hip.vif.web.menu.IVIFMenuItem;
-import org.hip.vif.web.menu.VIFMenuComposite;
-import org.hip.vif.web.util.UseCaseHelper;
+import org.ripla.interfaces.IControllerSet;
+import org.ripla.interfaces.IMenuItem;
+import org.ripla.interfaces.IMessages;
+import org.ripla.menu.RiplaMenuComposite;
+import org.ripla.web.interfaces.IMenuSet;
+import org.ripla.web.services.IUseCase;
+import org.ripla.web.util.UseCaseHelper;
 
-/**
- * This bundle's service provider for <code>IUseCaseAdmin</code>.
- * 
- * @author Luthiger
- * Created: 06.11.2011
- */
-public class UseCaseComponent implements IUseCaseAdmin {
+/** This bundle's service provider for <code>IUseCaseAdmin</code>.
+ *
+ * @author Luthiger Created: 06.11.2011 */
+public class UseCaseComponent implements IUseCase {
 
-	public IVIFMenuItem getMenu() {
-		IMessages lMessages = Activator.getMessages();
-		VIFMenuComposite outMenu = new VIFMenuComposite(lMessages.getMessage("component.menu.title"), 20); //$NON-NLS-1$
-		outMenu.setTaskName(UseCaseHelper.createFullyQualifiedTaskName(GroupShowListTask.class));
-		outMenu.setPermission(Constants.PERMISSION_GROUPS_EDIT);
-		
-		VIFMenuComposite lSubMenu = new VIFMenuComposite(lMessages.getMessage("context.menu.groupedit.new"), 10); //$NON-NLS-1$
-		lSubMenu.setTaskName(UseCaseHelper.createFullyQualifiedTaskName(GroupNewTask.class));
-		lSubMenu.setPermission(Constants.PERMISSION_GROUP_CREATE);
-		
-		outMenu.add(lSubMenu);
-		return outMenu;
-	}
+    @Override
+    public IMenuItem getMenu() {
+        final IMessages lMessages = Activator.getMessages();
+        final RiplaMenuComposite outMenu = new RiplaMenuComposite(lMessages.getMessage("component.menu.title"), 20); //$NON-NLS-1$
+        outMenu.setControllerName(UseCaseHelper.createFullyQualifiedControllerName(GroupShowListTask.class));
+        outMenu.setPermission(Constants.PERMISSION_GROUPS_EDIT);
 
-	public Package getTaskClasses() {
-		return GroupShowListTask.class.getPackage();
-	}
+        final RiplaMenuComposite lSubMenu = new RiplaMenuComposite(
+                lMessages.getMessage("context.menu.groupedit.new"), 10); //$NON-NLS-1$
+        lSubMenu.setControllerName(UseCaseHelper.createFullyQualifiedControllerName(GroupNewTask.class));
+        lSubMenu.setPermission(Constants.PERMISSION_GROUP_CREATE);
 
-	public ITaskSet getTaskSet() {
-		return UseCaseHelper.EMPTY_TASK_SET;
-	}
+        outMenu.add(lSubMenu);
+        return outMenu;
+    }
 
-	public IMenuSet[] getContextMenus() {		
-		return new IMenuSet[] {HelperContextMenuAdminGroups.createContextMenuSet1(),
-				HelperContextMenuAdminGroups.createContextMenuSet2(),
-				HelperContextMenuAdminGroups.createContextMenuSet3()};
-	}
+    @Override
+    public Package getControllerClasses() {
+        return GroupShowListTask.class.getPackage();
+    }
+
+    @Override
+    public IControllerSet getControllerSet() {
+        return UseCaseHelper.EMPTY_CONTROLLER_SET;
+    }
+
+    @Override
+    public IMenuSet[] getContextMenus() {
+        return new IMenuSet[] { HelperContextMenuAdminGroups.createContextMenuSet1(),
+                HelperContextMenuAdminGroups.createContextMenuSet2(),
+                HelperContextMenuAdminGroups.createContextMenuSet3() };
+    }
 
 }

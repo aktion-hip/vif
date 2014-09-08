@@ -18,17 +18,14 @@
  */
 package org.hip.vif.web.interfaces;
 
-/**
- * Interface for forwarding services, contributes to the OSGi SCR.
- * 
+/** Interface for forwarding services, contributes to the OSGi SCR.
+ *
  * @author Luthiger Created: 28.09.2011
- */
+ * @deprecated Use <code>org.ripla.web.interfaces.IForwarding</code> instead. */
+@Deprecated
 public interface IForwarding {
 
-	/**
-	 * @return {@link ITargetConfiguration}[] the list of configurations for the
-	 *         target tasks the bundle is providing.
-	 */
-	ITargetConfiguration[] getTargets();
+    /** @return {@link ITargetConfiguration}[] the list of configurations for the target tasks the bundle is providing. */
+    ITargetConfiguration[] getTargets();
 
 }

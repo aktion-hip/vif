@@ -26,7 +26,7 @@ import org.hip.kernel.code.CodeList;
 import org.hip.vif.core.bom.GroupHome;
 import org.hip.vif.core.bom.impl.NestedGroupHome;
 import org.hip.vif.core.interfaces.ISelectableBean;
-import org.hip.vif.core.util.BeanWrapperHelper;
+import org.hip.vif.web.util.BeanWrapperHelper;
 
 /**
  * Wrapper class for group model instances.

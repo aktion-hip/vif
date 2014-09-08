@@ -29,7 +29,6 @@ import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.BookmarkHome;
 import org.hip.vif.core.bom.QuestionHome;
 import org.hip.vif.core.interfaces.IMessages;
-import org.hip.vif.core.util.BeanWrapperHelper;
 import org.hip.vif.forum.usersettings.Activator;
 import org.hip.vif.forum.usersettings.Constants;
 import org.hip.vif.forum.usersettings.data.BookmarkBean;
@@ -37,6 +36,7 @@ import org.hip.vif.forum.usersettings.data.BookmarkContainer;
 import org.hip.vif.forum.usersettings.ui.BookmarkListView;
 import org.hip.vif.web.tasks.AbstractVIFTask;
 import org.hip.vif.web.tasks.ForwardTaskRegistry;
+import org.hip.vif.web.util.BeanWrapperHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

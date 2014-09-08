@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/p/vif/code/!svn/ver/1026/org.hip.vifapp.test.htmlunit/trunk/src/org/hip/vifapp/test
+END
+CreateGroups.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/p/vif/code/!svn/ver/610/org.hip.vifapp.test.htmlunit/trunk/src/org/hip/vifapp/test/CreateGroups.java
+END
+CreateSU.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/p/vif/code/!svn/ver/610/org.hip.vifapp.test.htmlunit/trunk/src/org/hip/vifapp/test/CreateSU.java
+END
+OpenDiscussionGroup.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/p/vif/code/!svn/ver/610/org.hip.vifapp.test.htmlunit/trunk/src/org/hip/vifapp/test/OpenDiscussionGroup.java
+END
+CreateMembers.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/p/vif/code/!svn/ver/610/org.hip.vifapp.test.htmlunit/trunk/src/org/hip/vifapp/test/CreateMembers.java
+END
+AdminLogin.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/p/vif/code/!svn/ver/610/org.hip.vifapp.test.htmlunit/trunk/src/org/hip/vifapp/test/AdminLogin.java
+END
+VifTestCase.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/p/vif/code/!svn/ver/1026/org.hip.vifapp.test.htmlunit/trunk/src/org/hip/vifapp/test/VifTestCase.java
+END
+CreateStartingQuestion.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/p/vif/code/!svn/ver/610/org.hip.vifapp.test.htmlunit/trunk/src/org/hip/vifapp/test/CreateStartingQuestion.java
+END
+CheckContributionContent.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/p/vif/code/!svn/ver/610/org.hip.vifapp.test.htmlunit/trunk/src/org/hip/vifapp/test/CheckContributionContent.java
+END

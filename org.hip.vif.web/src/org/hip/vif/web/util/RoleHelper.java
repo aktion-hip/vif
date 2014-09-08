@@ -21,94 +21,133 @@ package org.hip.vif.web.util;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Dictionary;
 
 import org.hip.kernel.bom.GeneralDomainObject;
 import org.hip.kernel.bom.QueryResult;
 import org.hip.kernel.exc.VException;
+import org.hip.vif.core.ApplicationConstants;
 import org.hip.vif.core.bom.BOMHelper;
+import org.hip.vif.core.bom.LinkPermissionRoleHome;
+import org.hip.vif.core.bom.PermissionHome;
 import org.hip.vif.core.bom.RoleHome;
 import org.hip.vif.core.code.Role;
 import org.hip.vif.core.member.IActor;
+import org.hip.vif.web.Constants;
 import org.osgi.service.useradmin.Group;
 import org.osgi.service.useradmin.User;
 import org.osgi.service.useradmin.UserAdmin;
 
-/**
- * Helper class for all issues concerning OSGi roles and user amdin.
- * 
- * @author lbenno
- */
+/** Helper class for all issues concerning OSGi roles and user amdin.
+ *
+ * @author lbenno */
 public final class RoleHelper {
 
-	private RoleHelper() {
-		// prevent instatiation
-	}
+    private RoleHelper() {
+        // prevent instantiation
+    }
 
-	/**
-	 * Creates OSGi roles for the VIF application.
-	 * 
-	 * @param inUserAdmin
-	 *            {@link UserAdmin}
-	 * @throws SQLException
-	 * @throws VException
-	 */
-	public static void createVIFRoles(final UserAdmin inUserAdmin)
-			throws SQLException, VException {
-		final QueryResult lRoles = BOMHelper.getRoleHome().select();
-		while (lRoles.hasMoreElements()) {
-			final String lGroupName = (String) lRoles.nextAsDomainObject().get(
-					RoleHome.KEY_DESCRIPTION);
-			final Group lGroup = (Group) inUserAdmin.createRole(lGroupName,
-					org.osgi.service.useradmin.Role.GROUP);
-			lGroup.addMember(inUserAdmin
-					.getRole(org.osgi.service.useradmin.Role.USER_ANYONE));
-		}
-	}
+    /** Create OSGi roles and permissions for the VIF application.
+     *
+     * @param inUserAdmin
+     * @throws SQLException
+     * @throws VException */
+    @SuppressWarnings("unchecked")
+    public static void createRolesAndPermissions(final UserAdmin inUserAdmin) throws SQLException, VException {
+        createVIFRoles(inUserAdmin);
 
-	/**
-	 * Creates a OSGi user object for the specified VIF actor and assigns it the
-	 * OSGi roles according to the user's VIF roles.
-	 * 
-	 * @param inActor
-	 *            {@link IActor} the VIF actor object
-	 * @param inUserAdmin
-	 *            {@link UserAdmin}
-	 * @throws VException
-	 * @throws SQLException
-	 */
-	@SuppressWarnings("unchecked")
-	public static void mapUserToRole(final IActor inActor,
-			final UserAdmin inUserAdmin) throws VException, SQLException {
-		// create user
-		final String lUserId = inActor.getUserID();
-		final User lUser = (User) inUserAdmin.createRole(lUserId,
-				org.osgi.service.useradmin.Role.USER);
-		lUser.getProperties().put("vif.user", lUserId);
+        final LinkPermissionRoleHome lLinkHome = BOMHelper.getLinkPermissionRoleHome();
+        final QueryResult lPermissions = BOMHelper.getPermissionHome().select();
+        while (lPermissions.hasMoreElements()) {
+            final GeneralDomainObject lPermissionBOM = lPermissions.next();
+            final Group lPermission = (Group) inUserAdmin.createRole(
+                    (String) lPermissionBOM.get(PermissionHome.KEY_LABEL), org.osgi.service.useradmin.Role.GROUP);
+            if (lPermission != null) {
+                final Dictionary<String, String> lProperties = lPermission.getProperties();
+                lProperties.put(Constants.PERMISSION_DESCRIPTION_KEY,
+                        (String) lPermissionBOM.get(PermissionHome.KEY_DESCRIPTION));
+                final Collection<Role> lRoles = lLinkHome.getRolesOf(Long.parseLong(lPermissionBOM.get(
+                        PermissionHome.KEY_ID).toString()));
+                addRoles(inUserAdmin, lPermission, lRoles);
+            }
+        }
+    }
 
-		// map to group
-		final Collection<String> lRoleIds = getRoleIds(inActor.getActorID());
-		final QueryResult lRoles = BOMHelper.getRoleHome().select();
-		while (lRoles.hasMoreElements()) {
-			final GeneralDomainObject lRole = lRoles.nextAsDomainObject();
-			final Group lGroup = (Group) inUserAdmin.getRole((String) lRole
-					.get(RoleHome.KEY_DESCRIPTION));
-			if (lGroup != null
-					&& lRoleIds.contains(lRole.get(RoleHome.KEY_CODE_ID))) {
-				lGroup.addRequiredMember(lUser);
-			}
-		}
+    private static void addRoles(final UserAdmin inUserAdmin, final Group inPermission, final Collection<Role> inRoles) {
+        for (final Role lRole : inRoles) {
+            final org.osgi.service.useradmin.Role lOSGiRole = inUserAdmin.getRole(lRole.getElementID());
+            if (lOSGiRole != null) {
+                inPermission.addMember(lOSGiRole);
+            }
+        }
+    }
 
-	}
+    /** Creates OSGi roles for the VIF application.
+     *
+     * @param inUserAdmin {@link UserAdmin}
+     * @throws SQLException
+     * @throws VException */
+    private static void createVIFRoles(final UserAdmin inUserAdmin)
+            throws SQLException, VException {
+        final QueryResult lRoles = BOMHelper.getRoleHome().select();
+        while (lRoles.hasMoreElements()) {
+            final String lGroupName = (String) lRoles.nextAsDomainObject().get(
+                    RoleHome.KEY_CODE_ID);
+            final Group lGroup = (Group) inUserAdmin.createRole(lGroupName,
+                    org.osgi.service.useradmin.Role.GROUP);
+            if (lGroup != null) {
+                lGroup.addMember(inUserAdmin
+                        .getRole(org.osgi.service.useradmin.Role.USER_ANYONE));
+            }
+        }
+    }
 
-	private static Collection<String> getRoleIds(final Long inMemberID)
-			throws VException {
-		final Collection<Role> lRoles = BOMHelper.getLinkMemberRoleHome()
-				.getRolesOf(inMemberID);
-		final Collection<String> out = new ArrayList<String>(lRoles.size());
-		for (final Role lRole : lRoles) {
-			out.add(lRole.getElementID());
-		}
-		return out;
-	}
+    /** Creates a OSGi user object for the specified VIF actor and assigns it the OSGi roles according to the user's VIF
+     * roles.
+     *
+     * @param inActor {@link IActor} the VIF actor object
+     * @param inUserAdmin {@link UserAdmin}
+     * @throws VException
+     * @throws SQLException */
+    @SuppressWarnings("unchecked")
+    public static void mapUserToRole(final IActor inActor,
+            final UserAdmin inUserAdmin) throws VException, SQLException {
+        // create user
+        final String lUserId = inActor.getUserID();
+        User lUser = (User) inUserAdmin.getRole(lUserId);
+        if (lUser == null) {
+            lUser = (User) inUserAdmin.createRole(lUserId,
+                    org.osgi.service.useradmin.Role.USER);
+        }
+        if (lUser == null) {
+            throw new VException(String.format("Could not get OSGi user object for '%s'!", lUserId));
+        }
+        lUser.getProperties().put(ApplicationConstants.VIF_USER, lUserId);
+
+        // map to group
+        final Collection<String> lRoleIds = getRoleIds(inActor.getActorID());
+        final QueryResult lRoles = BOMHelper.getRoleHome().select();
+        while (lRoles.hasMoreElements()) {
+            final GeneralDomainObject lRole = lRoles.nextAsDomainObject();
+            final Group lGroup = (Group) inUserAdmin.getRole((String) lRole
+                    .get(RoleHome.KEY_DESCRIPTION));
+            if (lGroup != null
+                    && lRoleIds.contains(lRole.get(RoleHome.KEY_CODE_ID))) {
+                lGroup.addRequiredMember(lUser);
+            }
+        }
+
+    }
+
+    private static Collection<String> getRoleIds(final Long inMemberID)
+            throws VException {
+        final Collection<Role> lRoles = BOMHelper.getLinkMemberRoleHome()
+                .getRolesOf(inMemberID);
+        final Collection<String> out = new ArrayList<String>(lRoles.size());
+        for (final Role lRole : lRoles) {
+            out.add(lRole.getElementID());
+        }
+        return out;
+    }
 
 }

@@ -1,6 +1,6 @@
-/*
-	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+/**
+    This package is part of the application VIF.
+    Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,55 +15,48 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.forum.groups.data;
 
 import org.hip.kernel.bom.GeneralDomainObject;
 import org.hip.vif.core.bom.QuestionHome;
-import org.hip.vif.core.util.BeanWrapperHelper;
+import org.hip.vif.web.util.BeanWrapperHelper;
 import org.hip.vif.web.util.RichTextSanitizer;
 
-/**
- * @author Luthiger
- * Created: 06.06.2011
- */
+/** @author Luthiger Created: 06.06.2011 */
 public class QuestionWrapper {
-	private Long questionID;
-	private String questionDecimal;
-	private String question;
-	
-	/**
-	 * Private constructor.
-	 * 
-	 * @param inDomainObject
-	 */
-	private QuestionWrapper(GeneralDomainObject inDomainObject) {
-		questionID = BeanWrapperHelper.getLong(QuestionHome.KEY_ID, inDomainObject);
-		questionDecimal = BeanWrapperHelper.getString(QuestionHome.KEY_QUESTION_DECIMAL, inDomainObject);
-		question = RichTextSanitizer.removePara(BeanWrapperHelper.getString(QuestionHome.KEY_QUESTION, inDomainObject));
-	}
-	
-	/**
-	 * Factory method, creation the instance.
-	 * 
-	 * @param inDomainObject
-	 * @return {@link QuestionWrapper}
-	 */
-	public static QuestionWrapper createItem(GeneralDomainObject inDomainObject) {
-		return new QuestionWrapper(inDomainObject);
-	}
+    private final Long questionID;
+    private final String questionDecimal;
+    private final String question;
 
-	public Long getQuestionID() {
-		return questionID;
-	}
+    /** Private constructor.
+     * 
+     * @param inDomainObject */
+    private QuestionWrapper(final GeneralDomainObject inDomainObject) {
+        questionID = BeanWrapperHelper.getLong(QuestionHome.KEY_ID, inDomainObject);
+        questionDecimal = BeanWrapperHelper.getString(QuestionHome.KEY_QUESTION_DECIMAL, inDomainObject);
+        question = RichTextSanitizer.removePara(BeanWrapperHelper.getString(QuestionHome.KEY_QUESTION, inDomainObject));
+    }
 
-	public String getQuestionDecimal() {
-		return questionDecimal;
-	}
+    /** Factory method, creation the instance.
+     * 
+     * @param inDomainObject
+     * @return {@link QuestionWrapper} */
+    public static QuestionWrapper createItem(final GeneralDomainObject inDomainObject) {
+        return new QuestionWrapper(inDomainObject);
+    }
 
-	public String getQuestion() {
-		return question;
-	}
+    public Long getQuestionID() {
+        return questionID;
+    }
+
+    public String getQuestionDecimal() {
+        return questionDecimal;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
 
 }

@@ -26,100 +26,90 @@ import org.ripla.util.ParameterObject;
 import org.ripla.web.interfaces.IContextMenuItem;
 import org.ripla.web.interfaces.IPluggable;
 
-/**
- * Default implementation of <code>IVIFContextMenuItem</code>.<br />
- * This class is more or less a parameter object. All fields are set in the
- * constructor and are read-only after instantiation.
- * 
+/** Default implementation of <code>IVIFContextMenuItem</code>.<br />
+ * This class is more or less a parameter object. All fields are set in the constructor and are read-only after
+ * instantiation.
+ *
  * @author Luthiger Created: 12.10.2011
  * @see IVIFContextMenuItem
- */
+ * @deprecated use <code>org.ripla.web.menu.ContextMenuItem</code> instead. */
+@Deprecated
 public class ContextMenuItem implements IContextMenuItem {
-	private final Class<? extends IPluggable> taskClass;
-	private final String titleMsg;
-	private final String menuPermission;
-	private final boolean needsGroupAmin;
-	private final boolean needsRegistration;
-	private final boolean needsTypePrivate;
-	private final String[] groupStates;
-	private final IMessages messages;
+    private final Class<? extends IPluggable> taskClass;
+    private final String titleMsg;
+    private final String menuPermission;
+    private final boolean needsGroupAmin;
+    private final boolean needsRegistration;
+    private final boolean needsTypePrivate;
+    private final String[] groupStates;
+    private final IMessages messages;
 
-	/**
-	 * ContextMenuItem constructor.
-	 * 
-	 * @param inTaskClass
-	 *            Class of {@link IPluggable}
-	 * @param inTitleMsg
-	 *            String key
-	 * @param inMenuPermission
-	 *            String
-	 * @param inNeedsGroupAmin
-	 *            boolean
-	 * @param inNeedsRegistration
-	 *            boolean
-	 * @param inNeedsTypePrivate
-	 *            boolean
-	 * @param inGroupStates
-	 *            String[]
-	 * @param inMessages
-	 *            {@link IMessages}
-	 */
-	public ContextMenuItem(final Class<? extends IPluggable> inTaskClass,
-			final String inTitleMsg, final String inMenuPermission,
-			final boolean inNeedsGroupAmin, final boolean inNeedsRegistration,
-			final boolean inNeedsTypePrivate, final String[] inGroupStates,
-			final IMessages inMessages) {
-		taskClass = inTaskClass;
-		titleMsg = inTitleMsg;
-		menuPermission = inMenuPermission;
-		needsGroupAmin = inNeedsGroupAmin;
-		needsRegistration = inNeedsRegistration;
-		needsTypePrivate = inNeedsTypePrivate;
-		groupStates = inGroupStates;
-		messages = inMessages;
-	}
+    /** ContextMenuItem constructor.
+     * 
+     * @param inTaskClass Class of {@link IPluggable}
+     * @param inTitleMsg String key
+     * @param inMenuPermission String
+     * @param inNeedsGroupAmin boolean
+     * @param inNeedsRegistration boolean
+     * @param inNeedsTypePrivate boolean
+     * @param inGroupStates String[]
+     * @param inMessages {@link IMessages} */
+    public ContextMenuItem(final Class<? extends IPluggable> inTaskClass,
+            final String inTitleMsg, final String inMenuPermission,
+            final boolean inNeedsGroupAmin, final boolean inNeedsRegistration,
+            final boolean inNeedsTypePrivate, final String[] inGroupStates,
+            final IMessages inMessages) {
+        taskClass = inTaskClass;
+        titleMsg = inTitleMsg;
+        menuPermission = inMenuPermission;
+        needsGroupAmin = inNeedsGroupAmin;
+        needsRegistration = inNeedsRegistration;
+        needsTypePrivate = inNeedsTypePrivate;
+        groupStates = inGroupStates;
+        messages = inMessages;
+    }
 
-	public Class<? extends IPluggable> getTaskClass() {
-		return taskClass;
-	}
+    public Class<? extends IPluggable> getTaskClass() {
+        return taskClass;
+    }
 
-	@Override
-	public String getTitleMsg() {
-		return messages.getMessage(titleMsg);
-	}
+    @Override
+    public String getTitleMsg() {
+        return messages.getMessage(titleMsg);
+    }
 
-	@Override
-	public String getMenuPermission() {
-		return menuPermission;
-	}
+    @Override
+    public String getMenuPermission() {
+        return menuPermission;
+    }
 
-	public boolean needsGroupAmin() {
-		return needsGroupAmin;
-	}
+    public boolean needsGroupAmin() {
+        return needsGroupAmin;
+    }
 
-	public boolean needsRegistration() {
-		return needsRegistration;
-	}
+    public boolean needsRegistration() {
+        return needsRegistration;
+    }
 
-	public boolean needsTypePrivate() {
-		return needsTypePrivate;
-	}
+    public boolean needsTypePrivate() {
+        return needsTypePrivate;
+    }
 
-	public String[] getGroupStates() {
-		return groupStates;
-	}
+    public String[] getGroupStates() {
+        return groupStates;
+    }
 
-	@Override
-	public Class<? extends IPluggable> getControllerClass() {
-		return taskClass;
-	}
+    @Override
+    public Class<? extends IPluggable> getControllerClass() {
+        return taskClass;
+    }
 
-	@Override
-	public boolean checkConditions(final User inUser,
-			final Authorization inAuthorization,
-			final ParameterObject inParameters) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean checkConditions(final User inUser,
+            final Authorization inAuthorization,
+            final ParameterObject inParameters) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
 }

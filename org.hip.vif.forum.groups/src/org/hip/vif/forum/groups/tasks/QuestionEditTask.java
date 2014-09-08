@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the application VIF.
- Copyright (C) 2008, Benno Luthiger
+ Copyright (C) 2008-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -21,69 +21,69 @@ package org.hip.vif.forum.groups.tasks;
 import java.sql.SQLException;
 
 import org.hip.kernel.exc.VException;
-import org.hip.vif.core.annotations.Partlet;
 import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.Question;
 import org.hip.vif.core.bom.QuestionHierarchyHome;
 import org.hip.vif.core.bom.QuestionHome;
 import org.hip.vif.core.exc.BOMChangeValueException;
-import org.hip.vif.core.util.BeanWrapperHelper;
 import org.hip.vif.forum.groups.Activator;
+import org.hip.vif.web.util.BeanWrapperHelper;
+import org.ripla.annotations.UseCaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vaadin.ui.Window.Notification;
+import com.vaadin.ui.Notification.Type;
 
-
-/**
- * Task to display a question in editable form.
- * 
+/** Task to display a question in editable form.
+ *
  * Created on 13.08.2003
- * @author Luthiger
- */
-@Partlet
+ *
+ * @author Luthiger */
+@UseCaseController
 public class QuestionEditTask extends AbstractQuestionTask {
-	private static final Logger LOG = LoggerFactory.getLogger(QuestionEditTask.class);
-	
-	private Question question = null;
-	
-	private Question getQuestion() throws VException, SQLException {
-		if (question == null) {
-			question = BOMHelper.getQuestionHome().getQuestion(getQuestionID().toString());
-		}
-		return question;
-	}
-	
-	@Override
-	protected Long getParentQuestionID() throws VException, SQLException {
-		return BeanWrapperHelper.getLong(QuestionHierarchyHome.KEY_PARENT_ID, BOMHelper.getQuestionHierarchyHome().getParent(getQuestionID()));
-	}
+    private static final Logger LOG = LoggerFactory.getLogger(QuestionEditTask.class);
 
-	@Override
-	protected String getQuestionText() throws VException, SQLException {
-		return BeanWrapperHelper.getString(QuestionHome.KEY_QUESTION, getQuestion());
-	}
+    private Question question = null;
 
-	@Override
-	protected String getRemarkText() throws VException, SQLException {
-		return BeanWrapperHelper.getString(QuestionHome.KEY_REMARK, getQuestion());
-	}
-	
-	@Override
-	public boolean saveQuestion(String inQuestion, String inRemark) {
-		try {
-			getQuestion().ucSave(cleanUp(inQuestion), cleanUp(inRemark), getActor().getActorID());
-			showNotification(Activator.getMessages().getMessage("msg.task.data.changed"), Notification.TYPE_TRAY_NOTIFICATION); //$NON-NLS-1$
-			sendEvent(ContributionsListTask.class);
-			return true;
-		} catch (BOMChangeValueException exc) {
-			LOG.error("Error while saving the question.", exc); //$NON-NLS-1$
-		} catch (VException exc) {
-			LOG.error("Error while saving the question.", exc); //$NON-NLS-1$
-		} catch (SQLException exc) {
-			LOG.error("Error while saving the question.", exc); //$NON-NLS-1$
-		}
-		return false;
-	}
+    private Question getQuestion() throws VException, SQLException {
+        if (question == null) {
+            question = BOMHelper.getQuestionHome().getQuestion(getQuestionID().toString());
+        }
+        return question;
+    }
+
+    @Override
+    protected Long getParentQuestionID() throws VException, SQLException {
+        return BeanWrapperHelper.getLong(QuestionHierarchyHome.KEY_PARENT_ID, BOMHelper.getQuestionHierarchyHome()
+                .getParent(getQuestionID()));
+    }
+
+    @Override
+    protected String getQuestionText() throws VException, SQLException {
+        return BeanWrapperHelper.getString(QuestionHome.KEY_QUESTION, getQuestion());
+    }
+
+    @Override
+    protected String getRemarkText() throws VException, SQLException {
+        return BeanWrapperHelper.getString(QuestionHome.KEY_REMARK, getQuestion());
+    }
+
+    @Override
+    public boolean saveQuestion(final String inQuestion, final String inRemark) {
+        try {
+            getQuestion().ucSave(cleanUp(inQuestion), cleanUp(inRemark), getActor().getActorID());
+            showNotification(
+                    Activator.getMessages().getMessage("msg.task.data.changed"), Type.TRAY_NOTIFICATION); //$NON-NLS-1$
+            sendEvent(ContributionsListTask.class);
+            return true;
+        } catch (final BOMChangeValueException exc) {
+            LOG.error("Error while saving the question.", exc); //$NON-NLS-1$
+        } catch (final VException exc) {
+            LOG.error("Error while saving the question.", exc); //$NON-NLS-1$
+        } catch (final SQLException exc) {
+            LOG.error("Error while saving the question.", exc); //$NON-NLS-1$
+        }
+        return false;
+    }
 
 }

@@ -1,4 +1,4 @@
-/*
+/**
 	This package is part of the application VIF.
 	Copyright (C) 2012, Benno Luthiger
 
@@ -16,10 +16,7 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-
 package org.hip.vif.web.interfaces;
-
-import org.hip.vif.web.tasks.DBAccessWorkflow.ReturnCode;
 
 /**
  * Interface for classes listening to steps of the DB access configuration workflow. 
@@ -32,9 +29,9 @@ public interface IWorkflowListener {
 	/**
 	 * Event signaling the workflow exit.
 	 * 
-	 * @param inReturnCode {@link ReturnCode} the code for the workflow exit
+	 * @param inReturnCode int the code for the workflow exit
 	 * @param inMessage String the exit message, in case of a workflow error
 	 */
-	void workflowExit(ReturnCode inReturnCode, String inMessage);
+	void workflowExit(int inReturnCode, String inMessage);
 
 }

@@ -4,7 +4,8 @@ Bundle-Name: VIF core
 Bundle-SymbolicName: org.hip.vif.core
 Bundle-Version: 1.2.0.qualifier
 Bundle-Vendor: RelationWare
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
+ JavaSE-1.6
 Import-Package: com.vaadin.ui;version="[7.1.12,8.0.0)",
  javax.mail,
  javax.mail.internet,

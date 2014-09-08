@@ -20,18 +20,15 @@ package org.hip.vif.web.interfaces;
 
 import java.util.Map;
 
-/**
- * Interface for even dispatchers used by the VIF application.<br />
- * The event dispatcher is used to send events of the specified
- * <code>Event</code> type between components.
- * 
- * @author lbenno
- */
+/** Interface for event dispatchers used by the VIF application.<br />
+ * The event dispatcher is used to send events of the specified <code>Event</code> type between components.
+ *
+ * @author lbenno */
 public interface IVIFEventDispatcher {
-	public enum Event {
-		SEND;
-	}
+    public enum Event {
+        SEND, LOOKUP;
+    }
 
-	void dispatch(final Event inType, final Map<String, Object> inProperties);
+    void dispatch(final Event inType, final Map<String, Object> inProperties);
 
 }

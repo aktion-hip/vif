@@ -1,20 +1,15 @@
 package org.hip.vif.useradmin.internal;
 
-import org.osgi.service.useradmin.UserAdmin;
 import org.ripla.useradmin.admin.RiplaUserAdmin;
 
-/**
- * Provider of the OSGi <code>UserAdmin</code> service.
- * 
- * @author Luthiger
- */
-public class VifUserAdmin extends RiplaUserAdmin implements UserAdmin {
+/** Provider of the OSGi <code>UserAdmin</code> service.
+ *
+ * @author Luthiger */
+public class VifUserAdmin extends RiplaUserAdmin {
 
-	/**
-	 * @throws Exception
-	 */
-	public VifUserAdmin() throws Exception { // NOPMD by Luthiger
-		super();
-	}
+    /** @throws Exception */
+    public VifUserAdmin() throws Exception { // NOPMD by Luthiger
+        super();
+    }
 
 }

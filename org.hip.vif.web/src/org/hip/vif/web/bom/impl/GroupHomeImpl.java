@@ -18,32 +18,28 @@
  */
 package org.hip.vif.web.bom.impl;
 
-import org.hip.vif.core.bom.GroupHome;
+import org.hip.vif.web.bom.GroupHome;
 
-/**
- * This domain object home implements the GroupHome interface.
- * 
+/** This domain object home implements the GroupHome interface.
+ *
  * Created on 19.07.2002
- * 
+ *
  * @author Benno Luthiger
- * @see org.hip.vif.core.bom.GroupHome
- */
+ * @see org.hip.vif.core.bom.GroupHome */
 @SuppressWarnings("serial")
 public class GroupHomeImpl extends org.hip.vif.core.bom.impl.GroupHomeImpl
-		implements GroupHome {
+implements GroupHome {
 
-	/*
-	 * Every home has to know the class it handles. They provide access to this
-	 * name through the method <I>getObjectClassName</I>;
-	 */
-	private final static String GROUP_CLASS_NAME = "org.hip.vif.web.bom.impl.GroupImpl";
+    /*
+     * Every home has to know the class it handles. They provide access to this name through the method
+     * <I>getObjectClassName</I>;
+     */
+    private final static String GROUP_CLASS_NAME = "org.hip.vif.web.bom.impl.GroupImpl";
 
-	/**
-	 * @see org.hip.kernel.bom.GeneralDomainObjectHome#getObjectClassName()
-	 */
-	@Override
-	public String getObjectClassName() {
-		return GROUP_CLASS_NAME;
-	}
+    /** @see org.hip.kernel.bom.GeneralDomainObjectHome#getObjectClassName() */
+    @Override
+    public String getObjectClassName() {
+        return GROUP_CLASS_NAME;
+    }
 
 }

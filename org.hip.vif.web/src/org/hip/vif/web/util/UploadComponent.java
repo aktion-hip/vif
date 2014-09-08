@@ -32,7 +32,6 @@ import org.hip.vif.core.ApplicationConstants;
 import org.hip.vif.core.bom.DownloadTextHome;
 import org.hip.vif.core.exc.ProhibitedFileException;
 import org.hip.vif.core.service.PreferencesHandler;
-import org.hip.vif.core.util.BeanWrapperHelper;
 import org.hip.vif.web.Activator;
 import org.hip.vif.web.Constants;
 import org.hip.vif.web.interfaces.IBibliographyTask;

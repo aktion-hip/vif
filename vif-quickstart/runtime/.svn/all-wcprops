@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/vif/!svn/ver/1275/org.hip.vif.quickstart/trunk/runtime
+END
+vif.properties.orig
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/vif/!svn/ver/1275/org.hip.vif.quickstart/trunk/runtime/vif.properties.orig
+END
+run.bat
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/vif/!svn/ver/1274/org.hip.vif.quickstart/trunk/runtime/run.bat
+END
+logback.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/vif/!svn/ver/1274/org.hip.vif.quickstart/trunk/runtime/logback.xml
+END
+run_debug.bat
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/vif/!svn/ver/1274/org.hip.vif.quickstart/trunk/runtime/run_debug.bat
+END
+run.sh
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/vif/!svn/ver/1274/org.hip.vif.quickstart/trunk/runtime/run.sh
+END
+vif.properties
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/vif/!svn/ver/1274/org.hip.vif.quickstart/trunk/runtime/vif.properties
+END

@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the application VIF.
- Copyright (C) 2010, Benno Luthiger
+ Copyright (C) 2010-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -27,61 +27,54 @@ import javax.mail.internet.InternetAddress;
 import org.hip.kernel.bom.QueryResult;
 import org.hip.kernel.mail.MailGenerationException;
 
-/**
- * Adapter class for <code>javax.mail.internet.InternetAddress</code>.
+/** Adapter class for <code>javax.mail.internet.InternetAddress</code>.
  *
- * @author Luthiger
- * Created: 03.06.2010
- */
+ * @author Luthiger Created: 03.06.2010 */
 public class AddressAdapter {
-	private InternetAddress internetAddress;
+    private final InternetAddress internetAddress;
 
-	public AddressAdapter(InternetAddress inAddress) {
-		internetAddress = inAddress;
-	}
-	
-	public InternetAddress getInternetAddress() {
-		return internetAddress;
-	}
+    public AddressAdapter(final InternetAddress inAddress) {
+        internetAddress = inAddress;
+    }
 
-	/**
-	 * Parses the passed string containing mail addresses into a collection of mail addresses.
-	 * 
-	 * @param inAddressList String comma separated list of mail addresses
-	 * @return Collection<AddressAdapter>
-	 * @throws MailGenerationException
-	 */
-	public static Collection<AddressAdapter> parse(String inAddressList) throws MailGenerationException {
-		Collection<AddressAdapter> outAddresses = new Vector<AddressAdapter>();
-		try {
-			for (InternetAddress lAddress : InternetAddress.parse(inAddressList)) {
-				outAddresses.add(new AddressAdapter(lAddress));
-			}
-		} catch (AddressException exc) {
-			throw new MailGenerationException(exc.getMessage());
-		}
-		return outAddresses;
-	}
-	
-	/**
-	 * Evaluates the passed result set to create a collection of mail addresses.
-	 * 
-	 * @param inResult {@link QueryResult}
-	 * @param inFieldName String the name of the field containing the mail address
-	 * @return Collection<AddressAdapter>
-	 * @throws MailGenerationException
-	 */
-	public static Collection<AddressAdapter> fill(QueryResult inResult, String inFieldName) throws MailGenerationException {
-		Collection<AddressAdapter> outAddresses = new Vector<AddressAdapter>();
-		try {			
-			while (inResult.hasMoreElements()) {
-				outAddresses.add(new AddressAdapter(new InternetAddress(inResult.next().get(inFieldName).toString())));
-			}
-		}
-		catch (Exception exc) {
-			throw new MailGenerationException(exc.getMessage());			
-		}
-		return outAddresses;
-	}
-	
+    public InternetAddress getInternetAddress() {
+        return internetAddress;
+    }
+
+    /** Parses the passed string containing mail addresses into a collection of mail addresses.
+     * 
+     * @param inAddressList String comma separated list of mail addresses
+     * @return Collection<AddressAdapter>
+     * @throws MailGenerationException */
+    public static Collection<AddressAdapter> parse(final String inAddressList) throws MailGenerationException {
+        final Collection<AddressAdapter> outAddresses = new Vector<AddressAdapter>();
+        try {
+            for (final InternetAddress lAddress : InternetAddress.parse(inAddressList)) {
+                outAddresses.add(new AddressAdapter(lAddress));
+            }
+        } catch (final AddressException exc) {
+            throw new MailGenerationException(exc.getMessage());
+        }
+        return outAddresses;
+    }
+
+    /** Evaluates the passed result set to create a collection of mail addresses.
+     * 
+     * @param inResult {@link QueryResult}
+     * @param inFieldName String the name of the field containing the mail address
+     * @return Collection<AddressAdapter>
+     * @throws MailGenerationException */
+    public static Collection<AddressAdapter> fill(final QueryResult inResult, final String inFieldName)
+            throws MailGenerationException {
+        final Collection<AddressAdapter> outAddresses = new Vector<AddressAdapter>();
+        try {
+            while (inResult.hasMoreElements()) {
+                outAddresses.add(new AddressAdapter(new InternetAddress(inResult.next().get(inFieldName).toString())));
+            }
+        } catch (final Exception exc) {
+            throw new MailGenerationException(exc.getMessage());
+        }
+        return outAddresses;
+    }
+
 }

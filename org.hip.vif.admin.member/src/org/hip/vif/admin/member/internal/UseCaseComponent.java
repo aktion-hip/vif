@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,40 +15,41 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.admin.member.internal;
 
 import org.hip.vif.admin.member.tasks.MemberSearchTask;
-import org.hip.vif.web.interfaces.IMenuSet;
-import org.hip.vif.web.interfaces.ITaskSet;
-import org.hip.vif.web.interfaces.IUseCaseAdmin;
-import org.hip.vif.web.menu.IVIFMenuItem;
-import org.hip.vif.web.util.UseCaseHelper;
+import org.ripla.interfaces.IControllerSet;
+import org.ripla.interfaces.IMenuItem;
+import org.ripla.web.interfaces.IMenuSet;
+import org.ripla.web.services.IUseCase;
+import org.ripla.web.util.UseCaseHelper;
 
-/**
- * This bundle's service instance for <code>IUseCaseAdmin</code>.
- * 
- * @author Luthiger
- * Created: 16.10.2011
- */
-public class UseCaseComponent implements IUseCaseAdmin {
+/** This bundle's service instance for <code>IUseCaseAdmin</code>.
+ *
+ * @author Luthiger Created: 16.10.2011 */
+public class UseCaseComponent implements IUseCase {
 
-	public IVIFMenuItem getMenu() {
-		return ComponentHelper.createMenu();
-	}
-	
-	public IMenuSet[] getContextMenus() {
-		return new IMenuSet[] {HelperContextMenuAdminMembers.createContextMenuSet1(),
-				HelperContextMenuAdminMembers.createContextMenuSet2()};
-	}
+    @Override
+    public IMenuItem getMenu() {
+        return ComponentHelper.createMenu();
+    }
 
-	public Package getTaskClasses() {
-		return MemberSearchTask.class.getPackage();
-	}
+    @Override
+    public IMenuSet[] getContextMenus() {
+        return new IMenuSet[] { HelperContextMenuAdminMembers.createContextMenuSet1(),
+                HelperContextMenuAdminMembers.createContextMenuSet2() };
+    }
 
-	public ITaskSet getTaskSet() {
-		return UseCaseHelper.EMPTY_TASK_SET;
-	}
+    @Override
+    public Package getControllerClasses() {
+        return MemberSearchTask.class.getPackage();
+    }
+
+    @Override
+    public IControllerSet getControllerSet() {
+        return UseCaseHelper.EMPTY_CONTROLLER_SET;
+    }
 
 }

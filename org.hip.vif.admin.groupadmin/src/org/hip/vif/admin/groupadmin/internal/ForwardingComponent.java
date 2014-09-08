@@ -19,31 +19,30 @@
 package org.hip.vif.admin.groupadmin.internal;
 
 import org.hip.vif.admin.groupadmin.tasks.AdminShowPendingTask;
-import org.hip.vif.web.interfaces.IForwarding;
-import org.hip.vif.web.interfaces.ITargetConfiguration;
 import org.hip.vif.web.tasks.ForwardControllerRegistry;
+import org.ripla.web.interfaces.IForwarding;
+import org.ripla.web.interfaces.IForwardingConfig;
 import org.ripla.web.interfaces.IPluggable;
 
-/**
- * The service provider for the <code>IForwarding</code> service.
- * 
- * @author Luthiger Created: 29.11.2011
- */
+/** The service provider for the <code>IForwarding</code> service.
+ *
+ * @author Luthiger Created: 29.11.2011 */
 public class ForwardingComponent implements IForwarding {
 
-	@Override
-	public ITargetConfiguration[] getTargets() {
-		return new ITargetConfiguration[] { new ITargetConfiguration() {
-			@Override
-			public Class<? extends IPluggable> getTarget() {
-				return AdminShowPendingTask.class;
-			}
+    @Override
+    public IForwardingConfig[] getForwardingConfigs() {
+        return new IForwardingConfig[] { new IForwardingConfig() {
+            @Override
+            public Class<? extends IPluggable> getTarget() {
+                return AdminShowPendingTask.class;
+            }
 
-			@Override
-			public String getAlias() {
-				return ForwardControllerRegistry.FORWARD_GROUP_ADMIN_PENDING;
-			}
-		} };
-	}
+            @Override
+            public String getAlias() {
+                return ForwardControllerRegistry.FORWARD_GROUP_ADMIN_PENDING;
+            }
+        }
+        };
+    }
 
 }
