@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.web.request.handler">
+   <implementation class="org.hip.vif.web.util.VIFRequestHandler"/>
+   <service>
+      <provide interface="com.vaadin.server.RequestHandler"/>
+   </service>
+</scr:component>

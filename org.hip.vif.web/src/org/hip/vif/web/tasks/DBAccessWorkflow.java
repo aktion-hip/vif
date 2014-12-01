@@ -19,7 +19,6 @@
 
 package org.hip.vif.web.tasks;
 
-import org.hip.vif.web.layout.VIFApplication;
 import org.hip.vif.web.tasks.DBAccessWorkflowItems.CheckNoTables;
 import org.hip.vif.web.tasks.DBAccessWorkflowItems.CheckSUExistance;
 import org.hip.vif.web.tasks.DBAccessWorkflowItems.CreateSU;
@@ -34,155 +33,119 @@ import org.ripla.interfaces.IWorkflowListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vaadin.ui.Window;
-
-/**
- * The controller class of the workflow to create the DB access.
- * 
- * @author Luthiger Created: 11.02.2012
- */
+/** The controller class of the workflow to create the DB access.
+ *
+ * @author Luthiger Created: 11.02.2012 */
 public class DBAccessWorkflow {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(DBAccessWorkflow.class);
+    private static final Logger LOG = LoggerFactory
+            .getLogger(DBAccessWorkflow.class);
 
-	public static final int OK_SU = 1;
-	public static final int OK_LOGIN = 2;
-	public static final int ERROR = 3;
+    public static final int OK_SU = 1;
+    public static final int OK_LOGIN = 2;
+    public static final int ERROR = 3;
 
-	// public enum ReturnCode {
-	// OK_SU, OK_LOGIN, ERROR;
-	// }
+    // public enum ReturnCode {
+    // OK_SU, OK_LOGIN, ERROR;
+    // }
 
-	private IWorkflowItem workflowItem;
-	private final IWorkflowListener workflowListener;
+    private IWorkflowItem workflowItem;
+    private final IWorkflowListener workflowListener;
 
-	/**
-	 * Private constructor for the DB access workflow.
-	 * 
-	 * @param inWorkflowItem
-	 *            {@link IWorkflowItem} the workflow's starting step
-	 * @param inWorkflowListener
-	 *            {@link VIFApplication} the application instance
-	 */
-	private DBAccessWorkflow(final IWorkflowItem inWorkflowItem,
-			final IWorkflowListener inWorkflowListener) {
-		workflowItem = inWorkflowItem;
-		workflowListener = inWorkflowListener;
-	}
+    /** Private constructor for the DB access workflow.
+     *
+     * @param inWorkflowItem {@link IWorkflowItem} the workflow's starting step
+     * @param inWorkflowListener {@link IWorkflowListener} the application instance */
+    private DBAccessWorkflow(final IWorkflowItem inWorkflowItem,
+            final IWorkflowListener inWorkflowListener) {
+        workflowItem = inWorkflowItem;
+        workflowListener = inWorkflowListener;
+    }
 
-	/**
-	 * Creates the workflow for the initial DB access.
-	 * 
-	 * @param inWindow
-	 *            {@link Window} the application's main window
-	 * @param inWorkflowListener
-	 *            {@link IWorkflowListener}
-	 * @return {@link DBAccessWorkflow}
-	 */
-	public static DBAccessWorkflow getInitialWorkflow(final Window inWindow,
-			final IWorkflowListener inWorkflowListener) {
-		// instantiate the workflow steps we need
-		final IWorkflowItem lShowDBConfig = new ShowConfigPopup(inWindow);
-		final IWorkflowItem lTryConnect = new TryConnect();
-		final IWorkflowItem lCheckNoTables = new CheckNoTables();
-		final IWorkflowItem lCreateTables = new CreateTables();
-		final IWorkflowItem lCreateSU = new CreateSU(inWindow);
-		final IWorkflowItem lCheckSUExistance = new CheckSUExistance();
-		final IWorkflowItem lShowLogin = new ShowLogin();
+    /** Creates the workflow for the initial DB access.
+     *
+     * @param inWorkflowListener {@link IWorkflowListener}
+     * @return {@link DBAccessWorkflow} */
+    public static DBAccessWorkflow getInitialWorkflow(final IWorkflowListener inWorkflowListener) {
+        // instantiate the workflow steps we need
+        final IWorkflowItem lShowDBConfig = new ShowConfigPopup();
+        final IWorkflowItem lTryConnect = new TryConnect();
+        final IWorkflowItem lCheckNoTables = new CheckNoTables();
+        final IWorkflowItem lCreateTables = new CreateTables();
+        final IWorkflowItem lCreateSU = new CreateSU();
+        final IWorkflowItem lCheckSUExistance = new CheckSUExistance();
+        final IWorkflowItem lShowLogin = new ShowLogin();
 
-		// wire the workflow steps
-		lShowDBConfig.registerSuccessItem(lTryConnect);
-		//
-		lTryConnect.registerSuccessItem(lCheckNoTables);
-		lTryConnect.registerFailureItem(lShowDBConfig);
-		//
-		lCheckNoTables.registerSuccessItem(lCheckSUExistance);
-		lCheckNoTables.registerFailureItem(lCreateTables);
-		//
-		lCreateTables.registerSuccessItem(lCreateSU);
-		//
-		lCheckSUExistance.registerSuccessItem(lShowLogin);
-		lCheckSUExistance.registerFailureItem(lCreateSU);
+        // wire the workflow steps
+        lShowDBConfig.registerSuccessItem(lTryConnect);
+        //
+        lTryConnect.registerSuccessItem(lCheckNoTables);
+        lTryConnect.registerFailureItem(lShowDBConfig);
+        //
+        lCheckNoTables.registerSuccessItem(lCheckSUExistance);
+        lCheckNoTables.registerFailureItem(lCreateTables);
+        //
+        lCreateTables.registerSuccessItem(lCreateSU);
+        //
+        lCheckSUExistance.registerSuccessItem(lShowLogin);
+        lCheckSUExistance.registerFailureItem(lCreateSU);
 
-		final DBAccessWorkflow outWorkflow = new DBAccessWorkflow(
-				lShowDBConfig, inWorkflowListener);
-		return outWorkflow;
-	}
+        final DBAccessWorkflow outWorkflow = new DBAccessWorkflow(
+                lShowDBConfig, inWorkflowListener);
+        return outWorkflow;
+    }
 
-	/**
-	 * Creates the workflow to create and initialize the tables within a DB
-	 * schema.
-	 * 
-	 * @param inWindow
-	 *            {@link Window} the application's main window
-	 * @param inWorkflowListener
-	 *            {@link IWorkflowListener}
-	 * @return {@link DBAccessWorkflow}
-	 */
-	public static DBAccessWorkflow getCreateTablesWorkflow(
-			final Window inWindow, final IWorkflowListener inWorkflowListener) {
-		final IWorkflowItem lCreateTables = new CreateTables();
-		final IWorkflowItem lCreateSU = new CreateSUNoLogin(inWindow);
-		lCreateTables.registerSuccessItem(lCreateSU);
+    /** Creates the workflow to create and initialize the tables within a DB schema.
+     *
+     * @param inWorkflowListener {@link IWorkflowListener}
+     * @return {@link DBAccessWorkflow} */
+    public static DBAccessWorkflow getCreateTablesWorkflow(final IWorkflowListener inWorkflowListener) {
+        final IWorkflowItem lCreateTables = new CreateTables();
+        final IWorkflowItem lCreateSU = new CreateSUNoLogin();
+        lCreateTables.registerSuccessItem(lCreateSU);
 
-		final DBAccessWorkflow outWorkflow = new DBAccessWorkflow(
-				lCreateTables, inWorkflowListener);
-		return outWorkflow;
-	}
+        final DBAccessWorkflow outWorkflow = new DBAccessWorkflow(
+                lCreateTables, inWorkflowListener);
+        return outWorkflow;
+    }
 
-	/**
-	 * Creates the workflow to create the SU record.
-	 * 
-	 * @param inWindow
-	 *            {@link Window} the application's main window
-	 * @param inWorkflowListener
-	 *            {@link IWorkflowListener}
-	 * @return {@link DBAccessWorkflow}
-	 */
-	public static DBAccessWorkflow getCreateSUWorkflow(final Window inWindow,
-			final IWorkflowListener inWorkflowListener) {
-		final IWorkflowItem lCreateSU = new CreateSUNoLogin(inWindow);
+    /** Creates the workflow to create the SU record.
+     *
+     * @param inWorkflowListener {@link IWorkflowListener}
+     * @return {@link DBAccessWorkflow} */
+    public static DBAccessWorkflow getCreateSUWorkflow(final IWorkflowListener inWorkflowListener) {
+        final IWorkflowItem lCreateSU = new CreateSUNoLogin();
 
-		final DBAccessWorkflow outWorkflow = new DBAccessWorkflow(lCreateSU,
-				inWorkflowListener);
-		return outWorkflow;
-	}
+        final DBAccessWorkflow outWorkflow = new DBAccessWorkflow(lCreateSU,
+                inWorkflowListener);
+        return outWorkflow;
+    }
 
-	/**
-	 * Start the workflow to set the application's initial configuration.
-	 * 
-	 * @throws WorkflowException
-	 */
-	public void startWorkflow() throws WorkflowException {
-		workflowItem.run(this);
-	}
+    /** Start the workflow to set the application's initial configuration.
+     *
+     * @throws WorkflowException */
+    public void startWorkflow() throws WorkflowException {
+        workflowItem.run(this);
+    }
 
-	/**
-	 * @return {@link ReturnCode} returns the configuration workflow's return
-	 *         code
-	 */
-	public int getReturnCode() {
-		return workflowItem.getReturnCode();
-	}
+    /** @return {@link ReturnCode} returns the configuration workflow's return code */
+    public int getReturnCode() {
+        return workflowItem.getReturnCode();
+    }
 
-	/**
-	 * Package protected: run the workflow's next step.
-	 */
-	protected void nextStep() {
-		try {
-			if (workflowItem.hasNextStep()) {
-				workflowItem = workflowItem.getNextStep();
-				workflowItem.run(this);
-			} else {
-				workflowListener.workflowExit(workflowItem.getReturnCode(), ""); //$NON-NLS-1$
-			}
-		}
-		catch (final WorkflowException exc) {
-			LOG.error(
-					"Error encountered during initial configuration workflow!", exc); //$NON-NLS-1$
-			workflowListener
-					.workflowExit(ERROR, workflowItem.getErrorMessage());
-		}
-	}
+    /** Package protected: run the workflow's next step. */
+    protected void nextStep() {
+        try {
+            if (workflowItem.hasNextStep()) {
+                workflowItem = workflowItem.getNextStep();
+                workflowItem.run(this);
+            } else {
+                workflowListener.workflowExit(workflowItem.getReturnCode(), ""); //$NON-NLS-1$
+            }
+        } catch (final WorkflowException exc) {
+            LOG.error("Error encountered during initial configuration workflow!", exc); //$NON-NLS-1$
+            workflowListener
+                    .workflowExit(ERROR, workflowItem.getErrorMessage());
+        }
+    }
 
 }

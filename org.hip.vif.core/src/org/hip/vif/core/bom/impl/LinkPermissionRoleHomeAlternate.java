@@ -21,18 +21,16 @@ package org.hip.vif.core.bom.impl;
 import org.hip.kernel.bom.QueryStatement;
 import org.hip.kernel.bom.impl.AlternativeQueryStatement;
 
-/**
- * Alternative home for LinkPermissionRole that provides a <code>AlternativeQueryStatement</code>.
+/** Alternative home for LinkPermissionRole that provides a <code>AlternativeQueryStatement</code>.
  *
- * @author Luthiger
- * Created: 04.01.2009
- * @see AlternativeQueryStatement
- */
+ * @author Luthiger Created: 04.01.2009
+ * @see AlternativeQueryStatement */
+@SuppressWarnings("serial")
 public class LinkPermissionRoleHomeAlternate extends LinkPermissionRoleHomeImpl {
-	
-	@Override
-	public QueryStatement createQueryStatement() {
-		return new AlternativeQueryStatement(this);
-	}
-	
+
+    @Override
+    public QueryStatement createQueryStatement() {
+        return new AlternativeQueryStatement(this);
+    }
+
 }

@@ -26,74 +26,63 @@ import org.hip.kernel.exc.VException;
 import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.MemberHome;
 
-/**
- * Model for table join between ratings and (rated) member.
+/** Model for table join between ratings and (rated) member.
  *
- * @author Luthiger
- * Created: 30.08.2009
- */
+ * @author Luthiger Created: 30.08.2009 */
+@SuppressWarnings("serial")
 public class JoinRatingsToRater extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinRatingsToRaterHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinRatingsToRaterHome";
 
-	private final String TMPL = "%s %s";
+    private final String TMPL = "%s %s";
 
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
-	
-	/**
-	 * Returns the member's full name, i.e. <code>firstname name</code>.
-	 * 
-	 * @return String the member's full name
-	 * @throws VException
-	 */
-	public String getFullName() throws VException {
-		return String.format(TMPL, (String)get(MemberHome.KEY_FIRSTNAME), (String)get(MemberHome.KEY_NAME));
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
-	/**
-	 * Returns the query result (strategy) to retrieve the questions related to a specific rating event.
-	 * 
-	 * @return QueryResult
-	 * @throws SQLException 
-	 * @throws VException 
-	 */
-	public QueryResult getQuestionsToBeRated() throws VException, SQLException {
-		JoinRatingsToQuestionHome lHome = BOMHelper.getJoinRatingsToQuestionHome();
-		return lHome.getQuestionsToBeRated(getRatingsID());
-	}
+    /** Returns the member's full name, i.e. <code>firstname name</code>.
+     * 
+     * @return String the member's full name
+     * @throws VException */
+    public String getFullName() throws VException {
+        return String.format(TMPL, get(MemberHome.KEY_FIRSTNAME), get(MemberHome.KEY_NAME));
+    }
 
-	/**
-	 * Returns the query result (strategy) to retrieve the completions related to a specific rating event.
-	 * 
-	 * @return IQueryStrategy
-	 * @throws SQLException 
-	 * @throws VException 
-	 */
-	public QueryResult getCompletionsToBeRated() throws VException, SQLException {
-		JoinRatingsToCompletionHome lHome = BOMHelper.getJoinRatingsToCompletionHome();
-		return lHome.getCompletionsToBeRated(getRatingsID());
-	}
+    /** Returns the query result (strategy) to retrieve the questions related to a specific rating event.
+     * 
+     * @return QueryResult
+     * @throws SQLException
+     * @throws VException */
+    public QueryResult getQuestionsToBeRated() throws VException, SQLException {
+        final JoinRatingsToQuestionHome lHome = BOMHelper.getJoinRatingsToQuestionHome();
+        return lHome.getQuestionsToBeRated(getRatingsID());
+    }
 
-	/**
-	 * Returns the query result (strategy) to retrieve the bibliography entries related to a specific rating event.
-	 * 
-	 * @return IQueryStrategy
-	 * @throws SQLException 
-	 * @throws VException 
-	 */
-	public QueryResult getTextsToBeRated() throws VException, SQLException {
-		JoinRatingsToTextHome lHome = BOMHelper.getJoinRatingsToTextHome();
-		return lHome.getTextsToBeRated(getRatingsID());
-	}
-	
-	private Long getRatingsID() throws VException {
-		return new Long(get(RatingsHome.KEY_RATINGEVENTS_ID).toString());
-	}
+    /** Returns the query result (strategy) to retrieve the completions related to a specific rating event.
+     * 
+     * @return IQueryStrategy
+     * @throws SQLException
+     * @throws VException */
+    public QueryResult getCompletionsToBeRated() throws VException, SQLException {
+        final JoinRatingsToCompletionHome lHome = BOMHelper.getJoinRatingsToCompletionHome();
+        return lHome.getCompletionsToBeRated(getRatingsID());
+    }
+
+    /** Returns the query result (strategy) to retrieve the bibliography entries related to a specific rating event.
+     * 
+     * @return IQueryStrategy
+     * @throws SQLException
+     * @throws VException */
+    public QueryResult getTextsToBeRated() throws VException, SQLException {
+        final JoinRatingsToTextHome lHome = BOMHelper.getJoinRatingsToTextHome();
+        return lHome.getTextsToBeRated(getRatingsID());
+    }
+
+    private Long getRatingsID() throws VException {
+        return new Long(get(RatingsHome.KEY_RATINGEVENTS_ID).toString());
+    }
 
 }

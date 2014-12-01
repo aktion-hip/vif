@@ -1,21 +1,6 @@
-package org.hip.vif.core.bom.impl;
-
-import java.io.IOException;
-
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexWriter;
-import org.hip.kernel.bom.impl.DomainObjectImpl;
-import org.hip.kernel.exc.VException;
-import org.hip.vif.core.bom.CompletionHome;
-import org.hip.vif.core.bom.MemberHome;
-import org.hip.vif.core.bom.QuestionHome;
-import org.hip.vif.core.search.AbstractSearching;
-import org.hip.vif.core.search.FullTextHelper;
-import org.hip.vif.core.search.Indexable;
-
-/*
+/**
  This package is part of the persistency layer of the application VIF.
- Copyright (C) 2005, Benno Luthiger
+ Copyright (C) 2005-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public
@@ -31,48 +16,61 @@ import org.hip.vif.core.search.Indexable;
  License along with this library; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+package org.hip.vif.core.bom.impl;
 
-/**
- * Joined domain object containing the information relevant for indexation.
- * 
- * @author Benno Luthiger
- * Created on 26.09.2005 
- */
+import java.io.IOException;
+
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexWriter;
+import org.hip.kernel.bom.impl.DomainObjectImpl;
+import org.hip.kernel.exc.VException;
+import org.hip.vif.core.bom.CompletionHome;
+import org.hip.vif.core.bom.MemberHome;
+import org.hip.vif.core.bom.QuestionHome;
+import org.hip.vif.core.search.AbstractSearching;
+import org.hip.vif.core.search.FullTextHelper;
+import org.hip.vif.core.search.Indexable;
+
+/** Joined domain object containing the information relevant for indexation.
+ *
+ * @author Benno Luthiger Created on 26.09.2005 */
+@SuppressWarnings("serial")
 public class JoinCompletionForIndex extends DomainObjectImpl implements Indexable {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinCompletionForIndexHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinCompletionForIndexHome";
 
-	/**
-	 * JoinCompletionForIndex constructor.
-	 */
-	public JoinCompletionForIndex() {
-		super();
-	}
+    /** JoinCompletionForIndex constructor. */
+    public JoinCompletionForIndex() {
+        super();
+    }
 
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
-	/**
-	 * @see Indexable#indexContent(IndexWriter)
-	 */
-	public void indexContent(IndexWriter inWriter) throws IOException, VException {
-		FullTextHelper lFullText = new FullTextHelper();
-		Document lDocument = new Document();
-		lDocument.add(AbstractSearching.IndexField.CONTRIBUTION_ID.createField(get(JoinCompletionForIndexHome.JOIN_QUESTION_ID).toString()));
-		lDocument.add(AbstractSearching.IndexField.AUTHOR_NAME.createField(lFullText.add(get(MemberHome.KEY_FIRSTNAME).toString() + " " + get(MemberHome.KEY_NAME).toString())));
-		lDocument.add(AbstractSearching.IndexField.DECIMAL_ID.createField(get(QuestionHome.KEY_QUESTION_DECIMAL).toString()));
-		lDocument.add(AbstractSearching.IndexField.QUESTION_COMPLETION.createField(get(QuestionHome.KEY_QUESTION).toString()));
-		lFullText.add(get(CompletionHome.KEY_COMPLETION).toString());
-		lDocument.add(AbstractSearching.IndexField.GROUP_ID.createField(get(QuestionHome.KEY_GROUP_ID).toString()));
-		lDocument.add(AbstractSearching.IndexField.GROUP_NAME.createField(get(JoinCompletionForIndexHome.JOIN_GROUP_NAME).toString()));
-		lDocument.add(AbstractSearching.IndexField.CONTENT_FULL.createField(lFullText.getFullText()));
-		synchronized (this) {
-			inWriter.addDocument(lDocument);
-		}
-	}
+    /** @see Indexable#indexContent(IndexWriter) */
+    @Override
+    public void indexContent(final IndexWriter inWriter) throws IOException, VException {
+        final FullTextHelper lFullText = new FullTextHelper();
+        final Document lDocument = new Document();
+        lDocument.add(AbstractSearching.IndexField.CONTRIBUTION_ID.createField(get(
+                JoinCompletionForIndexHome.JOIN_QUESTION_ID).toString()));
+        lDocument.add(AbstractSearching.IndexField.AUTHOR_NAME.createField(lFullText.add(get(MemberHome.KEY_FIRSTNAME)
+                .toString() + " " + get(MemberHome.KEY_NAME).toString())));
+        lDocument.add(AbstractSearching.IndexField.DECIMAL_ID.createField(get(QuestionHome.KEY_QUESTION_DECIMAL)
+                .toString()));
+        lDocument.add(AbstractSearching.IndexField.QUESTION_COMPLETION.createField(get(QuestionHome.KEY_QUESTION)
+                .toString()));
+        lFullText.add(get(CompletionHome.KEY_COMPLETION).toString());
+        lDocument.add(AbstractSearching.IndexField.GROUP_ID.createField(get(QuestionHome.KEY_GROUP_ID).toString()));
+        lDocument.add(AbstractSearching.IndexField.GROUP_NAME.createField(get(
+                JoinCompletionForIndexHome.JOIN_GROUP_NAME).toString()));
+        lDocument.add(AbstractSearching.IndexField.CONTENT_FULL.createField(lFullText.getFullText()));
+        synchronized (this) {
+            inWriter.addDocument(lDocument);
+        }
+    }
 }

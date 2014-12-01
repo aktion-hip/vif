@@ -32,6 +32,7 @@ import org.hip.kernel.bom.OrderObject;
 import org.hip.kernel.bom.impl.KeyObjectImpl;
 import org.hip.kernel.bom.impl.OrderObjectImpl;
 import org.hip.kernel.exc.VException;
+import org.hip.vif.core.ApplicationConstants;
 import org.hip.vif.core.bom.GroupHome;
 import org.hip.vif.core.bom.Text;
 import org.hip.vif.core.member.IActor;
@@ -44,9 +45,11 @@ import org.hip.vif.web.exc.VIFWebException;
 import org.hip.vif.web.interfaces.IPluggableWithLookup;
 import org.hip.vif.web.interfaces.IVIFEventDispatcher;
 import org.hip.vif.web.interfaces.IVIFEventDispatcher.Event;
+import org.hip.vif.web.tasks.ForwardControllerRegistry.Alias;
 import org.hip.vif.web.util.LinkButtonHelper;
 import org.hip.vif.web.util.LinkButtonHelper.LookupType;
 import org.hip.vif.web.util.RichTextSanitizer;
+import org.hip.vif.web.util.VIFAppHelper;
 import org.ripla.exceptions.NoControllerFoundException;
 import org.ripla.exceptions.RiplaException;
 import org.ripla.interfaces.IRiplaEventDispatcher;
@@ -106,52 +109,34 @@ public abstract class AbstractWebController extends AbstractController implement
         }
     }
 
-    private void setValueToSession(final String inKey, final Long inValue) {
-        try {
-            VaadinSession.getCurrent().getLockInstance().lock();
-            VaadinSession.getCurrent().setAttribute(inKey, inValue);
-        } finally {
-            VaadinSession.getCurrent().getLockInstance().unlock();
-        }
-    }
-
-    private Long getValueFromSession(final String inKey) {
-        try {
-            VaadinSession.getCurrent().getLockInstance().lock();
-            return (Long) VaadinSession.getCurrent().getAttribute(inKey);
-        } finally {
-            VaadinSession.getCurrent().getLockInstance().unlock();
-        }
-    }
-
     /** @param inGroupID sets the actually relevant group's id (because he selected that group) */
     protected void setGroupID(final Long inGroupID) {
-        setValueToSession(Constants.GROUP_ID_KEY, inGroupID);
+        VIFAppHelper.setValueToSession(Constants.GROUP_ID_KEY, inGroupID);
     }
 
     /** @return Long the id of the group actually relevant for the user (because he works on the group's questions) */
     public Long getGroupID() {
-        return getValueFromSession(Constants.GROUP_ID_KEY);
+        return VIFAppHelper.getValueFromSession(Constants.GROUP_ID_KEY);
     }
 
     /** @param inQuestionID Long sets the actually relevant question's id (because he selected that question) */
     protected void setQuestionID(final Long inQuestionID) {
-        setValueToSession(Constants.QUESTION_ID_KEY, inQuestionID);
+        VIFAppHelper.setValueToSession(Constants.QUESTION_ID_KEY, inQuestionID);
     }
 
     /** @return Long the id of the question actually relevant for the user (because he works on that question) */
     protected Long getQuestionID() {
-        return getValueFromSession(Constants.QUESTION_ID_KEY);
+        return VIFAppHelper.getValueFromSession(Constants.QUESTION_ID_KEY);
     }
 
     /** @param inCompletionID Long sets the actually relevant completion's id (because he selected that completion) */
     protected void setCompletionID(final Long inCompletionID) {
-        setValueToSession(Constants.COMPLETION_ID_KEY, inCompletionID);
+        VIFAppHelper.setValueToSession(Constants.COMPLETION_ID_KEY, inCompletionID);
     }
 
     /** @return Long the id of the completion actually relevant for the user (because he works on that completion) */
     protected Long getCompletionID() {
-        return getValueFromSession(Constants.COMPLETION_ID_KEY);
+        return VIFAppHelper.getValueFromSession(Constants.COMPLETION_ID_KEY);
     }
 
     /** Sets the text id-version actually relevant for the application.
@@ -161,25 +146,25 @@ public abstract class AbstractWebController extends AbstractController implement
         if (inTextID.contains(Text.DELIMITER_ID_VERSION)) {
             final String[] lIDVersion = inTextID
                     .split(Text.DELIMITER_ID_VERSION);
-            setValueToSession(Constants.TEXT_ID_KEY,
+            VIFAppHelper.setValueToSession(Constants.TEXT_ID_KEY,
                     Long.parseLong(lIDVersion[0]));
-            setValueToSession(Constants.TEXT_VERSION_ID_KEY,
+            VIFAppHelper.setValueToSession(Constants.TEXT_VERSION_ID_KEY,
                     Long.parseLong(lIDVersion[1]));
         } else {
-            setValueToSession(Constants.TEXT_ID_KEY, Long.parseLong(inTextID));
+            VIFAppHelper.setValueToSession(Constants.TEXT_ID_KEY, Long.parseLong(inTextID));
         }
     }
 
     /** @return Long the id of the bibliography entry actually relevant for the user (e.g. because he clicked the lookup
      *         for a bibliography entry) */
     protected Long getTextID() {
-        return getValueFromSession(Constants.TEXT_ID_KEY);
+        return VIFAppHelper.getValueFromSession(Constants.TEXT_ID_KEY);
     }
 
     /** @return Long the version of the bibliography entry actually relevant for the user (e.g. because he clicked the
      *         lookup for a bibliography entry) */
     protected Long getTextVersion() {
-        return getValueFromSession(Constants.TEXT_VERSION_ID_KEY);
+        return VIFAppHelper.getValueFromSession(Constants.TEXT_VERSION_ID_KEY);
     }
 
     /** Use Vaadin event service to display the next content view.
@@ -187,6 +172,13 @@ public abstract class AbstractWebController extends AbstractController implement
      * @param inClass Class the next task */
     protected void sendEvent(final Class<? extends IPluggable> inTask) {
         sendEvent(createFullyQualifiedControllerName(inTask));
+    }
+
+    /** Use Vaadin event service to display the next content view identified by the specified alias.
+     *
+     * @param inAlias {@link Alias} */
+    protected void sendAliasEvent(final Alias inAlias) {
+        sendEvent(ForwardControllerRegistry.INSTANCE.getTargetOf(inAlias));
     }
 
     /** Use Vaadin event service to display the next content view.
@@ -350,6 +342,18 @@ public abstract class AbstractWebController extends AbstractController implement
      * @param inParameters {@link ParameterObject} */
     public void setUseCaseParameter(final ParameterObject inParameters) {
         setParameters(inParameters);
+    }
+
+    /** Returns the id of the model that should be processed (e.g. displayed). The model could be a member or a question
+     * object for example. The parameter object evaluated has two entries. The first entry (with ID
+     * <code>generic_key</code>) has the value of the key of the second entry. The second's entry's value is the ID to
+     * look up.
+     *
+     * @return Long the model's id */
+    protected Long getModelIdFromParameter() {
+        final ParameterObject lParameters = getParameters();
+        return new Long(lParameters.get(
+                lParameters.get(ApplicationConstants.PARAMETER_KEY_GENERIC).toString()).toString());
     }
 
 }

@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.core.bom.impl;
 
@@ -29,65 +29,56 @@ import org.hip.kernel.bom.impl.ExtSingleValueQueryStatement;
 import org.hip.kernel.dbaccess.DataSourceRegistry;
 import org.hip.vif.core.service.PreferencesHandler;
 import org.hip.vif.core.util.ExternalObjectDefUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-/**
- * Home for <code>Member</code> objects retrieved from an external member database.
- * 
- * @author Luthiger
- */
+/** Home for <code>Member</code> objects retrieved from an external member database.
+ *
+ * @author Luthiger */
+@SuppressWarnings("serial")
 public class ExtMemberHomeImpl extends MemberHomeImpl {
-	private static final Logger LOG = LoggerFactory.getLogger(ExtMemberHomeImpl.class);
-	
-	private final static String MEMBER_CLASS_NAME = "org.hip.vif.core.bom.impl.ExtMemberImpl";
-	final static String OBJECT_DEF_FILE = "MEMBEROBJECTDEF.xml";
-	private QueryStatement statement = null;
-	
-	/**
-	 * Returns the Member class name
-	 *
-	 * @return java.lang.String
-	 */
-	public String getObjectClassName() {
-		return MEMBER_CLASS_NAME;
-	}	
+    private final static String MEMBER_CLASS_NAME = "org.hip.vif.core.bom.impl.ExtMemberImpl";
+    final static String OBJECT_DEF_FILE = "MEMBEROBJECTDEF.xml";
+    private QueryStatement statement = null;
 
-	/**
-	 * Reads the content of the file <code>$TOMCAT_HOME/webapps/vifapp/WEB-INF/conf/MEMBEROBJECTDEF.xml</code>.
-	 */
-	protected String getObjectDefString() {
-		File lObjectDefFile = ExternalObjectDefUtil.getObjectDefFile(OBJECT_DEF_FILE);
-		if (!lObjectDefFile.exists()) {
-			return "";
-		}
-		return ExternalObjectDefUtil.readObjectDef(lObjectDefFile);
-	}
-	
-	/**
-	 * Overrides super implementation to return specialised QueryStatement.
-	 */
-	public QueryStatement createQueryStatement() {
-		if (statement == null) {
-			statement = createStatement();
-		}
-		return statement;
-	}
-	
-	private QueryStatement createStatement() {
-		return new ExtDBQueryStatement(this, PreferencesHandler.INSTANCE.getExtDBConfiguration());
-	}
-	
-	/**
-	 * Overrides super implementation to return specialised QueryStatement.
-	 */
-	protected SingleValueQueryStatement createSingleValueQueryStatement() {
-		return new ExtSingleValueQueryStatement(PreferencesHandler.INSTANCE.getExtDBConfiguration());
-	}
-	
-	@Override
-	protected DBAdapterType retrieveDBAdapterType() {
-		return DataSourceRegistry.INSTANCE.getAdapterType(PreferencesHandler.INSTANCE.getExtDBConfiguration());
-	}
-	
+    /** Returns the Member class name
+     *
+     * @return java.lang.String */
+    @Override
+    public String getObjectClassName() {
+        return MEMBER_CLASS_NAME;
+    }
+
+    /** Reads the content of the file <code>$TOMCAT_HOME/webapps/vifapp/WEB-INF/conf/MEMBEROBJECTDEF.xml</code>. */
+    @Override
+    protected String getObjectDefString() {
+        final File lObjectDefFile = ExternalObjectDefUtil.getObjectDefFile(OBJECT_DEF_FILE);
+        if (!lObjectDefFile.exists()) {
+            return "";
+        }
+        return ExternalObjectDefUtil.readObjectDef(lObjectDefFile);
+    }
+
+    /** Overrides super implementation to return specialised QueryStatement. */
+    @Override
+    public QueryStatement createQueryStatement() {
+        if (statement == null) {
+            statement = createStatement();
+        }
+        return statement;
+    }
+
+    private QueryStatement createStatement() {
+        return new ExtDBQueryStatement(this, PreferencesHandler.INSTANCE.getExtDBConfiguration());
+    }
+
+    /** Overrides super implementation to return specialised QueryStatement. */
+    @Override
+    protected SingleValueQueryStatement createSingleValueQueryStatement() {
+        return new ExtSingleValueQueryStatement(PreferencesHandler.INSTANCE.getExtDBConfiguration());
+    }
+
+    @Override
+    protected DBAdapterType retrieveDBAdapterType() {
+        return DataSourceRegistry.INSTANCE.getAdapterType(PreferencesHandler.INSTANCE.getExtDBConfiguration());
+    }
+
 }

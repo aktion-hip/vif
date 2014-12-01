@@ -40,6 +40,7 @@ import org.hip.vif.core.util.RolesCheck;
  *
  * @author: Benno Luthiger
  * @see org.hip.vif.core.bom.LinkMemberRoleHome */
+@SuppressWarnings("serial")
 public class LinkMemberRoleHomeImpl extends DomainObjectHomeImpl implements LinkMemberRoleHome {
 
     /*

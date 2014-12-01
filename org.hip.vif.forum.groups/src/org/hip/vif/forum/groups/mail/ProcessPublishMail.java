@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.hip.kernel.exc.VException;
 import org.hip.vif.core.bom.VIFMember;
 import org.hip.vif.forum.groups.Activator;
+import org.hip.vif.web.tasks.ForwardControllerRegistry;
 import org.hip.vif.web.util.MailWithLink;
 import org.ripla.interfaces.IMessages;
 
@@ -53,7 +54,8 @@ public class ProcessPublishMail extends MailWithLink {
             final StringBuilder inNotificationText, final StringBuilder inNotificationTextHtml) throws VException,
             IOException {
         super(inAuthor, inReviewer);
-        baseURL = createRequestedURL(ForwardTaskRegistry.INSTANCE.getTask(ForwardTaskRegistry.FORWARD_RATING_FORM),
+        baseURL = createRequestedURL(
+                ForwardControllerRegistry.INSTANCE.getController(ForwardControllerRegistry.Alias.FORWARD_RATING_FORM),
                 true);
         body.append(inNotificationText);
         bodyHtml.append(inNotificationTextHtml);

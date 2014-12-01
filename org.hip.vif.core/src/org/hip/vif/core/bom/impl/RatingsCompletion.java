@@ -20,22 +20,19 @@ package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 
-/**
- * Model for entries connecting ratings with completions.
+/** Model for entries connecting ratings with completions.
  *
- * @author Luthiger
- * Created: 29.08.2009
- */
+ * @author Luthiger Created: 29.08.2009 */
+@SuppressWarnings("serial")
 public class RatingsCompletion extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsCompletionHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsCompletionHome";
 
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
 }

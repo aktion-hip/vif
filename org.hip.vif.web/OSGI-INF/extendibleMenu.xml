@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.web.extendible">
-   <implementation class="org.hip.vif.web.internal.controller.MenuContributionController"/>
-   <reference bind="registerMenuContributions" cardinality="0..n" interface="org.hip.vif.web.menu.IExtendibleMenuContributions" name="IExtendibleMenuContributions" policy="dynamic" unbind="unregisterMenuContributions"/>
-</scr:component>

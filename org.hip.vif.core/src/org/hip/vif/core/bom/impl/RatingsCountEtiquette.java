@@ -20,22 +20,19 @@ package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 
-/**
- * Model for the etiquette rating entry. 
+/** Model for the etiquette rating entry.
  *
- * @author Luthiger
- * Created: 17.09.2009
- */
+ * @author Luthiger Created: 17.09.2009 */
+@SuppressWarnings("serial")
 public class RatingsCountEtiquette extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsCountEtiquetteHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsCountEtiquetteHome";
 
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
 }

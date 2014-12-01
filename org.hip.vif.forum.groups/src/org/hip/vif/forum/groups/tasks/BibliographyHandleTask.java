@@ -31,13 +31,13 @@ import org.hip.vif.core.bom.TextHome;
 import org.hip.vif.core.bom.impl.TextQuestionHome;
 import org.hip.vif.core.bom.impl.WorkflowAwareContribution;
 import org.hip.vif.core.code.QuestionState;
-import org.hip.vif.core.util.AutoCompleteHelper;
 import org.hip.vif.forum.groups.Activator;
 import org.hip.vif.forum.groups.Constants;
 import org.hip.vif.forum.groups.data.ContributionContainer;
 import org.hip.vif.forum.groups.data.ContributionWrapper;
 import org.hip.vif.forum.groups.ui.BibliographySearchView;
 import org.hip.vif.web.bom.VifBOMHelper;
+import org.hip.vif.web.util.AutoCompleteHelper;
 import org.hip.vif.web.util.LinkButtonHelper.LookupType;
 import org.ripla.annotations.UseCaseController;
 import org.ripla.exceptions.RiplaException;
@@ -196,7 +196,7 @@ public class BibliographyHandleTask extends AbstractBibliographyTask implements 
      * @see com.vaadin.data.Property.ValueChangeListener#valueChange(com.vaadin.data.Property.ValueChangeEvent) */
     @Override
     public void valueChange(final ValueChangeEvent inEvent) {
-        final Property lProperty = inEvent.getProperty();
+        final Property<?> lProperty = inEvent.getProperty();
         if (lProperty instanceof Table) {
             final Object lValue = ((Table) lProperty).getValue();
             if (lValue instanceof ContributionWrapper) {

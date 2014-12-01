@@ -21,6 +21,7 @@ package org.hip.vif.forum.groups.internal;
 
 import org.hip.vif.forum.groups.tasks.QuestionShowTask;
 import org.hip.vif.forum.groups.tasks.RequestsListTask;
+import org.hip.vif.web.tasks.ForwardControllerRegistry;
 import org.ripla.web.interfaces.IForwarding;
 import org.ripla.web.interfaces.IForwardingConfig;
 import org.ripla.web.interfaces.IPluggable;
@@ -35,8 +36,7 @@ public class ForwardingComponent implements IForwarding {
         return new IForwardingConfig[] { new IForwardingConfig() {
             @Override
             public String getAlias() {
-                // TODO
-                return "ForwardTaskRegistry.FORWARD_REQUEST_LIST";
+                return ForwardControllerRegistry.Alias.FORWARD_REQUEST_LIST.getName();
             }
 
             @Override
@@ -47,8 +47,7 @@ public class ForwardingComponent implements IForwarding {
         new IForwardingConfig() {
             @Override
             public String getAlias() {
-                // TODO
-                return "ForwardTaskRegistry.FORWARD_QUESTION_SHOW";
+                return ForwardControllerRegistry.Alias.FORWARD_QUESTION_SHOW.getName();
             }
 
             @Override

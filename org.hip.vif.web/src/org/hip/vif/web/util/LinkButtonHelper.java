@@ -25,33 +25,29 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.themes.BaseTheme;
 
-/**
- * Helper class to create link buttons with preconfigured click listeners.
- * 
- * @author Luthiger Created: 09.06.2011
- */
+/** Helper class to create link buttons with preconfigured click listeners.
+ *
+ * @author Luthiger */
 public class LinkButtonHelper {
 
-	/**
-	 * Type of lookup windows.
-	 */
-	public enum LookupType {
-		MEMBER, MEMBER_SEARCH, MEMBER_SELECT, CONTENT, BIBLIOGRAPHY;
-	}
+    /** Type of lookup windows. */
+    public enum LookupType {
+        MEMBER, MEMBER_SEARCH, MEMBER_SELECT, CONTENT, BIBLIOGRAPHY;
+    }
 
-	@SuppressWarnings("serial")
-	public static Button createLinkButton(final String inCaption,
-			final LookupType inType, final Long inID,
-			final IPluggableWithLookup inController) {
-		final Button outLink = new Button(inCaption);
-		outLink.setStyleName(BaseTheme.BUTTON_LINK);
-		outLink.addClickListener(new Button.ClickListener() {
-			@Override
-			public void buttonClick(final ClickEvent inEvent) {
-				inController.requestLookup(inType, inID);
-			}
-		});
-		return outLink;
-	}
+    @SuppressWarnings("serial")
+    public static Button createLinkButton(final String inCaption,
+            final LookupType inType, final Long inID,
+            final IPluggableWithLookup inController) {
+        final Button outLink = new Button(inCaption);
+        outLink.setStyleName(BaseTheme.BUTTON_LINK);
+        outLink.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(final ClickEvent inEvent) {
+                inController.requestLookup(inType, inID);
+            }
+        });
+        return outLink;
+    }
 
 }

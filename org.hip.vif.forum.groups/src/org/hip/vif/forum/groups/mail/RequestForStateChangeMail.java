@@ -27,6 +27,7 @@ import org.hip.kernel.mail.MailGenerationException;
 import org.hip.kernel.util.ListJoiner;
 import org.hip.vif.core.bom.VIFMember;
 import org.hip.vif.forum.groups.Activator;
+import org.hip.vif.web.tasks.ForwardControllerRegistry;
 import org.hip.vif.web.util.MailWithLink;
 import org.ripla.interfaces.IMessages;
 
@@ -60,7 +61,8 @@ public class RequestForStateChangeMail extends MailWithLink {
         groupName = inGroupName;
         message = inMessage;
         baseURL = createRequestedURL(
-                ForwardTaskRegistry.INSTANCE.getTask(ForwardTaskRegistry.FORWARD_GROUP_ADMIN_PENDING), true);
+                ForwardControllerRegistry.INSTANCE.getController(ForwardControllerRegistry.Alias.FORWARD_GROUP_ADMIN_PENDING),
+                true);
     }
 
     @Override

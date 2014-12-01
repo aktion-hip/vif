@@ -33,17 +33,17 @@ public class ParticipantContainer extends BeanItemContainer<ParticipantBean> {
     public static final String ENTRY_CHECKED = "checked"; //$NON-NLS-1$
     public static final String PARTICIPANT_PLACE = "place"; //$NON-NLS-1$
     public static final String PARTICIPANT_MAIL = "mail"; //$NON-NLS-1$
-    public static final String[] NATURAL_COL_ORDER = new String[] {
-            "userID", "name", PARTICIPANT_PLACE, PARTICIPANT_MAIL, "isAdmin", "isActive" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+    public static final Object[] NATURAL_COL_ORDER = new Object[] {
+        "userID", "name", PARTICIPANT_PLACE, PARTICIPANT_MAIL, "isAdmin", "isActive" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
     public static final String[] COL_HEADERS = new String[] {
-            "container.member.headers.userid", "container.member.headers.name", "container.member.headers.place", "container.member.headers.mail", "container.participants.headers.admin", "container.participants.headers.active" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+        "container.member.headers.userid", "container.member.headers.name", "container.member.headers.place", "container.member.headers.mail", "container.participants.headers.admin", "container.participants.headers.active" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 
     private ParticipantContainer() {
         super(ParticipantBean.class);
     }
 
     /** Factory method.
-     * 
+     *
      * @param inParticipants {@link QueryResult}
      * @return {@link ParticipantContainer}
      * @throws VException

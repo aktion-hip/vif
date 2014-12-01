@@ -35,91 +35,87 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.ProgressBar;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-/**
- * View to start the registered upgrade tasks.
- * 
- * @author Luthiger Created: 16.02.2012
- */
+/** View to start the registered upgrade tasks.
+ *
+ * @author Luthiger */
 @SuppressWarnings("serial")
 public class UpgradeView extends AbstractAdminView {
-	private static final String TMPL_FEEDBACK = "<div class=\"vif-warning\">%s</div>"; //$NON-NLS-1$
-	private static final int POLL_RUN = 500;
-	private static final int POLL_SLEEP = 5000;
+    private static final String TMPL_FEEDBACK = "<div class=\"vif-warning\">%s</div>"; //$NON-NLS-1$
+    private static final int POLL_RUN = 500;
 
-	/**
-	 * UpgradeView constructor.
-	 * 
-	 * @param inVersionInstance
-	 *            String the instance's version (i.e. the version of the tables)
-	 * @param inVersionSoftware
-	 *            String the version according to the installed version
-	 * @param inThread
-	 *            {@link UpgradeTask} the thread managing the upgrade
-	 */
-	public UpgradeView(final String inVersionInstance,
-			final String inVersionSoftware, final UpgradeThread inThread) {
-		final IMessages lMessages = Activator.getMessages();
+    /** UpgradeView constructor.
+     *
+     * @param inVersionInstance String the instance's version (i.e. the version of the tables)
+     * @param inVersionSoftware String the version according to the installed version
+     * @param inThread {@link UpgradeTask} the thread managing the upgrade */
+    public UpgradeView(final String inVersionInstance,
+            final String inVersionSoftware, final UpgradeThread inThread) {
+        final IMessages lMessages = Activator.getMessages();
 
-		final VerticalLayout lLayout = initLayout(lMessages,
-				"admin.menu.upgrade"); //$NON-NLS-1$
+        final VerticalLayout lLayout = initLayout(lMessages, "admin.menu.upgrade"); //$NON-NLS-1$
 
-		final Label lFeedbackMsg = new Label(
-				String.format(TMPL_FEEDBACK,
-						lMessages.getMessage("admin.upgrade.feedback.failure")), ContentMode.HTML); //$NON-NLS-1$
-		lFeedbackMsg.setVisible(false);
-		lLayout.addComponent(lFeedbackMsg);
-		final Label lFailures = new Label("", ContentMode.HTML); //$NON-NLS-1$
-		lLayout.addComponent(lFailures);
-		lFailures.setVisible(false);
+        final Label lFeedbackMsg = new Label(
+                String.format(TMPL_FEEDBACK,
+                        lMessages.getMessage("admin.upgrade.feedback.failure")), ContentMode.HTML); //$NON-NLS-1$
+        lFeedbackMsg.setVisible(false);
+        lLayout.addComponent(lFeedbackMsg);
+        final Label lFailures = new Label("", ContentMode.HTML); //$NON-NLS-1$
+        lLayout.addComponent(lFailures);
+        lFailures.setVisible(false);
 
-		final LabelValueTable lTable = new LabelValueTable();
-		lTable.addRow(
-				lMessages.getMessage("admin.upgrade.version.instance"), inVersionInstance); //$NON-NLS-1$
-		lTable.addRow(
-				lMessages.getMessage("admin.upgrade.version.app"), inVersionSoftware); //$NON-NLS-1$
-		lLayout.addComponent(lTable);
-		lLayout.addComponent(RiplaViewHelper.createSpacer());
+        final LabelValueTable lTable = new LabelValueTable();
+        lTable.addRow(
+                lMessages.getMessage("admin.upgrade.version.instance"), inVersionInstance); //$NON-NLS-1$
+        lTable.addRow(
+                lMessages.getMessage("admin.upgrade.version.app"), inVersionSoftware); //$NON-NLS-1$
+        lLayout.addComponent(lTable);
+        lLayout.addComponent(RiplaViewHelper.createSpacer());
 
-		final Button lUpgrade = new Button(
-				lMessages.getMessage("admin.menu.upgrade")); //$NON-NLS-1$
-		lLayout.addComponent(lUpgrade);
+        final Button lUpgrade = new Button(
+                lMessages.getMessage("admin.menu.upgrade")); //$NON-NLS-1$
+        lLayout.addComponent(lUpgrade);
 
-		lLayout.addComponent(RiplaViewHelper.createSpacer());
-		final ProgressBar lProgress = new ProgressBar(new Float(0.0));
-		lProgress.setWidth(200, Unit.PIXELS);
-		// lProgress.setPollingInterval(POLL_RUN);
-		lProgress.setVisible(false);
-		lLayout.addComponent(lProgress);
+        lLayout.addComponent(RiplaViewHelper.createSpacer());
+        final ProgressBar lProgress = new ProgressBar(new Float(0.0));
+        lProgress.setWidth(200, Unit.PIXELS);
+        lProgress.setVisible(false);
+        lLayout.addComponent(lProgress);
 
-		lUpgrade.addClickListener(new Button.ClickListener() {
-			@Override
-			public void buttonClick(final ClickEvent inEvent) {
-				lProgress.setVisible(true);
-				final Collection<IVIFUpgrade> lFailed = inThread.upgrade(
-						inVersionInstance, inVersionSoftware, lProgress);
-				lProgress.setVisible(false);
-				// lProgress.setPollingInterval(POLL_SLEEP);
-				if (lFailed.isEmpty()) {
-					lFeedbackMsg.setVisible(false);
-					lFailures.setVisible(false);
-				} else {
-					lFeedbackMsg.setVisible(true);
-					lFailures.setPropertyDataSource(new ObjectProperty<String>(
-							renderFailures(lFailed), String.class));
-					lFailures.setVisible(true);
-				}
-			}
-		});
-	}
+        lUpgrade.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(final ClickEvent inEvent) {
+                lProgress.setVisible(true);
+                lProgress.setEnabled(true);
+                lUpgrade.setEnabled(false);
+                UI.getCurrent().setPollInterval(POLL_RUN);
 
-	protected String renderFailures(final Collection<IVIFUpgrade> inFailed) {
-		final StringBuilder out = new StringBuilder("<ul>"); //$NON-NLS-1$
-		for (final IVIFUpgrade lUpgrade : inFailed) {
-			out.append("<li>").append(lUpgrade.getDescription()).append("</li>"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		out.append("</ul>"); //$NON-NLS-1$
-		return new String(out);
-	}
+                final Collection<IVIFUpgrade> lFailed = inThread.upgrade(
+                        inVersionInstance, inVersionSoftware, lProgress);
+
+                lProgress.setVisible(false);
+                if (lFailed.isEmpty()) {
+                    lFeedbackMsg.setVisible(false);
+                    lFailures.setVisible(false);
+                } else {
+                    lFeedbackMsg.setVisible(true);
+                    lFailures.setPropertyDataSource(new ObjectProperty<String>(
+                            renderFailures(lFailed), String.class));
+                    lFailures.setVisible(true);
+                }
+                lUpgrade.setEnabled(true);
+            }
+        });
+    }
+
+    protected String renderFailures(final Collection<IVIFUpgrade> inFailed) {
+        final StringBuilder out = new StringBuilder("<ul>"); //$NON-NLS-1$
+        for (final IVIFUpgrade lUpgrade : inFailed) {
+            out.append("<li>").append(lUpgrade.getDescription()).append("</li>"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        out.append("</ul>"); //$NON-NLS-1$
+        return new String(out);
+    }
 }

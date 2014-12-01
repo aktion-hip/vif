@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
 
-import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.hip.kernel.bom.OrderObject;
 import org.hip.kernel.bom.QueryResult;
 import org.hip.kernel.exc.VException;
@@ -34,74 +34,69 @@ import org.hip.vif.core.member.IMemberSearcher;
 import org.hip.vif.core.search.NoHitsException;
 import org.hip.vif.core.search.VIFMemberSearcher;
 
-/**
- * Class for searching member entries using standard VIF setups, i.e. members
- * are stored in the internal member table. Searching is done using the
- * <code>VIFMemberSearcher</code> object.
- * 
- * @author Luthiger 30.06.2007
- */
+/** Class for searching member entries using standard VIF setups, i.e. members are stored in the internal member table.
+ * Searching is done using the <code>VIFMemberSearcher</code> object.
+ *
+ * @author Luthiger 30.06.2007 */
 public class StandardMemberSearcher implements IMemberSearcher {
-	private static String MEMBER_HOME_CLASS_NAME = MemberImpl.HOME_CLASS_NAME;
-	private QueryResult retrieved = null;
+    private static String MEMBER_HOME_CLASS_NAME = MemberImpl.HOME_CLASS_NAME;
+    private QueryResult retrieved = null;
 
-	@Override
-	public void prepareSearch(final String inQueryTerm) throws IOException,
-			ParseException, NoHitsException, VException, SQLException {
-		retrieved = (new VIFMemberSearcher()).search(inQueryTerm);
-	}
+    @Override
+    public void prepareSearch(final String inQueryTerm) throws IOException,
+            ParseException, NoHitsException, VException, SQLException {
+        retrieved = (new VIFMemberSearcher()).search(inQueryTerm);
+    }
 
-	@Override
-	public void prepareSearch(final String inName, final String inFirstName,
-			final String inStreet, final String inPostal, final String inCity,
-			final String inMail) throws NoHitsException, ParseException,
-			IOException, VException, SQLException {
-		retrieved = (new VIFMemberSearcher()).search(inName, inFirstName,
-				inStreet, inPostal, inCity, inMail);
-	}
+    @Override
+    public void prepareSearch(final String inName, final String inFirstName,
+            final String inStreet, final String inPostal, final String inCity,
+            final String inMail) throws NoHitsException, ParseException,
+            IOException, VException, SQLException {
+        retrieved = (new VIFMemberSearcher()).search(inName, inFirstName,
+                inStreet, inPostal, inCity, inMail);
+    }
 
-	@Override
-	public boolean canShowAll() {
-		return true;
-	}
+    @Override
+    public boolean canShowAll() {
+        return true;
+    }
 
-	@Override
-	public boolean canReorder() {
-		return false;
-	}
+    @Override
+    public boolean canReorder() {
+        return false;
+    }
 
-	@Override
-	public QueryResult doSearch(final OrderObject inOrder) throws VException,
-			SQLException {
-		VSys.assertNotNull(Assert.ERROR, this, "doSearch", retrieved);
-		return retrieved;
-	}
+    @Override
+    public QueryResult doSearch(final OrderObject inOrder) throws VException,
+            SQLException {
+        VSys.assertNotNull(Assert.ERROR, this, "doSearch", retrieved);
+        return retrieved;
+    }
 
-	@Override
-	public MemberHome getMemberCacheHome() {
-		return getMemberAuthenticationHome();
-	}
+    @Override
+    public MemberHome getMemberCacheHome() {
+        return getMemberAuthenticationHome();
+    }
 
-	/**
-	 * In the standard case, we only have one type of member entries.
-	 */
-	@Override
-	public MemberHome getMemberAuthenticationHome() {
-		return (MemberHome) VSys.homeManager.getHome(MEMBER_HOME_CLASS_NAME);
-	}
+    /** In the standard case, we only have one type of member entries. */
+    @Override
+    public MemberHome getMemberAuthenticationHome() {
+        return (MemberHome) VSys.homeManager.getHome(MEMBER_HOME_CLASS_NAME);
+    }
 
-	@Override
-	public Collection<Long> createMemberCacheEntryChecked(
-			final Collection<Long> inMemberIDs) throws VException, SQLException {
-		// We don't have a 'member cache', therefore, nothing to do.
-		return inMemberIDs;
-	}
+    @Override
+    public Collection<Long> createMemberCacheEntryChecked(
+            final Collection<Long> inMemberIDs) throws VException, SQLException {
+        // We don't have a 'member cache', therefore, nothing to do.
+        return inMemberIDs;
+    }
 
-	@Override
-	public Long getAssociatedCacheID(final Long inMemberID) throws VException,
-			SQLException {
-		// We don't have a 'member cache', therefore, nothing to do.
-		return inMemberID;
-	}
+    @Override
+    public Long getAssociatedCacheID(final Long inMemberID) throws VException,
+            SQLException {
+        // We don't have a 'member cache', therefore, nothing to do.
+        return inMemberID;
+    }
 
 }

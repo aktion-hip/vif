@@ -35,9 +35,10 @@ public class VIFBody extends RiplaBody {
     /** VIFBody constructor.
      *
      * @param inSkin {@link ISkin}
-     * @param inApplication {@link RiplaApplication} */
-    protected VIFBody(final ISkin inSkin, final RiplaApplication inApplication) {
-        super(inSkin, inApplication);
+     * @param inApplication {@link RiplaApplication}
+     * @param inMenuTagFilter String */
+    protected VIFBody(final ISkin inSkin, final RiplaApplication inApplication, final String inMenuTagFilter) {
+        super(inSkin, inApplication, inMenuTagFilter);
     }
 
     @Override
@@ -51,10 +52,11 @@ public class VIFBody extends RiplaBody {
      *
      * @param inSkin {@link ISkin}
      * @param inApplication {@link RiplaApplication}
+     * @param inMenuTagFilter String
      * @return {@link IBodyComponent} */
     public static IBodyComponent createVIFInstance(final ISkin inSkin,
-            final RiplaApplication inApplication) {
-        final VIFBody outBody = new VIFBody(inSkin, inApplication);
+            final RiplaApplication inApplication, final String inMenuTagFilter) {
+        final VIFBody outBody = new VIFBody(inSkin, inApplication, inMenuTagFilter);
         outBody.initializeLayout();
         return outBody;
     }

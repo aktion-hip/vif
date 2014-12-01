@@ -1,6 +1,6 @@
-/*
-	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+/**
+    This package is part of the application VIF.
+    Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,57 +15,64 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.forum.usersettings.data;
 
-import org.hip.vif.core.interfaces.IMessages;
 import org.hip.vif.forum.usersettings.Activator;
+import org.ripla.interfaces.IMessages;
 
 import com.vaadin.ui.AbstractSelect;
 
-/**
- * Container for the rating items used in the rating form's option group.
- * 
- * @author Luthiger
- * Created: 23.12.2011
- */
+/** Container for the rating items used in the rating form's option group.
+ *
+ * @author Luthiger Created: 23.12.2011 */
 @SuppressWarnings("serial")
 public class RatingsContainer extends AbstractSelect {
-	
-	private RatingsContainer() {
-		IMessages lMessages = Activator.getMessages();
-		addItem(new RatingItem(1, lMessages.getMessage("ui.rating.label.positive"))); //$NON-NLS-1$
-		addItem(new RatingItem(0, lMessages.getMessage("ui.rating.label.neutral"))); //$NON-NLS-1$
-		addItem(new RatingItem(-1, lMessages.getMessage("ui.rating.label.negative"))); //$NON-NLS-1$
-	}
-	
-	/**
-	 * Factory method, creates the data source for the option group.
-	 * 
-	 * @return {@link RatingsContainer}
-	 */
-	public static RatingsContainer getRatingsContainer() {
-		return new RatingsContainer();
-	}
-	
-// ---
-	
-	public static class RatingItem {
-		private int id;
-		private String caption;
+    private static final String[] LABELS = { "ui.rating.label.negative", "ui.rating.label.neutral",
+            "ui.rating.label.positive" };
 
-		RatingItem(int inID, String inCaption) {
-			id = inID;
-			caption = inCaption;
-		}
-		
-		public int getId() {
-			return id;
-		}
-		public String toString() {
-			return caption;
-		}
-	}
+    private RatingsContainer() {
+        final IMessages lMessages = Activator.getMessages();
+        addItem(new RatingItem(1, lMessages.getMessage(LABELS[2]))); //$NON-NLS-1$
+        addItem(new RatingItem(0, lMessages.getMessage(LABELS[1]))); //$NON-NLS-1$
+        addItem(new RatingItem(-1, lMessages.getMessage(LABELS[0]))); //$NON-NLS-1$
+    }
+
+    /** Factory method, creates the data source for the option group.
+     *
+     * @return {@link RatingsContainer} */
+    public static RatingsContainer getRatingsContainer() {
+        return new RatingsContainer();
+    }
+
+    /** Factory method for a RatingItem with the specified value.
+     *
+     * @param inValue int
+     * @return {@link RatingItem} */
+    public static RatingItem getRatingItem(final int inValue) {
+        return new RatingItem(inValue, Activator.getMessages().getMessage(LABELS[inValue + 1]));
+    }
+
+    // ---
+
+    public static class RatingItem {
+        private final int id;
+        private final String caption;
+
+        private RatingItem(final int inID, final String inCaption) {
+            id = inID;
+            caption = inCaption;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public String toString() {
+            return caption;
+        }
+    }
 
 }

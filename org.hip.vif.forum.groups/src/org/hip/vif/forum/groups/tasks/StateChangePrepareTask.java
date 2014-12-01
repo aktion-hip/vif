@@ -34,7 +34,6 @@ import org.hip.vif.core.bom.Question;
 import org.hip.vif.core.bom.QuestionHome;
 import org.hip.vif.core.bom.VIFMember;
 import org.hip.vif.core.bom.impl.WorkflowAwareContribution;
-import org.hip.vif.core.service.ApplicationData;
 import org.hip.vif.core.util.QuestionStateChecker;
 import org.hip.vif.forum.groups.Activator;
 import org.hip.vif.forum.groups.Constants;
@@ -45,6 +44,7 @@ import org.hip.vif.web.bom.VifBOMHelper;
 import org.hip.vif.web.tasks.AbstractWebController;
 import org.ripla.annotations.UseCaseController;
 import org.ripla.exceptions.RiplaException;
+import org.ripla.web.util.ControllerStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -139,10 +139,11 @@ public class StateChangePrepareTask extends AbstractWebController { // extends A
         return BOMHelper.getGroupAdminHome().isGroupAdmin(inActorID, inGroupID);
     }
 
-    private Component noAction(final String inMsgKey) throws VException {
+    private Component noAction(final String inMsgKey) throws RiplaException {
         showNotification(Activator.getMessages().getMessage(inMsgKey), Type.WARNING_MESSAGE);
-        ApplicationData.popLastTask();
-        return ApplicationData.getLastTask().run();
+        final ControllerStack lControllerStack = ControllerStack.getControllerStack();
+        lControllerStack.pop();
+        return lControllerStack.peek().run();
     }
 
     private Question retrieveQuestion(final Long inQuestionID) throws VException, SQLException {
@@ -217,7 +218,7 @@ public class StateChangePrepareTask extends AbstractWebController { // extends A
         @Override
         void sendNotification() throws Exception {
             final Long lGroupID = getGroupID();
-            final Member lActor = BOMHelper.getMemberCacheHome().getActor();
+            final Member lActor = BOMHelper.getMemberCacheHome().getMember(getActor().getActorID());
             final QueryResult lAdmins = BOMHelper.getJoinGroupAdminToMemberHome().select(lGroupID);
 
             VIFMember lFirst = null;

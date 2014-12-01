@@ -20,53 +20,52 @@ package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectHomeImpl;
 
-/**
- * Home for ratings completions models.
+/** Home for ratings completions models.
  *
- * @author Luthiger
- * Created: 29.08.2009
- */
+ * @author Luthiger Created: 29.08.2009 */
+@SuppressWarnings("serial")
 public class RatingsCompletionHome extends DomainObjectHomeImpl {
-	public final static String KEY_RATINGEVENTS_ID = "RatingEventsID";
-	public final static String KEY_COMPLETION_ID = "CompletionID";
-	
-	private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsCompletion";
+    public final static String KEY_RATINGEVENTS_ID = "RatingEventsID";
+    public final static String KEY_COMPLETION_ID = "CompletionID";
 
-	private final static String XML_OBJECT_DEF = 
-		"<?xml version='1.0' encoding='ISO-8859-1'?>	" +
-		"<objectDef objectName='RatingsCompletion' parent='org.hip.kernel.bom.DomainObject' version='1.0'>	" +
-		"	<keyDefs>	" +
-		"		<keyDef>	" +
-		"			<keyItemDef seq='0' keyPropertyName='" + KEY_RATINGEVENTS_ID + "'/>	" +
-		"			<keyItemDef seq='1' keyPropertyName='" + KEY_COMPLETION_ID + "'/>	" +
-		"		</keyDef>	" +
-		"	</keyDefs>	" +
-		"	<propertyDefs>	" +
-		"		<propertyDef propertyName='" + KEY_RATINGEVENTS_ID + "' valueType='Long' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblRatingsCompletion' columnName='RatingEventsID'/>	" +
-		"		</propertyDef>	" +
-		"		<propertyDef propertyName='" + KEY_COMPLETION_ID + "' valueType='Long' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblRatingsCompletion' columnName='CompletionID'/>	" +
-		"		</propertyDef>	" +
-		"	</propertyDefs>	" +
-		"</objectDef>";
+    private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsCompletion";
 
-	/**
-	 * Returns the name of the objects which this home can create.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getObjectClassName() {
-		return OBJECT_CLASS_NAME;
-	}
+    private final static String XML_OBJECT_DEF =
+            "<?xml version='1.0' encoding='ISO-8859-1'?>	"
+                    +
+                    "<objectDef objectName='RatingsCompletion' parent='org.hip.kernel.bom.DomainObject' version='1.0'>	"
+                    +
+                    "	<keyDefs>	" +
+                    "		<keyDef>	" +
+                    "			<keyItemDef seq='0' keyPropertyName='" + KEY_RATINGEVENTS_ID + "'/>	" +
+                    "			<keyItemDef seq='1' keyPropertyName='" + KEY_COMPLETION_ID + "'/>	" +
+                    "		</keyDef>	" +
+                    "	</keyDefs>	" +
+                    "	<propertyDefs>	" +
+                    "		<propertyDef propertyName='" + KEY_RATINGEVENTS_ID
+                    + "' valueType='Long' propertyType='simple'>	" +
+                    "			<mappingDef tableName='tblRatingsCompletion' columnName='RatingEventsID'/>	" +
+                    "		</propertyDef>	" +
+                    "		<propertyDef propertyName='" + KEY_COMPLETION_ID + "' valueType='Long' propertyType='simple'>	" +
+                    "			<mappingDef tableName='tblRatingsCompletion' columnName='CompletionID'/>	" +
+                    "		</propertyDef>	" +
+                    "	</propertyDefs>	" +
+                    "</objectDef>";
 
-	/**
-	 * Returns the object definition string of the class managed by this home.
-	 *
-	 * @return java.lang.String
-	 */
-	protected String getObjectDefString() {
-		return XML_OBJECT_DEF;
-	}
+    /** Returns the name of the objects which this home can create.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getObjectClassName() {
+        return OBJECT_CLASS_NAME;
+    }
+
+    /** Returns the object definition string of the class managed by this home.
+     *
+     * @return java.lang.String */
+    @Override
+    protected String getObjectDefString() {
+        return XML_OBJECT_DEF;
+    }
 
 }

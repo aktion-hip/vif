@@ -29,128 +29,155 @@ import org.hip.vif.core.bom.Member;
 import org.hip.vif.core.bom.QuestionAuthorReviewerHome;
 import org.hip.vif.core.bom.ResponsibleHome;
 
-/**
- * This domain object home implements the QuestionAuthorReviewerHome interface.
- * 
+/** This domain object home implements the QuestionAuthorReviewerHome interface.
+ *
  * @author: Benno Luthiger
- * @see org.hip.vif.core.bom.QuestionAuthorReviewerHome
- */
+ * @see org.hip.vif.core.bom.QuestionAuthorReviewerHome */
+@SuppressWarnings("serial")
 public class QuestionAuthorReviewerHomeImpl extends AbstractResponsibleHome implements QuestionAuthorReviewerHome {
-	/* Every home has to know the class it handles. They provide access to
-		this name through the method <I>getObjectClassName</I>;
-	*/
-	private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.QuestionAuthorReviewerImpl";
+    /*
+     * Every home has to know the class it handles. They provide access to this name through the method
+     * <I>getObjectClassName</I>;
+     */
+    private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.QuestionAuthorReviewerImpl";
 
-	private final static String XML_OBJECT_DEF = 
-		"<?xml version='1.0' encoding='ISO-8859-1'?>	\n" +
-		"<objectDef objectName='QuestionAuthorReviewer' parent='org.hip.kernel.bom.DomainObject' version='1.0'>	\n" +
-		"	<keyDefs>	\n" +
-		"		<keyDef>	\n" +
-		"			<keyItemDef seq='0' keyPropertyName='" + KEY_QUESTION_ID + "'/>	\n" +
-		"			<keyItemDef seq='1' keyPropertyName='" + ResponsibleHome.KEY_MEMBER_ID + "'/>	\n" +
-		"		</keyDef>	\n" +
-		"	</keyDefs>	\n" +
-		"	<propertyDefs>	\n" +
-		"		<propertyDef propertyName='" + KEY_QUESTION_ID + "' valueType='Long' propertyType='simple'>	\n" +
-		"			<mappingDef tableName='tblQuestionAuthorReviewer' columnName='QuestionID'/>	\n" +
-		"		</propertyDef>	\n" +
-		"		<propertyDef propertyName='" + ResponsibleHome.KEY_MEMBER_ID + "' valueType='Long' propertyType='simple'>	\n" +
-		"			<mappingDef tableName='tblQuestionAuthorReviewer' columnName='MemberID'/>	\n" +
-		"		</propertyDef>	\n" +
-		"		<propertyDef propertyName='" + ResponsibleHome.KEY_TYPE + "' valueType='Number' propertyType='simple'>	\n" +
-		"			<mappingDef tableName='tblQuestionAuthorReviewer' columnName='nType'/>	\n" +
-		"		</propertyDef>	\n" +
-		"		<propertyDef propertyName='" + ResponsibleHome.KEY_CREATED + "' valueType='Timestamp' propertyType='simple'>	\n" +
-		"			<mappingDef tableName='tblQuestionAuthorReviewer' columnName='dtCreation'/>	\n" +
-		"		</propertyDef>	\n" +
-		"	</propertyDefs>	\n" +
-		"</objectDef>";	
-	
-	/**
-	 * Constructor for QuestionAuthorReviewerHomeImpl.
-	 */
-	public QuestionAuthorReviewerHomeImpl() {
-		super();
-	}
+    private final static String XML_OBJECT_DEF =
+            "<?xml version='1.0' encoding='ISO-8859-1'?>	\n"
+                    +
+                    "<objectDef objectName='QuestionAuthorReviewer' parent='org.hip.kernel.bom.DomainObject' version='1.0'>	\n"
+                    +
+                    "	<keyDefs>	\n" +
+                    "		<keyDef>	\n" +
+                    "			<keyItemDef seq='0' keyPropertyName='"
+                    + KEY_QUESTION_ID
+                    + "'/>	\n"
+                    +
+                    "			<keyItemDef seq='1' keyPropertyName='"
+                    + ResponsibleHome.KEY_MEMBER_ID
+                    + "'/>	\n"
+                    +
+                    "		</keyDef>	\n"
+                    +
+                    "	</keyDefs>	\n"
+                    +
+                    "	<propertyDefs>	\n"
+                    +
+                    "		<propertyDef propertyName='"
+                    + KEY_QUESTION_ID
+                    + "' valueType='Long' propertyType='simple'>	\n"
+                    +
+                    "			<mappingDef tableName='tblQuestionAuthorReviewer' columnName='QuestionID'/>	\n"
+                    +
+                    "		</propertyDef>	\n"
+                    +
+                    "		<propertyDef propertyName='"
+                    + ResponsibleHome.KEY_MEMBER_ID
+                    + "' valueType='Long' propertyType='simple'>	\n"
+                    +
+                    "			<mappingDef tableName='tblQuestionAuthorReviewer' columnName='MemberID'/>	\n"
+                    +
+                    "		</propertyDef>	\n"
+                    +
+                    "		<propertyDef propertyName='"
+                    + ResponsibleHome.KEY_TYPE
+                    + "' valueType='Number' propertyType='simple'>	\n"
+                    +
+                    "			<mappingDef tableName='tblQuestionAuthorReviewer' columnName='nType'/>	\n"
+                    +
+                    "		</propertyDef>	\n"
+                    +
+                    "		<propertyDef propertyName='"
+                    + ResponsibleHome.KEY_CREATED
+                    + "' valueType='Timestamp' propertyType='simple'>	\n" +
+                    "			<mappingDef tableName='tblQuestionAuthorReviewer' columnName='dtCreation'/>	\n" +
+                    "		</propertyDef>	\n" +
+                    "	</propertyDefs>	\n" +
+                    "</objectDef>";
 
-	/**
-	 * @see org.hip.kernel.bom.GeneralDomainObjectHome#getObjectClassName()
-	 */
-	public String getObjectClassName() {
-		return OBJECT_CLASS_NAME;
-	}
+    /** Constructor for QuestionAuthorReviewerHomeImpl. */
+    public QuestionAuthorReviewerHomeImpl() {
+        super();
+    }
 
-	/**
-	 * @see org.hip.kernel.bom.impl.AbstractDomainObjectHome#getObjectDefString()
-	 */
-	protected String getObjectDefString() {
-		return XML_OBJECT_DEF;
-	}	
+    /** @see org.hip.kernel.bom.GeneralDomainObjectHome#getObjectClassName() */
+    @Override
+    public String getObjectClassName() {
+        return OBJECT_CLASS_NAME;
+    }
 
-	/**
-	 * Sets the specified member as author of the specified question.
-	 * 
-	 * @param inMemberID java.lang.Long
-	 * @param inQuestionID java.lang.Long
-	 * @throws org.hip.kernel.exc.VException
-	 * @throws java.sql.SQLException
-	 */
-	public void setAuthor(Long inMemberID, Long inQuestionID) throws VException, SQLException {
-		DomainObject lAuthor = create();
-		lAuthor.set(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.AUTHOR.getValue());
-		setAuthorReviewer(lAuthor, inMemberID, inQuestionID);
-	}
+    /** @see org.hip.kernel.bom.impl.AbstractDomainObjectHome#getObjectDefString() */
+    @Override
+    protected String getObjectDefString() {
+        return XML_OBJECT_DEF;
+    }
 
-	/**
-	 * Sets the specified member as reviewer of the specified question.
-	 * 
-	 * @param inMemberID java.lang.Long
-	 * @param inQuestionID java.lang.Long
-	 * @throws org.hip.kernel.exc.VException
-	 * @throws java.sql.SQLException
-	 */
-	public void setReviewer(Long inMemberID, Long inQuestionID) throws VException, SQLException {
-		DomainObject lReviewer = create();
-		lReviewer.set(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER.getValue());
-		setAuthorReviewer(lReviewer, inMemberID, inQuestionID);
-	}
-	
-	private void setAuthorReviewer(DomainObject inDomainObject, Long inMemberID, Long inQuestionID) throws VException, SQLException {
-		inDomainObject.set(ResponsibleHome.KEY_MEMBER_ID, inMemberID);
-		inDomainObject.set(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inQuestionID);
-		inDomainObject.insert(true);
-	}
-	
-	protected KeyObject getContributionKey(Integer inContributionID) throws VException {
-		KeyObject outKey = new KeyObjectImpl();
-		outKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inContributionID);
-		return outKey;
-	}
+    /** Sets the specified member as author of the specified question.
+     * 
+     * @param inMemberID java.lang.Long
+     * @param inQuestionID java.lang.Long
+     * @throws org.hip.kernel.exc.VException
+     * @throws java.sql.SQLException */
+    @Override
+    public void setAuthor(final Long inMemberID, final Long inQuestionID) throws VException, SQLException {
+        final DomainObject lAuthor = create();
+        lAuthor.set(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.AUTHOR.getValue());
+        setAuthorReviewer(lAuthor, inMemberID, inQuestionID);
+    }
 
-	public void removeReviewer(Long inMemberID, Long inQuestionID) throws VException, SQLException {
-		KeyObject lKey = new KeyObjectImpl();
-		lKey.setValue(ResponsibleHome.KEY_MEMBER_ID, inMemberID);
-		lKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inQuestionID);
-		lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER.getValue());
-		DomainObject lEntry = findByKey(lKey);
-		lEntry.set(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER_REFUSED.getValue());
-		lEntry.update(true);
-	}
+    /** Sets the specified member as reviewer of the specified question.
+     * 
+     * @param inMemberID java.lang.Long
+     * @param inQuestionID java.lang.Long
+     * @throws org.hip.kernel.exc.VException
+     * @throws java.sql.SQLException */
+    @Override
+    public void setReviewer(final Long inMemberID, final Long inQuestionID) throws VException, SQLException {
+        final DomainObject lReviewer = create();
+        lReviewer.set(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER.getValue());
+        setAuthorReviewer(lReviewer, inMemberID, inQuestionID);
+    }
 
-	public Member getAuthor(Long inQuestionID) throws Exception {
-		KeyObject lKey = new KeyObjectImpl();
-		lKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inQuestionID);
-		lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.AUTHOR.getValue());
-		DomainObject lEntry = findByKey(lKey);
-		return BOMHelper.getMemberCacheHome().getMember(lEntry.get(ResponsibleHome.KEY_MEMBER_ID).toString());
-	}
+    private void setAuthorReviewer(final DomainObject inDomainObject, final Long inMemberID, final Long inQuestionID)
+            throws VException, SQLException {
+        inDomainObject.set(ResponsibleHome.KEY_MEMBER_ID, inMemberID);
+        inDomainObject.set(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inQuestionID);
+        inDomainObject.insert(true);
+    }
 
-	public boolean checkRefused(Long inReviewerID, Long inQuestionID) throws VException, SQLException {
-		KeyObject lKey = new KeyObjectImpl();
-		lKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inQuestionID);
-		lKey.setValue(ResponsibleHome.KEY_MEMBER_ID, inReviewerID);
-		lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER_REFUSED.getValue());		
-		return getCount(lKey) != 0;
-	}
-	
+    @Override
+    protected KeyObject getContributionKey(final Integer inContributionID) throws VException {
+        final KeyObject outKey = new KeyObjectImpl();
+        outKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inContributionID);
+        return outKey;
+    }
+
+    @Override
+    public void removeReviewer(final Long inMemberID, final Long inQuestionID) throws VException, SQLException {
+        final KeyObject lKey = new KeyObjectImpl();
+        lKey.setValue(ResponsibleHome.KEY_MEMBER_ID, inMemberID);
+        lKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inQuestionID);
+        lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER.getValue());
+        final DomainObject lEntry = findByKey(lKey);
+        lEntry.set(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER_REFUSED.getValue());
+        lEntry.update(true);
+    }
+
+    @Override
+    public Member getAuthor(final Long inQuestionID) throws Exception {
+        final KeyObject lKey = new KeyObjectImpl();
+        lKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inQuestionID);
+        lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.AUTHOR.getValue());
+        final DomainObject lEntry = findByKey(lKey);
+        return BOMHelper.getMemberCacheHome().getMember(lEntry.get(ResponsibleHome.KEY_MEMBER_ID).toString());
+    }
+
+    @Override
+    public boolean checkRefused(final Long inReviewerID, final Long inQuestionID) throws VException, SQLException {
+        final KeyObject lKey = new KeyObjectImpl();
+        lKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inQuestionID);
+        lKey.setValue(ResponsibleHome.KEY_MEMBER_ID, inReviewerID);
+        lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER_REFUSED.getValue());
+        return getCount(lKey) != 0;
+    }
+
 }

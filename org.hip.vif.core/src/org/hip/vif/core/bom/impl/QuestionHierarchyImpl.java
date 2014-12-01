@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package org.hip.vif.core.bom.impl;
 
 import java.sql.SQLException;
@@ -30,39 +30,34 @@ import org.hip.vif.core.bom.QuestionHierarchy;
 import org.hip.vif.core.bom.QuestionHierarchyHome;
 import org.hip.vif.core.bom.QuestionHome;
 
-/**
- * This domain object implements the QuestionHierarchy interface.
- * 
+/** This domain object implements the QuestionHierarchy interface.
+ *
  * @author: Benno Luthiger
- * @see org.hip.vif.core.bom.QuestionHierarchy
- */
+ * @see org.hip.vif.core.bom.QuestionHierarchy */
+@SuppressWarnings("serial")
 public class QuestionHierarchyImpl extends DomainObjectImpl implements QuestionHierarchy {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.QuestionHierarchyHomeImpl";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.QuestionHierarchyHomeImpl";
 
-	/**
-	 * Constructor for QuestionHierarchyImpl.
-	 */
-	public QuestionHierarchyImpl() {
-		super();
-	}
+    /** Constructor for QuestionHierarchyImpl. */
+    public QuestionHierarchyImpl() {
+        super();
+    }
 
-	/**
-	 * @see org.hip.kernel.bom.GeneralDomainObject#getHomeClassName()
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
-	
-	/**
-	 * Returns the question associated with this QuestionHiearchy entry.
-	 * 
-	 * @return Question
-	 * @throws VException
-	 * @throws SQLException
-	 */
-	public Question getAssociatedQuestion() throws VException, SQLException {
-		KeyObject lKey = new KeyObjectImpl();
-		lKey.setValue(QuestionHome.KEY_ID, get(QuestionHierarchyHome.KEY_CHILD_ID));
-		return (Question)BOMHelper.getQuestionHome().findByKey(lKey);
-	}
+    /** @see org.hip.kernel.bom.GeneralDomainObject#getHomeClassName() */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
+
+    /** Returns the question associated with this QuestionHiearchy entry.
+     * 
+     * @return Question
+     * @throws VException
+     * @throws SQLException */
+    @Override
+    public Question getAssociatedQuestion() throws VException, SQLException {
+        final KeyObject lKey = new KeyObjectImpl();
+        lKey.setValue(QuestionHome.KEY_ID, get(QuestionHierarchyHome.KEY_CHILD_ID));
+        return (Question) BOMHelper.getQuestionHome().findByKey(lKey);
+    }
 }

@@ -36,11 +36,11 @@ import org.hip.vif.core.bom.QuestionHome;
 import org.hip.vif.core.bom.VIFWorkflowAware;
 import org.hip.vif.web.bom.GroupHome;
 import org.hip.vif.web.util.BeanWrapperHelper;
-import org.hip.vif.web.util.Dialog;
-import org.hip.vif.web.util.Dialog.DialogWindow;
 import org.hip.vif.web.util.VIFViewHelper;
 import org.ripla.interfaces.IMessages;
 import org.ripla.web.interfaces.IPluggable;
+import org.ripla.web.util.Dialog;
+import org.ripla.web.util.Dialog.AbstractDialogWindow;
 import org.ripla.web.util.RiplaViewHelper;
 
 import com.vaadin.data.Container;
@@ -64,7 +64,7 @@ import com.vaadin.ui.VerticalLayout;
 public class QuestionView extends AbstractQuestionView {
 
     /** Constructor to view the question.
-     * 
+     *
      * @param inGroup {@link Group}
      * @param inQuestion {@link Question}
      * @param inParent {@link QuestionContainer}
@@ -139,7 +139,7 @@ public class QuestionView extends AbstractQuestionView {
 
     private Component createQuestionActionButtons(
             final AdminQuestionShowTask inTask, final IMessages inMessages) {
-        final DialogWindow lDialogPublish = Dialog
+        final AbstractDialogWindow lDialogPublish = Dialog
                 .openQuestion(
                         inMessages.getMessage("ui.discussion.dialog.title"), inMessages.getMessage("ui.discussion.dialog.question.publish"), new Dialog.ICommand() { //$NON-NLS-1$ //$NON-NLS-2$
                             @Override
@@ -151,7 +151,7 @@ public class QuestionView extends AbstractQuestionView {
                                 }
                             }
                         });
-        final DialogWindow lDialogDelete = Dialog
+        final AbstractDialogWindow lDialogDelete = Dialog
                 .openQuestion(
                         inMessages.getMessage("ui.discussion.dialog.title"), inMessages.getMessage("ui.discussion.dialog.question.delete"), new Dialog.ICommand() { //$NON-NLS-1$ //$NON-NLS-2$
                             @Override

@@ -105,7 +105,7 @@ public class AdminApplication extends RiplaApplication {
                     @Override
                     public User authenticate(final String inName,
                             final String inPassword, final UserAdmin inUserAdmin)
-                                    throws LoginException {
+                            throws LoginException {
 
                         try {
                             // first we check whether the user can be authenticated
@@ -140,6 +140,11 @@ public class AdminApplication extends RiplaApplication {
             public String getAppName() {
                 return APP_NAME;
             }
+
+            @Override
+            public String getMenuTagFilter() {
+                return "vif.admin.*";
+            }
         };
     }
 
@@ -170,7 +175,7 @@ public class AdminApplication extends RiplaApplication {
 
     @Override
     protected IBodyComponent createBodyView(final ISkin inSkin) {
-        return VIFBody.createVIFInstance(inSkin, this);
+        return VIFBody.createVIFInstance(inSkin, this, getAppConfiguration().getMenuTagFilter());
     }
 
 }

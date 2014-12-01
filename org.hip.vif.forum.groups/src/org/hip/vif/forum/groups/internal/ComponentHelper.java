@@ -37,6 +37,7 @@ public class ComponentHelper {
         final RiplaMenuComposite outMenu = new RiplaMenuComposite(Activator.getMessages()
                 .getMessage("component.menu.title"), 10); //$NON-NLS-1$
         outMenu.setControllerName(UseCaseHelper.createFullyQualifiedControllerName(GroupShowListTask.class));
+        outMenu.setTag("vif.forum.menu");
         return outMenu;
     }
 

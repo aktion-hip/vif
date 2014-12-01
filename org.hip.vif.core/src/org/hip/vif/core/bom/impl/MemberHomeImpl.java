@@ -36,7 +36,6 @@ import org.hip.vif.core.bom.MemberHome;
 import org.hip.vif.core.exc.BOMChangeValueException;
 import org.hip.vif.core.exc.InvalidAuthenticationException;
 import org.hip.vif.core.member.IMemberInformation;
-import org.hip.vif.core.service.ApplicationData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -151,12 +150,6 @@ public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome {
         super();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.hip.vif.bom.MemberHome#checkAuthentication(java.lang.String, java.lang.String,
-     * org.hip.vif.servlets.VIFContext)
-     */
     @Override
     public Member checkAuthentication(final String inUserID,
             final String inPassword) throws InvalidAuthenticationException,
@@ -196,23 +189,6 @@ public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome {
     @Override
     protected Vector<Object> createTestObjects() {
         return null;
-    }
-
-    /** Returns the entry of the authenticated member
-     *
-     * @return org.hip.vif.bom.Member
-     * @exception org.hip.kernel.bom.BOMInvalidKeyException */
-    @Override
-    public Member getActor() throws BOMInvalidKeyException {
-        // create a key for the UserID
-        final KeyObject lKeyUserID = new KeyObjectImpl();
-        try {
-            lKeyUserID
-                    .setValue(KEY_ID, ApplicationData.getActor().getActorID());
-            return (Member) findByKey(lKeyUserID);
-        } catch (final VException exc) {
-            throw new BOMInvalidKeyException(exc.getMessage());
-        }
     }
 
     /** Returns the member identified by the specified ID
@@ -295,11 +271,6 @@ public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome {
         return XML_OBJECT_DEF;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.hip.vif.bom.MemberHome#updateMemberCache(java.lang.String, org.hip.vif.member.MemberInformation)
-     */
     @Override
     public Member updateMemberCache(final IMemberInformation inInformation)
             throws SQLException, VException {

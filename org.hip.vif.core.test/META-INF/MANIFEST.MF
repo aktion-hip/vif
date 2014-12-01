@@ -12,5 +12,5 @@ Import-Package: com.mysql.jdbc;version="5.1.18",
  org.osgi.service.jdbc;version="1.0.0"
 Bundle-ClassPath: .,
  lib/jtidy-r938.jar
-Export-Package: org.hip.vif.core,
- org.hip.vif.core.util
+Export-Package: org.hip.vif.core;version="1.0.0",
+ org.hip.vif.core.util;version="1.0.0"

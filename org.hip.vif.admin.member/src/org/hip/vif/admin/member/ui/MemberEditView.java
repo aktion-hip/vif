@@ -21,13 +21,13 @@ package org.hip.vif.admin.member.ui;
 
 import org.hip.kernel.exc.VException;
 import org.hip.vif.admin.member.Activator;
-import org.hip.vif.admin.member.data.MemberBean;
-import org.hip.vif.admin.member.data.RoleContainer;
 import org.hip.vif.admin.member.tasks.AbstractMemberTask;
 import org.hip.vif.core.bom.Member;
 import org.hip.vif.core.bom.MemberHome;
 import org.hip.vif.core.exc.ExternIDNotUniqueException;
 import org.hip.vif.core.util.RatingsHelper;
+import org.hip.vif.web.member.MemberBean;
+import org.hip.vif.web.member.RoleContainer;
 import org.hip.vif.web.util.BeanWrapperHelper;
 import org.hip.vif.web.util.MemberViewHelper;
 import org.hip.vif.web.util.RatingsTable;
@@ -161,29 +161,28 @@ public class MemberEditView extends AbstractMemberView {
         private static final int WIDTH_ZIP = 50;
         private static final int WIDTH_CITY = 240;
 
-        protected Member member;
         private final RoleContainer roles;
         protected IMessages messages;
         protected TextField firstfield;
         protected LabelValueTable table;
         private final ComboBox address;
+        private final Label userID;
 
         FormCreator(final Member inMember, final RoleContainer inRoles) {
             super(MemberBean.createMemberBean(inMember, inRoles));
-            member = inMember;
             roles = inRoles;
             messages = Activator.getMessages();
             table = new LabelValueTable();
-            address = MemberViewHelper.getMemberAddress(member);
+            address = MemberViewHelper.getMemberAddress(inMember);
+            userID = new Label(BeanWrapperHelper.getString(
+                    MemberHome.KEY_USER_ID, inMember), ContentMode.HTML);
         }
 
         @Override
         protected Component createTable() {
-            final Label lUserID = new Label(BeanWrapperHelper.getString(
-                    MemberHome.KEY_USER_ID, member), ContentMode.HTML);
-            lUserID.setStyleName("vif-value vif-value-emphasized"); //$NON-NLS-1$
+            userID.setStyleName("vif-value vif-value-emphasized"); //$NON-NLS-1$
             table.addRow(
-                    messages.getMessage("ui.member.editor.label.userid"), lUserID); //$NON-NLS-1$
+                    messages.getMessage("ui.member.editor.label.userid"), userID); //$NON-NLS-1$
 
             firstfield = RiplaViewHelper.createTextField(DFT_WIDTH_INPUT);
             focusInit();
@@ -211,12 +210,11 @@ public class MemberEditView extends AbstractMemberView {
                     addFieldRequired(MemberBean.FN_STREET, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT),
                             lFieldLabel));
             lFieldLabel = messages.getMessage("ui.member.editor.label.city"); //$NON-NLS-1$
-            inTable.addRowEmphasized(
-                    messages.getMessage("ui.member.editor.label.city"), createZipCityFields(member, lFieldLabel)); //$NON-NLS-1$
-            inTable.addRow(
-                    messages.getMessage("ui.member.editor.label.phone"), addField(MemberBean.FN_PHONE, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); //$NON-NLS-1$
-            inTable.addRow(
-                    messages.getMessage("ui.member.editor.label.fax"), addField(MemberBean.FN_FAX, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); //$NON-NLS-1$
+            inTable.addRowEmphasized(lFieldLabel, createZipCityFields(lFieldLabel)); //$NON-NLS-1$
+            lFieldLabel = messages.getMessage("ui.member.editor.label.phone");
+            inTable.addRow(lFieldLabel, addField(MemberBean.FN_PHONE, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); //$NON-NLS-1$
+            lFieldLabel = messages.getMessage("ui.member.editor.label.fax");
+            inTable.addRow(lFieldLabel, addField(MemberBean.FN_FAX, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); //$NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.mail"); //$NON-NLS-1$
             inTable.addRowEmphasized(
                     lFieldLabel,
@@ -230,8 +228,7 @@ public class MemberEditView extends AbstractMemberView {
             return inTable;
         }
 
-        private Component createZipCityFields(final Member inMember,
-                final String inFieldLabel) {
+        private Component createZipCityFields(final String inFieldLabel) {
             final HorizontalLayout outLayout = new HorizontalLayout();
             final Field<?> lZip = addFieldRequired(MemberBean.FN_ZIP, RiplaViewHelper.createTextField(WIDTH_ZIP),
                     messages.getMessage("ui.member.editor.label.zip")); //$NON-NLS-1$

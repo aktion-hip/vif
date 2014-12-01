@@ -4,8 +4,7 @@ Bundle-Name: VIF web application framework
 Bundle-SymbolicName: org.hip.vif.web
 Bundle-Version: 1.2.0.qualifier
 Bundle-Vendor: RelationWare
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
- JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.hip.vif.web.biblio;version="1.2.0",
  org.hip.vif.web.bom;version="1.0.0",
  org.hip.vif.web.components;version="1.2.0",
@@ -13,7 +12,9 @@ Export-Package: org.hip.vif.web.biblio;version="1.2.0",
  org.hip.vif.web.exc;version="1.2.0",
  org.hip.vif.web.interfaces;version="1.2.0",
  org.hip.vif.web.mail;version="1.0.0",
+ org.hip.vif.web.member;version="1.0.0",
  org.hip.vif.web.tasks;version="1.2.0",
+ org.hip.vif.web.usertasks;version="1.0.0",
  org.hip.vif.web.util;version="1.2.0"
 Bundle-Activator: org.hip.vif.web.Activator
 Import-Package: ch.qos.logback.classic;version="1.0.1",
@@ -22,6 +23,7 @@ Import-Package: ch.qos.logback.classic;version="1.0.1",
  com.vaadin.data;version="[7.1.0,8.0.0)",
  com.vaadin.data.fieldgroup;version="[7.1.0,8.0.0)",
  com.vaadin.data.util;version="[7.1.0,8.0.0)",
+ com.vaadin.data.util.filter;version="[7.1.12,8.0.0)",
  com.vaadin.data.validator;version="[7.1.0,8.0.0)",
  com.vaadin.event;version="[7.1.0,8.0.0)",
  com.vaadin.event.dd;version="[7.1.0,8.0.0)",
@@ -37,6 +39,7 @@ Import-Package: ch.qos.logback.classic;version="1.0.1",
  javax.servlet.http;version="[2.5.0,3.0.0)",
  javax.xml.parsers,
  javax.xml.xpath,
+ org.apache.lucene.index;version="[4.10.1,5.0.0)",
  org.hip.kernel.bom,
  org.hip.kernel.bom.impl,
  org.hip.kernel.code,
@@ -77,3 +80,4 @@ Import-Package: ch.qos.logback.classic;version="1.0.1",
  org.xml.sax.helpers
 Service-Component: OSGI-INF/*.xml
 Bundle-ClassPath: .
+Eclipse-ExtensibleAPI: true 

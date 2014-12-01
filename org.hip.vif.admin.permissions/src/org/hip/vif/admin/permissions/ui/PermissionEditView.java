@@ -39,6 +39,7 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -49,12 +50,11 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 /** View to add and delete permissions and to associate them with roles.
  *
- * @author Luthiger Created: 14.12.2011 */
+ * @author Luthiger */
 @SuppressWarnings("serial")
 public class PermissionEditView extends CustomComponent {
     private static final int TABLE_SIZE = 13;
@@ -93,36 +93,36 @@ public class PermissionEditView extends CustomComponent {
         // generate column checkbox for delete
         lTable.addGeneratedColumn(LoadedPermissionContainer.FIELD_CHECK,
                 new Table.ColumnGenerator() {
-            @Override
-            public Object generateCell(final Table inSource, final Object inItemId,
-                    final Object inColumnId) {
-                if (Constants.PERMISSION_EDIT
-                        .equals(((LoadedPermissionBean) inItemId)
-                                .getLabel())) {
-                    return new Label();
-                }
-                return VIFViewHelper.createCheck(
-                        (ISelectableBean) inItemId,
-                        new VIFViewHelper.IConfirmationModeChecker() {
-                            @Override
-                            public boolean inConfirmationMode() {
-                                return confirmationMode;
-                            }
-                        });
-            }
-        });
+                    @Override
+                    public Object generateCell(final Table inSource, final Object inItemId,
+                            final Object inColumnId) {
+                        if (Constants.PERMISSION_EDIT
+                                .equals(((LoadedPermissionBean) inItemId)
+                                        .getLabel())) {
+                            return new Label();
+                        }
+                        return VIFViewHelper.createCheck(
+                                (ISelectableBean) inItemId,
+                                new VIFViewHelper.IConfirmationModeChecker() {
+                                    @Override
+                                    public boolean inConfirmationMode() {
+                                        return confirmationMode;
+                                    }
+                                });
+                    }
+                });
         // generate column label
         lTable.addGeneratedColumn(LoadedPermissionContainer.FIELD_LABEL,
                 new Table.ColumnGenerator() {
-            @Override
-            public Object generateCell(final Table inSource, final Object inItemId,
-                    final Object inColumnId) {
-                final LoadedPermissionBean lPermission = (LoadedPermissionBean) inItemId;
-                return new Label(String.format(TMPL_LABEL,
-                        lPermission.getDescription(),
-                        lPermission.getLabel()), ContentMode.HTML);
-            }
-        });
+                    @Override
+                    public Object generateCell(final Table inSource, final Object inItemId,
+                            final Object inColumnId) {
+                        final LoadedPermissionBean lPermission = (LoadedPermissionBean) inItemId;
+                        return new Label(String.format(TMPL_LABEL,
+                                lPermission.getDescription(),
+                                lPermission.getLabel()), ContentMode.HTML);
+                    }
+                });
         // generate column checkbox for roles
         lTable.addGeneratedColumn(LoadedPermissionContainer.FIELD_ROLE_SU,
                 new ColumnCheckBoxGenerator(Role.SU));
@@ -163,7 +163,7 @@ public class PermissionEditView extends CustomComponent {
                 if (!inTask.saveChanges()) {
                     Notification.show(
                             lMessages
-                            .getMessage("errmsg.permissions.save"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+                                    .getMessage("errmsg.permissions.save"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                 }
             }
         });
@@ -181,7 +181,7 @@ public class PermissionEditView extends CustomComponent {
                     if (!inTask.deletePermissions()) {
                         Notification.show(
                                 lMessages
-                                        .getMessage("errmsg.permissions.delete"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+                                .getMessage("errmsg.permissions.delete"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                     }
                 } else {
                     if (VIFViewHelper.processAction(inPermissions)) {
@@ -206,7 +206,8 @@ public class PermissionEditView extends CustomComponent {
                 String.format(
                         VIFViewHelper.TMPL_TITLE, "vif-title", inMessages.getMessage("ui.permission.subtitle.create")), ContentMode.HTML)); //$NON-NLS-1$ //$NON-NLS-2$
 
-        final FormCreator lForm = new FormCreator();
+        final PermissionBean lPermission = new PermissionBean();
+        final FormCreator lForm = new FormCreator(lPermission);
         out.addComponent(lForm.createForm());
 
         final Button lNew = new Button(
@@ -216,17 +217,17 @@ public class PermissionEditView extends CustomComponent {
             public void buttonClick(final ClickEvent inEvent) {
                 try {
                     lForm.commit();
-                    if (!inTask.createPermission(lForm.getLabel(),
-                            lForm.getDescription())) {
+                    if (!inTask.createPermission(lPermission.getLabel(),
+                            lPermission.getDescription())) {
                         Notification.show(
                                 inMessages
-                                        .getMessage("errmsg.permissions.create"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+                                .getMessage("errmsg.permissions.create"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                     }
                 }
                 catch (final ExternIDNotUniqueException exc) {
                     Notification.show(
                             inMessages
-                            .getMessage("errmsg.permissions.not.unique"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+                                    .getMessage("errmsg.permissions.not.unique"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                 } catch (final CommitException exc) {
                     // intentionally left empty
                 }
@@ -253,7 +254,7 @@ public class PermissionEditView extends CustomComponent {
     // --- private classes ---
 
     private static class ColumnCheckBoxGenerator implements
-            Table.ColumnGenerator {
+    Table.ColumnGenerator {
         private final Role role;
 
         ColumnCheckBoxGenerator(final Role inRole) {
@@ -272,7 +273,7 @@ public class PermissionEditView extends CustomComponent {
                 public void valueChange(final ValueChangeEvent inEvent) {
                     ((LoadedPermissionBean) inItemId).setRoleValue(role,
                             ((CheckBox) inEvent.getProperty())
-                            .getValue());
+                                    .getValue());
                 }
             });
             out.setEnabled(!Constants.PERMISSION_EDIT.equals(lPermission
@@ -301,32 +302,40 @@ public class PermissionEditView extends CustomComponent {
 
     private class FormCreator extends AbstractFormCreator {
 
-        public FormCreator() {
-            // TODO: Item
-            super(null);
+        public FormCreator(final PermissionBean inPermissionBean) {
+            super(new BeanItem<PermissionBean>(inPermissionBean));
         }
-
-        private final LabelValueTable table = new LabelValueTable();
-        private final TextField label = RiplaViewHelper
-                .createTextField("", 180, null); //$NON-NLS-1$
-        private final TextField description = RiplaViewHelper.createTextField("", 500, null); //$NON-NLS-1$
 
         @Override
         protected Component createTable() {
             final IMessages lMessages = Activator.getMessages();
-            table.addRow(
-                    lMessages.getMessage("ui.permission.label.label"), addFieldRequired("label", label, lMessages.getMessage("ui.permission.label.label"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            table.addRow(
-                    lMessages.getMessage("ui.permission.label.description"), addFieldRequired("description", description, lMessages.getMessage("ui.permission.label.description"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            return table;
+            final LabelValueTable outTable = new LabelValueTable();
+            outTable.addRow(
+                    lMessages.getMessage("ui.permission.label.label"), addFieldRequired("label", RiplaViewHelper.createTextField(180), lMessages.getMessage("ui.permission.label.label"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            outTable.addRow(
+                    lMessages.getMessage("ui.permission.label.description"), addFieldRequired("description", RiplaViewHelper.createTextField(500), lMessages.getMessage("ui.permission.label.description"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            return outTable;
+        }
+    }
+
+    public static class PermissionBean {
+        private String label = "";
+        private String description = "";
+
+        public String getLabel() {
+            return label;
         }
 
-        String getLabel() {
-            return label.getValue().toString();
+        public void setLabel(final String inLabel) {
+            label = inLabel;
         }
 
-        String getDescription() {
-            return description.getValue().toString();
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(final String inDescription) {
+            description = inDescription;
         }
 
     }

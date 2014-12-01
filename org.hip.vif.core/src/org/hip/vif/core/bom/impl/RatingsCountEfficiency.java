@@ -20,22 +20,19 @@ package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 
-/**
- * Model entry for the efficiency rating. 
+/** Model entry for the efficiency rating.
  *
- * @author Luthiger
- * Created: 17.09.2009
- */
+ * @author Luthiger Created: 17.09.2009 */
+@SuppressWarnings("serial")
 public class RatingsCountEfficiency extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsCountEfficiencyHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsCountEfficiencyHome";
 
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
 }

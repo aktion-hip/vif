@@ -1,280 +1,173 @@
 /**
-	This package is part of the application VIF.
-	Copyright (C) 2011-2014, Benno Luthiger
+    This package is part of the application VIF.
+    Copyright (C) 2014, Benno Luthiger
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package org.hip.vif.web.tasks;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.hip.vif.web.interfaces.ITaskConfiguration;
-import org.hip.vif.web.interfaces.ITaskSet;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
+import org.hip.vif.web.Activator;
 import org.ripla.exceptions.RiplaException;
 import org.ripla.web.controllers.AbstractController;
-import org.ripla.web.controllers.AbstractForwardingController;
-import org.ripla.web.interfaces.IForwardingController;
+import org.ripla.web.controllers.AbstractForwardingMapper;
+import org.ripla.web.interfaces.IForwardingMapper;
 import org.ripla.web.interfaces.IPluggable;
+import org.ripla.web.util.ForwardingUtil;
 import org.ripla.web.util.UseCaseHelper;
 
 import com.vaadin.ui.Component;
 
-/**
- * Registry for all forwarding controllers that provides the mapping between the
- * forward alias and the implementing controller.<br />
- * An application has to provide the possibility to forward the control across
- * bundles. To achieve this, a use case controller implementation has to be
- * registered both at the Ripla controller manager and this forward controller
- * registry. Then, this registry can look up the controller by it's forward
- * alias and thus forward the control to the proper controller implementation.
- * 
- * Controllers in bundles can forward to registered controllers as follows:
- * 
- * <pre>
- * sendEvent(ForwardControllerRegistry.ForwardQuestionShow.class);
- * </pre>
- * 
- * @author Luthiger
- */
+/** Registry for forwarding tasks/controllers.
+ * <p>
+ * The aim of defining forwarding tasks is that the application needs tasks that are not bundle (i.e. use case)
+ * specific. Put in other words, the application needs to provide controller functionality in various use cases that is
+ * implemented by some special bundles. The application does this by defining aliases (i.e. forwarding tasks) for tasks
+ * that are used in various bundles. The bundles using this functionality call the aliases defined centrally. The alias
+ * then forwards the tasks to the implementation provided by the bundle that knows how to handle the task.
+ * </p>
+ *
+ * @see org.ripla.web.interfaces.IForwarding
+ * @author lbenno */
 public enum ForwardControllerRegistry {
-	INSTANCE;
+    INSTANCE;
 
-	public static final String FORWARD_REQUEST_LIST = "showRequestList"; //$NON-NLS-1$
-	public static final String FORWARD_QUESTION_SHOW = "showQuestion"; //$NON-NLS-1$
-	public static final String FORWARD_GROUP_ADMIN_PENDING = "showGroupAdminsPending"; //$NON-NLS-1$
-	public static final String FORWARD_RATING_FORM = "showRatingForm"; //$NON-NLS-1$
-	public static final String FORWARD_PWCHNGE_FORM = "changePWForm"; //$NON-NLS-1$
+    public enum Alias {
+        FORWARD_REQUEST_LIST("showRequestList"), FORWARD_QUESTION_SHOW("showQuestion"), FORWARD_GROUP_ADMIN_PENDING(
+                "showGroupAdminsPending"), FORWARD_RATING_FORM("showRatingForm"), FORWARD_PWCHNGE_FORM("changePWForm");
 
-	private final Map<String, String> targetRegistry = new HashMap<String, String>();
-	private final Map<String, IForwardingController> controllerRegistry = new HashMap<String, IForwardingController>();
+        private String name;
 
-	// private final Map<String, Class<? extends IForwardingController>>
-	// controllerRegistry = new HashMap<String, Class<? extends
-	// IForwardingController>>();
+        Alias(final String inName) {
+            name = inName;
+        }
 
-	/**
-	 * Singleton constructor, fills the task manager with all forwarding tasks.
-	 */
-	private ForwardControllerRegistry() {
-		// register final forwards to this registry
-		controllerRegistry.put(FORWARD_REQUEST_LIST, new ForwardRequestsList());
-		controllerRegistry
-				.put(FORWARD_QUESTION_SHOW, new ForwardQuestionShow());
-		controllerRegistry.put(FORWARD_GROUP_ADMIN_PENDING,
-				new ForwardGroupAdminPending());
-		controllerRegistry.put(FORWARD_RATING_FORM, new ForwardRatingForm());
-		controllerRegistry.put(FORWARD_PWCHNGE_FORM, new ForwardPWChangeForm());
-	}
+        public String getName() {
+            return name;
+        }
+    }
 
-	/**
-	 * Returns the name of the controller class that is mapped to the specified
-	 * alias.
-	 * 
-	 * @param inAlias
-	 *            String the forward alias
-	 * @return String the fully qualified controller name of the specified
-	 *         forward
-	 */
-	public String getTargetOf(final IForwardingController inAlias) {
-		final IForwardingController mapped = controllerRegistry.get(inAlias
-				.getAlias());
-		// TODO: handle mapped = null, e.g. by returning the
-		// no-controller-found-Controller
-		if (mapped == null) {
-			return UseCaseHelper
-					.createFullyQualifiedControllerName(NoControllerFound.class);
-		}
-		return UseCaseHelper.createFullyQualifiedControllerName(mapped
-				.getTarget());
-	}
+    private final ForwardingUtil registry = new ForwardingUtil(5);
 
-	// /**
-	// * Returns the task class that is registered with the specified alias. <br
-	// />
-	// * This method is public, as clients have to call it.
-	// *
-	// * @param inAlias
-	// * String
-	// * @return IPluggableTask class
-	// */
-	// public Class<? extends IForwardingController> getTask(final String
-	// inAlias) {
-	// return controllerRegistry.get(inAlias);
-	// }
+    private ForwardControllerRegistry() {
+        registry.put(Alias.FORWARD_REQUEST_LIST.getName(), new ForwardRequestsList());
+        registry.put(Alias.FORWARD_QUESTION_SHOW.getName(), new ForwardQuestionShow());
+        registry.put(Alias.FORWARD_GROUP_ADMIN_PENDING.getName(), new ForwardGroupAdminPending());
+        registry.put(Alias.FORWARD_RATING_FORM.getName(), new ForwardRatingForm());
+        registry.put(Alias.FORWARD_PWCHNGE_FORM.getName(), new ForwardPWChangeForm());
+    }
 
-	/**
-	 * Returns the target class that is registered with the specified alias. <br />
-	 * This method is package friendly, as only the <code>ForwardTask</code> has
-	 * to call it.
-	 * 
-	 * @param inAlias
-	 *            String
-	 * @return String the target's fully qualified class name
-	 */
-	String getTarget(final String inAlias) {
-		return targetRegistry.get(inAlias);
-	}
+    /** Registeres the specified target class with the specified alias.<br />
+     * The forwarding controller evaluates the <code>IForwarding</code> instances and registeres the forward task
+     * implementation here.
+     *
+     * @param inAlias String
+     * @param inTarget {@link IPluggable} */
+    public void registerTarget(final String inAlias, final Class<? extends IPluggable> inTarget) {
+        final IForwardingMapper mapping = registry.get(inAlias);
+        if (mapping != null) {
+            mapping.setTarget(inTarget);
+        }
+    }
 
-	/**
-	 * Registeres the specified target class with the specified alias.
-	 * 
-	 * @param inAlias
-	 *            String
-	 * @param inTarget
-	 *            IPluggableTask class
-	 */
-	public void registerTarget(final String inAlias,
-			final Class<? extends IPluggable> inTarget) {
-		final IForwardingController mapping = controllerRegistry.get(inAlias);
-		if (mapping != null) {
-			mapping.setTarget(inTarget);
-		}
-	}
+    /** Unregisteres the target task with the specified alias.<br />
+     * Called when a <code>IForwarding</code> instance is removed.
+     *
+     * @param inAlias String */
+    public void unregisterTarget(final String inAlias) {
+        registry.unregisterTarget(inAlias);
+    }
 
-	/**
-	 * Unregisteres the target task with the specified alias.
-	 * 
-	 * @param inAlias
-	 *            String
-	 */
-	public void unregisterTarget(final String inAlias) {
-		targetRegistry.remove(inAlias);
-	}
+    /** Returns the name of the controller class that is mapped to the specified alias.<br />
+     * This method translates (i.e. forwards) the alias to a call for the proper task implementation.
+     *
+     * @param inAlias {@link Alias}
+     * @return String the fully qualified controller name of the specified forward */
+    public String getTargetOf(final Alias inAlias) {
+        final IForwardingMapper mapped = registry.get(inAlias.getName());
+        if (mapped == null) {
+            return UseCaseHelper.createFullyQualifiedControllerName(NoControllerFound.class);
+        }
+        return UseCaseHelper.createFullyQualifiedControllerName(mapped
+                .getTarget());
+    }
 
-	// --- inner classes ---
+    /** Returns the target class that is registered with the specified alias.
+     *
+     * @param inAlias {@link Alias}
+     * @return {@link IPluggable} the forward's implementation */
+    public Class<? extends IPluggable> getController(final Alias inAlias) {
+        final IForwardingMapper mapped = registry.get(inAlias.getName());
+        if (mapped == null) {
+            return NoControllerFound.class;
+        }
+        return mapped.getTarget();
+    }
 
-	/**
-	 * The task set of all forwarding tasks is configured here.
-	 */
-	private static class ForwardTaskSet implements ITaskSet {
-		final Bundle bundle = FrameworkUtil.getBundle(getClass());
+    // --- implementation of forwarding tasks ---
 
-		@Override
-		public ITaskConfiguration[] getTaskConfigurations() {
-			return new ITaskConfiguration[] { new ITaskConfiguration() {
-				@Override
-				public String getTaskName() {
-					return ForwardRequestsList.class.getName();
-				}
+    public static class ForwardRequestsList extends
+    AbstractForwardingMapper {
+        @Override
+        public String getAlias() {
+            return Alias.FORWARD_REQUEST_LIST.getName();
+        }
+    }
 
-				@Override
-				public Bundle getBundle() {
-					return bundle;
-				}
-			}, new ITaskConfiguration() {
-				@Override
-				public String getTaskName() {
-					return ForwardQuestionShow.class.getName();
-				}
+    public static class ForwardQuestionShow extends
+    AbstractForwardingMapper {
+        @Override
+        public String getAlias() {
+            return Alias.FORWARD_QUESTION_SHOW.getName();
+        }
+    }
 
-				@Override
-				public Bundle getBundle() {
-					return bundle;
-				}
-			}, new ITaskConfiguration() {
-				@Override
-				public String getTaskName() {
-					return ForwardGroupAdminPending.class.getName();
-				}
+    public static class ForwardGroupAdminPending extends
+    AbstractForwardingMapper {
+        @Override
+        public String getAlias() {
+            return Alias.FORWARD_GROUP_ADMIN_PENDING.getName();
+        }
+    }
 
-				@Override
-				public Bundle getBundle() {
-					return bundle;
-				}
-			}, new ITaskConfiguration() {
-				@Override
-				public String getTaskName() {
-					return ForwardRatingForm.class.getName();
-				}
+    public static class ForwardRatingForm extends AbstractForwardingMapper {
+        @Override
+        public String getAlias() {
+            return Alias.FORWARD_RATING_FORM.getName();
+        }
+    }
 
-				@Override
-				public Bundle getBundle() {
-					return bundle;
-				}
-			}, new ITaskConfiguration() {
-				@Override
-				public String getTaskName() {
-					return ForwardPWChangeForm.class.getName();
-				}
+    public static class ForwardPWChangeForm extends
+    AbstractForwardingMapper {
+        @Override
+        public String getAlias() {
+            return Alias.FORWARD_PWCHNGE_FORM.getName();
+        }
+    }
 
-				@Override
-				public Bundle getBundle() {
-					return bundle;
-				}
-			} };
-		}
+    public static class NoControllerFound extends AbstractController implements
+    IPluggable {
 
-	}
+        @Override
+        protected String needsPermission() {
+            return "";
+        }
 
-	// --- implementation of forwarding tasks ---
-
-	public static class ForwardRequestsList extends
-			AbstractForwardingController {
-		@Override
-		public String getAlias() {
-			return FORWARD_REQUEST_LIST;
-		}
-	}
-
-	public static class ForwardQuestionShow extends
-			AbstractForwardingController {
-		@Override
-		public String getAlias() {
-			return FORWARD_QUESTION_SHOW;
-		}
-	}
-
-	public static class ForwardGroupAdminPending extends
-			AbstractForwardingController {
-		@Override
-		public String getAlias() {
-			return FORWARD_GROUP_ADMIN_PENDING;
-		}
-	}
-
-	public static class ForwardRatingForm extends AbstractForwardingController {
-		@Override
-		public String getAlias() {
-			return FORWARD_RATING_FORM;
-		}
-	}
-
-	public static class ForwardPWChangeForm extends
-			AbstractForwardingController {
-		@Override
-		public String getAlias() {
-			return FORWARD_PWCHNGE_FORM;
-		}
-	}
-
-	public static class NoControllerFound extends AbstractController implements
-			IPluggable {
-
-		@Override
-		protected String needsPermission() {
-			return "";
-		}
-
-		@Override
-		protected Component runChecked() throws RiplaException {
-			// TODO Auto-generated method stub
-			return null;
-		}
-	}
+        @Override
+        protected Component runChecked() throws RiplaException {
+            return new DefaultVIFView(Activator.getMessages().getMessage("errmsg.error.contactAdmin"));
+        }
+    }
 
 }

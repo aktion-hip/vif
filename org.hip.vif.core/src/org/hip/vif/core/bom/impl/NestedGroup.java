@@ -1,5 +1,3 @@
-package org.hip.vif.core.bom.impl;
-
 /*
 	This package is part of the persistency layer of the application VIF.
 	Copyright (C) 2003, Benno Luthiger
@@ -17,32 +15,27 @@ package org.hip.vif.core.bom.impl;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 
-/**
- * 
- * 
- * @author Benno Luthiger
- * Created on Dec 31, 2003
- */
+/** @author Benno Luthiger Created on Dec 31, 2003 */
+@SuppressWarnings("serial")
 public class NestedGroup extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.NestedGroupHome";
-	public final static String HOME2_CLASS_NAME = "org.hip.vif.core.bom.impl.NestedGroupHome2";
-	
-	/**
-	 * NestedGroup constructor.
-	 */
-	public NestedGroup() {
-		super();
-	}
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.NestedGroupHome";
+    public final static String HOME2_CLASS_NAME = "org.hip.vif.core.bom.impl.NestedGroupHome2";
+
+    /** NestedGroup constructor. */
+    public NestedGroup() {
+        super();
+    }
+
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 }

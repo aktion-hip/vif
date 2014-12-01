@@ -27,6 +27,8 @@ import org.hip.vif.admin.admin.Constants;
 import org.hip.vif.admin.admin.tasks.RefreshIndexTask;
 import org.ripla.interfaces.IMessages;
 import org.ripla.web.util.RiplaViewHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -40,81 +42,78 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.VerticalLayout;
 
-/**
- * @author Luthiger Created: 30.10.2011
- */
+/** @author Luthiger Created: 30.10.2011 */
 @SuppressWarnings("serial")
 public class ReindexView extends AbstractAdminView {
-	private static final String FORMAT_LABEL = "<div class=\"vif-check-label\">%s</div>"; //$NON-NLS-1$
-	private final Collection<CheckBox> checkBoxes = new Vector<CheckBox>();
-	private final Button reindex;
+    private static final Logger LOG = LoggerFactory.getLogger(ReindexView.class);
 
-	/**
-	 * Constructor
-	 * 
-	 * @param inTask
-	 *            {@link RefreshIndexTask}
-	 */
-	public ReindexView(final RefreshIndexTask inTask) {
-		final IMessages lMessages = Activator.getMessages();
-		final VerticalLayout lLayout = initLayout(lMessages,
-				"admin.reindex.title.page"); //$NON-NLS-1$
+    private static final String FORMAT_LABEL = "<div class=\"vif-check-label\">%s</div>"; //$NON-NLS-1$
+    private final Collection<CheckBox> checkBoxes = new Vector<CheckBox>();
+    private final Button reindex;
 
-		final CheckBox lContentIndex = createCheckbox(
-				lMessages.getMessage("admin.reindex.check.content"), Constants.INDEX_CONTENT); //$NON-NLS-1$
-		lContentIndex.focus();
-		lLayout.addComponent(lContentIndex);
-		lLayout.addComponent(new Label(
-				String.format(FORMAT_LABEL,
-						lMessages.getMessage("admin.reindex.label.content")), ContentMode.HTML)); //$NON-NLS-1$
-		final CheckBox lPersonIndex = createCheckbox(
-				lMessages.getMessage("admin.reindex.check.person"), Constants.INDEX_MEMBER); //$NON-NLS-1$
-		lLayout.addComponent(lPersonIndex);
-		lLayout.addComponent(new Label(
-				String.format(FORMAT_LABEL,
-						lMessages.getMessage("admin.reindex.label.person")), ContentMode.HTML)); //$NON-NLS-1$
+    /** Constructor
+     * 
+     * @param inTask {@link RefreshIndexTask} */
+    public ReindexView(final RefreshIndexTask inTask) {
+        final IMessages lMessages = Activator.getMessages();
+        final VerticalLayout lLayout = initLayout(lMessages, "admin.reindex.title.page"); //$NON-NLS-1$
 
-		lLayout.addComponent(RiplaViewHelper.createSpacer());
-		reindex = new Button(lMessages.getMessage("admin.reindex.button.start")); //$NON-NLS-1$
-		reindex.setClickShortcut(KeyCode.ENTER);
-		reindex.setEnabled(false);
-		reindex.addClickListener(new Button.ClickListener() {
-			@Override
-			public void buttonClick(final ClickEvent inEvent) {
-				try {
-					final String lFeedback = inTask.reindex(checkBoxes);
-					Notification.show(lFeedback, Type.TRAY_NOTIFICATION);
-				}
-				catch (final Exception exc) {
-					Notification.show(
-							lMessages.getMessage("errmsg.reindex"), Type.WARNING_MESSAGE); //$NON-NLS-1$
-				}
-			}
-		});
+        final CheckBox lContentIndex = createCheckbox(
+                lMessages.getMessage("admin.reindex.check.content"), Constants.INDEX_CONTENT); //$NON-NLS-1$
+        lContentIndex.focus();
+        lLayout.addComponent(lContentIndex);
+        lLayout.addComponent(new Label(
+                String.format(FORMAT_LABEL,
+                        lMessages.getMessage("admin.reindex.label.content")), ContentMode.HTML)); //$NON-NLS-1$
+        final CheckBox lPersonIndex = createCheckbox(
+                lMessages.getMessage("admin.reindex.check.person"), Constants.INDEX_MEMBER); //$NON-NLS-1$
+        lLayout.addComponent(lPersonIndex);
+        lLayout.addComponent(new Label(
+                String.format(FORMAT_LABEL,
+                        lMessages.getMessage("admin.reindex.label.person")), ContentMode.HTML)); //$NON-NLS-1$
 
-		lLayout.addComponent(reindex);
-	}
+        lLayout.addComponent(RiplaViewHelper.createSpacer());
+        reindex = new Button(lMessages.getMessage("admin.reindex.button.start")); //$NON-NLS-1$
+        reindex.setClickShortcut(KeyCode.ENTER);
+        reindex.setEnabled(false);
+        reindex.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(final ClickEvent inEvent) {
+                try {
+                    final String lFeedback = inTask.reindex(checkBoxes);
+                    Notification.show(lFeedback, Type.TRAY_NOTIFICATION);
+                }
+                catch (final Exception exc) {
+                    LOG.error("Error encountered during search index refresh!", exc);
+                    Notification.show(
+                            lMessages.getMessage("errmsg.reindex"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+                }
+            }
+        });
 
-	private CheckBox createCheckbox(final String inLabel, final String inData) {
-		final CheckBox outCheckBox = new CheckBox(inLabel);
-		outCheckBox.setStyleName("vif-check"); //$NON-NLS-1$
-		outCheckBox.setData(inData);
-		outCheckBox.setImmediate(true);
-		outCheckBox.addValueChangeListener(new Property.ValueChangeListener() {
-			@Override
-			public void valueChange(final ValueChangeEvent inEvent) {
-				for (final CheckBox lCheckBox : checkBoxes) {
-					final Boolean lValue = lCheckBox.getValue();
-					if (lValue != null && lValue.booleanValue()) {
-						reindex.setEnabled(true);
-						return;
-					}
-				}
-				reindex.setEnabled(false);
-			}
-		});
-		checkBoxes.add(outCheckBox);
-		return outCheckBox;
-	}
+        lLayout.addComponent(reindex);
+    }
+
+    private CheckBox createCheckbox(final String inLabel, final String inData) {
+        final CheckBox outCheckBox = new CheckBox(inLabel);
+        outCheckBox.setStyleName("vif-check"); //$NON-NLS-1$
+        outCheckBox.setData(inData);
+        outCheckBox.setImmediate(true);
+        outCheckBox.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(final ValueChangeEvent inEvent) {
+                for (final CheckBox lCheckBox : checkBoxes) {
+                    final Boolean lValue = lCheckBox.getValue();
+                    if (lValue != null && lValue.booleanValue()) {
+                        reindex.setEnabled(true);
+                        return;
+                    }
+                }
+                reindex.setEnabled(false);
+            }
+        });
+        checkBoxes.add(outCheckBox);
+        return outCheckBox;
+    }
 
 }

@@ -37,6 +37,7 @@ import org.hip.vif.core.bom.CompletionHistoryHome;
 import org.hip.vif.core.bom.CompletionHome;
 import org.hip.vif.core.bom.DownloadTextHome;
 import org.hip.vif.core.bom.GroupAdminHome;
+import org.hip.vif.core.bom.GroupHome;
 import org.hip.vif.core.bom.JoinParticipantToMemberHome;
 import org.hip.vif.core.bom.LinkMemberRoleHome;
 import org.hip.vif.core.bom.LinkPermissionRole;
@@ -54,6 +55,7 @@ import org.hip.vif.core.bom.SubscriptionHome;
 import org.hip.vif.core.bom.Text;
 import org.hip.vif.core.bom.TextAuthorReviewerHome;
 import org.hip.vif.core.bom.TextHome;
+import org.hip.vif.core.bom.impl.GroupImpl;
 import org.hip.vif.core.bom.impl.JoinAuthorReviewerToCompletionHome;
 import org.hip.vif.core.bom.impl.JoinAuthorReviewerToQuestionHome;
 import org.hip.vif.core.bom.impl.JoinAuthorReviewerToTextHome;
@@ -70,6 +72,7 @@ import org.hip.vif.core.bom.impl.Test2DomainObjectHomeImpl;
 import org.hip.vif.core.bom.impl.TextQuestionHome;
 import org.hip.vif.core.bom.impl.WorkflowAwareContribution;
 import org.hip.vif.core.exc.BOMChangeValueException;
+import org.hip.vif.core.exc.ExternIDNotUniqueException;
 import org.hip.vif.core.util.StatementsFileParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +84,7 @@ import org.xml.sax.SAXException;
  * @author: Benno Luthiger */
 public class DataHouseKeeper {
     private static final Logger LOG = LoggerFactory.getLogger(DataHouseKeeper.class);
-    private static final int SLEEP_PERIOD = 50; // milliseconds 50 200
+    private static final int SLEEP_PERIOD = 5; // milliseconds 50 200
     private static final String EMBEDDED_DERBY = "org.apache.derby.jdbc.EmbeddedDriver/Derby (embedded)/10.5.1.1";
 
     private static DataHouseKeeper singleton = new DataHouseKeeper();
@@ -101,6 +104,7 @@ public class DataHouseKeeper {
 
     private final static String MEMBER_USER_ID = "TestUsr-DHK";
     private final static String DFT_NAME = "NameT";
+    private final static String GROUP_ID = "TestGroup";
     public static final Long DFT_GROUP_ID = new Long(23);
 
     private final static String SIMPLE_HOME_NAME = "org.hip.vif.bom.impl.test.Test2DomainObjectHomeImpl";
@@ -113,7 +117,7 @@ public class DataHouseKeeper {
     private boolean isEmbeddedDerby = false;
 
     /** Constructor for DataHouseKeeper.
-     * 
+     *
      * @throws IOException */
     private DataHouseKeeper() {
         initMySQL();
@@ -189,6 +193,10 @@ public class DataHouseKeeper {
 
     public MemberHome getMemberHome() throws Exception {
         return (MemberHome) VSys.homeManager.getHome(MemberImpl.HOME_CLASS_NAME);
+    }
+
+    public GroupHome getGroupHome() {
+        return (GroupHome) VSys.homeManager.getHome(GroupImpl.HOME_CLASS_NAME);
     }
 
     public LinkMemberRoleHome getLinkMemberRoleHome() {
@@ -453,7 +461,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a member entry
-     * 
+     *
      * @param inNr String
      * @return String member ID
      * @throws BOMChangeValueException */
@@ -462,7 +470,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a member entry with the specified user id and mail address
-     * 
+     *
      * @param inNr User id
      * @param inMail Mail address
      * @return String The ID of the new member
@@ -472,7 +480,7 @@ public class DataHouseKeeper {
             final Member lMember = (Member) getMemberHome().create();
             final Long outMemberID = lMember.ucNew(MEMBER_USER_ID + inNr, "NameT" + inNr, "VornameT" + inNr,
                     "StrasseT", "PLZ-T", "StadtT", "", "", inMail, "1", "de", "123", new String[] {
-                            ApplicationConstants.ROLE_ID_SU, ApplicationConstants.ROLE_ID_GROUP_ADMIN });
+                    ApplicationConstants.ROLE_ID_SU, ApplicationConstants.ROLE_ID_GROUP_ADMIN });
             return outMemberID.toString();
         } catch (final VException exc) {
             throw new BOMChangeValueException(exc.getMessage());
@@ -480,7 +488,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a member and returns his id
-     * 
+     *
      * @return java.lang.String
      * @throws BOMChangeValueException */
     public String createMember() throws Exception {
@@ -488,7 +496,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates two members and returns their ids
-     * 
+     *
      * @return java.lang.String[]
      * @throws BOMChangeValueException */
     public String[] create2Members() throws Exception {
@@ -499,7 +507,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates three members and returns their ids
-     * 
+     *
      * @return java.lang.String[]
      * @throws BOMChangeValueException */
     public String[] create3Members() throws Exception {
@@ -511,14 +519,14 @@ public class DataHouseKeeper {
     }
 
     /** Creates a member entry and two associated role entries.
-     * 
+     *
      * @return java.math.Long ID of created member entry */
     public Long createMember2Roles() throws Exception {
         return createMember2Roles(DFT_NAME);
     }
 
     /** Creates a member entry with the specified member name and two associated role entries.
-     * 
+     *
      * @return Long ID of created member entry */
     public Long createMember2Roles(final String inName) throws Exception {
         return createMemberRoles(inName, new String[] { ApplicationConstants.ROLE_ID_SU,
@@ -526,7 +534,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a member entry with the specified member name and the specified role entries.
-     * 
+     *
      * @param inName String
      * @param inRoles String[]
      * @return Long ID of created member entry
@@ -536,7 +544,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a member entry with the specified user id and member name and the specified role entries.
-     * 
+     *
      * @param inUserID String
      * @param inName String
      * @param inRoles String[]
@@ -553,7 +561,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a member entry with the specified member name and one associated role.
-     * 
+     *
      * @return Long ID of created member entry */
     public Long createMember1Role(final String inUserID, final String inName) throws Exception {
         try {
@@ -568,6 +576,47 @@ public class DataHouseKeeper {
         } catch (final VException exc) {
             throw new BOMChangeValueException(exc.getMessage());
         }
+    }
+
+    private Long createGroup(final String inNr) throws VException {
+        try {
+            return getGroupHome().createNew(GROUP_ID + inNr, "Group Nr. " + inNr, "1", "3", "10", false);
+        } catch (ExternIDNotUniqueException | SQLException | VException exc) {
+            throw new BOMChangeValueException(exc.getMessage());
+        }
+    }
+
+    /** Creates one group and returns its id
+     *
+     * @return java.lang.String
+     * @throws BOMChangeValueException */
+    public Long createGroup() throws VException {
+        return createGroup("1");
+    }
+
+    /** Creates two groups and returns their ids
+     *
+     * @return java.lang.String[]
+     * @throws BOMChangeValueException */
+    public Long[] create2Groups() throws VException {
+        final Long[] outIDs = new Long[2];
+        outIDs[0] = createGroup("1");
+        outIDs[1] = createGroup("2");
+        return outIDs;
+    }
+
+    /** Creates five groups and returns their ids
+     *
+     * @return java.lang.String[]
+     * @throws BOMChangeValueException */
+    public Long[] create5Groups() throws VException {
+        final Long[] outIDs = new Long[5];
+        outIDs[0] = createGroup("1");
+        outIDs[1] = createGroup("2");
+        outIDs[2] = createGroup("3");
+        outIDs[3] = createGroup("4");
+        outIDs[4] = createGroup("5");
+        return outIDs;
     }
 
     public String getExpectedName() {
@@ -637,7 +686,7 @@ public class DataHouseKeeper {
 
     /** Creates two members (M1, M2) and two permissions (P1, P2). M1 has SU-Role, M2 has Group-Admin-Role SU has both
      * permissions associated, Group-Admin only P1
-     * 
+     *
      * @return Long[] IDs of created members */
     public Long[] create2MembersAndRoleAndPermissions() throws Exception {
         final String lUserID1 = "authorization1";
@@ -670,7 +719,7 @@ public class DataHouseKeeper {
     }
 
     /** Create a new entry to design a group admin for the specified group.
-     * 
+     *
      * @param inGroupID Long
      * @param inMemberID Long */
     public void createGroupAdmin(final Long inGroupID, final Long inMemberID) {
@@ -685,7 +734,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a Question and returns its ID.
-     * 
+     *
      * @param inQuestion
      * @param inDecimal
      * @return Long the Question's ID
@@ -695,7 +744,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a Question with specified group and returns its ID.
-     * 
+     *
      * @param inQuestion
      * @param inDecimal
      * @param inGroupID
@@ -708,7 +757,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a Question with specified state and returns its ID.
-     * 
+     *
      * @param inQuestion
      * @param inDecimal
      * @param inGroupID
@@ -736,7 +785,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a text entry.
-     * 
+     *
      * @param inTitle
      * @param inAuthor
      * @return String the created entry's ID
@@ -767,7 +816,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a subscription.
-     * 
+     *
      * @param inQuestionID
      * @param inMemberID
      * @param inLocal
@@ -783,7 +832,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a Completion and returns its ID.
-     * 
+     *
      * @param inCompletion
      * @param inQuestionID
      * @return Long ID
@@ -794,7 +843,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a Completion with specified state and returns its ID.
-     * 
+     *
      * @param inCompletion
      * @param inQuestionID
      * @param inState int
@@ -811,7 +860,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates an author or reviewer entry in the QuestionAuthorReviewer table.
-     * 
+     *
      * @param inQuestionID Long
      * @param inMemberID Integer
      * @param isAuthor boolean */
@@ -832,7 +881,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates an author or reviewer entry in the CompletionAuthorReviewer table.
-     * 
+     *
      * @param inCompletionID
      * @param inMemberID
      * @param isAuthor
@@ -854,7 +903,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates an author or reviewer entry in the TextAuthorReviewer table.
-     * 
+     *
      * @param inTextID
      * @param inVersion
      * @param inMemberID
@@ -882,7 +931,7 @@ public class DataHouseKeeper {
     }
 
     /** Returns the home for the test table.
-     * 
+     *
      * @return org.hip.vif.bom.impl.test.Test2DomainObjectHomeImpl */
     public Test2DomainObjectHomeImpl getSimpleHome() {
         if (simpleHome == null)
@@ -892,7 +941,7 @@ public class DataHouseKeeper {
     }
 
     /** Creates a new entry with the specified name in the test table.
-     * 
+     *
      * @param inName java.lang.String */
     public void createTestEntry(final String inName) throws SQLException {
         try {
@@ -936,7 +985,7 @@ public class DataHouseKeeper {
     }
 
     /** Returns the result of a query with the specified SQL statement.
-     * 
+     *
      * @param inSQL java.lang.String
      * @return java.sql.ResultSet */
     public ResultSet executeQuery(final String inSQL) {
@@ -992,7 +1041,7 @@ public class DataHouseKeeper {
 
     /** Checks the <code>QueryResult</code> against the specified array. Both the elements and the lenght of the result
      * set are evaluated.
-     * 
+     *
      * @param inExpected Long[] containing the expected values
      * @param inResult QueryResult the result set to check
      * @param inColumn String the column to evaluate within the result set

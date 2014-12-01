@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.forum.usersettings.data;
 
@@ -26,38 +26,33 @@ import org.hip.kernel.exc.VException;
 
 import com.vaadin.data.util.BeanItemContainer;
 
-/**
- * Container for bookmark bean instances.
- * 
- * @author Luthiger
- * Created: 20.12.2011
- */
+/** Container for bookmark bean instances.
+ *
+ * @author Luthiger Created: 20.12.2011 */
 @SuppressWarnings("serial")
 public class BookmarkContainer extends BeanItemContainer<BookmarkBean> {
-	public static final String ITEM_CHK = "chk"; //$NON-NLS-1$
-	public static final String ITEM_LOCAL = "local"; //$NON-NLS-1$
-	public static final String ITEM_CHECKED = "checked"; //$NON-NLS-1$
-	public static final String[] NATURAL_COL_ORDER = new String[] {ITEM_CHK, "text"}; //$NON-NLS-1$
-	public static final String[] COL_HEADERS = new String[] {"", "ui.usersettings.data.column.bookmark"}; //$NON-NLS-1$ //$NON-NLS-2$
+    public static final String ITEM_CHK = "chk"; //$NON-NLS-1$
+    public static final String ITEM_LOCAL = "local"; //$NON-NLS-1$
+    public static final String ITEM_CHECKED = "checked"; //$NON-NLS-1$
+    public static final Object[] NATURAL_COL_ORDER = new Object[] { ITEM_CHK, "text" }; //$NON-NLS-1$
+    public static final String[] COL_HEADERS = new String[] { "", "ui.usersettings.data.column.bookmark" }; //$NON-NLS-1$ //$NON-NLS-2$
 
-	private BookmarkContainer() {
-		super(BookmarkBean.class);
-	}
-	
-	/**
-	 * Factory method: Creates and returns an instance of <code>BookmarkContainer</code>.
-	 * 
-	 * @param inData {@link QueryResult}
-	 * @return {@link BookmarkContainer}
-	 * @throws VException
-	 * @throws SQLException
-	 */
-	public static BookmarkContainer createData(QueryResult inData) throws VException, SQLException {
-		BookmarkContainer outData = new BookmarkContainer();
-		while (inData.hasMoreElements()) {
-			outData.addItem(BookmarkBean.createItem(inData.nextAsDomainObject()));
-		}
-		return outData;
-	}
+    private BookmarkContainer() {
+        super(BookmarkBean.class);
+    }
+
+    /** Factory method: Creates and returns an instance of <code>BookmarkContainer</code>.
+     * 
+     * @param inData {@link QueryResult}
+     * @return {@link BookmarkContainer}
+     * @throws VException
+     * @throws SQLException */
+    public static BookmarkContainer createData(final QueryResult inData) throws VException, SQLException {
+        final BookmarkContainer outData = new BookmarkContainer();
+        while (inData.hasMoreElements()) {
+            outData.addItem(BookmarkBean.createItem(inData.nextAsDomainObject()));
+        }
+        return outData;
+    }
 
 }

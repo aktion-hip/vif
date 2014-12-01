@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the group administration of the application VIF.
- Copyright (C) 2008, Benno Luthiger
+ Copyright (C) 2008-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -18,13 +18,12 @@
  */
 package org.hip.vif.admin.groupadmin;
 
-/** Partlet constants.
+/** Constants.
  *
- * @author Luthiger Created: 01.01.2008 */
-public class Constants {
+ * @author Luthiger */
+public final class Constants {
     public static final String PERMISSION_EDIT_BIBLIOGRAPHY = "editBibliographyAdmin"; //$NON-NLS-1$
 
-    // TODO: uncomment permissions
     public static final String PERMISSION_GROUPS_ADMIN = "adminGroups"; //$NON-NLS-1$
     public static final String PERMISSION_QUESTION_NEW = "newQuestionAdmin"; //$NON-NLS-1$
     public static final String PERMISSION_COMPLETION_NEW = "newCompletionAdmin"; //$NON-NLS-1$
@@ -39,4 +38,8 @@ public class Constants {
     public static final String MENU_SET_ID_BACK = "back"; //$NON-NLS-1$
 
     public static final String KEY_PARAMETER_DELETE_TEXT = "deleteTextHelper"; //$NON-NLS-1$
+
+    private Constants() {
+        // prevent instantiation
+    }
 }

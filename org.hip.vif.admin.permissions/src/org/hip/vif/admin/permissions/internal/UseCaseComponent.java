@@ -45,6 +45,7 @@ public class UseCaseComponent implements IPermissionRecords, IUseCase {
         final RiplaMenuComposite outMenu = new RiplaMenuComposite(lMessages.getMessage("component.menu.title"), 40); //$NON-NLS-1$
         outMenu.setControllerName(UseCaseHelper.createFullyQualifiedControllerName(PermissionsEditTask.class));
         outMenu.setPermission(Constants.PERMISSION_EDIT);
+        outMenu.setTag("vif.admin.menu");
         return outMenu;
     }
 
@@ -68,7 +69,7 @@ public class UseCaseComponent implements IPermissionRecords, IUseCase {
         final IPermissionRecord[] outRecords = new IPermissionRecord[1];
         outRecords[0] = new PermissionRecord(Constants.PERMISSION_LOOKUP_MEMBERS, "Forum: Lookup members.", //$NON-NLS-1$
                 new int[] { RolesConstants.ADMINISTRATOR, RolesConstants.GROUP_ADMINISTRATOR,
-                        RolesConstants.PARTICIPANT, RolesConstants.MEMBER, RolesConstants.EXCLUDED_PARTICIPANT });
+                RolesConstants.PARTICIPANT, RolesConstants.MEMBER, RolesConstants.EXCLUDED_PARTICIPANT });
         return outRecords;
     }
 

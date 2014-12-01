@@ -18,7 +18,9 @@
  */
 package org.hip.vif.web.bom;
 
-/** @author lbenno */
+/** Interface for group home instances using message and Vaadin functionality.
+ *
+ * @author lbenno */
 public interface GroupHome extends org.hip.vif.core.bom.GroupHome {
 
 }

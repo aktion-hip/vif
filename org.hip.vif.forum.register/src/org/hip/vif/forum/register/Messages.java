@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the application VIF.
- Copyright (C) 2011, Benno Luthiger
+ Copyright (C) 2011-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -18,25 +18,22 @@
  */
 package org.hip.vif.forum.register;
 
-import org.hip.vif.core.util.AbstractMessages;
+import org.ripla.web.util.AbstractWebMessages;
 
-/**
- * Bundle specific messages.
- * 
- * @author Luthiger
- * Created: 04.06.2011
- */
-public class Messages extends AbstractMessages {
-	private static final String BASE_NAME = "messages"; //$NON-NLS-1$
+/** Bundle specific messages.
+ *
+ * @author Luthiger Created: 04.06.2011 */
+public class Messages extends AbstractWebMessages {
+    private static final String BASE_NAME = "messages"; //$NON-NLS-1$
 
-	@Override
-	protected ClassLoader getLoader() {
-		return getClass().getClassLoader();
-	}
+    @Override
+    protected ClassLoader getLoader() {
+        return getClass().getClassLoader();
+    }
 
-	@Override
-	protected String getBaseName() {
-		return BASE_NAME;
-	}
+    @Override
+    protected String getBaseName() {
+        return BASE_NAME;
+    }
 
 }

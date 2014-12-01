@@ -19,8 +19,8 @@
 
 package org.hip.vif.admin.member.ui;
 
-import org.hip.vif.admin.member.data.RoleContainer;
-import org.hip.vif.admin.member.data.RoleWrapper;
+import org.hip.vif.web.member.RoleContainer;
+import org.hip.vif.web.member.RoleWrapper;
 import org.hip.vif.web.util.VIFViewHelper;
 import org.ripla.interfaces.IMessages;
 

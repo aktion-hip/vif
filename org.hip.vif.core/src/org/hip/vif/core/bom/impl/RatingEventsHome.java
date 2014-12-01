@@ -23,69 +23,63 @@ import org.hip.kernel.bom.impl.DomainObjectHomeImpl;
 import org.hip.kernel.bom.impl.KeyObjectImpl;
 import org.hip.kernel.exc.VException;
 
-/**
- * Home for rating events models.
+/** Home for rating events models.
  *
- * @author Luthiger
- * Created: 29.08.2009
- */
+ * @author Luthiger Created: 29.08.2009 */
+@SuppressWarnings("serial")
 public class RatingEventsHome extends DomainObjectHomeImpl {
-	public final static String KEY_ID = "RatingEventsID";
-	public final static String KEY_COMPLETED = "Completed";
-	public final static String KEY_CREATION = "Creation";
-	
-	private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingEvents";
+    public final static String KEY_ID = "RatingEventsID";
+    public final static String KEY_COMPLETED = "Completed";
+    public final static String KEY_CREATION = "Creation";
 
-	private final static String XML_OBJECT_DEF = 
-		"<?xml version='1.0' encoding='ISO-8859-1'?>	" +
-		"<objectDef objectName='RatingEvents' parent='org.hip.kernel.bom.DomainObject' version='1.0'>	" +
-		"	<keyDefs>	" +
-		"		<keyDef>	" +
-		"			<keyItemDef seq='0' keyPropertyName='" + KEY_ID + "'/>	" +
-		"		</keyDef>	" +
-		"	</keyDefs>	" +
-		"	<propertyDefs>	" +
-		"		<propertyDef propertyName='" + KEY_ID + "' valueType='Long' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblRatingEvents' columnName='RatingEventsID'/>	" +
-		"		</propertyDef>	" +
-		"		<propertyDef propertyName='" + KEY_COMPLETED + "' valueType='Number' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblRatingEvents' columnName='bCompleted'/>	" +
-		"		</propertyDef>	" +
-		"		<propertyDef propertyName='" + KEY_CREATION + "' valueType='Timestamp' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblRatingEvents' columnName='dtCreation'/>	" +
-		"		</propertyDef>	" +
-		"	</propertyDefs>	" +
-		"</objectDef>";
+    private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingEvents";
 
-	/**
-	 * Returns the name of the objects which this home can create.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getObjectClassName() {
-		return OBJECT_CLASS_NAME;
-	}
+    private final static String XML_OBJECT_DEF =
+            "<?xml version='1.0' encoding='ISO-8859-1'?>	" +
+                    "<objectDef objectName='RatingEvents' parent='org.hip.kernel.bom.DomainObject' version='1.0'>	" +
+                    "	<keyDefs>	" +
+                    "		<keyDef>	" +
+                    "			<keyItemDef seq='0' keyPropertyName='" + KEY_ID + "'/>	" +
+                    "		</keyDef>	" +
+                    "	</keyDefs>	" +
+                    "	<propertyDefs>	" +
+                    "		<propertyDef propertyName='" + KEY_ID + "' valueType='Long' propertyType='simple'>	" +
+                    "			<mappingDef tableName='tblRatingEvents' columnName='RatingEventsID'/>	" +
+                    "		</propertyDef>	" +
+                    "		<propertyDef propertyName='" + KEY_COMPLETED + "' valueType='Number' propertyType='simple'>	" +
+                    "			<mappingDef tableName='tblRatingEvents' columnName='bCompleted'/>	" +
+                    "		</propertyDef>	" +
+                    "		<propertyDef propertyName='" + KEY_CREATION + "' valueType='Timestamp' propertyType='simple'>	" +
+                    "			<mappingDef tableName='tblRatingEvents' columnName='dtCreation'/>	" +
+                    "		</propertyDef>	" +
+                    "	</propertyDefs>	" +
+                    "</objectDef>";
 
-	/**
-	 * Returns the object definition string of the class managed by this home.
-	 *
-	 * @return java.lang.String
-	 */
-	protected String getObjectDefString() {
-		return XML_OBJECT_DEF;
-	}
-	
-	/**
-	 * Returns the model with the specified ID.
-	 * 
-	 * @param inEventsID Long
-	 * @return RatingEvents
-	 * @throws VException
-	 */
-	public RatingEvents getRatingEvents(Long inEventsID) throws VException {
-		KeyObject lKey = new KeyObjectImpl();
-		lKey.setValue(RatingEventsHome.KEY_ID, inEventsID);
-		return (RatingEvents) findByKey(lKey);
-	}
+    /** Returns the name of the objects which this home can create.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getObjectClassName() {
+        return OBJECT_CLASS_NAME;
+    }
+
+    /** Returns the object definition string of the class managed by this home.
+     *
+     * @return java.lang.String */
+    @Override
+    protected String getObjectDefString() {
+        return XML_OBJECT_DEF;
+    }
+
+    /** Returns the model with the specified ID.
+     * 
+     * @param inEventsID Long
+     * @return RatingEvents
+     * @throws VException */
+    public RatingEvents getRatingEvents(final Long inEventsID) throws VException {
+        final KeyObject lKey = new KeyObjectImpl();
+        lKey.setValue(RatingEventsHome.KEY_ID, inEventsID);
+        return (RatingEvents) findByKey(lKey);
+    }
 
 }

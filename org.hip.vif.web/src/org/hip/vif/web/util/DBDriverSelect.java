@@ -19,6 +19,9 @@
 
 package org.hip.vif.web.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hip.kernel.dbaccess.DataSourceRegistry;
 import org.hip.kernel.dbaccess.DataSourceRegistry.DBSourceParameter;
 import org.ripla.web.util.GenericSelect.IProcessor;
@@ -67,11 +70,41 @@ public class DBDriverSelect {
         return outSelect;
     }
 
+    @SuppressWarnings("serial")
+    public static ComboBox getDBDriverSelection(final int inWidth,
+            final boolean inAllowNull, final IProcessor inProcessor) {
+        final ComboBox outSelect = new ComboBox(null, getDbDrivers());
+        outSelect.setStyleName("vif-select"); //$NON-NLS-1$
+        outSelect.setWidth(inWidth, Unit.PIXELS);
+        outSelect.setNullSelectionAllowed(inAllowNull);
+        outSelect.setImmediate(true);
+        outSelect.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(final ValueChangeEvent inEvent) {
+                final String lItemID = ((DBDriverBean) inEvent.getProperty()
+                        .getValue()).getID();
+                if (inProcessor != null) {
+                    inProcessor.process(lItemID);
+                }
+            }
+        });
+        return outSelect;
+    }
+
+    private static List<DBDriverBean> getDbDrivers() {
+        final List<DBDriverBean> out = new ArrayList<DBDriverBean>();
+        for (final DBSourceParameter lDriverParameter : DataSourceRegistry.INSTANCE
+                .getDBSourceParameters()) {
+            out.add(new DBDriverBean(lDriverParameter));
+        }
+        return out;
+    }
+
     // ---
 
     @SuppressWarnings("serial")
     private static class DBDriverContainer extends
-            BeanItemContainer<DBDriverBean> {
+    BeanItemContainer<DBDriverBean> {
         private DBDriverBean activeDriver;
 
         private DBDriverContainer() {
@@ -102,7 +135,7 @@ public class DBDriverSelect {
 
     }
 
-    private static class DBDriverBean {
+    public static class DBDriverBean {
         private final DBSourceParameter driverParameter;
 
         DBDriverBean(final DBSourceParameter inDriverParameter) {
@@ -117,8 +150,52 @@ public class DBDriverSelect {
         public String toString() {
             return driverParameter.getFactoryName();
         }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result
+                    + ((driverParameter.getFactoryID() == null) ? 0 : driverParameter.getFactoryID().hashCode());
+            result = prime * result
+                    + ((driverParameter.getFactoryName() == null) ? 0 : driverParameter.getFactoryName().hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            final DBDriverBean other = (DBDriverBean) obj;
+            if (driverParameter.getFactoryID() == null) {
+                if (other.driverParameter.getFactoryID() != null)
+                    return false;
+            } else if (!driverParameter.getFactoryID().equals(other.driverParameter.getFactoryID()))
+                return false;
+            if (driverParameter.getFactoryName() == null) {
+                if (other.driverParameter.getFactoryName() != null)
+                    return false;
+            } else if (!driverParameter.getFactoryName().equals(other.driverParameter.getFactoryName()))
+                return false;
+            return true;
+        }
+
     }
-    //
+
+    public static DBDriverBean createDriverBean(final String inDriverId) {
+        for (final DBSourceParameter lDriverParameter : DataSourceRegistry.INSTANCE
+                .getDBSourceParameters()) {
+            if (inDriverId.equals(lDriverParameter.getFactoryID())) {
+                return new DBDriverBean(lDriverParameter);
+            }
+        }
+        return null;
+    }
+
     // /**
     // * Process the selection.
     // *

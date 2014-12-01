@@ -20,22 +20,20 @@ package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.workflow.WorkflowException;
 
-/**
- * Model object for Question entries for guest views.
+/** Model object for Question entries for guest views.
  *
- * @author Luthiger
- * Created: 15.10.2009
- */
+ * @author Luthiger Created: 15.10.2009 */
+@SuppressWarnings("serial")
 public class QuestionForGuests extends QuestionImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.QuestionForGuestsHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.QuestionForGuestsHome";
 
-	public QuestionForGuests() throws WorkflowException {
-		super();
-	}
+    public QuestionForGuests() throws WorkflowException {
+        super();
+    }
 
-	@Override
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
-	
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
+
 }

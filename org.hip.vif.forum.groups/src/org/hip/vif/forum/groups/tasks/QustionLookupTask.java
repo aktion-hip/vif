@@ -48,7 +48,8 @@ public class QustionLookupTask extends AbstractGroupsTask {
     @Override
     protected Component runChecked() throws RiplaException {
         try {
-            final Long lQuestionID = getQuestionID();
+
+            final Long lQuestionID = getModelIdFromParameter();
             final Question lQuestion = BOMHelper.getQuestionHome().getQuestion(lQuestionID);
             final CodeList lCodeList = CodeListHome.instance().getCodeList(QuestionState.class,
                     getAppLocale().getLanguage());

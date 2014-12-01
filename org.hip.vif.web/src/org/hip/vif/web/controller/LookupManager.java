@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 /** Singleton class to manage the lookup windows and tasks.
  *
- * @author Luthiger Created: 09.06.2011 */
+ * @author Luthiger */
 public enum LookupManager {
     INSTANCE;
 
@@ -39,7 +39,7 @@ public enum LookupManager {
     private final Map<LookupType, ILookupWindow> lookupMap = new HashMap<LinkButtonHelper.LookupType, ILookupWindow>();
 
     /** The service's binding method.
-     * 
+     *
      * @param inLookup {@link ILookupWindow} */
     public void setLookup(final ILookupWindow inLookup) {
         if (lookupMap.get(inLookup.getType()) == null) {
@@ -49,7 +49,7 @@ public enum LookupManager {
     }
 
     /** The service's unbinding method.
-     * 
+     *
      * @param inLookup {@link ILookupWindow} */
     public void unsetLookup(final ILookupWindow inLookup) {
         lookupMap.remove(inLookup.getType());
@@ -57,7 +57,7 @@ public enum LookupManager {
     }
 
     /** Returns the lookup window of the specified type.
-     * 
+     *
      * @param inType {@link LookupType}
      * @return {@link ILookupWindow} */
     public ILookupWindow getLookup(final LookupType inType) {

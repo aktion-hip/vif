@@ -2,6 +2,6 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.hip.vif.forum.search">
    <implementation class="org.hip.vif.forum.search.internal.UseCaseComponent"/>
    <service>
-      <provide interface="org.hip.vif.web.interfaces.IUseCaseForum"/>
+      <provide interface="org.ripla.web.services.IUseCase"/>
    </service>
 </scr:component>

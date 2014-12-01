@@ -26,34 +26,30 @@ import org.hip.kernel.exc.VException;
 import org.hip.vif.core.bom.Responsible;
 import org.hip.vif.core.bom.ResponsibleHome;
 
-/**
- * Abstract class providing basic functionality for all author/reviewer 
- * domain objects.
- * 
+/** Abstract class providing basic functionality for all author/reviewer domain objects.
+ *
  * Created on 15.08.2003
- * @author Luthiger
- */
+ * 
+ * @author Luthiger */
+@SuppressWarnings("serial")
 public abstract class AbstractResponsible extends DomainObjectImpl implements Responsible {
-	
-	/**
-	 * The member has refused to review the contributions,
-	 * therefore, set the entrie's flag to refused.
-	 * 
-	 * @throws VException
-	 * @throws SQLException
-	 */
-	public void setRefused() throws VException, SQLException {
-		set(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER_REFUSED.getValue());
-		update(true);
-	}
-	
-	/**
-	 * Returns the ID of the responsible member.
-	 * 
-	 * @return Long
-	 * @throws VException
-	 */
-	public Long getResponsibleID() throws VException {
-		return new Long(get(ResponsibleHome.KEY_MEMBER_ID).toString());
-	}
+
+    /** The member has refused to review the contributions, therefore, set the entrie's flag to refused.
+     * 
+     * @throws VException
+     * @throws SQLException */
+    @Override
+    public void setRefused() throws VException, SQLException {
+        set(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER_REFUSED.getValue());
+        update(true);
+    }
+
+    /** Returns the ID of the responsible member.
+     * 
+     * @return Long
+     * @throws VException */
+    @Override
+    public Long getResponsibleID() throws VException {
+        return new Long(get(ResponsibleHome.KEY_MEMBER_ID).toString());
+    }
 }

@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the application VIF.
- Copyright (C) 2005, Benno Luthiger
+ Copyright (C) 2005-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public
@@ -23,33 +23,30 @@ import java.io.IOException;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
 import org.hip.kernel.bom.QueryResult;
 
-/**
- * Implements full text searching of members using lucene.
- * 
- * @author Benno Luthiger
- * Created on 02.10.2005
- */
+/** Implements full text searching of members using lucene.
+ *
+ * @author Benno Luthiger Created on 02.10.2005 */
 public class VIFMemberSearcher extends AbstractVIFSearcher {
 
-	@Override
-	QueryResult getHitsQueryResult(Document[] inHits) {
-		return new MemberHitsResult(inHits);
-	}
+    @Override
+    QueryResult getHitsQueryResult(final Document[] inHits) {
+        return new MemberHitsResult(inHits);
+    }
 
-	@Override
-	protected Query parseQuery(String inQueryTerm) throws ParseException {
-		QueryParser lParser = new QueryParser(LUCENE_VERSION, IndexField.MEMBER_FULL_TEXT.fieldName, getAnalyzer());
-		return lParser.parse(inQueryTerm);
-	}
+    @Override
+    protected Query parseQuery(final String inQueryTerm) throws ParseException {
+        final QueryParser lParser = new QueryParser(IndexField.MEMBER_FULL_TEXT.fieldName, getAnalyzer());
+        return lParser.parse(inQueryTerm);
+    }
 
-	@Override
-	protected IndexReader getIndexReader() throws CorruptIndexException, IOException {
-		return VIFIndexing.INSTANCE.createMemberIndexReader();
-	}
-	
+    @Override
+    protected IndexReader getIndexReader() throws CorruptIndexException, IOException {
+        return VIFIndexing.INSTANCE.createMemberIndexReader();
+    }
+
 }

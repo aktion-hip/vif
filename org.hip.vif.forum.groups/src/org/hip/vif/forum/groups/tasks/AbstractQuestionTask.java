@@ -111,7 +111,7 @@ public abstract class AbstractQuestionTask extends AbstractWebController {
 
     private QueryResult getPublishedBibliography(final Long inQuestionID) throws VException,
             SQLException {
-        return BOMHelper.getJoinQuestionToTextHome().selectPublished(inQuestionID);
+        return VifBOMHelper.getJoinQuestionToTextHome().selectPublished(inQuestionID);
     }
 
     private QueryResult getAuthors(final String inQuestionID) throws VException, SQLException {

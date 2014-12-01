@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,122 +19,104 @@
 
 package org.hip.vif.skin.green;
 
-import org.hip.vif.web.layout.VIFFooter;
+import org.hip.vif.core.ApplicationConstants;
 import org.ripla.web.services.ISkin;
+import org.ripla.web.util.FooterHelper;
 
 import com.vaadin.server.Resource;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.server.ThemeResource;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 
-/**
- * Skin implementation.
- * 
- * @author Luthiger Created: 03.01.2012
- */
+/** Skin implementation.
+ *
+ * @author Luthiger Created: 03.01.2012 */
 public class Skin implements ISkin {
 
-	public String getWelcomeForum() {
-		return Activator.getMessages().getMessage(
-				"LoginViewInformation.welcome.forum");
-	}
+    public String getWelcomeForum() {
+        return Activator.getMessages().getMessage(
+                "LoginViewInformation.welcome.forum");
+    }
 
-	public String getWelcomeAdmin() {
-		return Activator.getMessages().getMessage(
-				"LoginViewInformation.welcome.admin");
-	}
+    public String getWelcomeAdmin() {
+        return Activator.getMessages().getMessage(
+                "LoginViewInformation.welcome.admin");
+    }
 
-	@Override
-	public boolean hasHeader() {
-		return true;
-	}
+    @Override
+    public boolean hasHeader() {
+        return true;
+    }
 
-	@Override
-	public Component getHeader(final String inAppName) {
-		final HorizontalLayout outLayout = new HorizontalLayout();
-		outLayout.setWidth("100%");
-		outLayout.setHeight(80, Unit.PIXELS);
-		outLayout.setStyleName("vif-green-head");
+    @Override
+    public Component getHeader(final String inAppName) {
+        final HorizontalLayout outLayout = new HorizontalLayout();
+        outLayout.setWidth("100%");
+        outLayout.setHeight(80, Unit.PIXELS);
+        outLayout.setStyleName("vif-green-head");
 
-		final Embedded lImage = new Embedded();
-		lImage.setSource(new ThemeResource("images/head.jpg"));
-		outLayout.addComponent(lImage);
-		outLayout.setComponentAlignment(lImage, Alignment.TOP_LEFT);
+        final Embedded lImage = new Embedded();
+        lImage.setSource(new ThemeResource("images/head.jpg"));
+        outLayout.addComponent(lImage);
+        outLayout.setComponentAlignment(lImage, Alignment.TOP_LEFT);
 
-		final Label lTitle = new Label("VIF - Virtual Discussion Forum");
-		lTitle.setStyleName("vif-head-title");
-		lTitle.setWidth(700, Unit.PIXELS);
-		outLayout.addComponent(lTitle);
+        final Label lTitle = new Label("VIF - Virtual Discussion Forum");
+        lTitle.setStyleName("vif-head-title");
+        lTitle.setWidth(700, Unit.PIXELS);
+        outLayout.addComponent(lTitle);
 
-		return outLayout;
-	}
+        return outLayout;
+    }
 
-	@Override
-	public boolean hasFooter() {
-		return true;
-	}
+    @Override
+    public boolean hasFooter() {
+        return true;
+    }
 
-	@Override
-	public Component getFooter() {
-		return VIFFooter.createFooter(VIFFooter.DFT_FOOTER_TEXT);
-	}
+    @Override
+    public Component getFooter() {
+        final FooterHelper out = FooterHelper
+                .createFooter(ApplicationConstants.FOOTER_TEXT);
+        out.setHeight(19);
+        out.setStyleName("vif-footer");
+        return out;
+    }
 
-	@Override
-	public boolean hasToolBar() {
-		return true;
-	}
+    @Override
+    public boolean hasToolBar() {
+        return true;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.ripla.web.services.ISkin#getToolbarSeparator()
-	 */
-	@Override
-	public Label getToolbarSeparator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Label getToolbarSeparator() {
+        final Label outSeparator = new Label("&bull;", ContentMode.HTML); //$NON-NLS-1$
+        outSeparator.setWidth(6, Unit.PIXELS);
+        return outSeparator;
+    }
 
-	@Override
-	public boolean hasMenuBar() {
-		return true;
-	}
+    @Override
+    public boolean hasMenuBar() {
+        return true;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.ripla.web.services.ISkin#getMenuBarMedium()
-	 */
-	@Override
-	public HorizontalLayout getMenuBarMedium() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public HorizontalLayout getMenuBarMedium() {
+        return null;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.ripla.web.services.ISkin#getMenuBar()
-	 */
-	@Override
-	public HorizontalLayout getMenuBar() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public HorizontalLayout getMenuBar() {
+        return null;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.ripla.web.services.ISkin#getSubMenuIcon()
-	 */
-	@Override
-	public Resource getSubMenuIcon() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Resource getSubMenuIcon() {
+        return null;
+    }
 
 }

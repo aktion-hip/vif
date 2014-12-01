@@ -4,7 +4,8 @@ Bundle-Name: Test Bundle for the Admin Administration Bundle
 Bundle-SymbolicName: org.hip.vif.admin.admin.test
 Bundle-Version: 1.1.0
 Bundle-Vendor: RelationWare
-Fragment-Host: org.hip.vif.admin.admin;bundle-version="1.1.0"
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Fragment-Host: org.hip.vif.admin.admin;bundle-version="1.2.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.hip.kernel.workflow,
- org.hip.vif.markup.serializer
+ org.hip.vif.markup.serializer,
+ org.hip.vif.web.bom;version="1.0.0"

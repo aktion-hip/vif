@@ -31,82 +31,104 @@ import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.QuestionHome;
 import org.hip.vif.core.bom.TextHome;
 
-/**
- * Home to retrieve all question entries linked to a given text/bibliography entry.
+/** Home to retrieve all question entries linked to a given text/bibliography entry.
  *
- * @author Luthiger
- * Created: 07.09.2010
- */
+ * @author Luthiger Created: 07.09.2010 */
+@SuppressWarnings("serial")
 public class JoinTextToQuestionHome extends JoinedDomainObjectHomeImpl {
-	private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinTextToQuestion";
-	
-	private final static String XML_OBJECT_DEF = 
-		"<?xml version='1.0' encoding='ISO-8859-1'?>	" +
-		"<joinedObjectDef objectName='JoinTextToQuestion' parent='org.hip.kernel.bom.ReadOnlyDomainObject' version='1.0'>	" +
-		"	<columnDefs>	" +
-		"		<columnDef columnName='" + TextQuestionHome.KEY_TEXTID + "' domainObject='org.hip.vif.core.bom.impl.TextQuestion'/>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_ID + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_QUESTION_DECIMAL + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_QUESTION + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_STATE + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_GROUP_ID + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"	</columnDefs>	" +
-		"	<joinDef joinType='EQUI_JOIN'>	" +
-		"		<objectDesc objectClassName='org.hip.vif.core.bom.impl.TextQuestion'/>	" +
-		"		<objectDesc objectClassName='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		<joinCondition>	" +
-		"			<columnDef columnName='" + TextQuestionHome.KEY_QUESTIONID + "' domainObject='org.hip.vif.core.bom.impl.TextQuestion'/>	" +
-		"		    <columnDef columnName='" + QuestionHome.KEY_ID + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		</joinCondition>	" +
-		"	</joinDef>	" +
-		"</joinedObjectDef>";
+    private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinTextToQuestion";
 
-	/**
-	 * Returns the name of the objects which this home can create.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getObjectClassName() {
-		return OBJECT_CLASS_NAME;
-	}
+    private final static String XML_OBJECT_DEF =
+            "<?xml version='1.0' encoding='ISO-8859-1'?>	"
+                    +
+                    "<joinedObjectDef objectName='JoinTextToQuestion' parent='org.hip.kernel.bom.ReadOnlyDomainObject' version='1.0'>	"
+                    +
+                    "	<columnDefs>	" +
+                    "		<columnDef columnName='"
+                    + TextQuestionHome.KEY_TEXTID
+                    + "' domainObject='org.hip.vif.core.bom.impl.TextQuestion'/>	"
+                    +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_ID
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_QUESTION_DECIMAL
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_QUESTION
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_STATE
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_GROUP_ID
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "	</columnDefs>	"
+                    +
+                    "	<joinDef joinType='EQUI_JOIN'>	"
+                    +
+                    "		<objectDesc objectClassName='org.hip.vif.core.bom.impl.TextQuestion'/>	"
+                    +
+                    "		<objectDesc objectClassName='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "		<joinCondition>	"
+                    +
+                    "			<columnDef columnName='"
+                    + TextQuestionHome.KEY_QUESTIONID
+                    + "' domainObject='org.hip.vif.core.bom.impl.TextQuestion'/>	"
+                    +
+                    "		    <columnDef columnName='"
+                    + QuestionHome.KEY_ID
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
+                    "		</joinCondition>	" +
+                    "	</joinDef>	" +
+                    "</joinedObjectDef>";
 
-	/**
-	 * Returns the object definition string of the class managed by this home.
-	 *
-	 * @return java.lang.String
-	 */
-	protected String getObjectDefString() {
-		return XML_OBJECT_DEF;
-	}
+    /** Returns the name of the objects which this home can create.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getObjectClassName() {
+        return OBJECT_CLASS_NAME;
+    }
 
-	/**
-	 * Returns the published questions linked to the specified text entry.
-	 * 
-	 * @param inTextID Long
-	 * @return {@link QueryResult}
-	 * @throws SQLException 
-	 * @throws VException 
-	 */
-	public QueryResult selectPublished(Long inTextID) throws VException, SQLException {
-		return select(inTextID, WorkflowAwareContribution.STATES_PUBLISHED);
-	}
+    /** Returns the object definition string of the class managed by this home.
+     *
+     * @return java.lang.String */
+    @Override
+    protected String getObjectDefString() {
+        return XML_OBJECT_DEF;
+    }
 
-	/**
-	 * Returns the questions being in the specified states linked with the specified text entry.
-	 * 
-	 * @param inTextID Long
-	 * @param inState Integer[]
-	 * @return {@link QueryResult}
-	 * @throws VException
-	 * @throws SQLException
-	 */
-	public QueryResult select(Long inTextID, Integer[] inState) throws VException, SQLException {
-		KeyObject lKey = new KeyObjectImpl();
-		lKey.setValue(TextQuestionHome.KEY_TEXTID, inTextID);
-		lKey.setValue(BOMHelper.getKeyStates(TextHome.KEY_STATE, inState));
-		OrderObject lOrder = new OrderObjectImpl();
-		lOrder.setValue(QuestionHome.KEY_QUESTION_DECIMAL, 0);
-		return select(lKey, lOrder);
-	}
+    /** Returns the published questions linked to the specified text entry.
+     * 
+     * @param inTextID Long
+     * @return {@link QueryResult}
+     * @throws SQLException
+     * @throws VException */
+    public QueryResult selectPublished(final Long inTextID) throws VException, SQLException {
+        return select(inTextID, WorkflowAwareContribution.STATES_PUBLISHED);
+    }
+
+    /** Returns the questions being in the specified states linked with the specified text entry.
+     * 
+     * @param inTextID Long
+     * @param inState Integer[]
+     * @return {@link QueryResult}
+     * @throws VException
+     * @throws SQLException */
+    public QueryResult select(final Long inTextID, final Integer[] inState) throws VException, SQLException {
+        final KeyObject lKey = new KeyObjectImpl();
+        lKey.setValue(TextQuestionHome.KEY_TEXTID, inTextID);
+        lKey.setValue(BOMHelper.getKeyStates(TextHome.KEY_STATE, inState));
+        final OrderObject lOrder = new OrderObjectImpl();
+        lOrder.setValue(QuestionHome.KEY_QUESTION_DECIMAL, 0);
+        return select(lKey, lOrder);
+    }
 
 }

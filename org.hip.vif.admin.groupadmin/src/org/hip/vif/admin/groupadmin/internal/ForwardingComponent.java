@@ -39,7 +39,7 @@ public class ForwardingComponent implements IForwarding {
 
             @Override
             public String getAlias() {
-                return ForwardControllerRegistry.FORWARD_GROUP_ADMIN_PENDING;
+                return ForwardControllerRegistry.Alias.FORWARD_GROUP_ADMIN_PENDING.getName();
             }
         }
         };

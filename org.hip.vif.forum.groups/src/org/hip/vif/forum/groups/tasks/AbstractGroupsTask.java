@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import org.hip.kernel.bom.QueryResult;
 import org.hip.kernel.exc.VException;
 import org.hip.vif.core.bom.BOMHelper;
+import org.hip.vif.web.bom.VifBOMHelper;
 import org.hip.vif.web.tasks.AbstractWebController;
 
 /** Abstract base class for tasks in the groups bundle.
@@ -40,12 +41,12 @@ public abstract class AbstractGroupsTask extends AbstractWebController {
     }
 
     protected QueryResult getPublishedCompletions(final Long inQuestionID) throws NumberFormatException, VException,
-    SQLException {
+            SQLException {
         return BOMHelper.getJoinCompletionToMemberHome().selectPublishedWithResponsibles(inQuestionID);
     }
 
     protected QueryResult getPublishedBibliography(final Long inQuestionID) throws VException, SQLException {
-        return BOMHelper.getJoinQuestionToTextHome().selectPublished(inQuestionID);
+        return VifBOMHelper.getJoinQuestionToTextHome().selectPublished(inQuestionID);
     }
 
     /** Returns the collection of download files belonging to the specified text entry.

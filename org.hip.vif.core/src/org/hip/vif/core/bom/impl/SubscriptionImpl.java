@@ -1,5 +1,3 @@
-package org.hip.vif.core.bom.impl;
-
 /*
 	This package is part of the persistency layer of the application VIF.
 	Copyright (C) 2004, Benno Luthiger
@@ -17,33 +15,31 @@ package org.hip.vif.core.bom.impl;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 import org.hip.vif.core.bom.Subscription;
 
-/**
- * Implementation of the Subscription model.
- * @see org.hip.vif.core.bom.Subscription
+/** Implementation of the Subscription model.
  * 
- * @author Benno Luthiger
- * Created on Feb 14, 2004
- */
+ * @see org.hip.vif.core.bom.Subscription
+ *
+ * @author Benno Luthiger Created on Feb 14, 2004 */
+@SuppressWarnings("serial")
 public class SubscriptionImpl extends DomainObjectImpl implements Subscription {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.SubscriptionHomeImpl";
-	
-	/**
-	 * SubscriptionImpl constructor.
-	 */
-	public SubscriptionImpl() {
-		super();
-	}
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.SubscriptionHomeImpl";
+
+    /** SubscriptionImpl constructor. */
+    public SubscriptionImpl() {
+        super();
+    }
+
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 }

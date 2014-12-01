@@ -158,7 +158,7 @@ public class GroupShowListTask extends AbstractWebController implements Property
 
         lKey = new KeyObjectImpl();
         lKey.setValue(ParticipantHome.KEY_GROUP_ID, inGroupID);
-        BOMHelper.getParticipantHome().delete(lKey, true);
+        VifBOMHelper.getParticipantHome().delete(lKey, true);
 
         lKey = new KeyObjectImpl();
         lKey.setValue(GroupHome.KEY_ID, inGroupID);

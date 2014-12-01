@@ -407,3 +407,8 @@
 .vif-view .vif-padding-left {
     padding-left:15px;
 }
+
+
+.vif-footer {
+	padding: 2px 0 5px 10px;
+}

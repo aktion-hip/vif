@@ -20,12 +20,12 @@
 package org.hip.vif.admin.member.ui;
 
 import org.hip.vif.admin.member.Activator;
-import org.hip.vif.admin.member.data.RoleContainer;
-import org.hip.vif.admin.member.data.RoleWrapper;
 import org.hip.vif.admin.member.tasks.MemberShowTask;
 import org.hip.vif.core.bom.Member;
 import org.hip.vif.core.bom.MemberHome;
 import org.hip.vif.core.util.RatingsHelper;
+import org.hip.vif.web.member.RoleContainer;
+import org.hip.vif.web.member.RoleWrapper;
 import org.hip.vif.web.util.BeanWrapperHelper;
 import org.hip.vif.web.util.MemberViewHelper;
 import org.hip.vif.web.util.RatingsTable;

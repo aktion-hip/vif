@@ -18,30 +18,27 @@
  */
 package org.hip.vif.core.bom.impl;
 
+import org.hip.kernel.bom.GeneralDomainObject;
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 import org.hip.vif.core.bom.LinkPermissionRole;
 
-/**
- * This domain object home implements the LinkPermissionRole interface.
- * 
+/** This domain object home implements the LinkPermissionRole interface.
+ *
  * @author: Benno Luthiger
- * @see org.hip.vif.core.bom.LinkPermissionRole
- */
-public class LinkPermissionRoleImpl extends DomainObjectImpl implements LinkPermissionRole {		
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.LinkPermissionRoleHomeImpl";
+ * @see org.hip.vif.core.bom.LinkPermissionRole */
+@SuppressWarnings("serial")
+public class LinkPermissionRoleImpl extends DomainObjectImpl implements LinkPermissionRole {
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.LinkPermissionRoleHomeImpl";
 
-	/**
-	 * Constructor for LinkPermissionRoleImpl.
-	 */
-	public LinkPermissionRoleImpl() {
-		super();
-	}
+    /** Constructor for LinkPermissionRoleImpl. */
+    public LinkPermissionRoleImpl() {
+        super();
+    }
 
-	/**
-	 * @see GeneralDomainObject#getHomeClassName()
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** @see GeneralDomainObject#getHomeClassName() */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
 }

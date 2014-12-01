@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.forum.usersettings.menu.contributions">
-   <implementation class="org.hip.vif.forum.usersettings.internal.MenuContributions"/>
-   <service>
-      <provide interface="org.hip.vif.web.menu.IExtendibleMenuContributions"/>
-   </service>
-</scr:component>
+<components xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+   <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.forum.usersettings.menu.contribution.bookmarks">
+      <implementation class="org.hip.vif.forum.usersettings.internal.ManageBookmarksMenu"/>
+      <service>
+         <provide interface="org.ripla.services.IExtendibleMenuContribution"/>
+      </service>
+   </scr:component>
+   <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.forum.usersettings.menu.contribution.subscriptions">
+      <implementation class="org.hip.vif.forum.usersettings.internal.ManageSubscriptionsMenu"/>
+      <service>
+         <provide interface="org.ripla.services.IExtendibleMenuContribution"/>
+      </service>
+   </scr:component>
+   <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.hip.vif.forum.usersettings.menu.contribution.usermenu">
+      <implementation class="org.hip.vif.forum.usersettings.internal.ManageUserMenu"/>
+      <service>
+         <provide interface="org.ripla.services.IExtendibleMenuContribution"/>
+      </service>
+   </scr:component>
+</components>   

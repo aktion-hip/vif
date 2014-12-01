@@ -15,27 +15,24 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 
-/**
- * Model of entry joining all completions for a specified rating. 
+/** Model of entry joining all completions for a specified rating.
  *
- * @author Luthiger
- * Created: 31.08.2009
- */
+ * @author Luthiger Created: 31.08.2009 */
+@SuppressWarnings("serial")
 public class JoinRatingsToCompletion extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinRatingsToCompletionHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinRatingsToCompletionHome";
 
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
 }

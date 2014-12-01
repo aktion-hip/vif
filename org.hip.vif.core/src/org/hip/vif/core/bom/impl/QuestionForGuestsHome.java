@@ -31,70 +31,96 @@ import org.hip.kernel.exc.VException;
 import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.QuestionHome;
 
-/**
- * Home for model that displays questions readable for guests.
- * 
- * @author Benno Luthiger
- * Created on Apr 11, 2005
- */
+/** Home for model that displays questions readable for guests.
+ *
+ * @author Benno Luthiger Created on Apr 11, 2005 */
+@SuppressWarnings("serial")
 public class QuestionForGuestsHome extends JoinedDomainObjectHomeImpl {
-	private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.QuestionForGuests";
-	public final static String KEY_DEPTH = "GUEST_DEPTH";
+    private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.QuestionForGuests";
+    public final static String KEY_DEPTH = "GUEST_DEPTH";
 
-	private final static String XML_OBJECT_DEF = 
-		"<?xml version='1.0' encoding='ISO-8859-1'?>	" +
-		"<joinedObjectDef objectName='QuestionForGuests' parent='org.hip.kernel.bom.ReadOnlyDomainObject' version='1.0'>	" +
-		"	<columnDefs>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_ID + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_QUESTION_DECIMAL + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_QUESTION + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_REMARK + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_STATE + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_MUTATION + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_GROUP_ID + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_ROOT_QUESTION + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"		<columnDef columnName='" + QuestionHome.KEY_QUESTION_DECIMAL + "' as='" + KEY_DEPTH + "' template='LENGTH({0})-LENGTH(REPLACE({0}, \".\", \"\"))' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"	</columnDefs>	" +
-		"	<joinDef joinType='NO_JOIN'>	" +
-		"		<objectDesc objectClassName='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
-		"	</joinDef>	" +
-		"</joinedObjectDef>";
+    private final static String XML_OBJECT_DEF =
+            "<?xml version='1.0' encoding='ISO-8859-1'?>	"
+                    +
+                    "<joinedObjectDef objectName='QuestionForGuests' parent='org.hip.kernel.bom.ReadOnlyDomainObject' version='1.0'>	"
+                    +
+                    "	<columnDefs>	" +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_ID
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_QUESTION_DECIMAL
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_QUESTION
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_REMARK
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_STATE
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_MUTATION
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_GROUP_ID
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_ROOT_QUESTION
+                    + "' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "		<columnDef columnName='"
+                    + QuestionHome.KEY_QUESTION_DECIMAL
+                    + "' as='"
+                    + KEY_DEPTH
+                    + "' template='LENGTH({0})-LENGTH(REPLACE({0}, \".\", \"\"))' domainObject='org.hip.vif.core.bom.impl.QuestionImpl'/>	"
+                    +
+                    "	</columnDefs>	" +
+                    "	<joinDef joinType='NO_JOIN'>	" +
+                    "		<objectDesc objectClassName='org.hip.vif.core.bom.impl.QuestionImpl'/>	" +
+                    "	</joinDef>	" +
+                    "</joinedObjectDef>";
 
-	/**
-	 * Returns the name of the objects which this home can create.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getObjectClassName() {
-		return OBJECT_CLASS_NAME;
-	}
+    /** Returns the name of the objects which this home can create.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getObjectClassName() {
+        return OBJECT_CLASS_NAME;
+    }
 
-	/**
-	 * Returns the object definition string of the class managed by this home.
-	 *
-	 * @return java.lang.String
-	 */
-	protected String getObjectDefString() {
-		return XML_OBJECT_DEF;
-	}
-	
-	/**
-	 * Returns the group's published questions up to the specified depth.
-	 * 
-	 * @param inGroupID Long
-	 * @param inGuestDepth Long
-	 * @param inOrder OrderObject
-	 * @return QueryResult
-	 * @throws VException
-	 * @throws SQLException
-	 */
-	public QueryResult selectOfGroup(Long inGroupID, Long inGuestDepth, OrderObject inOrder) throws VException, SQLException {
-		KeyObject lKey = new KeyObjectImpl();
-		lKey.setValue(QuestionHome.KEY_GROUP_ID, inGroupID);
-		lKey.setValue(BOMHelper.getKeyStates(QuestionHome.KEY_STATE, WorkflowAwareContribution.STATES_PUBLISHED));
-		HavingObject lHaving = new HavingObjectImpl();
-		lHaving.setValue(KEY_DEPTH, inGuestDepth, "<");
-		return select(lKey, inOrder, lHaving);
-	}
+    /** Returns the object definition string of the class managed by this home.
+     *
+     * @return java.lang.String */
+    @Override
+    protected String getObjectDefString() {
+        return XML_OBJECT_DEF;
+    }
+
+    /** Returns the group's published questions up to the specified depth.
+     * 
+     * @param inGroupID Long
+     * @param inGuestDepth Long
+     * @param inOrder OrderObject
+     * @return QueryResult
+     * @throws VException
+     * @throws SQLException */
+    public QueryResult selectOfGroup(final Long inGroupID, final Long inGuestDepth, final OrderObject inOrder)
+            throws VException, SQLException {
+        final KeyObject lKey = new KeyObjectImpl();
+        lKey.setValue(QuestionHome.KEY_GROUP_ID, inGroupID);
+        lKey.setValue(BOMHelper.getKeyStates(QuestionHome.KEY_STATE, WorkflowAwareContribution.STATES_PUBLISHED));
+        final HavingObject lHaving = new HavingObjectImpl();
+        lHaving.setValue(KEY_DEPTH, inGuestDepth, "<");
+        return select(lKey, inOrder, lHaving);
+    }
 
 }

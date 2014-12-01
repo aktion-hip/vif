@@ -21,33 +21,28 @@ package org.hip.vif.core.bom.impl;
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 import org.hip.kernel.exc.VException;
 
-/**
- * Model to calculate the max value of bibliography entries.
+/** Model to calculate the max value of bibliography entries.
  *
- * @author Luthiger
- * Created: 13.08.2010
- */
+ * @author Luthiger Created: 13.08.2010 */
+@SuppressWarnings("serial")
 public class TextMax extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.TextMaxHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.TextMaxHome";
 
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
-	
-	/**
-	 * Returns the maximum version.
-	 * 
-	 * @return int this entry's max version value.
-	 * @throws VException
-	 */
-	public int getMaxVersion() throws VException {
-		Object out = get(TextMaxHome.KEY_MAX_VERSION);
-		return out == null ? 0 : Integer.parseInt(out.toString());
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
+
+    /** Returns the maximum version.
+     * 
+     * @return int this entry's max version value.
+     * @throws VException */
+    public int getMaxVersion() throws VException {
+        final Object out = get(TextMaxHome.KEY_MAX_VERSION);
+        return out == null ? 0 : Integer.parseInt(out.toString());
+    }
 
 }

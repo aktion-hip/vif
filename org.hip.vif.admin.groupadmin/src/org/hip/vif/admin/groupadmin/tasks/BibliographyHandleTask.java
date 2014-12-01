@@ -40,8 +40,8 @@ import org.hip.vif.core.bom.impl.TextImpl;
 import org.hip.vif.core.bom.impl.TextQuestionHome;
 import org.hip.vif.core.bom.impl.WorkflowAwareContribution;
 import org.hip.vif.core.code.QuestionState;
-import org.hip.vif.core.util.AutoCompleteHelper;
 import org.hip.vif.web.bom.VifBOMHelper;
+import org.hip.vif.web.util.AutoCompleteHelper;
 import org.hip.vif.web.util.LinkButtonHelper.LookupType;
 import org.ripla.annotations.UseCaseController;
 import org.ripla.exceptions.RiplaException;
@@ -63,7 +63,7 @@ import com.vaadin.ui.Table;
 @SuppressWarnings("serial")
 @UseCaseController
 public class BibliographyHandleTask extends AbstractBibliographyTask implements
-        ValueChangeListener {
+ValueChangeListener {
     private static final Logger LOG = LoggerFactory
             .getLogger(BibliographyHandleTask.class);
 
@@ -105,7 +105,7 @@ public class BibliographyHandleTask extends AbstractBibliographyTask implements
     }
 
     /** Do search for titles or authors.
-     * 
+     *
      * @param inTitle Object, input, may be <code>null</code>
      * @param inAuthor Object, input, may be <code>null</code>
      * @return boolean <code>true</code> if the input has been processed successfully, <code>false</code> else. */
@@ -114,7 +114,7 @@ public class BibliographyHandleTask extends AbstractBibliographyTask implements
             final QueryResult lSearchResult = BOMHelper.getTextHome()
                     .selectTitleOrAuthor(
                             inTitle == null ? "" : inTitle.toString(), //$NON-NLS-1$
-                            inAuthor == null ? "" : inAuthor.toString()); //$NON-NLS-1$
+                                    inAuthor == null ? "" : inAuthor.toString()); //$NON-NLS-1$
             if (lSearchResult.hasMoreElements()) {
                 // display list of search results
                 texts = ContributionContainer.createTexts(
@@ -135,7 +135,7 @@ public class BibliographyHandleTask extends AbstractBibliographyTask implements
     }
 
     /** Display form to create bibliographical entry.
-     * 
+     *
      * @param inTitle
      * @param inAuthor
      * @return boolean <code>true</code> if the input has been processed successfully, <code>false</code> else. */
@@ -151,7 +151,7 @@ public class BibliographyHandleTask extends AbstractBibliographyTask implements
     }
 
     /** Returns the data container containing the text entries according to the input in the combo boxes.
-     * 
+     *
      * @return {@link ContributionContainer} */
     public ContributionContainer getTexts() {
         return texts;
@@ -183,12 +183,12 @@ public class BibliographyHandleTask extends AbstractBibliographyTask implements
             return;
         }
         showNotification(lMessages
-                .getMessage(lCount == 1 ? "msg.bibliography.addedS" : "msg.bibliography.addedM")); //$NON-NLS-1$ //$NON-NLS-2$		
+                .getMessage(lCount == 1 ? "msg.bibliography.addedS" : "msg.bibliography.addedM")); //$NON-NLS-1$ //$NON-NLS-2$
         sendEvent(AdminQuestionShowTask.class);
     }
 
     /** Method called when user clicks the table of the search results => show bibliography entry in popup window.
-     * 
+     *
      * @see com.vaadin.data.Property.ValueChangeListener#valueChange(com.vaadin.data.Property.ValueChangeEvent) */
     @Override
     @SuppressWarnings("rawtypes")
@@ -220,7 +220,7 @@ public class BibliographyHandleTask extends AbstractBibliographyTask implements
     /** Tries to delete the selected bibliography entries.<br />
      * The application only deletes entries if they're not references. Therefore, the actor might have to remove
      * references first for that entry deletion can be processed.
-     * 
+     *
      * @return boolean <code>true</code> if successful */
     public boolean deleteBibliography() {
         try {

@@ -62,13 +62,11 @@ import org.slf4j.LoggerFactory;
 /** This domain object implements the Group interface.<br />
  * Note: this group class is workflow aware.
  *
- * Created on 19.07.2002
- *
  * @author Benno Luthiger
  * @see org.hip.vif.core.bom.Group */
 @SuppressWarnings("serial")
 public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
-Group, WorkflowAware, VIFGroupWorkflow {
+        Group, WorkflowAware, VIFGroupWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(GroupImpl.class);
 
     public final static String HOME_CLASS_NAME = "org.hip.vif.web.bom.impl.GroupHomeImpl";
@@ -115,7 +113,7 @@ Group, WorkflowAware, VIFGroupWorkflow {
     public Long ucNew(final String inName, final String inDescription,
             final String inReviewers, final String inGuestDepth,
             final String inMinGoupSize, final boolean inIsPrivate)
-                    throws BOMChangeValueException, ExternIDNotUniqueException {
+            throws BOMChangeValueException, ExternIDNotUniqueException {
         Long outGroupID = new Long(0);
         preCheck(inName, inDescription);
 
@@ -148,7 +146,7 @@ Group, WorkflowAware, VIFGroupWorkflow {
      * @throws ExternIDNotUniqueException */
     @Override
     public Long ucNew() throws BOMChangeValueException,
-    ExternIDNotUniqueException {
+            ExternIDNotUniqueException {
         Long outGroupID = new Long(0);
         String lName = "";
         boolean lIdUnique = true;
@@ -188,7 +186,7 @@ Group, WorkflowAware, VIFGroupWorkflow {
     public void ucSave(final String inName, final String inDescription,
             final String inReviewers, final String inGuestDepth,
             final String inMinGoupSize, final boolean inIsPrivate)
-                    throws VException, WorkflowException, ExternIDNotUniqueException {
+            throws VException, WorkflowException, ExternIDNotUniqueException {
         preCheck(inName, inDescription);
 
         if (!compareID(inName) && !checkIdUnique(inName)) {
@@ -270,7 +268,7 @@ Group, WorkflowAware, VIFGroupWorkflow {
     private void setValues(final String inName, final String inDescription,
             final String inReviewers, final String inGuestDepth,
             final String inMinGoupSize, final Integer inPrivate)
-                    throws BOMChangeValueException {
+            throws BOMChangeValueException {
         // the specified GroupID does not exist yet, therefore, we can continue
         Long lReviewers = new Long(DEFAULT_REVIEWERS);
         Long lGuestDepth = new Long(DEFAULT_GUEST_DEPTH);
@@ -443,7 +441,7 @@ Group, WorkflowAware, VIFGroupWorkflow {
      * @throws VException */
     @Override
     public int getNumberOfRegistered() throws VException {
-        return BOMHelper.getParticipantHome().getParticipantsOfGroup(
+        return VifBOMHelper.getParticipantHome().getParticipantsOfGroup(
                 new Long(get(GroupHome.KEY_ID).toString()));
     }
 
@@ -525,7 +523,7 @@ Group, WorkflowAware, VIFGroupWorkflow {
      * @throws VException */
     @Override
     public boolean isParticipant(final Long inActorID) throws VException {
-        return BOMHelper.getParticipantHome().isParticipantOfGroup(
+        return VifBOMHelper.getParticipantHome().isParticipantOfGroup(
                 new Long(get(GroupHome.KEY_ID).toString()), inActorID);
     }
 
@@ -557,7 +555,7 @@ Group, WorkflowAware, VIFGroupWorkflow {
      * @throws AddressException */
     @Override
     public InternetAddress[] getParticipantsMail() throws VException,
-    SQLException, AddressException {
+            SQLException, AddressException {
         final Collection<String> lMails = BOMHelper
                 .getJoinParticipantToMemberHome().getParticipantsMail(
                         new Long(get(GroupHome.KEY_ID).toString()));
@@ -575,7 +573,7 @@ Group, WorkflowAware, VIFGroupWorkflow {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.hip.vif.bom.Group#isDeletable()
      */
     @Override
@@ -603,7 +601,7 @@ Group, WorkflowAware, VIFGroupWorkflow {
      * @throws SQLException
      * @throws VException */
     private void deleteContentFromIndex() throws VException, SQLException,
-    IOException {
+            IOException {
         final VIFContentIndexer lIndexer = new VIFContentIndexer();
         lIndexer.removeGroupContent(get(GroupHome.KEY_ID).toString());
     }
@@ -636,7 +634,7 @@ Group, WorkflowAware, VIFGroupWorkflow {
     @Override
     public void enterWorkflow(final Workflow inWorkflow,
             final String inInitialStateName, final Object[] inArgs)
-                    throws WorkflowException {
+            throws WorkflowException {
         workflowAware.enterWorkflow(inWorkflow, inInitialStateName, inArgs,
                 this);
     }
@@ -844,7 +842,7 @@ Group, WorkflowAware, VIFGroupWorkflow {
                     .getSubject(lGroupName));
             inParameters.setMailBody(GroupStateChangeNotification.getBody(
                     lGroupName, Activator.getMessages()
-                    .getMessage(inMessageKey)));
+                            .getMessage(inMessageKey)));
             inParameters.setGroupName(lGroupName);
             inParameters.setGroupID(get(GroupHome.KEY_ID).toString());
         } catch (final Exception exc) {

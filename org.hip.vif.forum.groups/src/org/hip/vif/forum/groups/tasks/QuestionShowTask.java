@@ -103,12 +103,12 @@ public class QuestionShowTask extends AbstractGroupsTask implements ValueChangeL
             questionView = new QuestionView(lGroup, lQuestion, lCodeList,
                     lQuestion.isRoot() ? QuestionContainer.createEmpty() : QuestionContainer.createData(BOMHelper
                             .getQuestionHierarchyHome().getParentQuestion(lQuestionID)),
-                            QuestionContainer.createData(lChildren),
-                            getAuthors(lQuestionIDs),
-                            getReviewers(lQuestionIDs),
-                            CompletionsHelper.getNormalizedCompletions(getPublishedCompletions(lQuestionID)),
-                            getPublishedBibliography(lQuestionID),
-                            lSwitchHelper, isGuest, this);
+                    QuestionContainer.createData(lChildren),
+                    getAuthors(lQuestionIDs),
+                    getReviewers(lQuestionIDs),
+                    CompletionsHelper.getNormalizedCompletions(getPublishedCompletions(lQuestionID)),
+                    getPublishedBibliography(lQuestionID),
+                    lSwitchHelper, isGuest, this);
             return questionView;
         } catch (final GuestDepthException exc) {
             throw exc;
@@ -132,7 +132,7 @@ public class QuestionShowTask extends AbstractGroupsTask implements ValueChangeL
      * @see com.vaadin.data.Property.ValueChangeListener#valueChange(com.vaadin.data.Property.ValueChangeEvent) */
     @Override
     public void valueChange(final ValueChangeEvent inEvent) {
-        final Property lProperty = inEvent.getProperty();
+        final Property<?> lProperty = inEvent.getProperty();
         if (questionView.checkSelectionSource(lProperty)) {
             if (lProperty instanceof Table) {
                 final Object lValue = ((Table) lProperty).getValue();

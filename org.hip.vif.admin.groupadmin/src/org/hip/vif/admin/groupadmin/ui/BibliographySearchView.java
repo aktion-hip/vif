@@ -30,7 +30,7 @@ import org.hip.vif.admin.groupadmin.tasks.BibliographyHandleTask;
 import org.hip.vif.core.bom.Group;
 import org.hip.vif.core.bom.Question;
 import org.hip.vif.core.bom.QuestionHome;
-import org.hip.vif.core.util.AutoCompleteHelper;
+import org.hip.vif.web.util.AutoCompleteHelper;
 import org.hip.vif.web.util.BeanWrapperHelper;
 import org.hip.vif.web.util.VIFViewHelper;
 import org.ripla.interfaces.IMessages;
@@ -65,7 +65,7 @@ public class BibliographySearchView extends AbstractContributionView {
     private final ComboBox author;
 
     /** View constructor.
-     * 
+     *
      * @param inQuestion {@link Question} the actual question, possibly the question the bibliography will be linked
      *            with
      * @param inGroup {@link Group} the actual group
@@ -87,7 +87,7 @@ public class BibliographySearchView extends AbstractContributionView {
         final String lTitle = lMessages.getFormattedMessage("ui.bibliography.link.title.page", //$NON-NLS-1$
                 BeanWrapperHelper.getPlain(QuestionHome.KEY_QUESTION,
                         inQuestion), BeanWrapperHelper.getString(
-                        QuestionHome.KEY_QUESTION_DECIMAL, inQuestion));
+                                QuestionHome.KEY_QUESTION_DECIMAL, inQuestion));
         lLayout.addComponent(new Label(
                 String.format(VIFViewHelper.TMPL_TITLE, "vif-pagetitle", lTitle), ContentMode.HTML)); //$NON-NLS-1$
 
@@ -114,7 +114,7 @@ public class BibliographySearchView extends AbstractContributionView {
             public void buttonClick(final ClickEvent inEvent) {
                 if (!inTask.createNew(title.getValue(), author.getValue())) {
                     Notification
-                            .show(Activator.getMessages().getMessage("errmsg.save.general"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+                    .show(Activator.getMessages().getMessage("errmsg.save.general"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                 }
             }
         });
@@ -154,7 +154,7 @@ public class BibliographySearchView extends AbstractContributionView {
     // ---
 
     /** Extended <code>ComboBox</code> to attach lazy loading behavior.
-     * 
+     *
      * @author Luthiger Created: 11.09.2011 */
     private static class AutoCompleteSelection extends ComboBox {
         private String filterString;
@@ -212,11 +212,11 @@ public class BibliographySearchView extends AbstractContributionView {
     }
 
     /** View component to display the table of search results.
-     * 
+     *
      * @author Luthiger Created: 25.09.2011 */
     private static class ResultView extends CustomComponent {
         private static final String[] COL_HEADERS = new String[] {
-                "", "container.table.headers.id", "container.table.headers.text" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            "", "container.table.headers.id", "container.table.headers.text" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         private Component table;
         private final VerticalLayout layout;
@@ -224,7 +224,7 @@ public class BibliographySearchView extends AbstractContributionView {
         private final BibliographyHandleTask bibliographyTask;
 
         /** Constructor
-         * 
+         *
          * @param inTask BibliographyHandleTask */
         ResultView(final BibliographyHandleTask inTask) {
             bibliographyTask = inTask;
@@ -275,7 +275,7 @@ public class BibliographySearchView extends AbstractContributionView {
                         if (!bibliographyTask.deleteBibliography()) {
                             Notification.show(
                                     lMessages
-                                            .getMessage("errmsg.contribution.delete"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+                                    .getMessage("errmsg.contribution.delete"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                         }
                     }
                 }
@@ -283,7 +283,7 @@ public class BibliographySearchView extends AbstractContributionView {
         }
 
         /** Fill the table according to the information entered into the combo boxes.
-         * 
+         *
          * @param inTexts ContributionContainer */
         void fillTable(final ContributionContainer inTexts) {
             if (inTexts == null)

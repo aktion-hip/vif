@@ -171,14 +171,9 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
                 });
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.vaadin.data.Property.ValueChangeListener#valueChange(com.vaadin.data.Property.ValueChangeEvent)
-     */
     @Override
     public void valueChange(final ValueChangeEvent inEvent) {
-        final Property lProperty = inEvent.getProperty();
+        final Property<?> lProperty = inEvent.getProperty();
         if (contributionsList.checkSelectionSource(lProperty)) {
             if (lProperty instanceof Table) {
                 final Object lValue = ((Table) lProperty).getValue();

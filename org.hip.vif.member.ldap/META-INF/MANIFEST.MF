@@ -4,7 +4,7 @@ Bundle-Name: VIF member handler for members on LDAP server
 Bundle-SymbolicName: org.hip.vif.member.ldap;singleton:=true
 Bundle-Version: 1.1.0
 Eclipse-RegisterBuddy: org.hip.vifapp
-Import-Package: org.apache.lucene.queryParser,
+Import-Package: org.apache.lucene.queryparser.classic;version="[4.10.1,5.0.0)",
  org.hip.kernel.bom,
  org.hip.kernel.bom.directory,
  org.hip.kernel.bom.impl,
@@ -24,6 +24,6 @@ Import-Package: org.apache.lucene.queryParser,
  org.osgi.framework;version="[1.5.0,2.0.0)",
  org.ripla.exceptions;version="[1.0.0,2.0.0)",
  org.slf4j;version="1.6.1"
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: RelationWare
 Service-Component: OSGI-INF/member.xml

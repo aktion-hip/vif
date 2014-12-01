@@ -21,26 +21,22 @@ package org.hip.vif.core.bom.impl;
 
 import org.hip.vif.core.bom.TextAuthorReviewer;
 
-/**
- * This domain object impelements the TextAuthorReviewer interface.
- * 
+/** This domain object impelements the TextAuthorReviewer interface.
+ *
  * @author: Benno Luthiger
- * @see org.hip.vif.core.bom.TextAuthorReviewer
- */
+ * @see org.hip.vif.core.bom.TextAuthorReviewer */
+@SuppressWarnings("serial")
 public class TextAuthorReviewerImpl extends AbstractResponsible implements TextAuthorReviewer {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.TextAuthorReviewerHomeImpl";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.TextAuthorReviewerHomeImpl";
 
-	/**
-	 * Constructor for TextAuthorReviewerImpl.
-	 */
-	public TextAuthorReviewerImpl() {
-		super();
-	}
+    /** Constructor for TextAuthorReviewerImpl. */
+    public TextAuthorReviewerImpl() {
+        super();
+    }
 
-	/**
-	 * @see org.hip.kernel.bom.GeneralDomainObject#getHomeClassName()
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** @see org.hip.kernel.bom.GeneralDomainObject#getHomeClassName() */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 }

@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the application VIF.
- Copyright (C) 2008, Benno Luthiger
+ Copyright (C) 2008-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -36,170 +36,208 @@ import org.hip.vif.core.bom.MemberHome;
 import org.hip.vif.core.bom.VIFMember;
 import org.hip.vif.core.bom.impl.JoinRatingsToRater;
 import org.hip.vif.core.bom.impl.RatingsHome;
-import org.hip.vif.core.interfaces.IMessages;
-import org.hip.vif.core.mail.AbstractNotification;
-import org.hip.vif.core.usertasks.IUserTask;
 import org.hip.vif.forum.usersettings.Activator;
 import org.hip.vif.forum.usersettings.data.RatingsContainer;
 import org.hip.vif.forum.usersettings.data.RatingsContainer.RatingItem;
 import org.hip.vif.forum.usersettings.tasks.ShowCompletedRatingTask;
 import org.hip.vif.forum.usersettings.tasks.UserTasksManageTask;
 import org.hip.vif.forum.usersettings.ui.ShowRatingView;
+import org.hip.vif.web.exc.VIFWebException;
+import org.hip.vif.web.mail.AbstractNotification;
 import org.hip.vif.web.tasks.AbstractUserTask;
-import org.hip.vif.web.util.RequestHandler;
+import org.hip.vif.web.util.BeanWrapperHelper;
+import org.hip.vif.web.util.VIFRequestHandler;
+import org.ripla.interfaces.IMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.ui.Component;
 
-/**
- * User task: after publishing a contribution, the author and reviewer have to rate the interaction.
+/** User task: after publishing a contribution, the author and reviewer have to rate the interaction.
  *
- * @author Luthiger
- * Created: 27.08.2009
- */
-public class RatingUserTask extends AbstractUserTask implements IUserTask {
-	private static final Logger LOG = LoggerFactory.getLogger(RatingUserTask.class);
+ * @author Luthiger */
+public class RatingUserTask extends AbstractUserTask {
+    private static final Logger LOG = LoggerFactory.getLogger(RatingUserTask.class);
 
-	private Long memberID;
+    private Long memberID;
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.usertasks.IUserTask#getId()
-	 */
-	public String getId() {
-		return RatingUserTask.class.getName();
-	}
+    @Override
+    public String getId() {
+        return RatingUserTask.class.getName();
+    }
 
-	/**
-	 * Checks whether the specified user has open rating tasks.
-	 * 
-	 * @param inMemberID Long
-	 * @return boolean <code>true</code> if the task is open for the user, else <code>false</code>.
-	 * @throws VException 
-	 */
-	public boolean isOpen(Long inMemberID) throws VException, SQLException {
-		return BOMHelper.getRatingsHome().getCount(createKeyOpenTasks(inMemberID)) != 0;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.usertasks.IUserTask#createUserTaskViews(org.hip.vif.servlets.VIFContext, java.lang.Long)
-	 */
-	public Collection<Component> createUserTaskViews(Long inMemberID) throws Exception {
-		memberID = inMemberID;
-		Collection<Component> outViews = new Vector<Component>();
-		
-		//for all the member's open rating tasks:
-		QueryResult lQuery = BOMHelper.getJoinRatingsToRaterHome().select(createKeyOpenTasks(inMemberID));
-		while (lQuery.hasMoreElements()) {
-			JoinRatingsToRater lRating = (JoinRatingsToRater)lQuery.nextAsDomainObject();
-			outViews.add(new ShowRatingView(lRating, lRating.getFullName(), lRating.getQuestionsToBeRated(), lRating.getCompletionsToBeRated(), lRating.getTextsToBeRated(), this));
-		}
-		return outViews;
-	}
-	
-	/**
-	 * SELECT * FROM tblRatings WHERE RaterID = 1 AND nEfficiency IS NULL AND nEtiquette IS NULL
-	 * 
-	 * @param inMemberID
-	 * @return KeyObject
-	 * @throws VException
-	 */
-	private KeyObject createKeyOpenTasks(Long inMemberID) throws VException {
-		KeyObject outKey = new KeyObjectImpl();
-		outKey.setValue(RatingsHome.KEY_RATER_ID, inMemberID);
-		outKey.setValue(RatingsHome.KEY_EFFICIENCY, SQLNull.getInstance(), "IS", BinaryBooleanOperator.AND); //$NON-NLS-1$
-		outKey.setValue(RatingsHome.KEY_ETIQUETTE, SQLNull.getInstance(), "IS", BinaryBooleanOperator.AND); //$NON-NLS-1$
-		outKey.setValue(RatingsHome.KEY_CORRECTNESS, SQLNull.getInstance(), "IS", BinaryBooleanOperator.AND); //$NON-NLS-1$
-		return outKey;
-	}
+    /** Checks whether the specified user has open rating tasks.
+     *
+     * @param inMemberID Long
+     * @return boolean <code>true</code> if the task is open for the user, else <code>false</code>.
+     * @throws VException */
+    @Override
+    public boolean isOpen(final Long inMemberID) throws VException, SQLException {
+        return BOMHelper.getRatingsHome().getCount(createKeyOpenTasks(inMemberID)) != 0;
+    }
 
-	/**
-	 * Callback method to save ratings.
-	 * 
-	 * @param inCorrectness {@link RatingItem#RatingItem}
-	 * @param inEfficiency {@link RatingItem#RatingItem}
-	 * @param inEtiquette {@link RatingItem#RatingItem}
-	 * @param inRemark String
-	 * @param inRatingEventsID Long
-	 * @return boolean <code>true</code> if successful
-	 */
-	public boolean saveRatings(RatingsContainer.RatingItem inCorrectness, RatingsContainer.RatingItem inEfficiency, RatingsContainer.RatingItem inEtiquette, String inRemark, Long inRatingEventsID ) {
-		try {
-			RatingsHome lHome = BOMHelper.getRatingsHome();
-			Long lRatedID = lHome.saveRating(inRatingEventsID, memberID, 
-					inCorrectness.getId(), inEfficiency.getId(), inEtiquette.getId(), inRemark);
-			
-			if (lHome.checkRatingCompleted(inRatingEventsID, memberID)) {
-				//marks the rating process as completed
-				BOMHelper.getRatingEventsHome().getRatingEvents(inRatingEventsID).setCompleted();
+    @Override
+    public Collection<Component> createUserTaskViews(final Long inMemberID) throws Exception {
+        memberID = inMemberID;
+        final Collection<Component> outViews = new Vector<Component>();
 
-				//notifies contributors about completions of rating process
-				String lURL = RequestHandler.createRequestedURL(ShowCompletedRatingTask.class, true, ApplicationConstants.KEY_RATING_ID, inRatingEventsID);
-				RatingCompletedMail lMail = new RatingCompletedMail(InternetAddress.parse(getMailAddresses(memberID, lRatedID)), 
-																	Activator.getMessages(), lURL);
-				lMail.send();
-			}
-			showNotification(Activator.getMessages().getMessage("msg.ratings.feedback.success")); //$NON-NLS-1$
-			sendEvent(UserTasksManageTask.class);
-			return true;
-		}
-		catch (Exception exc) {
-			LOG.error("Error encountered while saving the ratings!", exc); //$NON-NLS-1$
-		}
-		return false;
-	}
-	
-	private String getMailAddresses(Long inRaterID, Long inRatedID) throws Exception {
-		MemberHome lHome = BOMHelper.getMemberCacheHome();
-		VIFMember lMember = (VIFMember) lHome.getMember(inRaterID);
-		StringBuilder outAddresses = new StringBuilder(lMember.getMailAddress());
-		outAddresses.append(", "); //$NON-NLS-1$
-		lMember = (VIFMember) lHome.getMember(inRatedID);
-		outAddresses.append(lMember.getMailAddress());
-		return new String(outAddresses);
-	}
+        // for all the member's open rating tasks:
+        final QueryResult lQuery = BOMHelper.getJoinRatingsToRaterHome().select(createKeyOpenTasks(inMemberID));
+        while (lQuery.hasMoreElements()) {
+            final JoinRatingsToRater lRating = (JoinRatingsToRater) lQuery.nextAsDomainObject();
+            outViews.add(new ShowRatingView(lRating, this));
+        }
+        return outViews;
+    }
 
-// --- private class ---
+    /** SELECT * FROM tblRatings WHERE RaterID = 1 AND nEfficiency IS NULL AND nEtiquette IS NULL
+     *
+     * @param inMemberID
+     * @return KeyObject
+     * @throws VException */
+    private KeyObject createKeyOpenTasks(final Long inMemberID) throws VException {
+        final KeyObject outKey = new KeyObjectImpl();
+        outKey.setValue(RatingsHome.KEY_RATER_ID, inMemberID);
+        outKey.setValue(RatingsHome.KEY_EFFICIENCY, SQLNull.getInstance(), "IS", BinaryBooleanOperator.AND); //$NON-NLS-1$
+        outKey.setValue(RatingsHome.KEY_ETIQUETTE, SQLNull.getInstance(), "IS", BinaryBooleanOperator.AND); //$NON-NLS-1$
+        outKey.setValue(RatingsHome.KEY_CORRECTNESS, SQLNull.getInstance(), "IS", BinaryBooleanOperator.AND); //$NON-NLS-1$
+        return outKey;
+    }
 
-	private static class RatingCompletedMail extends AbstractNotification {
-		private final static String KEY_SUBJECT 	= "usersettings.ratings.mail.subject"; //$NON-NLS-1$
-		private final static String KEY_HELLO 		= "usersettings.ratings.mail.hello"; //$NON-NLS-1$
-		private final static String KEY_BODY 		= "usersettings.ratings.mail.body"; //$NON-NLS-1$
-		private final static String KEY_TERM 		= "usersettings.ratings.mail.term"; //$NON-NLS-1$
-		private static final String TMPL_URL = "<a href=\"%s\">%s</a>"; //$NON-NLS-1$
+    /** Callback method to save ratings.
+     *
+     * @param inCorrectness {@link RatingItem#RatingItem}
+     * @param inEfficiency {@link RatingItem#RatingItem}
+     * @param inEtiquette {@link RatingItem#RatingItem}
+     * @param inRemark String
+     * @param inRatingEventsID Long
+     * @return boolean <code>true</code> if successful */
+    public boolean saveRatings(final RatingsContainer.RatingItem inCorrectness,
+            final RatingsContainer.RatingItem inEfficiency, final RatingsContainer.RatingItem inEtiquette,
+            final String inRemark, final Long inRatingEventsID) {
+        try {
+            final RatingsHome lHome = BOMHelper.getRatingsHome();
+            final Long lRatedID = lHome.saveRating(inRatingEventsID, memberID,
+                    inCorrectness.getId(), inEfficiency.getId(), inEtiquette.getId(), inRemark);
 
-		private IMessages messages;
-		private String url;
+            if (lHome.checkRatingCompleted(inRatingEventsID, memberID)) {
+                // marks the rating process as completed
+                BOMHelper.getRatingEventsHome().getRatingEvents(inRatingEventsID).setCompleted();
 
-		RatingCompletedMail(InternetAddress[] inReceiverMails, IMessages inMessages, String inURL) {
-			super(inReceiverMails, false);
-			messages = inMessages;
-			url = inURL;
-		}
+                // notifies contributors about completions of rating process
+                final String lURL = VIFRequestHandler.createRequestedURL(ShowCompletedRatingTask.class, true,
+                        ApplicationConstants.KEY_RATING_ID, inRatingEventsID);
+                final RatingCompletedMail lMail = new RatingCompletedMail(InternetAddress.parse(getMailAddresses(
+                        memberID, lRatedID)),
+                        Activator.getMessages(), lURL);
+                lMail.send();
+            }
+            showNotification(Activator.getMessages().getMessage("msg.ratings.feedback.success")); //$NON-NLS-1$
+            sendEvent(UserTasksManageTask.class);
+            return true;
+        } catch (final Exception exc) {
+            LOG.error("Error encountered while saving the ratings!", exc); //$NON-NLS-1$
+        }
+        return false;
+    }
 
-		@Override
-		protected StringBuilder getBody() {
-			StringBuilder outBody = new StringBuilder(getMessage(messages, KEY_HELLO));
-			outBody.append("\n\n").append(getFormattedMessage(messages, KEY_BODY, url)); //$NON-NLS-1$
-			outBody.append(getMailGreetings());
-			return outBody;
-		}
-		
-		@Override
-		protected StringBuilder getBodyHtml() {
-			String lUrl = String.format(TMPL_URL, url, getMessage(messages, KEY_TERM));
-			StringBuilder outBody = new StringBuilder();
-			outBody.append("<p>").append(getMessage(messages, KEY_HELLO)).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$
-			outBody.append("<p>").append(getFormattedMessage(messages, KEY_BODY, lUrl)).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$
-			outBody.append("<p>").append(getMailGreetingsHtml()); //$NON-NLS-1$
-			return outBody;
-		}
+    public boolean saveRatings(final JoinRatingsToRater inRating) {
+        final Long lRatingEventsID = BeanWrapperHelper.getLong(RatingsHome.KEY_RATINGEVENTS_ID, inRating);
+        try {
+            final RatingsHome lHome = BOMHelper.getRatingsHome();
+            final Long lRatedID = lHome.saveRating(inRating, memberID);
+            if (lHome.checkRatingCompleted(lRatingEventsID, memberID)) {
+                // marks the rating process as completed
+                BOMHelper.getRatingEventsHome().getRatingEvents(lRatingEventsID).setCompleted();
 
-		@Override
-		protected String getSubjectText() {
-			return new String(getSubjectID().append(" ").append(getMessage(messages, KEY_SUBJECT))); //$NON-NLS-1$
-		}
-	}
-	
+                // notifies contributors about completions of rating process
+                final String lURL = VIFRequestHandler.createRequestedURL(ShowCompletedRatingTask.class, true,
+                        ApplicationConstants.KEY_RATING_ID, lRatingEventsID);
+                final RatingCompletedMail lMail = new RatingCompletedMail(InternetAddress.parse(getMailAddresses(
+                        memberID, lRatedID)), Activator.getMessages(), lURL);
+                lMail.send();
+            }
+            showNotification(Activator.getMessages().getMessage("msg.ratings.feedback.success")); //$NON-NLS-1$
+            sendEvent(UserTasksManageTask.class);
+            return true;
+        } catch (final Exception exc) {
+            LOG.error("Error encountered while saving the ratings!", exc); //$NON-NLS-1$
+        }
+        return false;
+    }
+
+    private String getMailAddresses(final Long inRaterID, final Long inRatedID) throws Exception {
+        final MemberHome lHome = BOMHelper.getMemberCacheHome();
+        VIFMember lMember = (VIFMember) lHome.getMember(inRaterID);
+        final StringBuilder outAddresses = new StringBuilder(lMember.getMailAddress());
+        outAddresses.append(", "); //$NON-NLS-1$
+        lMember = (VIFMember) lHome.getMember(inRatedID);
+        outAddresses.append(lMember.getMailAddress());
+        return new String(outAddresses);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.ripla.web.controllers.AbstractController#needsPermission()
+     */
+    @Override
+    protected String needsPermission() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.ripla.web.controllers.AbstractController#runChecked()
+     */
+    @Override
+    protected Component runChecked() throws VIFWebException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // --- private class ---
+
+    private static class RatingCompletedMail extends AbstractNotification {
+        private final static String KEY_SUBJECT = "usersettings.ratings.mail.subject"; //$NON-NLS-1$
+        private final static String KEY_HELLO = "usersettings.ratings.mail.hello"; //$NON-NLS-1$
+        private final static String KEY_BODY = "usersettings.ratings.mail.body"; //$NON-NLS-1$
+        private final static String KEY_TERM = "usersettings.ratings.mail.term"; //$NON-NLS-1$
+        private static final String TMPL_URL = "<a href=\"%s\">%s</a>"; //$NON-NLS-1$
+
+        private final IMessages messages;
+        private final String url;
+
+        RatingCompletedMail(final InternetAddress[] inReceiverMails, final IMessages inMessages, final String inURL) {
+            super(inReceiverMails, false);
+            messages = inMessages;
+            url = inURL;
+        }
+
+        @Override
+        protected StringBuilder getBody() {
+            final StringBuilder outBody = new StringBuilder(getMessage(messages, KEY_HELLO));
+            outBody.append("\n\n").append(getFormattedMessage(messages, KEY_BODY, url)); //$NON-NLS-1$
+            outBody.append(getMailGreetings());
+            return outBody;
+        }
+
+        @Override
+        protected StringBuilder getBodyHtml() {
+            final String lUrl = String.format(TMPL_URL, url, getMessage(messages, KEY_TERM));
+            final StringBuilder outBody = new StringBuilder();
+            outBody.append("<p>").append(getMessage(messages, KEY_HELLO)).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$
+            outBody.append("<p>").append(getFormattedMessage(messages, KEY_BODY, lUrl)).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$
+            outBody.append("<p>").append(getMailGreetingsHtml()); //$NON-NLS-1$
+            return outBody;
+        }
+
+        @Override
+        protected String getSubjectText() {
+            return new String(getSubjectID().append(" ").append(getMessage(messages, KEY_SUBJECT))); //$NON-NLS-1$
+        }
+    }
+
 }

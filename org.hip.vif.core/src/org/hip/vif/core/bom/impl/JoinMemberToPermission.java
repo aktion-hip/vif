@@ -1,5 +1,3 @@
-package org.hip.vif.core.bom.impl;
-
 /*
 	This package is part of application VIF.
 	Copyright (C) 2001, Benno Luthiger
@@ -17,31 +15,28 @@ package org.hip.vif.core.bom.impl;
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+package org.hip.vif.core.bom.impl;
 
+import org.hip.kernel.bom.GeneralDomainObject;
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 
-/**
- * This class implements the join between the domain objects
- * Member, Role and Permission.
- * 
- * @author Benno Luthiger
- */
+/** This class implements the join between the domain objects Member, Role and Permission.
+ *
+ * @author Benno Luthiger */
+@SuppressWarnings("serial")
 public class JoinMemberToPermission extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinMemberToPermissionHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinMemberToPermissionHome";
 
-	/**
-	 * Constructor for JoinMemberToPermission.
-	 */
-	public JoinMemberToPermission() {
-		super();
-	}
+    /** Constructor for JoinMemberToPermission. */
+    public JoinMemberToPermission() {
+        super();
+    }
 
-	/**
-	 * @see GeneralDomainObject#getHomeClassName()
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** @see GeneralDomainObject#getHomeClassName() */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
 }

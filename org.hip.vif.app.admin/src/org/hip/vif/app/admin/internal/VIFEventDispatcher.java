@@ -30,7 +30,9 @@ import org.ripla.web.interfaces.IBodyComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** @author lbenno */
+/** The event dispatcher for the forum's admin part.
+ *
+ * @author lbenno */
 public class VIFEventDispatcher extends AbstractVIFEventDispatcher implements IVIFEventDispatcher {
     public static final Logger LOG = LoggerFactory.getLogger(VIFEventDispatcher.class);
 
@@ -48,7 +50,7 @@ public class VIFEventDispatcher extends AbstractVIFEventDispatcher implements IV
             break;
         case LOOKUP:
             final LinkButtonHelper.LookupType lType = (LookupType) inProperties
-            .get(AbstractWebController.EVENT_PROPERTY_LOOKUP_TYPE);
+                    .get(AbstractWebController.EVENT_PROPERTY_LOOKUP_TYPE);
             LOG.debug("Lookup event {}.", lType);
             final AbstractWebController lController = (AbstractWebController) inProperties
                     .get(AbstractWebController.EVENT_PROPERTY_LOOKUP_CONTROLLER);

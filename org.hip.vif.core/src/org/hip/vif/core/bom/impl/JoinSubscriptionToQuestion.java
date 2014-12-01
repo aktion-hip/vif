@@ -1,7 +1,3 @@
-package org.hip.vif.core.bom.impl;
-
-import org.hip.kernel.bom.impl.DomainObjectImpl;
-
 /*
 	This package is part of ...
 	Copyright (C) 2004, Benno Luthiger
@@ -19,28 +15,26 @@ import org.hip.kernel.bom.impl.DomainObjectImpl;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-/**
- * 
- * 
- * @author Benno Luthiger
- * Created on Feb 29, 2004
  */
+package org.hip.vif.core.bom.impl;
+
+import org.hip.kernel.bom.impl.DomainObjectImpl;
+
+/** @author Benno Luthiger Created on Feb 29, 2004 */
+@SuppressWarnings("serial")
 public class JoinSubscriptionToQuestion extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinSubscriptionToQuestionHome";
-	
-	/**
-	 * JoinSubscriptionToQuestion constructor.
-	 */
-	public JoinSubscriptionToQuestion() {
-		super();
-	}
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinSubscriptionToQuestionHome";
+
+    /** JoinSubscriptionToQuestion constructor. */
+    public JoinSubscriptionToQuestion() {
+        super();
+    }
+
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 }

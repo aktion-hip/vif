@@ -115,7 +115,8 @@ public class VIFViewHelper {
      * @param inModel {@link GeneralDomainObject} the model to bind to the input field
      * @param inKey String the field's key that has to be bound to the input field
      * @param inWidth int the field width
-     * @return {@link TextField} */
+     * @return {@link TextField}
+     * @deprecated Use <code>org.ripla.web.util.RiplaViewHelper.createTextField()</code> instead */
     @Deprecated
     public static TextField createTextField(final GeneralDomainObject inModel,
             final String inKey, final int inWidth) {
@@ -128,7 +129,8 @@ public class VIFViewHelper {
      *
      * @param inProperty {@link Property} the Property to be edited with this editor
      * @param inWidth int the field width
-     * @return {@link TextField} */
+     * @return {@link TextField}
+     * @deprecated Use <code>org.ripla.web.util.RiplaViewHelper.createTextField()</code> instead */
     @Deprecated
     public static TextField createTextField(final Property inProperty,
             final int inWidth) {

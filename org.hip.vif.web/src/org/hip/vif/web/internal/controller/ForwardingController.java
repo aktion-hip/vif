@@ -19,49 +19,33 @@
 
 package org.hip.vif.web.internal.controller;
 
-import org.hip.vif.web.interfaces.IForwarding;
-import org.hip.vif.web.interfaces.ITargetConfiguration;
 import org.hip.vif.web.tasks.ForwardControllerRegistry;
+import org.ripla.web.interfaces.IForwarding;
+import org.ripla.web.interfaces.IForwardingConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * The client class for service components implementing the
- * <code>IForwarding</code> interface.
- * 
- * @author Luthiger Created: 28.09.2011
- */
+/** The client class for service components implementing the <code>IForwarding</code> interface.
+ *
+ * @author Luthiger Created: 28.09.2011 */
 public class ForwardingController {
-	private final static Logger LOG = LoggerFactory
-			.getLogger(ForwardingController.class);
+    private final static Logger LOG = LoggerFactory
+            .getLogger(ForwardingController.class);
 
-	/**
-	 * @param inForwarding
-	 *            {@link IForwarding} bind
-	 */
-	public void addForwarding(final IForwarding inForwarding) {
-		for (final ITargetConfiguration lTargetConfiguration : inForwarding
-				.getTargets()) {
-			ForwardControllerRegistry.INSTANCE.registerTarget(
-					lTargetConfiguration.getAlias(),
-					lTargetConfiguration.getTarget());
-			LOG.debug(
-					"Registered target task for forward with alias \"{}\".", lTargetConfiguration.getAlias()); //$NON-NLS-1$
-		}
-	}
+    /** @param inForwarding {@link IForwarding} bind */
+    public void addForwarding(final IForwarding inForwarding) {
+        for (final IForwardingConfig config : inForwarding.getForwardingConfigs()) {
+            ForwardControllerRegistry.INSTANCE.registerTarget(config.getAlias(), config.getTarget());
+            LOG.debug("Registered target controller for forward with alias \"{}\".", config.getAlias()); //$NON-NLS-1$
+        }
+    }
 
-	/**
-	 * @param inForwarding
-	 *            {@link IForwarding} unbind
-	 */
-	public void removeForwarding(final IForwarding inForwarding) {
-		for (final ITargetConfiguration lTargetConfiguration : inForwarding
-				.getTargets()) {
-			ForwardControllerRegistry.INSTANCE
-					.unregisterTarget(lTargetConfiguration.getAlias());
-			LOG.debug(
-					"Unregistered target task for forward with alias \"{}\".", lTargetConfiguration.getAlias()); //$NON-NLS-1$
-		}
-	}
+    /** @param inForwarding {@link IForwarding} unbind */
+    public void removeForwarding(final IForwarding inForwarding) {
+        for (final IForwardingConfig config : inForwarding.getForwardingConfigs()) {
+            ForwardControllerRegistry.INSTANCE.unregisterTarget(config.getAlias());
+            LOG.debug("Unregistered target controller for forward with alias \"{}\".", config.getAlias()); //$NON-NLS-1$
+        }
+    }
 
 }

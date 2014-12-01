@@ -23,44 +23,37 @@ import java.sql.SQLException;
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 import org.hip.kernel.exc.VException;
 
-/**
- * Model for rating events entries.
+/** Model for rating events entries.
  *
- * @author Luthiger
- * Created: 29.08.2009
- */
+ * @author Luthiger Created: 29.08.2009 */
+@SuppressWarnings("serial")
 public class RatingEvents extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingEventsHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingEventsHome";
 
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
-	/**
-	 * Sets this model to completed.
-	 * 
-	 * @throws VException
-	 * @throws SQLException
-	 */
-	public void setCompleted() throws VException, SQLException {
-		set(RatingEventsHome.KEY_COMPLETED, new Integer(1));
-		update(true);
-	}
-	
-	/**
-	 * Checks this model's <code>completed</code> value.
-	 * 
-	 * @return boolean <code>true</code> if this event is complted.
-	 * @throws VException
-	 */
-	public boolean isCompleted() throws VException {
-		String lValue = get(RatingEventsHome.KEY_COMPLETED).toString();
-		return new Integer(lValue).intValue() > 0;
-	}
-	
+    /** Sets this model to completed.
+     * 
+     * @throws VException
+     * @throws SQLException */
+    public void setCompleted() throws VException, SQLException {
+        set(RatingEventsHome.KEY_COMPLETED, new Integer(1));
+        update(true);
+    }
+
+    /** Checks this model's <code>completed</code> value.
+     * 
+     * @return boolean <code>true</code> if this event is complted.
+     * @throws VException */
+    public boolean isCompleted() throws VException {
+        final String lValue = get(RatingEventsHome.KEY_COMPLETED).toString();
+        return new Integer(lValue).intValue() > 0;
+    }
+
 }

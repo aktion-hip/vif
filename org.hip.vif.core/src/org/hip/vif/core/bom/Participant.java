@@ -1,8 +1,6 @@
-package org.hip.vif.core.bom;
-
-/*
+/**
 	This package is part of the persistency layer of the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,7 +15,8 @@ package org.hip.vif.core.bom;
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+package org.hip.vif.core.bom;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -25,23 +24,19 @@ import java.sql.Timestamp;
 import org.hip.kernel.bom.DomainObject;
 import org.hip.kernel.exc.VException;
 
-/**
- * This interface defines the behaviour of the Participant domain object.
- * It registers Members to the discussion groups they want contribute to.
- * 
+/** This interface defines the behaviour of the Participant domain object. It registers Members to the discussion groups
+ * they want contribute to.
+ *
  * @author Benno Luthiger
  * @see org.hip.vif.core.bom.Member
- * @see org.hip.vif.core.bom.Group
- */
+ * @see org.hip.vif.core.bom.Group */
 public interface Participant extends DomainObject {
 
-	/**
-	 * Suspends the participation for the specified period.
-	 * 
-	 * @param inFrom Timestamp
-	 * @param inTo Timestamp
-	 * @throws VException
-	 * @throws SQLException
-	 */
-	void suspend(Timestamp inFrom, Timestamp inTo) throws VException, SQLException;
+    /** Suspends the participation for the specified period.
+     * 
+     * @param inFrom Timestamp
+     * @param inTo Timestamp
+     * @throws VException
+     * @throws SQLException */
+    void suspend(Timestamp inFrom, Timestamp inTo) throws VException, SQLException;
 }

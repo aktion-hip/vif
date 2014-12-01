@@ -49,6 +49,7 @@ public class UseCaseComponent implements IUseCase {
         lSubMenu.setPermission(Constants.PERMISSION_GROUP_CREATE);
 
         outMenu.add(lSubMenu);
+        outMenu.setTag("vif.admin.menu");
         return outMenu;
     }
 

@@ -147,6 +147,9 @@ public class BeanWrapperHelper {
     }
 
     private static Locale getAppLocale() {
+        if (VaadinSession.getCurrent() == null) {
+            return Locale.ENGLISH;
+        }
         try {
             VaadinSession.getCurrent().getLockInstance().lock();
             return VaadinSession.getCurrent().getLocale();

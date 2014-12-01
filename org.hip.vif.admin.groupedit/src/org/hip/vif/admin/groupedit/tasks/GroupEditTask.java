@@ -62,7 +62,7 @@ import com.vaadin.ui.Notification.Type;
 @SuppressWarnings("serial")
 @UseCaseController
 public class GroupEditTask extends AbstractGroupTask implements
-        Property.ValueChangeListener {
+Property.ValueChangeListener {
     private static final Logger LOG = LoggerFactory
             .getLogger(GroupEditTask.class);
 
@@ -89,7 +89,7 @@ public class GroupEditTask extends AbstractGroupTask implements
 
             final CodeList lCodeList = CodeListHome.instance().getCodeList(
                     GroupState.class, getAppLocale().getLanguage());
-            return new GroupView(lGroup, BOMHelper.getParticipantHome()
+            return new GroupView(lGroup, VifBOMHelper.getParticipantHome()
                     .getParticipantsOfGroup(lGroupID),
                     lCodeList.getLabel(BeanWrapperHelper.getString(
                             GroupHome.KEY_STATE, lGroup)), admins, this);
@@ -234,9 +234,9 @@ public class GroupEditTask extends AbstractGroupTask implements
             lParameters.set(Constants.KEY_PARAMETER_SUBTITLE_SELECT, lMessages
                     .getFormattedMessage("ui.group.lookup.sub2.title.page", lGroupName)); //$NON-NLS-1$
             lParameters
-                    .set(Constants.KEY_PARAMETER_RIGHT_COLUMN,
-                            lMessages
-                                    .getFormattedMessage("ui.group.lookup.selected.participants", lGroupName)); //$NON-NLS-1$
+            .set(Constants.KEY_PARAMETER_RIGHT_COLUMN,
+                    lMessages
+                    .getFormattedMessage("ui.group.lookup.selected.participants", lGroupName)); //$NON-NLS-1$
             lParameters.set(Constants.KEY_PARAMETER_SELECTED,
                     new Vector<ParticipantBean>());
             lParameters.set(Constants.KEY_PARAMETER_PROCESSING,

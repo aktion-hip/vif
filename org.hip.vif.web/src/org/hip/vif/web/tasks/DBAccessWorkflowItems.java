@@ -49,365 +49,310 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 
-/**
- * Helper class providing the worklow items (i.e. single workflow steps) to
- * configure the DB access.
- * 
- * @author Luthiger Created: 14.02.2012
- */
+/** Helper class providing the worklow items (i.e. single workflow steps) to configure the DB access.
+ *
+ * @author Luthiger Created: 14.02.2012 */
 public class DBAccessWorkflowItems {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(DBAccessWorkflowItems.class);
+    private static final Logger LOG = LoggerFactory
+            .getLogger(DBAccessWorkflowItems.class);
 
-	/**
-	 * The interface of a workflow item.
-	 */
-	protected static interface IWorkflowItem {
-		void run(DBAccessWorkflow inController) throws WorkflowException;
+    /** The interface of a workflow item. */
+    protected static interface IWorkflowItem {
+        void run(DBAccessWorkflow inController) throws WorkflowException;
 
-		boolean hasNextStep();
+        boolean hasNextStep();
 
-		IWorkflowItem getNextStep();
+        IWorkflowItem getNextStep();
 
-		void registerSuccessItem(IWorkflowItem inItem);
+        void registerSuccessItem(IWorkflowItem inItem);
 
-		void registerFailureItem(IWorkflowItem inItem);
+        void registerFailureItem(IWorkflowItem inItem);
 
-		int getReturnCode();
+        int getReturnCode();
 
-		String getErrorMessage();
-	}
+        String getErrorMessage();
+    }
 
-	/**
-	 * Abstract workflow item base class.
-	 */
-	protected static abstract class AbstractWorkflowItem {
-		private IWorkflowItem successItem = null;
-		private IWorkflowItem failureItem = null;
-		private IWorkflowItem nextStep = null;
-		private String errorMsg = ""; //$NON-NLS-1$
-		private DBAccessWorkflow controller;
-		private final IMessages messages = Activator.getMessages();
+    /** Abstract workflow item base class. */
+    protected static abstract class AbstractWorkflowItem {
+        private IWorkflowItem successItem = null;
+        private IWorkflowItem failureItem = null;
+        private IWorkflowItem nextStep = null;
+        private String errorMsg = ""; //$NON-NLS-1$
+        private DBAccessWorkflow controller;
+        private final IMessages messages = Activator.getMessages();
 
-		public void registerSuccessItem(final IWorkflowItem inItem) {
-			successItem = inItem;
-		}
+        public void registerSuccessItem(final IWorkflowItem inItem) {
+            successItem = inItem;
+        }
 
-		public void registerFailureItem(final IWorkflowItem inItem) {
-			failureItem = inItem;
-		}
+        public void registerFailureItem(final IWorkflowItem inItem) {
+            failureItem = inItem;
+        }
 
-		protected void setOutcome(final boolean inSuccess) {
-			if (hasNextStep()) {
-				nextStep = inSuccess ? successItem : failureItem;
-			}
-		}
+        protected void setOutcome(final boolean inSuccess) {
+            if (hasNextStep()) {
+                nextStep = inSuccess ? successItem : failureItem;
+            }
+        }
 
-		public boolean hasNextStep() {
-			return successItem != null || failureItem != null;
-		}
+        public boolean hasNextStep() {
+            return successItem != null || failureItem != null;
+        }
 
-		public IWorkflowItem getNextStep() {
-			if (nextStep != null)
-				return nextStep;
-			if (successItem != null)
-				return successItem;
-			return failureItem;
-		}
+        public IWorkflowItem getNextStep() {
+            if (nextStep != null)
+                return nextStep;
+            if (successItem != null)
+                return successItem;
+            return failureItem;
+        }
 
-		public String getErrorMessage() {
-			return errorMsg;
-		}
+        public String getErrorMessage() {
+            return errorMsg;
+        }
 
-		protected void setErrorMessage(final String inMsgKey) {
-			errorMsg = messages.getMessage(inMsgKey);
-		}
+        protected void setErrorMessage(final String inMsgKey) {
+            errorMsg = messages.getMessage(inMsgKey);
+        }
 
-		public int getReturnCode() {
-			return DBAccessWorkflow.OK_LOGIN;
-		}
+        public int getReturnCode() {
+            return DBAccessWorkflow.OK_LOGIN;
+        }
 
-		protected void runNext() {
-			controller.nextStep();
-		}
+        protected void runNext() {
+            controller.nextStep();
+        }
 
-		public void run(final DBAccessWorkflow inController)
-				throws WorkflowException {
-			controller = inController;
-			runStep();
-		}
+        public void run(final DBAccessWorkflow inController)
+                throws WorkflowException {
+            controller = inController;
+            runStep();
+        }
 
-		protected abstract void runStep() throws WorkflowException;
-	}
+        protected abstract void runStep() throws WorkflowException;
+    }
 
-	/**
-	 * The workflow step to display the form to configure the DB access.
-	 */
-	public static class ShowConfigPopup extends AbstractWorkflowItem implements
-			IWorkflowItem {
-		private final Window window;
-		private DBConfigurationPopup dbConfiguration;
+    /** The workflow step to display the form to configure the DB access. */
+    public static class ShowConfigPopup extends AbstractWorkflowItem implements
+            IWorkflowItem {
+        private DBConfigurationPopup dbConfiguration;
 
-		ShowConfigPopup(final Window inWindow) {
-			window = inWindow;
-		}
+        @Override
+        public void runStep() throws WorkflowException {
+            try {
+                dbConfiguration = new DBConfigurationPopup(this);
+            } catch (final IOException exc) {
+                setErrorMessage("errmsg.dbaccess.configure"); //$NON-NLS-1$
+                throw new WorkflowException(exc);
+            }
+        }
 
-		@Override
-		public void runStep() throws WorkflowException {
-			try {
-				dbConfiguration = new DBConfigurationPopup(window, this);
-			}
-			catch (final IOException exc) {
-				setErrorMessage("errmsg.dbaccess.configure"); //$NON-NLS-1$
-				throw new WorkflowException(exc);
-			}
-		}
+        /** Callback method, saves the input of the DB access configuration popup.
+         *
+         * @param inConfiguration {@link ConfigurationItem} */
+        public void save(final ConfigurationItem inConfiguration) {
+            inConfiguration.saveChanges();
+            if (EmbeddedDBHelper.checkEmbedded(inConfiguration
+                    .getItemProperty(
+                            ConfigurationItem.PropertyDef.DB_DRIVER.getPID())
+                    .getValue().toString())) {
+                PreferencesHandler.INSTANCE.setEmbeddedDB();
+            }
+            // set the changed setting to the DB source registry
+            DataSourceRegistry.INSTANCE
+                    .setActiveConfiguration(PreferencesHandler.INSTANCE
+                            .getDBConfiguration());
+            dbConfiguration.close();
+            runNext();
+        }
+    }
 
-		/**
-		 * Callback method, saves the input of the DB access configuration
-		 * popup.
-		 * 
-		 * @param inConfiguration
-		 *            {@link ConfigurationItem}
-		 */
-		public void save(final ConfigurationItem inConfiguration) {
-			inConfiguration.saveChanges();
-			if (EmbeddedDBHelper.checkEmbedded(inConfiguration
-					.getItemProperty(
-							ConfigurationItem.PropertyDef.DB_DRIVER.getPID())
-					.getValue().toString())) {
-				PreferencesHandler.INSTANCE.setEmbeddedDB();
-			}
-			// set the changed setting to the DB source registry
-			DataSourceRegistry.INSTANCE
-					.setActiveConfiguration(PreferencesHandler.INSTANCE
-							.getDBConfiguration());
-			dbConfiguration.close();
-			runNext();
-		}
-	}
+    /** Check DB connection.
+     * <ul>
+     * <li>success -> checkNoTables</li>
+     * <li>failure -> DBAccessConfiguration</li>
+     * </ul> */
+    protected static class TryConnect extends AbstractWorkflowItem implements
+            IWorkflowItem {
+        @Override
+        public void runStep() throws WorkflowException {
+            final DBConnectionProber lProber = new DBConnectionProber();
+            setOutcome(!lProber.needsDBConfiguration());
+            runNext();
+        }
+    }
 
-	/**
-	 * Check DB connection.
-	 * <ul>
-	 * <li>success -> checkNoTables</li>
-	 * <li>failure -> DBAccessConfiguration</li>
-	 * </ul>
-	 * 
-	 */
-	protected static class TryConnect extends AbstractWorkflowItem implements
-			IWorkflowItem {
-		@Override
-		public void runStep() throws WorkflowException {
-			final DBConnectionProber lProber = new DBConnectionProber();
-			setOutcome(!lProber.needsDBConfiguration());
-			runNext();
-		}
-	}
+    /** Check whether the DB contains tables.
+     * <ul>
+     * <li>success -> checkSUExistance</li>
+     * <li>failure -> createTables</li>
+     * </ul> */
+    protected static class CheckNoTables extends AbstractWorkflowItem implements
+            IWorkflowItem {
+        @Override
+        public void runStep() throws WorkflowException {
+            final DBConnectionProber lProber = new DBConnectionProber();
+            setOutcome(!lProber.needsTableCreation());
+            runNext();
+        }
+    }
 
-	/**
-	 * Check whether the DB contains tables.
-	 * <ul>
-	 * <li>success -> checkSUExistance</li>
-	 * <li>failure -> createTables</li>
-	 * </ul>
-	 */
-	protected static class CheckNoTables extends AbstractWorkflowItem implements
-			IWorkflowItem {
-		@Override
-		public void runStep() throws WorkflowException {
-			final DBConnectionProber lProber = new DBConnectionProber();
-			setOutcome(!lProber.needsTableCreation());
-			runNext();
-		}
-	}
+    /** Create the tables if the DB is empty. */
+    public static class CreateTables extends AbstractWorkflowItem implements
+            IWorkflowItem {
 
-	/**
-	 * Create the tables if the DB is empty.
-	 */
-	public static class CreateTables extends AbstractWorkflowItem implements
-			IWorkflowItem {
+        @Override
+        public void runStep() throws WorkflowException {
+            try {
+                final DefaultStatement lSQL = new DefaultStatement();
+                for (final String lStatement : getStatements()) {
+                    lSQL.execute(lStatement);
+                }
+                runNext();
+            } catch (final Exception exc) {
+                setErrorMessage("errmsg.dbaccess.table.create"); //$NON-NLS-1$
+                throw new WorkflowException(exc);
+            }
+        }
 
-		@Override
-		public void runStep() throws WorkflowException {
-			try {
-				final DefaultStatement lSQL = new DefaultStatement();
-				for (final String lStatement : getStatements()) {
-					lSQL.execute(lStatement);
-				}
-				runNext();
-			}
-			catch (final Exception exc) {
-				setErrorMessage("errmsg.dbaccess.table.create"); //$NON-NLS-1$
-				throw new WorkflowException(exc);
-			}
-		}
+        private static Collection<String> getStatements() throws IOException,
+                SAXException, ParserConfigurationException {
+            final StatementsFileParser lParser = new StatementsFileParser();
+            return lParser.getStatements();
+        }
+    }
 
-		private static Collection<String> getStatements() throws IOException,
-				SAXException, ParserConfigurationException {
-			final StatementsFileParser lParser = new StatementsFileParser();
-			return lParser.getStatements();
-		}
-	}
+    /** Step to display the form to create the application's SU (the super user). */
+    public static class CreateSU extends AbstractWorkflowItem implements
+            IWorkflowItem {
+        protected int returnCode = DBAccessWorkflow.ERROR;
+        private CreateSUPopup createView;
 
-	/**
-	 * Step to display the form to create the application's SU (the super user).
-	 */
-	public static class CreateSU extends AbstractWorkflowItem implements
-			IWorkflowItem {
-		private final Window window;
-		protected int returnCode = DBAccessWorkflow.ERROR;
-		private CreateSUPopup createView;
+        @SuppressWarnings("serial")
+        @Override
+        public void runStep() throws WorkflowException {
+            try {
+                createView = new CreateSUPopup((Member) BOMHelper.getMemberHome().create(), this);
+                createView.addCloseListener(new CloseListener() {
+                    @Override
+                    public void windowClose(final CloseEvent inEvent) {
+                        registerSuccessItem(null);
+                        registerFailureItem(null);
+                        setErrorMessage("errmsg.dbaccess.form.su"); //$NON-NLS-1$
+                        runNext();
+                    }
+                });
+            } catch (final Exception exc) {
+                setErrorMessage("errmsg.dbaccess.create.su"); //$NON-NLS-1$
+                throw new WorkflowException(exc);
+            }
+        }
 
-		protected CreateSU(final Window inWindow) {
-			window = inWindow;
-		}
+        /** Callback method.
+         *
+         * @param inMember {@link Member} */
+        public void save(final Member inMember) {
+            try {
+                final String lPwrd = createSURecord(inMember);
+                loginAsSU(inMember, lPwrd);
+                runNext();
+            } catch (final Exception exc) {
+                LOG.error("Error encountered while creating the SU member record!", exc); //$NON-NLS-1$
+                setErrorMessage("errmsg.dbaccess.create.su"); //$NON-NLS-1$
+            } finally {
+                closeView();
+            }
+        }
 
-		@SuppressWarnings("serial")
-		@Override
-		public void runStep() throws WorkflowException {
-			try {
-				createView = new CreateSUPopup(window, (Member) BOMHelper
-						.getMemberHome().create(), this);
-				createView.addCloseListener(new CloseListener() {
-					@Override
-					public void windowClose(final CloseEvent inEvent) {
-						registerSuccessItem(null);
-						registerFailureItem(null);
-						setErrorMessage("errmsg.dbaccess.form.su"); //$NON-NLS-1$
-						runNext();
-					}
-				});
-			}
-			catch (final Exception exc) {
-				setErrorMessage("errmsg.dbaccess.create.su"); //$NON-NLS-1$
-				throw new WorkflowException(exc);
-			}
-		}
+        protected void closeView() {
+            createView.close();
+        }
 
-		/**
-		 * Callback method.
-		 * 
-		 * @param inMember
-		 *            {@link Member}
-		 */
-		public void save(final Member inMember) {
-			try {
-				final String lPwrd = createSURecord(inMember);
-				loginAsSU(inMember, lPwrd);
-				runNext();
-			}
-			catch (final Exception exc) {
-				LOG.error(
-						"Error encountered while creating the SU member record!", exc); //$NON-NLS-1$
-				setErrorMessage("errmsg.dbaccess.create.su"); //$NON-NLS-1$
-			} finally {
-				closeView();
-			}
-		}
+        protected String createSURecord(final Member inMember)
+                throws VException, Exception {
+            final String outPwrd = inMember.get(MemberHome.KEY_PASSWORD)
+                    .toString();
+            inMember.set(MemberHome.KEY_PASSWORD, MemberUtility.INSTANCE
+                    .getActiveAuthenticator().encrypt(outPwrd));
+            final Collection<String> lRoles = new ArrayList<String>();
+            lRoles.add(String.valueOf(RoleHome.ROLE_SU));
+            inMember.ucNew(lRoles);
+            return outPwrd;
+        }
 
-		protected void closeView() {
-			createView.close();
-		}
+        private void loginAsSU(final Member inMember, final String inPwrd)
+                throws InvalidAuthenticationException, VException,
+                SQLException, GettingException {
+            MemberUtility.INSTANCE.getActiveAuthenticator()
+                    .checkAuthentication(
+                            inMember.get(MemberHome.KEY_USER_ID).toString(),
+                            inPwrd);
+            returnCode = DBAccessWorkflow.OK_SU;
+        }
 
-		protected String createSURecord(final Member inMember)
-				throws VException, Exception {
-			final String outPwrd = inMember.get(MemberHome.KEY_PASSWORD)
-					.toString();
-			inMember.set(MemberHome.KEY_PASSWORD, MemberUtility.INSTANCE
-					.getActiveAuthenticator().encrypt(outPwrd));
-			final Collection<String> lRoles = new ArrayList<String>();
-			lRoles.add(String.valueOf(RoleHome.ROLE_SU));
-			inMember.ucNew(lRoles);
-			return outPwrd;
-		}
+        @Override
+        public int getReturnCode() {
+            return returnCode;
+        }
+    }
 
-		private void loginAsSU(final Member inMember, final String inPwrd)
-				throws InvalidAuthenticationException, VException,
-				SQLException, GettingException {
-			MemberUtility.INSTANCE.getActiveAuthenticator()
-					.checkAuthentication(
-							inMember.get(MemberHome.KEY_USER_ID).toString(),
-							inPwrd);
-			returnCode = DBAccessWorkflow.OK_SU;
-		}
+    /** Step to display the form to create the application's SU (the super user).<br />
+     * This step doesn't process the SU login. Instead, a notification for a new login is displayed. */
+    public static class CreateSUNoLogin extends CreateSU {
 
-		@Override
-		public int getReturnCode() {
-			return returnCode;
-		}
-	}
+        @Override
+        public void save(final Member inMember) {
+            try {
+                createSURecord(inMember);
+                returnCode = DBAccessWorkflow.OK_SU;
+                runNext();
+            } catch (final Exception exc) {
+                LOG.error("Error encountered while creating the SU member record!", exc); //$NON-NLS-1$
+                setErrorMessage("errmsg.dbaccess.create.su"); //$NON-NLS-1$
+            } finally {
+                closeView();
+            }
+        }
+    }
 
-	/**
-	 * Step to display the form to create the application's SU (the super user).<br />
-	 * This step doesn't process the SU login. Instead, a notification for a new
-	 * login is displayed.
-	 */
-	public static class CreateSUNoLogin extends CreateSU {
-		protected CreateSUNoLogin(final Window inWindow) {
-			super(inWindow);
-		}
+    /** Checks the existence of a SU.
+     * <ul>
+     * <li>success -> showLogin</li>
+     * <li>failure -> createSU</li>
+     * </ul> */
+    protected static class CheckSUExistance extends AbstractWorkflowItem
+            implements IWorkflowItem {
+        @Override
+        public void runStep() throws WorkflowException {
+            try {
+                final int lCount = BOMHelper.getMemberCacheHome().getCount();
+                setOutcome(lCount > 0);
+                runNext();
+            } catch (final Exception exc) {
+                setErrorMessage("errmsg.dbaccess.read.su"); //$NON-NLS-1$
+                throw new WorkflowException(exc);
+            }
+        }
+    }
 
-		@Override
-		public void save(final Member inMember) {
-			try {
-				createSURecord(inMember);
-				returnCode = DBAccessWorkflow.OK_SU;
-				runNext();
-			}
-			catch (final Exception exc) {
-				LOG.error(
-						"Error encountered while creating the SU member record!", exc); //$NON-NLS-1$
-				setErrorMessage("errmsg.dbaccess.create.su"); //$NON-NLS-1$
-			} finally {
-				closeView();
-			}
-		}
-	}
+    /** Final workflow step: show the normal login form. */
+    protected static class ShowLogin extends AbstractWorkflowItem implements
+            IWorkflowItem {
+        @Override
+        public void runStep() throws WorkflowException {
+            runNext();
+        }
+    }
 
-	/**
-	 * Checks the existence of a SU.
-	 * <ul>
-	 * <li>success -> showLogin</li>
-	 * <li>failure -> createSU</li>
-	 * </ul>
-	 */
-	protected static class CheckSUExistance extends AbstractWorkflowItem
-			implements IWorkflowItem {
-		@Override
-		public void runStep() throws WorkflowException {
-			try {
-				final int lCount = BOMHelper.getMemberCacheHome().getCount();
-				setOutcome(lCount > 0);
-				runNext();
-			}
-			catch (final Exception exc) {
-				setErrorMessage("errmsg.dbaccess.read.su"); //$NON-NLS-1$
-				throw new WorkflowException(exc);
-			}
-		}
-	}
-
-	/**
-	 * Final workflow step: show the normal login form.
-	 */
-	protected static class ShowLogin extends AbstractWorkflowItem implements
-			IWorkflowItem {
-		@Override
-		public void runStep() throws WorkflowException {
-			runNext();
-		}
-	}
-
-	@SuppressWarnings("serial")
-	public static class WorkflowException extends Exception {
-		public WorkflowException(final Throwable inCause) {
-			super(inCause);
-		}
-	}
+    @SuppressWarnings("serial")
+    public static class WorkflowException extends Exception {
+        public WorkflowException(final Throwable inCause) {
+            super(inCause);
+        }
+    }
 
 }

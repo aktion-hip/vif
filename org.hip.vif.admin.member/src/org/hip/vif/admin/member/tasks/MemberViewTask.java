@@ -19,17 +19,15 @@
 
 package org.hip.vif.admin.member.tasks;
 
-import org.hip.vif.admin.member.data.RoleContainer;
 import org.hip.vif.admin.member.internal.LookupMemberComponent;
 import org.hip.vif.admin.member.ui.MemberView;
-import org.hip.vif.core.ApplicationConstants;
 import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.Member;
 import org.hip.vif.core.util.RatingsHelper;
+import org.hip.vif.web.member.RoleContainer;
 import org.hip.vif.web.tasks.AbstractWebController;
 import org.ripla.annotations.UseCaseController;
 import org.ripla.exceptions.RiplaException;
-import org.ripla.util.ParameterObject;
 
 import com.vaadin.ui.Component;
 
@@ -48,15 +46,13 @@ public class MemberViewTask extends AbstractWebController {
 
     @Override
     protected Component runChecked() throws RiplaException {
-        final ParameterObject lParameters = getParameters();
         try {
-            final Long lMemberID = new Long(lParameters.get(
-                    lParameters.get(ApplicationConstants.PARAMETER_KEY_GENERIC).toString()).toString());
+            final Long lMemberID = getModelIdFromParameter();
             final Member lMember = BOMHelper.getMemberCacheHome().getMember(lMemberID);
             return new MemberView(lMember,
                     RoleContainer.createData(BOMHelper.getLinkMemberRoleHome().getRolesOf(lMemberID), getAppLocale()
                             .getLanguage(), BOMHelper.getRoleHome().getGroupSpecificIDs()),
-                            new RatingsHelper(lMemberID));
+                    new RatingsHelper(lMemberID));
         } catch (final Exception exc) {
             throw createContactAdminException(exc);
         }

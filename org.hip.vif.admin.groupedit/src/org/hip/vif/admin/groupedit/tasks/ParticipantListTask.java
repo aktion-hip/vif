@@ -127,7 +127,7 @@ public class ParticipantListTask extends AbstractWebController implements Proper
      * @return boolean <code>true</code> if successful */
     public boolean deleteParticipants() {
         try {
-            final ParticipantHome lParticipantHome = BOMHelper.getParticipantHome();
+            final ParticipantHome lParticipantHome = VifBOMHelper.getParticipantHome();
             final LinkMemberRoleHome lRoleHome = BOMHelper.getLinkMemberRoleHome();
             final Long lGroupID = getGroupID();
 

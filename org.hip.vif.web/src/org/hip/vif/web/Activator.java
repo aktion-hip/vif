@@ -21,6 +21,7 @@ package org.hip.vif.web;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.Timer;
 
 import org.hip.vif.web.stale.RemoveStaleRequests;
@@ -30,44 +31,42 @@ import org.ripla.interfaces.IMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * The bundle's activator.
- * 
- * @author Luthiger Created: 12.05.2011
- */
+/** The bundle's activator.
+ *
+ * @author Luthiger Created: 12.05.2011 */
 public class Activator implements BundleActivator {
-	private final static Logger LOG = LoggerFactory.getLogger(Activator.class);
-	volatile private static IMessages cMessages;
-	private Timer timer;
+    private final static Logger LOG = LoggerFactory.getLogger(Activator.class);
+    volatile private static IMessages cMessages;
+    private Timer timer;
 
-	@Override
-	public void start(final BundleContext inContext) throws Exception {
-		cMessages = new Messages();
-		LOG.debug("{} started.", inContext.getBundle().getSymbolicName()); //$NON-NLS-1$
+    @Override
+    public void start(final BundleContext inContext) throws Exception {
+        cMessages = new Messages();
+        LOG.debug("{} started.", inContext.getBundle().getSymbolicName()); //$NON-NLS-1$
 
-		// start the thread to remove stale tasks
-		timer = new Timer();
-		timer.scheduleAtFixedRate(new RemoveStaleRequests(),
-				getTomorrowMorning4am(), Constants.ONCE_PER_DAY);
-	}
+        // start the thread to remove stale tasks
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new RemoveStaleRequests(),
+                getTomorrowMorning4am(), Constants.ONCE_PER_DAY);
+    }
 
-	@Override
-	public void stop(final BundleContext inContext) throws Exception {
-		cMessages = null;
-		LOG.debug("{} stopped.", inContext.getBundle().getSymbolicName()); //$NON-NLS-1$
-	}
+    @Override
+    public void stop(final BundleContext inContext) throws Exception {
+        cMessages = null;
+        LOG.debug("{} stopped.", inContext.getBundle().getSymbolicName()); //$NON-NLS-1$
+    }
 
-	public static IMessages getMessages() {
-		return cMessages != null ? cMessages : new Messages();
-	}
+    public static IMessages getMessages() {
+        return cMessages != null ? cMessages : new TestMessages(Locale.ENGLISH);
+    }
 
-	private static Date getTomorrowMorning4am() {
-		final Calendar lTomorrow = new GregorianCalendar();
-		lTomorrow.add(Calendar.DATE, 1);
-		final Calendar out = new GregorianCalendar(
-				lTomorrow.get(Calendar.YEAR), lTomorrow.get(Calendar.MONTH),
-				lTomorrow.get(Calendar.DATE), 4, 0);
-		return out.getTime();
-	}
+    private static Date getTomorrowMorning4am() {
+        final Calendar lTomorrow = new GregorianCalendar();
+        lTomorrow.add(Calendar.DATE, 1);
+        final Calendar out = new GregorianCalendar(
+                lTomorrow.get(Calendar.YEAR), lTomorrow.get(Calendar.MONTH),
+                lTomorrow.get(Calendar.DATE), 4, 0);
+        return out.getTime();
+    }
 
 }

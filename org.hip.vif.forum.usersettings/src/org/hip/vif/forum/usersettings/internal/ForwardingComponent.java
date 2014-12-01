@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,31 +20,29 @@
 package org.hip.vif.forum.usersettings.internal;
 
 import org.hip.vif.forum.usersettings.tasks.UserTasksManageTask;
-import org.hip.vif.web.interfaces.IForwarding;
-import org.hip.vif.web.interfaces.ITargetConfiguration;
 import org.hip.vif.web.tasks.ForwardControllerRegistry;
+import org.ripla.web.interfaces.IForwarding;
+import org.ripla.web.interfaces.IForwardingConfig;
 import org.ripla.web.interfaces.IPluggable;
 
-/**
- * The service provider for the <code>IForwarding</code> service.
- * 
- * @author Luthiger Created: 30.12.2011
- */
+/** The service provider for the <code>IForwarding</code> service.
+ *
+ * @author Luthiger Created: 30.12.2011 */
 public class ForwardingComponent implements IForwarding {
 
-	@Override
-	public ITargetConfiguration[] getTargets() {
-		return new ITargetConfiguration[] { new ITargetConfiguration() {
-			@Override
-			public String getAlias() {
-				return ForwardControllerRegistry.FORWARD_RATING_FORM;
-			}
+    @Override
+    public IForwardingConfig[] getForwardingConfigs() {
+        return new IForwardingConfig[] { new IForwardingConfig() {
+            @Override
+            public String getAlias() {
+                return ForwardControllerRegistry.Alias.FORWARD_RATING_FORM.getName();
+            }
 
-			@Override
-			public Class<? extends IPluggable> getTarget() {
-				return UserTasksManageTask.class;
-			}
-		} };
-	}
+            @Override
+            public Class<? extends IPluggable> getTarget() {
+                return UserTasksManageTask.class;
+            }
+        } };
+    }
 
 }

@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package org.hip.vif.core.bom.impl;
 
 import java.sql.SQLException;
@@ -24,36 +24,31 @@ import org.hip.kernel.bom.impl.DomainObjectImpl;
 import org.hip.kernel.exc.VException;
 import org.hip.vif.core.util.QuestionHierarchyEntry;
 
-/**
- * This class implements the join between the question hierachy and questions.
- * 
- * @author: Benno Luthiger
- */
+/** This class implements the join between the question hierachy and questions.
+ *
+ * @author: Benno Luthiger */
+@SuppressWarnings("serial")
 public class JoinQuestionToChild extends DomainObjectImpl implements QuestionHierarchyEntry {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinQuestionToChildHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinQuestionToChildHome";
 
-	/**
-	 * Constructor for JoinQuestionToChild.
-	 */
-	public JoinQuestionToChild() {
-		super();
-	}
+    /** Constructor for JoinQuestionToChild. */
+    public JoinQuestionToChild() {
+        super();
+    }
 
-	/**
-	 * @see org.hip.kernel.bom.GeneralDomainObject#getHomeClassName()
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
-	
-	/**
-	 * Sets the specified visitor (see visitor pattern).
-	 * 
-	 * @param inVisitor QuestionHierarchyVisitor
-	 * @throws VException
-	 * @throws SQLException
-	 */
-	public void accept(QuestionHierarchyVisitor inVisitor) throws VException, SQLException {
-		inVisitor.visitChild(this);
-	}
+    /** @see org.hip.kernel.bom.GeneralDomainObject#getHomeClassName() */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
+
+    /** Sets the specified visitor (see visitor pattern).
+     * 
+     * @param inVisitor QuestionHierarchyVisitor
+     * @throws VException
+     * @throws SQLException */
+    @Override
+    public void accept(final QuestionHierarchyVisitor inVisitor) throws VException, SQLException {
+        inVisitor.visitChild(this);
+    }
 }

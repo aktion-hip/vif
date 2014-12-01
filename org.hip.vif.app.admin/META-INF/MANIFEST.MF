@@ -4,8 +4,7 @@ Bundle-Name: Admin
 Bundle-SymbolicName: org.hip.vif.app.admin
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: RelationWare
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
- JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: com.vaadin.annotations;version="[7.1.0,8.0.0)",
  com.vaadin.event;version="[7.1.12,8.0.0)",
  com.vaadin.server;version="[7.1.0,8.0.0)",

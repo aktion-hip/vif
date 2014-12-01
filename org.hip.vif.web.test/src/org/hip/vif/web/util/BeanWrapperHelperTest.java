@@ -22,12 +22,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.sql.Timestamp;
 
+import org.hip.kernel.exc.VException;
 import org.hip.vif.core.DataHouseKeeper;
 import org.hip.vif.core.IndexHouseKeeper;
 import org.hip.vif.core.bom.Member;
 import org.hip.vif.core.bom.MemberHome;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /** @author lbenno */
@@ -37,10 +39,14 @@ public class BeanWrapperHelperTest {
 
     private String memberID;
 
+    @BeforeClass
+    public static void init() throws VException {
+        data = DataHouseKeeper.getInstance();
+    }
+
     @Before
     public void setUp() throws Exception {
         IndexHouseKeeper.redirectDocRoot(false);
-
         memberID = data.createMember("testUser", "test@vif.org");
     }
 

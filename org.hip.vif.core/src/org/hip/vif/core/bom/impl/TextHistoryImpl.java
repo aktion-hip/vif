@@ -15,35 +15,30 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 import org.hip.vif.core.bom.TextHistory;
 
-/**
- * Implementation class of <code>Text</code> history.
+/** Implementation class of <code>Text</code> history.
  *
- * @author Luthiger
- * Created: 08.07.2010
- */
+ * @author Luthiger Created: 08.07.2010 */
+@SuppressWarnings("serial")
 public class TextHistoryImpl extends DomainObjectImpl implements TextHistory {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.TextHistoryHomeImpl";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.TextHistoryHomeImpl";
 
-	/**
-	 * TextHistoryImpl constructor.
-	 */
-	public TextHistoryImpl() {
-		super();
-	}
+    /** TextHistoryImpl constructor. */
+    public TextHistoryImpl() {
+        super();
+    }
 
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
 }

@@ -1,5 +1,3 @@
-package org.hip.vif.core.bom.impl;
-
 /*
 	This package is part of the persistency layer of the application VIF.
 	Copyright (C) 2004, Benno Luthiger
@@ -17,33 +15,30 @@ package org.hip.vif.core.bom.impl;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 import org.hip.vif.core.bom.Bookmark;
 
-/**
- * The model of a Bookmark.
- * 
+/** The model of a Bookmark.
+ *
  * @author Benno Luthiger
- * @see org.hip.vif.core.bom.Bookmark
- * Created on Feb 25, 2004
- */
+ * @see org.hip.vif.core.bom.Bookmark Created on Feb 25, 2004 */
+@SuppressWarnings("serial")
 public class BookmarkImpl extends DomainObjectImpl implements Bookmark {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.BookmarkHomeImpl";
-	
-	/**
-	 * BookmarkImpl constructor.
-	 */
-	public BookmarkImpl() {
-		super();
-	}
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.BookmarkHomeImpl";
+
+    /** BookmarkImpl constructor. */
+    public BookmarkImpl() {
+        super();
+    }
+
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 }

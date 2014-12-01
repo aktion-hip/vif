@@ -176,7 +176,7 @@ public class QuestionView extends AbstractQuestionView {
 
     private Component createChildren(final QuestionContainer inChildren, final IPluggable inTask,
             final IMessages inMessages)
-            throws VException, SQLException {
+                    throws VException, SQLException {
         return createTable(inMessages.getMessage("ui.question.view.question.follow.up"), inChildren, inTask); //$NON-NLS-1$
     }
 
@@ -341,10 +341,11 @@ public class QuestionView extends AbstractQuestionView {
 
         private Window createDialog(final String inTitle) {
             final Window outDialog = new Window(inTitle);
-            final VerticalLayout lLayout = (VerticalLayout) outDialog.getContent();
+            final VerticalLayout lLayout = new VerticalLayout();
             lLayout.setMargin(true);
             lLayout.setSpacing(true);
             lLayout.setSizeUndefined();
+            outDialog.setContent(lLayout);
 
             outDialog.setModal(true);
             outDialog.center();

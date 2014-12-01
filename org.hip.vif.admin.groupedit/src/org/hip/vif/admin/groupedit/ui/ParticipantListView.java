@@ -162,7 +162,7 @@ public class ParticipantListView extends CustomComponent {
     private static class SelectedFilter implements Container.Filter {
         @Override
         public boolean passesFilter(final Object inItemId, final Item inItem) throws UnsupportedOperationException {
-            final Property lCheckBox = inItem.getItemProperty(ParticipantContainer.ENTRY_CHECKED);
+            final Property<?> lCheckBox = inItem.getItemProperty(ParticipantContainer.ENTRY_CHECKED);
             return (Boolean) lCheckBox.getValue();
         }
 

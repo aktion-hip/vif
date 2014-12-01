@@ -20,22 +20,19 @@ package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 
-/**
- * Domain object containing the data of a discussion group's participant.
- * 
- * @author Benno Luthiger
- * Created on Nov 7, 2004
- */
+/** Domain object containing the data of a discussion group's participant.
+ *
+ * @author Benno Luthiger Created on Nov 7, 2004 */
+@SuppressWarnings("serial")
 public class NestedParticipantsOfGroup extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.NestedParticipantsOfGroupHome";
-	public final static String HOME_CLASS_NAME2 = "org.hip.vif.core.bom.impl.NestedParticipantsOfGroupHome2";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.NestedParticipantsOfGroupHome";
+    public final static String HOME_CLASS_NAME2 = "org.hip.vif.core.bom.impl.NestedParticipantsOfGroupHome2";
 
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 }

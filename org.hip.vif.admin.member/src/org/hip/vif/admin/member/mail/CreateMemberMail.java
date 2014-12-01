@@ -24,6 +24,7 @@ import org.hip.kernel.exc.VException;
 import org.hip.vif.admin.member.Activator;
 import org.hip.vif.core.bom.VIFMember;
 import org.hip.vif.core.service.PreferencesHandler;
+import org.hip.vif.web.tasks.ForwardControllerRegistry;
 import org.hip.vif.web.util.MailWithLink;
 import org.ripla.interfaces.IMessages;
 
@@ -61,7 +62,9 @@ public class CreateMemberMail extends MailWithLink {
         password = inPassword;
         forumName = PreferencesHandler.INSTANCE.get(PreferencesHandler.KEY_FORUM_NAME);
         urlForumMain = getForumAppURL();
-        urlForumChangePW = createRequestedURL(ForwardTaskRegistry.ForwardPWChangeForm.class, true);
+        urlForumChangePW = createRequestedURL(
+                ForwardControllerRegistry.INSTANCE.getController(ForwardControllerRegistry.Alias.FORWARD_PWCHNGE_FORM),
+                true);
     }
 
     /** @see org.hip.vif.mail.AbstractMail#getBody() */
@@ -84,9 +87,9 @@ public class CreateMemberMail extends MailWithLink {
         outBody.append("</p><p>").append(getMessage(lMessages, KEY_MAIL2)).append("<br/>"); //$NON-NLS-1$ //$NON-NLS-2$
         outBody.append(INDENT).append(getMessage(lMessages, KEY_USER_ID)).append(": ").append(userID).append("<br/>"); //$NON-NLS-1$ //$NON-NLS-2$
         outBody.append(INDENT).append(getMessage(lMessages, KEY_PASSWORD))
-        .append(": ").append(password).append("</p><p>"); //$NON-NLS-1$ //$NON-NLS-2$
+                .append(": ").append(password).append("</p><p>"); //$NON-NLS-1$ //$NON-NLS-2$
         outBody.append(getFormattedMessage(lMessages, KEY_FORUM_URL, renderClickable(urlForumMain, urlForumMain)))
-        .append("<br/>"); //$NON-NLS-1$
+                .append("<br/>"); //$NON-NLS-1$
         outBody.append(
                 getFormattedMessage(lMessages, KEY_PWCHNGE_URL,
                         renderClickable(urlForumChangePW, getMessage(lMessages, "mail.member.pwrd.label")))).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$

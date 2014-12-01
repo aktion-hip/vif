@@ -32,6 +32,7 @@ import org.hip.vif.core.bom.LinkMemberRoleHome;
 import org.hip.vif.core.bom.ParticipantHome;
 import org.hip.vif.core.exc.ExternIDNotUniqueException;
 import org.hip.vif.core.service.MemberUtility;
+import org.hip.vif.web.bom.VifBOMHelper;
 import org.hip.vif.web.util.MemberBean;
 import org.ripla.annotations.UseCaseController;
 import org.ripla.exceptions.RiplaException;
@@ -74,7 +75,7 @@ public class ParticipantSelectTask extends AbstractGroupTask {
 
     protected int registerAsParticipants(final Long inGroupID, final Collection<Long> inMembers) throws RiplaException {
         try {
-            final ParticipantHome lParticipantHome = BOMHelper.getParticipantHome();
+            final ParticipantHome lParticipantHome = VifBOMHelper.getParticipantHome();
             final LinkMemberRoleHome lRoleHome = BOMHelper.getLinkMemberRoleHome();
             boolean lRegistered = false;
             int outRegistered = 0;
@@ -100,7 +101,7 @@ public class ParticipantSelectTask extends AbstractGroupTask {
     }
 
     protected Collection<Long> getSelectedIDs(final Collection<MemberBean> inGroupAdmins) throws VException,
-    SQLException {
+            SQLException {
         final Collection<Long> lIDs = new ArrayList<Long>(inGroupAdmins.size());
         for (final MemberBean lMember : inGroupAdmins) {
             lIDs.add(lMember.getMemberID());

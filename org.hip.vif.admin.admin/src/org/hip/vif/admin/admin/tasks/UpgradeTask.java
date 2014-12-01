@@ -36,87 +36,86 @@ import org.slf4j.LoggerFactory;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ProgressBar;
+import com.vaadin.ui.UI;
 
-/**
- * Task to manage the application's upgrade.
- * 
- * @author Luthiger Created: 16.02.2012
- */
+/** Task to manage the application's upgrade.
+ *
+ * @author Luthiger Created: 16.02.2012 */
 @UseCaseController
 public class UpgradeTask extends AbstractWebController {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(UpgradeTask.class);
+    private static final Logger LOG = LoggerFactory
+            .getLogger(UpgradeTask.class);
 
-	@Override
-	protected String needsPermission() {
-		return Constants.PERMISSION_UPGRADE;
-	}
+    @Override
+    protected String needsPermission() {
+        return Constants.PERMISSION_UPGRADE;
+    }
 
-	@Override
-	protected Component runChecked() {
-		emptyContextMenu();
-		return new UpgradeView(BOMHelper.getAppVersionHome().getVersion(),
-				UpgradeRegistry.INSTANCE.getSoftwareVersion(),
-				new UpgradeThread());
-	}
+    @Override
+    protected Component runChecked() {
+        emptyContextMenu();
+        return new UpgradeView(BOMHelper.getAppVersionHome().getVersion(),
+                UpgradeRegistry.INSTANCE.getSoftwareVersion(),
+                new UpgradeThread());
+    }
 
-	// --- thread to process the upgrade ---
+    // --- thread to process the upgrade ---
 
-	public class UpgradeThread extends Thread {
-		private String fromVersion;
-		private String toVersion;
-		private ProgressBar progress;
-		private Collection<IVIFUpgrade> failurs;
+    public class UpgradeThread extends Thread {
+        private String fromVersion;
+        private String toVersion;
+        private ProgressBar progress;
+        private Collection<IVIFUpgrade> failurs;
 
-		/**
-		 * Method to initialize the upgrad process and start the thread.
-		 * 
-		 * @param inFromVersion
-		 *            String
-		 * @param inToVersion
-		 *            String
-		 * @param inProgress
-		 *            {@link ProgressBar}
-		 * @return Collection&lt;IVIFUpgrade> the collection of failed upgrades
-		 */
-		public Collection<IVIFUpgrade> upgrade(final String inFromVersion,
-				final String inToVersion, final ProgressBar inProgress) {
-			fromVersion = inFromVersion;
-			toVersion = inToVersion;
-			progress = inProgress;
-			failurs = Collections.emptyList();
+        /** Method to initialize the upgrad process and start the thread.
+         *
+         * @param inFromVersion String
+         * @param inToVersion String
+         * @param inProgress {@link ProgressBar}
+         * @return Collection&lt;IVIFUpgrade> the collection of failed upgrades */
+        public Collection<IVIFUpgrade> upgrade(final String inFromVersion,
+                final String inToVersion, final ProgressBar inProgress) {
+            fromVersion = inFromVersion;
+            toVersion = inToVersion;
+            progress = inProgress;
+            failurs = Collections.emptyList();
 
-			start();
+            start();
 
-			try {
-				join();
-			}
-			catch (final InterruptedException exc) {
-				LOG.error("Interrupted the upgrade thread.", exc); //$NON-NLS-1$
-			}
+            try {
+                join();
+            } catch (final InterruptedException exc) {
+                LOG.error("Interrupted the upgrade thread.", exc); //$NON-NLS-1$
+            }
 
-			if (failurs.isEmpty()) {
-				showNotification(Activator.getMessages().getMessage(
-						"admin.upgrade.feedback.success")); //$NON-NLS-1$
-				sendEvent(UpgradeTask.class);
-				return Collections.emptyList();
-			}
-			return failurs;
-		}
+            UI.getCurrent().setPollInterval(-1);
+            if (failurs.isEmpty()) {
+                showNotification(Activator.getMessages().getMessage("admin.upgrade.feedback.success")); //$NON-NLS-1$
+                sendEvent(UpgradeTask.class);
+                return Collections.emptyList();
+            }
+            return failurs;
+        }
 
-		@Override
-		public void run() {
-			final IProgressStepper lStepper = new IProgressStepper() {
-				@Override
-				public void nextStep(final int inActStep, final int inMaxSteps) {
-					final float lDelta = 1f / inMaxSteps;
-					progress.setValue(new Float(inActStep * lDelta));
-				}
-			};
+        @Override
+        public void run() {
+            final IProgressStepper lStepper = new IProgressStepper() {
+                @Override
+                public void nextStep(final int inActStep, final int inMaxSteps) {
+                    final float lDelta = 1f / inMaxSteps;
 
-			failurs = UpgradeRegistry.INSTANCE.upgrade(fromVersion, toVersion,
-					lStepper);
-		}
-	}
+                    UI.getCurrent().access(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.setValue(new Float(inActStep * lDelta));
+                        }
+                    });
+                }
+            };
+
+            failurs = UpgradeRegistry.INSTANCE.upgrade(fromVersion, toVersion,
+                    lStepper);
+        }
+    }
 
 }

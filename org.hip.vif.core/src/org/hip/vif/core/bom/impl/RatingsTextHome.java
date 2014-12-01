@@ -20,58 +20,55 @@ package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectHomeImpl;
 
-/**
- * Home for ratings bibliography models.
+/** Home for ratings bibliography models.
  *
- * @author Luthiger
- * Created: 07.08.2010
- */
+ * @author Luthiger Created: 07.08.2010 */
+@SuppressWarnings("serial")
 public class RatingsTextHome extends DomainObjectHomeImpl {
-	private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsText";
+    private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsText";
 
-	public final static String KEY_RATINGEVENTS_ID = "RatingEventsID";
-	public final static String KEY_TEXT_ID = "TextID";
-	public final static String KEY_VERSION = "Version";
-	
-	private final static String XML_OBJECT_DEF = 
-		"<?xml version='1.0' encoding='ISO-8859-1'?>	" +
-		"<objectDef objectName='RatingsText' parent='org.hip.kernel.bom.DomainObject' version='1.0'>	" +
-		"	<keyDefs>	" +
-		"		<keyDef>	" +
-		"			<keyItemDef seq='0' keyPropertyName='" + KEY_RATINGEVENTS_ID + "'/>	" +
-		"			<keyItemDef seq='1' keyPropertyName='" + KEY_TEXT_ID + "'/>	" +
-		"			<keyItemDef seq='2' keyPropertyName='" + KEY_VERSION + "'/>	" +
-		"		</keyDef>	" +
-		"	</keyDefs>	" +
-		"	<propertyDefs>	" +
-		"		<propertyDef propertyName='" + KEY_RATINGEVENTS_ID + "' valueType='Long' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblRatingsText' columnName='RatingEventsID'/>	" +
-		"		</propertyDef>	" +
-		"		<propertyDef propertyName='" + KEY_TEXT_ID + "' valueType='Long' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblRatingsText' columnName='TextID'/>	" +
-		"		</propertyDef>	" +
-		"		<propertyDef propertyName='" + KEY_VERSION + "' valueType='Long' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblRatingsText' columnName='nVersion'/>	" +
-		"		</propertyDef>	" +
-		"	</propertyDefs>	" +
-		"</objectDef>";
+    public final static String KEY_RATINGEVENTS_ID = "RatingEventsID";
+    public final static String KEY_TEXT_ID = "TextID";
+    public final static String KEY_VERSION = "Version";
 
-	/**
-	 * Returns the name of the objects which this home can create.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getObjectClassName() {
-		return OBJECT_CLASS_NAME;
-	}
+    private final static String XML_OBJECT_DEF =
+            "<?xml version='1.0' encoding='ISO-8859-1'?>	" +
+                    "<objectDef objectName='RatingsText' parent='org.hip.kernel.bom.DomainObject' version='1.0'>	" +
+                    "	<keyDefs>	" +
+                    "		<keyDef>	" +
+                    "			<keyItemDef seq='0' keyPropertyName='" + KEY_RATINGEVENTS_ID + "'/>	" +
+                    "			<keyItemDef seq='1' keyPropertyName='" + KEY_TEXT_ID + "'/>	" +
+                    "			<keyItemDef seq='2' keyPropertyName='" + KEY_VERSION + "'/>	" +
+                    "		</keyDef>	" +
+                    "	</keyDefs>	" +
+                    "	<propertyDefs>	" +
+                    "		<propertyDef propertyName='" + KEY_RATINGEVENTS_ID
+                    + "' valueType='Long' propertyType='simple'>	" +
+                    "			<mappingDef tableName='tblRatingsText' columnName='RatingEventsID'/>	" +
+                    "		</propertyDef>	" +
+                    "		<propertyDef propertyName='" + KEY_TEXT_ID + "' valueType='Long' propertyType='simple'>	" +
+                    "			<mappingDef tableName='tblRatingsText' columnName='TextID'/>	" +
+                    "		</propertyDef>	" +
+                    "		<propertyDef propertyName='" + KEY_VERSION + "' valueType='Long' propertyType='simple'>	" +
+                    "			<mappingDef tableName='tblRatingsText' columnName='nVersion'/>	" +
+                    "		</propertyDef>	" +
+                    "	</propertyDefs>	" +
+                    "</objectDef>";
 
-	/**
-	 * Returns the object definition string of the class managed by this home.
-	 *
-	 * @return java.lang.String
-	 */
-	protected String getObjectDefString() {
-		return XML_OBJECT_DEF;
-	}
+    /** Returns the name of the objects which this home can create.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getObjectClassName() {
+        return OBJECT_CLASS_NAME;
+    }
+
+    /** Returns the object definition string of the class managed by this home.
+     *
+     * @return java.lang.String */
+    @Override
+    protected String getObjectDefString() {
+        return XML_OBJECT_DEF;
+    }
 
 }

@@ -1,5 +1,5 @@
 /**
-    This package is part of the persistency layer of the application VIF.
+    This package is part of the application VIF.
     Copyright (C) 2003-2014, Benno Luthiger
 
     This program is free software; you can redistribute it and/or modify
@@ -64,7 +64,7 @@ public abstract class AbstractVIFEventDispatcher {
             if (lLookup == null) {
                 break;
             }
-            // TODO, see org.hip.vif.web.internal.handler.LookupEventHandler
+            inController.setUseCaseParameter(createModelIdParameter(inId));
             displayLookup(lLookup, "lookup.window.title.content", inController); //$NON-NLS-1$
             break;
         case MEMBER:
@@ -72,10 +72,7 @@ public abstract class AbstractVIFEventDispatcher {
             if (lLookup == null) {
                 break;
             }
-            final ParameterObject lParameters = new ParameterObject();
-            lParameters.set(ApplicationConstants.PARAMETER_KEY_GENERIC, PARAMETER_KEY_ID);
-            lParameters.set(PARAMETER_KEY_ID, inProperties.get(AbstractWebController.EVENT_PROPERTY_LOOKUP_ID));
-            inController.setUseCaseParameter(lParameters);
+            inController.setUseCaseParameter(createModelIdParameter(inId));
             displayLookup(lLookup, "lookup.window.title.member", inController); //$NON-NLS-1$
             break;
         case MEMBER_SEARCH:
@@ -109,6 +106,13 @@ public abstract class AbstractVIFEventDispatcher {
         lLayout.addComponent(lComponent);
         Popup.displayPopup(Activator.getMessages().getMessage(inWindowTitleKey), lLayout, inLookup.getWidth(),
                 inLookup.getHeight());
+    }
+
+    private ParameterObject createModelIdParameter(final String inId) {
+        final ParameterObject out = new ParameterObject();
+        out.set(ApplicationConstants.PARAMETER_KEY_GENERIC, PARAMETER_KEY_ID);
+        out.set(PARAMETER_KEY_ID, inId);
+        return out;
     }
 
 }

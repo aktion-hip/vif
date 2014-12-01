@@ -32,7 +32,7 @@ import com.vaadin.data.util.PropertysetItem;
  * Instances of this item contain <code>DirtyableProperty</code>s.<br />
  * Instances of this class can be used as view model for the application's configuration editor.
  *
- * @author Luthiger Created: 07.01.2012 */
+ * @author Luthiger */
 @SuppressWarnings("serial")
 public class ConfigurationItem extends PropertysetItem {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationItem.class);
@@ -86,6 +86,7 @@ public class ConfigurationItem extends PropertysetItem {
 
     /** Private constructor. */
     private ConfigurationItem() {
+        // prevent instantiation
     }
 
     /** Factory method to create and initialize an instance of <code>ConfigurationItem</code>.

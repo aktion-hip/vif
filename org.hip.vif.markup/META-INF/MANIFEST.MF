@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Markup
 Bundle-SymbolicName: org.hip.vif.markup
 Bundle-Version: 1.0.1
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .,
  lib/org.eclipse.mylyn.wikitext.core_1.5.0.v20110608-1400.jar,
  lib/org.eclipse.mylyn.wikitext.textile.core_1.5.0.v20110608-1400.jar,

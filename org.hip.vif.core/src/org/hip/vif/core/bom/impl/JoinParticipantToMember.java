@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of application VIF.
-	Copyright (C) 2003, Benno Luthiger
+	Copyright (C) 2003-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,18 +19,16 @@
 
 package org.hip.vif.core.bom.impl;
 
-/**
- * This class implements the join between the domain objects Participant and Member.
- * 
- * @author Benno Luthiger
- */
+/** This class implements the join between the domain objects Participant and Member.
+ *
+ * @author Benno Luthiger */
+@SuppressWarnings("serial")
 public class JoinParticipantToMember extends AbstractMember {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinParticipantToMemberHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.JoinParticipantToMemberHome";
 
-	/**
-	 * @see org.hip.kernel.bom.GeneralDomainObject#getHomeClassName()
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** @see org.hip.kernel.bom.GeneralDomainObject#getHomeClassName() */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 }

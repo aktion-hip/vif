@@ -18,8 +18,9 @@
  */
 package org.hip.vif.web.bom;
 
-
-/** @author lbenno */
+/** Interface for group instances using message and Vaadin functionality.
+ *
+ * @author lbenno */
 public interface Group extends org.hip.vif.core.bom.Group {
 
 }

@@ -1,6 +1,6 @@
-/*
-	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+/**
+    This package is part of the application VIF.
+    Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,57 +15,48 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.forum.search.internal;
 
 import org.hip.vif.forum.search.Activator;
 import org.hip.vif.forum.search.Constants;
 import org.hip.vif.forum.search.tasks.SearchContentTask;
-import org.hip.vif.web.interfaces.IMenuSet;
-import org.hip.vif.web.interfaces.ITaskSet;
-import org.hip.vif.web.interfaces.IUseCaseForum;
-import org.hip.vif.web.menu.IVIFMenuItem;
-import org.hip.vif.web.menu.VIFMenuComposite;
-import org.hip.vif.web.util.UseCaseHelper;
+import org.ripla.interfaces.IControllerSet;
+import org.ripla.interfaces.IMenuItem;
+import org.ripla.menu.RiplaMenuComposite;
+import org.ripla.web.interfaces.IMenuSet;
+import org.ripla.web.services.IUseCase;
+import org.ripla.web.util.UseCaseHelper;
 
-/**
- * This bundle's service provider for <code>IUseCaseForum</code>.
- * 
- * @author Luthiger
- * Created: 29.09.2011
- */
-public class UseCaseComponent implements IUseCaseForum {
+/** This bundle's service provider for <code>IUseCaseForum</code>.
+ *
+ * @author Luthiger Created: 29.09.2011 */
+public class UseCaseComponent implements IUseCase {
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.web.interfaces.IUseCase#getMenu()
-	 */
-	public IVIFMenuItem getMenu() {
-		VIFMenuComposite outMenu = new VIFMenuComposite(Activator.getMessages().getMessage("component.menu.title"), 20); //$NON-NLS-1$
-		outMenu.setTaskName(UseCaseHelper.createFullyQualifiedTaskName(SearchContentTask.class));
-		outMenu.setPermission(Constants.PERMISSION_SEARCH);
-		return outMenu;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.hip.vif.web.interfaces.IUseCase#getContextMenus()
-	 */
-	public IMenuSet[] getContextMenus() {
-		return UseCaseHelper.EMPTY_SUB_MENU_SET;
-	}
+    @Override
+    public IMenuItem getMenu() {
+        final RiplaMenuComposite outMenu = new RiplaMenuComposite(Activator.getMessages()
+                .getMessage("component.menu.title"), 20); //$NON-NLS-1$
+        outMenu.setControllerName(UseCaseHelper.createFullyQualifiedControllerName(SearchContentTask.class));
+        outMenu.setPermission(Constants.PERMISSION_SEARCH);
+        outMenu.setTag("vif.forum.menu");
+        return outMenu;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.web.interfaces.IUseCase#getTaskClasses()
-	 */
-	public Package getTaskClasses() {
-		return SearchContentTask.class.getPackage();
-	}
+    @Override
+    public IMenuSet[] getContextMenus() {
+        return UseCaseHelper.EMPTY_CONTEXT_MENU_SET;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.web.interfaces.IUseCase#getTaskSet()
-	 */
-	public ITaskSet getTaskSet() {
-		return UseCaseHelper.EMPTY_TASK_SET;
-	}
+    @Override
+    public Package getControllerClasses() {
+        return SearchContentTask.class.getPackage();
+    }
+
+    @Override
+    public IControllerSet getControllerSet() {
+        return UseCaseHelper.EMPTY_CONTROLLER_SET;
+    }
 
 }

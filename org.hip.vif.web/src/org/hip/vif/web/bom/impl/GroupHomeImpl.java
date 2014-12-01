@@ -22,8 +22,6 @@ import org.hip.vif.web.bom.GroupHome;
 
 /** This domain object home implements the GroupHome interface.
  *
- * Created on 19.07.2002
- *
  * @author Benno Luthiger
  * @see org.hip.vif.core.bom.GroupHome */
 @SuppressWarnings("serial")

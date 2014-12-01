@@ -27,11 +27,11 @@ import java.util.Map;
 import org.hip.vif.core.bom.Group;
 import org.hip.vif.core.bom.Question;
 import org.hip.vif.core.bom.QuestionHome;
-import org.hip.vif.core.util.AutoCompleteHelper;
 import org.hip.vif.forum.groups.Activator;
 import org.hip.vif.forum.groups.data.ContributionContainer;
 import org.hip.vif.forum.groups.data.ContributionWrapper;
 import org.hip.vif.forum.groups.tasks.BibliographyHandleTask;
+import org.hip.vif.web.util.AutoCompleteHelper;
 import org.hip.vif.web.util.BeanWrapperHelper;
 import org.hip.vif.web.util.VIFViewHelper;
 import org.ripla.interfaces.IMessages;
@@ -205,7 +205,7 @@ public class BibliographySearchView extends AbstractContributionView {
      * @author Luthiger Created: 25.09.2011 */
     private static class ResultView extends CustomComponent {
         private static final String[] COL_HEADERS = new String[] {
-                "", "container.table.headers.id", "container.table.headers.text" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            "", "container.table.headers.id", "container.table.headers.text" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         private Component table;
         private final VerticalLayout layout;

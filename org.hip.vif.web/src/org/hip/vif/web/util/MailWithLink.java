@@ -51,17 +51,17 @@ public abstract class MailWithLink extends AbstractMail {
      * <code>http://localhost:8084/forum?request=org.hip.vif.forum.groups/org.hip.vif.groups.tasks.RequestsListTask&groupID=21</code>
      * .
      *
-     * @param inTask {@link IPluggable}
+     * @param inController {@link IPluggable}
      * @param inIsForum boolean <code>true</code> if the requested url should call the forum application,
      *            <code>false</code> for the admin application
      * @return String the bookmarkable URL to the view of the specified task */
-    protected String createRequestedURL(final Class<? extends IPluggable> inTask, final boolean inIsForum) {
-        return RequestHandler.createRequestedURL(inTask, inIsForum);
+    protected String createRequestedURL(final Class<? extends IPluggable> inController, final boolean inIsForum) {
+        return VIFRequestHandler.createRequestedURL(inController, inIsForum);
     }
 
     /** @return String e.g. <code>http://localhost:8084/forum</code> */
     protected String getForumAppURL() {
-        return RequestHandler.getMainForumURL();
+        return VIFAppHelper.getMainForumURL();
     }
 
 }

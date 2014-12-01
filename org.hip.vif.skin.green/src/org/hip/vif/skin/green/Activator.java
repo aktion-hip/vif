@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,30 +24,28 @@ import org.ripla.interfaces.IMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * The skin bundle's activator.
- * 
- * @author Luthiger Created: 03.01.2012
- */
+/** The skin bundle's activator.
+ *
+ * @author Luthiger Created: 03.01.2012 */
 public class Activator implements BundleActivator {
-	private final static Logger LOG = LoggerFactory.getLogger(Activator.class);
+    private final static Logger LOG = LoggerFactory.getLogger(Activator.class);
 
-	volatile private static IMessages cMessages;
+    volatile private static IMessages cMessages;
 
-	@Override
-	public void start(final BundleContext inContext) throws Exception {
-		LOG.debug("{} started.", inContext.getBundle().getSymbolicName()); //$NON-NLS-1$
-		cMessages = new Messages();
-	}
+    @Override
+    public void start(final BundleContext inContext) throws Exception {
+        LOG.debug("{} started.", inContext.getBundle().getSymbolicName()); //$NON-NLS-1$
+        cMessages = new Messages();
+    }
 
-	@Override
-	public void stop(final BundleContext inContext) throws Exception {
-		LOG.debug("{} stopped.", inContext.getBundle().getSymbolicName()); //$NON-NLS-1$
-		cMessages = null;
-	}
+    @Override
+    public void stop(final BundleContext inContext) throws Exception {
+        LOG.debug("{} stopped.", inContext.getBundle().getSymbolicName()); //$NON-NLS-1$
+        cMessages = null;
+    }
 
-	public static IMessages getMessages() {
-		return cMessages;
-	}
+    public static IMessages getMessages() {
+        return cMessages;
+    }
 
 }

@@ -4,11 +4,15 @@ Bundle-Name: Test Fragment for org.hip.vif.web bundle
 Bundle-SymbolicName: org.hip.vif.web.test
 Bundle-Version: 1.0.0
 Fragment-Host: org.hip.vif.web
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: RelationWare
 Bundle-ClassPath: .,
  lib/org.hip.db.provider.mysql_1.0.1.jar
 Require-Bundle: org.mockito.mockito-all;bundle-version="1.9.5",
  org.junit;bundle-version="4.11.0"
-Import-Package: org.hip.vif.core;version="[1.2.0,2.0.0)",
+Import-Package: org.apache.lucene.document;version="[4.10.1,5.0.0)",
+ org.apache.lucene.queryparser.classic;version="[4.10.1,5.0.0)",
+ org.apache.lucene.search;version="[4.10.1,5.0.0)",
+ org.hip.vif.core;version="[1.2.0,2.0.0)",
  org.osgi.service.jdbc;version="[1.0.0,2.0.0)"
+Export-Package: org.hip.vif.web.bom;version="1.0.0"

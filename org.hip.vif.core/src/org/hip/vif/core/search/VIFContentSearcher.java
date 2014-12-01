@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2005, Benno Luthiger
+	Copyright (C) 2005-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public
@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.core.search;
 
@@ -24,33 +24,31 @@ import java.io.IOException;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
 import org.hip.kernel.bom.QueryResult;
 
-/**
- * Implements full text searching using lucene.
- * 
- * @author Benno Luthiger
- * Created on 27.09.2005
- */
+/** Implements full text searching using lucene.
+ *
+ * @author Benno Luthiger Created on 27.09.2005 */
 public class VIFContentSearcher extends AbstractVIFSearcher {
 
-	@Override
-	protected QueryResult getHitsQueryResult(Document[] inHits) {
-		return new ContentHitsResult(inHits);
-	}
+    @Override
+    protected QueryResult getHitsQueryResult(final Document[] inHits) {
+        return new ContentHitsResult(inHits);
+    }
 
-	@Override
-	protected Query parseQuery(String inQueryTerm) throws ParseException {
-		QueryParser lParser = new QueryParser(LUCENE_VERSION, IndexField.CONTENT_FULL.fieldName, getAnalyzer());
-		return lParser.parse(inQueryTerm);
-	}
+    @Override
+    protected Query parseQuery(final String inQueryTerm) throws ParseException {
+        new QueryParser("", getAnalyzer());
+        final QueryParser lParser = new QueryParser(IndexField.CONTENT_FULL.fieldName, getAnalyzer());
+        return lParser.parse(inQueryTerm);
+    }
 
-	@Override
-	protected IndexReader getIndexReader() throws CorruptIndexException, IOException {
-		return VIFIndexing.INSTANCE.createContentIndexReader();
-	}
+    @Override
+    protected IndexReader getIndexReader() throws CorruptIndexException, IOException {
+        return VIFIndexing.INSTANCE.createContentIndexReader();
+    }
 
 }

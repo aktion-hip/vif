@@ -34,54 +34,52 @@ import org.ripla.web.interfaces.IMenuSet;
 import org.ripla.web.services.IUseCase;
 import org.ripla.web.util.UseCaseHelper;
 
-/**
- * This bundle's service provider for <code>IUseCaseAdmin</code>.
- * 
- * @author Luthiger Created: 19.11.2011
- */
+/** This bundle's service provider for <code>IUseCaseAdmin</code>.
+ *
+ * @author Luthiger Created: 19.11.2011 */
 public class UseCaseComponent implements IUseCase, IPermissionRecords {
 
-	@Override
-	public IMenuItem getMenu() {
-		final IMessages lMessages = Activator.getMessages();
-		final RiplaMenuComposite outMenu = new RiplaMenuComposite(
-				lMessages.getMessage("component.menu.title"), 30); //$NON-NLS-1$
-		outMenu.setControllerName(UseCaseHelper
-				.createFullyQualifiedControllerName(AdminGroupShowListTask.class));
-		outMenu.setPermission(Constants.PERMISSION_GROUPS_ADMIN);
-		return outMenu;
-	}
+    @Override
+    public IMenuItem getMenu() {
+        final IMessages lMessages = Activator.getMessages();
+        final RiplaMenuComposite outMenu = new RiplaMenuComposite(
+                lMessages.getMessage("component.menu.title"), 30); //$NON-NLS-1$
+        outMenu.setControllerName(UseCaseHelper
+                .createFullyQualifiedControllerName(AdminGroupShowListTask.class));
+        outMenu.setPermission(Constants.PERMISSION_GROUPS_ADMIN);
+        outMenu.setTag("vif.admin.menu");
+        return outMenu;
+    }
 
-	@Override
-	public Package getControllerClasses() {
-		return AdminGroupShowListTask.class.getPackage();
-	}
+    @Override
+    public Package getControllerClasses() {
+        return AdminGroupShowListTask.class.getPackage();
+    }
 
-	@Override
-	public IControllerSet getControllerSet() {
-		return UseCaseHelper.EMPTY_CONTROLLER_SET;
-	}
+    @Override
+    public IControllerSet getControllerSet() {
+        return UseCaseHelper.EMPTY_CONTROLLER_SET;
+    }
 
-	@Override
-	public IMenuSet[] getContextMenus() {
-		return new IMenuSet[] {
-				HelperContextMenuAdminDiscussion.createContextMenuSet1(),
-				HelperContextMenuAdminDiscussion.createContextMenuSet2(),
-				HelperContextMenuAdminDiscussion.createContextMenuSet3(),
-				HelperContextMenuAdminDiscussion.createContextMenuSet4(),
-				HelperContextMenuAdminDiscussion.createContextMenuSet5(),
-				HelperContextMenuAdminDiscussion.createContextMenuSet6() };
-	}
+    @Override
+    public IMenuSet[] getContextMenus() {
+        return new IMenuSet[] {
+                HelperContextMenuAdminDiscussion.createContextMenuSet1(),
+                HelperContextMenuAdminDiscussion.createContextMenuSet2(),
+                HelperContextMenuAdminDiscussion.createContextMenuSet3(),
+                HelperContextMenuAdminDiscussion.createContextMenuSet4(),
+                HelperContextMenuAdminDiscussion.createContextMenuSet5(),
+                HelperContextMenuAdminDiscussion.createContextMenuSet6() };
+    }
 
-	@Override
-	public IPermissionRecord[] getPermissionRecords() {
-		final IPermissionRecord[] outRecords = new IPermissionRecord[1];
-		outRecords[0] = new PermissionRecord(
-				Constants.PERMISSION_EDIT_BIBLIOGRAPHY,
-				"Administration: Create bibliography entry.", //$NON-NLS-1$
-				new int[] { RolesConstants.ADMINISTRATOR,
-						RolesConstants.GROUP_ADMINISTRATOR });
-		return outRecords;
-	}
+    @Override
+    public IPermissionRecord[] getPermissionRecords() {
+        final IPermissionRecord[] outRecords = new IPermissionRecord[1];
+        outRecords[0] = new PermissionRecord(
+                Constants.PERMISSION_EDIT_BIBLIOGRAPHY, "Administration: Create bibliography entry.", //$NON-NLS-1$
+                new int[] { RolesConstants.ADMINISTRATOR,
+                        RolesConstants.GROUP_ADMINISTRATOR });
+        return outRecords;
+    }
 
 }

@@ -20,23 +20,19 @@ package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 
-/**
- * Model for rating entries.
+/** Model for rating entries.
  *
- * @author Luthiger
- * Created: 29.08.2009
- */
+ * @author Luthiger Created: 29.08.2009 */
+@SuppressWarnings("serial")
 public class Ratings extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsHome";
 
-
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
 }

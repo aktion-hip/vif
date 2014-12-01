@@ -40,7 +40,6 @@ import org.hip.vif.core.bom.ResponsibleHome;
 import org.hip.vif.core.bom.Text;
 import org.hip.vif.core.bom.VIFMember;
 import org.hip.vif.core.bom.VIFWorkflowAware;
-import org.hip.vif.core.bom.impl.NotificationTextCollector;
 import org.hip.vif.core.bom.impl.RatingEvents;
 import org.hip.vif.core.bom.impl.RatingEventsHome;
 import org.hip.vif.core.bom.impl.Ratings;
@@ -58,6 +57,7 @@ import org.hip.vif.forum.groups.data.ContributionContainer;
 import org.hip.vif.forum.groups.data.ContributionWrapper;
 import org.hip.vif.forum.groups.mail.ProcessPublishMail;
 import org.hip.vif.forum.groups.mail.SubscribersNotification;
+import org.hip.vif.web.bom.NotificationTextCollector;
 import org.hip.vif.web.bom.VifBOMHelper;
 import org.hip.vif.web.mail.IVIFMail;
 import org.hip.vif.web.tasks.AbstractWebController;
@@ -279,7 +279,7 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
     protected abstract ContributionContainer getContributions();
 
     protected Member getMember() throws Exception {
-        return MemberUtility.INSTANCE.getActiveMemberSearcher().getMemberCacheHome().getActor();
+        return MemberUtility.INSTANCE.getActiveMemberSearcher().getMemberCacheHome().getMember(getActor().getActorID());
     }
 
     /** Updates the state of the contributions performing the specified transition.

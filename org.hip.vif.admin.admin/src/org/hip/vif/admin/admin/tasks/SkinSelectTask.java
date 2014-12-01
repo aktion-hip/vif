@@ -22,40 +22,34 @@ import org.hip.vif.admin.admin.Constants;
 import org.hip.vif.admin.admin.data.SkinBean;
 import org.hip.vif.admin.admin.ui.SkinSelectView;
 import org.hip.vif.web.tasks.AbstractWebController;
-import org.hip.vif.web.util.SkinRegistry;
 import org.ripla.annotations.UseCaseController;
 import org.ripla.exceptions.RiplaException;
 
 import com.vaadin.ui.Component;
 
-/**
- * Taks to change the application's skin.
- * 
- * @author Luthiger Created: 29.12.2007
- */
+/** Taks to change the application's skin.
+ *
+ * @author Luthiger Created: 29.12.2007 */
 @UseCaseController
 public class SkinSelectTask extends AbstractWebController {
 
-	@Override
-	protected String needsPermission() {
-		return Constants.PERMISSION_SELECT_SKIN;
-	}
+    @Override
+    protected String needsPermission() {
+        return Constants.PERMISSION_SELECT_SKIN;
+    }
 
-	@Override
-	protected Component runChecked() throws RiplaException {
-		emptyContextMenu();
-		return new SkinSelectView(this);
-	}
+    @Override
+    protected Component runChecked() throws RiplaException {
+        emptyContextMenu();
+        return new SkinSelectView(this);
+    }
 
-	/**
-	 * Callback method to save the selected skin.
-	 * 
-	 * @param inSkin
-	 *            {@link SkinBean}
-	 */
-	public void save(final SkinBean inSkin) {
-		SkinRegistry.INSTANCE.changeSkin(inSkin.getSkinID());
-		changeSkin(inSkin.getSkinID());
-	}
+    /** Callback method to save the selected skin.
+     *
+     * @param inSkin {@link SkinBean} */
+    public void save(final SkinBean inSkin) {
+        changeSkin(inSkin.getSkinID());
+        logout();
+    }
 
 }

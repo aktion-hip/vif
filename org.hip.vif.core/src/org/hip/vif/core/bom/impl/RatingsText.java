@@ -21,22 +21,19 @@ package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 
-/**
- * Model for entries connecting ratings to bibliography entries.
+/** Model for entries connecting ratings to bibliography entries.
  *
- * @author Luthiger
- * Created: 07.08.2010
- */
+ * @author Luthiger Created: 07.08.2010 */
+@SuppressWarnings("serial")
 public class RatingsText extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsTextHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.RatingsTextHome";
 
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
 }

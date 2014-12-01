@@ -20,22 +20,19 @@ package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 
-/**
- * Model of entry joining all bibliographies for a specified rating.
+/** Model of entry joining all bibliographies for a specified rating.
  *
- * @author Luthiger
- * Created: 07.08.2010
- */
+ * @author Luthiger Created: 07.08.2010 */
+@SuppressWarnings("serial")
 public class JoinRatingsToText extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinRatingsToTextHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinRatingsToTextHome";
 
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
 }

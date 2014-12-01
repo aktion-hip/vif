@@ -45,6 +45,7 @@ public class ComponentHelper {
                 "context.menu.members.new"), 10); //$NON-NLS-1$
         lSubMenu.setControllerName(UseCaseHelper.createFullyQualifiedControllerName(MemberNewTask.class));
         outMenu.add(lSubMenu);
+        outMenu.setTag("vif.admin.menu");
         return outMenu;
     }
 

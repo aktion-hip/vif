@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package org.hip.vif.core.bom.impl;
 
 import java.sql.SQLException;
@@ -33,161 +33,156 @@ import org.hip.kernel.exc.VException;
 import org.hip.vif.core.bom.GroupAdminHome;
 import org.hip.vif.core.exc.BOMChangeValueException;
 
-/**
- * This domain object home implements the GroupAdminHome interface.
- * 
+/** This domain object home implements the GroupAdminHome interface.
+ *
  * @author: Benno Luthiger
- * @see org.hip.vif.core.bom.GroupAdminHome
- */
+ * @see org.hip.vif.core.bom.GroupAdminHome */
+@SuppressWarnings("serial")
 public class GroupAdminHomeImpl extends DomainObjectHomeImpl implements GroupAdminHome {
-		
-	/*  Every home has to know the class it handles. They provide access to
-		this name through the method <I>getObjectClassName</I>;
-	*/
-	private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.GroupAdminImpl";
-	
-	private final static String XML_OBJECT_DEF = 
-		"<?xml version='1.0' encoding='ISO-8859-1'?>	\n" +
-		"<objectDef objectName='GroupAdmin' parent='org.hip.kernel.bom.DomainObject' version='1.0'>	\n" +
-		"	<keyDefs>	\n" +
-		"		<keyDef>	\n" +
-		"			<keyItemDef seq='0' keyPropertyName='" + KEY_GROUP_ID + "'/>	\n" +
-		"			<keyItemDef seq='1' keyPropertyName='" + KEY_MEMBER_ID + "'/>	\n" +
-		"		</keyDef>	\n" +
-		"	</keyDefs>	\n" +
-		"	<propertyDefs>	\n" +
-		"		<propertyDef propertyName='" + KEY_GROUP_ID + "' valueType='Long' propertyType='simple'>	\n" +
-		"			<mappingDef tableName='tblGroupAdmin' columnName='GroupID'/>	\n" +
-		"		</propertyDef>	\n" +
-		"		<propertyDef propertyName='" + KEY_MEMBER_ID + "' valueType='Long' propertyType='simple'>	\n" +
-		"			<mappingDef tableName='tblGroupAdmin' columnName='MemberID'/>	\n" +
-		"		</propertyDef>	\n" +
-		"	</propertyDefs>	\n" +
-		"</objectDef>";
-		
-	/**
-	 * @see GeneralDomainObjectHome#getObjectClassName()
-	 */
-	public String getObjectClassName() {
-		return OBJECT_CLASS_NAME;
-	}
 
-	/**
-	 * @see AbstractDomainObjectHome#getObjectDefString()
-	 */
-	protected String getObjectDefString() {
-		return XML_OBJECT_DEF;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.core.bom.GroupAdminHome#associateGroupAdmins(java.lang.Long, java.lang.String[])
-	 */
-	public void associateGroupAdmins(Long inGroupID, String[] inGroupAdmins) throws BOMChangeValueException {
-		Collection<Long> lAdminIDs = new Vector<Long>(inGroupAdmins.length);
-		for (int i=0; i<inGroupAdmins.length; i++) {
-			lAdminIDs.add(Long.valueOf(inGroupAdmins[i]));
-		}
-		associateGroupAdmins(inGroupID, lAdminIDs);
-	}
-	public void associateGroupAdmins(Long inGroupID, Collection<Long> inGroupAdmins) throws BOMChangeValueException {
-		try {
-			for (Long lMemberID : inGroupAdmins) {
-				if (notFound(inGroupID, lMemberID)) {
-					associateGroupAdmin(inGroupID, lMemberID);
-				}
-			}
-		}
-		catch (VException exc) {
-			throw new BOMChangeValueException(exc.getMessage());
-		}
-		catch (SQLException exc) {
-			throw new BOMChangeValueException(exc.getMessage());
-		}
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.core.bom.GroupAdminHome#associateGroupAdmin(java.lang.Long, java.lang.Long)
-	 */
-	public void associateGroupAdmin(Long inGroupID, Long inMemberID) throws VException, SQLException {
-		DomainObject lGroupAdmin = create();
-		lGroupAdmin.set(GroupAdminHome.KEY_GROUP_ID, inGroupID);
-		lGroupAdmin.set(GroupAdminHome.KEY_MEMBER_ID, inMemberID);
-		lGroupAdmin.insert(true);
-	}
-	
-	private boolean notFound(Long inGroupID, Long inMemberID) {
-		try {
-			KeyObject lKey = new KeyObjectImpl();
-			lKey.setValue(GroupAdminHome.KEY_GROUP_ID, inGroupID);
-			lKey.setValue(GroupAdminHome.KEY_MEMBER_ID, inMemberID);
-			return findByKey(lKey) == null;
-		}
-		catch (VException exc) {
-			return true;
-		}
-	}
-	
-	/**
-	 * Tests whether the specified member is group admin.
-	 * 
-	 * @param inMemberID Long
-	 * @return boolean true, if the member is group admin.
-	 * @throws VException
-	 */
-	public boolean isGroupAdmin(Long inMemberID) throws VException {
-		try {
-			KeyObject lKey = new KeyObjectImpl();
-			lKey.setValue(GroupAdminHome.KEY_MEMBER_ID, inMemberID);
-			return getCount(lKey) > 0;
-		}
-		catch (SQLException exc) {
-			throw new VException(exc.getMessage());
-		}
-	}
+    /*
+     * Every home has to know the class it handles. They provide access to this name through the method
+     * <I>getObjectClassName</I>;
+     */
+    private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.GroupAdminImpl";
 
-	/**
-	 * Tests whether the specified member is admin of the specified group.
-	 *  
-	 * @param inMemberID Long
-	 * @param inGroupID Long
-	 * @return boolean true, if the member is admin of the specified group.
-	 * @throws VException
-	 */
-	public boolean isGroupAdmin(Long inMemberID, Long inGroupID) throws BOMChangeValueException {
-		try {
-			KeyObject lKey = new KeyObjectImpl();
-			lKey.setValue(GroupAdminHome.KEY_MEMBER_ID, inMemberID);
-			lKey.setValue(GroupAdminHome.KEY_GROUP_ID, inGroupID);
-			findByKey(lKey);
-			return true;
-		}
-		catch (BOMNotFoundException exc) {
-			return false;
-		}
-		catch (VException exc) {
-			throw new BOMChangeValueException(exc.getMessage());
-		}		
-	}
+    private final static String XML_OBJECT_DEF =
+            "<?xml version='1.0' encoding='ISO-8859-1'?>	\n" +
+                    "<objectDef objectName='GroupAdmin' parent='org.hip.kernel.bom.DomainObject' version='1.0'>	\n" +
+                    "	<keyDefs>	\n" +
+                    "		<keyDef>	\n" +
+                    "			<keyItemDef seq='0' keyPropertyName='" + KEY_GROUP_ID + "'/>	\n" +
+                    "			<keyItemDef seq='1' keyPropertyName='" + KEY_MEMBER_ID + "'/>	\n" +
+                    "		</keyDef>	\n" +
+                    "	</keyDefs>	\n" +
+                    "	<propertyDefs>	\n" +
+                    "		<propertyDef propertyName='" + KEY_GROUP_ID + "' valueType='Long' propertyType='simple'>	\n" +
+                    "			<mappingDef tableName='tblGroupAdmin' columnName='GroupID'/>	\n" +
+                    "		</propertyDef>	\n" +
+                    "		<propertyDef propertyName='" + KEY_MEMBER_ID + "' valueType='Long' propertyType='simple'>	\n" +
+                    "			<mappingDef tableName='tblGroupAdmin' columnName='MemberID'/>	\n" +
+                    "		</propertyDef>	\n" +
+                    "	</propertyDefs>	\n" +
+                    "</objectDef>";
 
-	
-	/**
-	 * Tests the specified list of member ids and returns a collection of ids
-	 * of those members which are not group administrators.
-	 * 
-	 * @param inMemberIDs String[] 
-	 * @return Collection<String> of ids of those members which are not group administrators. 
-	 * @throws VException
-	 */
-	public Collection<String> checkGroupAdmins(String[] inMemberIDs) throws VException {
-		Collection<String> outNoAdmin = new Vector<String>();
-		for (int i = 0; i < inMemberIDs.length; i++) {
-			if (!isGroupAdmin(new Long(inMemberIDs[i]))) {
-				outNoAdmin.add(inMemberIDs[i]);
-			}
-		}
-		return outNoAdmin;
-	}
-	
+    /** @see GeneralDomainObjectHome#getObjectClassName() */
+    @Override
+    public String getObjectClassName() {
+        return OBJECT_CLASS_NAME;
+    }
+
+    /** @see AbstractDomainObjectHome#getObjectDefString() */
+    @Override
+    protected String getObjectDefString() {
+        return XML_OBJECT_DEF;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.hip.vif.core.bom.GroupAdminHome#associateGroupAdmins(java.lang.Long, java.lang.String[])
+     */
+    @Override
+    public void associateGroupAdmins(final Long inGroupID, final String[] inGroupAdmins) throws BOMChangeValueException {
+        final Collection<Long> lAdminIDs = new Vector<Long>(inGroupAdmins.length);
+        for (int i = 0; i < inGroupAdmins.length; i++) {
+            lAdminIDs.add(Long.valueOf(inGroupAdmins[i]));
+        }
+        associateGroupAdmins(inGroupID, lAdminIDs);
+    }
+
+    @Override
+    public void associateGroupAdmins(final Long inGroupID, final Collection<Long> inGroupAdmins)
+            throws BOMChangeValueException {
+        try {
+            for (final Long lMemberID : inGroupAdmins) {
+                if (notFound(inGroupID, lMemberID)) {
+                    associateGroupAdmin(inGroupID, lMemberID);
+                }
+            }
+        } catch (final VException exc) {
+            throw new BOMChangeValueException(exc.getMessage());
+        } catch (final SQLException exc) {
+            throw new BOMChangeValueException(exc.getMessage());
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.hip.vif.core.bom.GroupAdminHome#associateGroupAdmin(java.lang.Long, java.lang.Long)
+     */
+    @Override
+    public void associateGroupAdmin(final Long inGroupID, final Long inMemberID) throws VException, SQLException {
+        final DomainObject lGroupAdmin = create();
+        lGroupAdmin.set(GroupAdminHome.KEY_GROUP_ID, inGroupID);
+        lGroupAdmin.set(GroupAdminHome.KEY_MEMBER_ID, inMemberID);
+        lGroupAdmin.insert(true);
+    }
+
+    private boolean notFound(final Long inGroupID, final Long inMemberID) {
+        try {
+            final KeyObject lKey = new KeyObjectImpl();
+            lKey.setValue(GroupAdminHome.KEY_GROUP_ID, inGroupID);
+            lKey.setValue(GroupAdminHome.KEY_MEMBER_ID, inMemberID);
+            return findByKey(lKey) == null;
+        } catch (final VException exc) {
+            return true;
+        }
+    }
+
+    /** Tests whether the specified member is group admin.
+     * 
+     * @param inMemberID Long
+     * @return boolean true, if the member is group admin.
+     * @throws VException */
+    @Override
+    public boolean isGroupAdmin(final Long inMemberID) throws VException {
+        try {
+            final KeyObject lKey = new KeyObjectImpl();
+            lKey.setValue(GroupAdminHome.KEY_MEMBER_ID, inMemberID);
+            return getCount(lKey) > 0;
+        } catch (final SQLException exc) {
+            throw new VException(exc.getMessage());
+        }
+    }
+
+    /** Tests whether the specified member is admin of the specified group.
+     * 
+     * @param inMemberID Long
+     * @param inGroupID Long
+     * @return boolean true, if the member is admin of the specified group.
+     * @throws VException */
+    @Override
+    public boolean isGroupAdmin(final Long inMemberID, final Long inGroupID) throws BOMChangeValueException {
+        try {
+            final KeyObject lKey = new KeyObjectImpl();
+            lKey.setValue(GroupAdminHome.KEY_MEMBER_ID, inMemberID);
+            lKey.setValue(GroupAdminHome.KEY_GROUP_ID, inGroupID);
+            findByKey(lKey);
+            return true;
+        } catch (final BOMNotFoundException exc) {
+            return false;
+        } catch (final VException exc) {
+            throw new BOMChangeValueException(exc.getMessage());
+        }
+    }
+
+    /** Tests the specified list of member ids and returns a collection of ids of those members which are not group
+     * administrators.
+     * 
+     * @param inMemberIDs String[]
+     * @return Collection<String> of ids of those members which are not group administrators.
+     * @throws VException */
+    @Override
+    public Collection<String> checkGroupAdmins(final String[] inMemberIDs) throws VException {
+        final Collection<String> outNoAdmin = new Vector<String>();
+        for (int i = 0; i < inMemberIDs.length; i++) {
+            if (!isGroupAdmin(new Long(inMemberIDs[i]))) {
+                outNoAdmin.add(inMemberIDs[i]);
+            }
+        }
+        return outNoAdmin;
+    }
+
 }

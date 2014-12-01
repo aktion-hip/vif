@@ -18,6 +18,7 @@
  */
 package org.hip.vif.skin.dflt;
 
+import org.hip.vif.core.ApplicationConstants;
 import org.ripla.web.services.ISkin;
 import org.ripla.web.util.FooterHelper;
 import org.ripla.web.util.LabelHelper;
@@ -73,11 +74,10 @@ public class Skin implements ISkin {
     @Override
     public Component getFooter() {
         final FooterHelper out = FooterHelper
-                .createFooter(FooterHelper.DFT_FOOTER_TEXT);
-        out.setHeight(19);
+                .createFooter(ApplicationConstants.FOOTER_TEXT);
+        out.setHeight(24);
         out.setStyleName("vif-footer");
         return out;
-        // return VIFFooter.createFooter(VIFFooter.DFT_FOOTER_TEXT);
     }
 
     @Override

@@ -20,22 +20,19 @@ package org.hip.vif.core.bom.impl;
 
 import org.hip.kernel.bom.impl.DomainObjectImpl;
 
-/**
- * The model linking text/bibliography entries to questions (n to m).
+/** The model linking text/bibliography entries to questions (n to m).
  *
- * @author Luthiger
- * Created: 28.07.2010
- */
+ * @author Luthiger Created: 28.07.2010 */
+@SuppressWarnings("serial")
 public class TextQuestion extends DomainObjectImpl {
-	public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.TextQuestionHome";
+    public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.TextQuestionHome";
 
-	/**
-	 * This Method returns the class name of the home.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getHomeClassName() {
-		return HOME_CLASS_NAME;
-	}
+    /** This Method returns the class name of the home.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getHomeClassName() {
+        return HOME_CLASS_NAME;
+    }
 
 }
