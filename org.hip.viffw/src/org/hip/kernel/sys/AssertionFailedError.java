@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2015, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -21,36 +21,30 @@ package org.hip.kernel.sys;
 
 import org.hip.kernel.exc.VError;
 
-/**
- * Objects of this type will be thrown in the Assert.assert methods.
+/** Objects of this type will be thrown in the Assert.assert methods.
  *
- * 	@author		Benno Luthiger
- * 	@version	1.0
- *	@see		org.hip.kernel.sys.Assert
- */
+ * @author Benno Luthiger
+ * @version 1.0
+ * @see org.hip.kernel.sys.Assert */
 @SuppressWarnings("serial")
 public class AssertionFailedError extends VError {
-	// Instance variables
-	private	String callerMethod	= null;
-	
-	/**
-	 * AssertionFailedError constructor
-	 *
-	 * @param inCaller java.lang.Object
-	 * @param inCallerMethod java.lang.String
-	 * @param inAssertName java.lang.String
-	 */
-	public AssertionFailedError(Object inCaller, String inCallerMethod, String inAssertName ) {
-		super(Assert.prepareAssertText(inCaller, inCallerMethod, inAssertName));
-		callerMethod = inCallerMethod;
-	}
-	
-	/**
-	 * Returns the String the assert has originally invoked with.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getCallerMethod() {
-		return callerMethod;
-	}
+    // Instance variables
+    private final String callerMethod;
+
+    /** AssertionFailedError constructor
+     *
+     * @param inCaller java.lang.Object
+     * @param inCallerMethod java.lang.String
+     * @param inAssertName java.lang.String */
+    public AssertionFailedError(final Object inCaller, final String inCallerMethod, final String inAssertName) {
+        super(Assert.prepareAssertText(inCaller, inCallerMethod, inAssertName));
+        callerMethod = inCallerMethod;
+    }
+
+    /** Returns the String the assert has originally invoked with.
+     *
+     * @return java.lang.String */
+    public String getCallerMethod() {
+        return callerMethod;
+    }
 }

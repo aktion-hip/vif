@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the framework used for the application VIF.
-	Copyright (C) 2006, Benno Luthiger
+	Copyright (C) 2006-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -15,43 +15,34 @@
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.kernel.bom.impl;
 
 import org.hip.kernel.bom.ICriteriumRenderStrategy;
 
-/**
- * Abstract implementation of <code>ICriteriumRenderStrategy</code> providing generic functionality for
- * strategies to render a <code>KeyCriterium</code>.
+/** Abstract implementation of <code>ICriteriumRenderStrategy</code> providing generic functionality for strategies to
+ * render a <code>KeyCriterium</code>.
  *
- * @author Luthiger
- * Created on 08.07.2007
- */
-public abstract class AbstractCriteriumRenderer implements ICriteriumRenderStrategy {
-	protected String operand1;
-	protected String operand2;
-	protected String comparison;
+ * @author Luthiger Created on 08.07.2007 */
+public abstract class AbstractCriteriumRenderer implements ICriteriumRenderStrategy { // NOPMD
+    protected transient String operand1;
+    protected transient String operand2;
+    protected transient String comparison;
 
-	/* (non-Javadoc)
-	 * @see org.hip.kernel.bom.IRenderStrategy#setOperand1(java.lang.String)
-	 */
-	public void setOperand1(String inOperand1) {
-		operand1 = inOperand1;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.hip.kernel.bom.IRenderStrategy#setOperand2(java.lang.String)
-	 */
-	public void setOperand2(String inOperand2) {
-		operand2 = inOperand2;		
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.hip.kernel.bom.IRenderStrategy#setComparison(java.lang.String)
-	 */
-	public void setComparison(String inComparison) {
-		comparison = inComparison;
-	}
+    @Override
+    public void setOperand1(final String inOperand1) { // NOPMD
+        operand1 = inOperand1;
+    }
+
+    @Override
+    public void setOperand2(final String inOperand2) { // NOPMD
+        operand2 = inOperand2;
+    }
+
+    @Override
+    public void setComparison(final String inComparison) { // NOPMD
+        comparison = inComparison;
+    }
 
 }

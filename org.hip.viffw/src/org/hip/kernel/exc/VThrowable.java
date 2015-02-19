@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2015, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -20,38 +20,31 @@
 package org.hip.kernel.exc;
 
 import java.util.Locale;
- 
+
 public interface VThrowable {
-	/**
-	 * @return java.lang.String
-	 * @param inLanguage java.util.Locale
-	 */
-	 
-	String getLocalizedMessage(Locale inLanguage);
-	/**
-	 * 
-	 * @return java.lang.String
-	 */
-	String getMessage();
-	/**
-	 * Returns the original exception if any.
-	 * 
-	 * @return java.lang.Throwable
-	 */
-	 
-	Throwable getRootCause();
-	/**
-	 * Returns true if this exception contains a root cause exception.
-	 *
-	 * @return java.lang.Throwable
-	 */
-	 
-	boolean hasRootCause();
-	/**
-	 * Setter for the root cause exception.
-	 *
-	 * @return java.lang.Throwable
-	 */
-	 
-	void setRootCause(Throwable rootCause);
+    /** @return java.lang.String
+     * @param inLanguage java.util.Locale */
+
+    String getLocalizedMessage(Locale inLanguage);
+
+    /** @return java.lang.String */
+    String getMessage();
+
+    /** Returns the original exception if any.
+     * 
+     * @return java.lang.Throwable */
+
+    Throwable getRootCause();
+
+    /** Returns true if this exception contains a root cause exception.
+     *
+     * @return java.lang.Throwable */
+
+    boolean hasRootCause();
+
+    /** Setter for the root cause exception.
+     *
+     * @return java.lang.Throwable */
+
+    void setRootCause(Throwable rootCause);
 }

@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2015, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -20,21 +20,19 @@ package org.hip.kernel.servlet.impl;
 
 import org.hip.kernel.servlet.Context;
 
-/**
- * 	Default implementation of the pageable html-page
+/** Default implementation of the pageable html-page
  *
- *	@author	Benno Luthiger
- */
+ * @author Benno Luthiger */
+@SuppressWarnings("serial")
 public class DefaultPageableHtmlPage extends AbstractPageableHtmlPage {
 
-	/**
-	 * 
-	 * @param inContext org.hip.kernel.servlet.Context
-	 */
-	public DefaultPageableHtmlPage(Context inContext) {
-		super(inContext);
-	}
-	protected String getXMLName() {
-		return null;
-	}
+    /** @param inContext org.hip.kernel.servlet.Context */
+    public DefaultPageableHtmlPage(final Context inContext) {
+        super(inContext);
+    }
+
+    @Override
+    protected String getXMLName() { // NOPMD by lbenno 
+        return null;
+    }
 }

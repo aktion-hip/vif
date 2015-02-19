@@ -1,8 +1,6 @@
-package org.hip.kernel.exc;
-
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2015, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -17,91 +15,79 @@ package org.hip.kernel.exc;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+package org.hip.kernel.exc;
 
 import org.hip.kernel.sys.VSys;
 
-/**
- * 	This is the base class for those implementations which want to subclass
- *  from this exception handler.
- * 
- * 	@author	Benno Luthiger
- */
+/** This is the base class for those implementations which want to subclass from this exception handler.
+ *
+ * @author Benno Luthiger */
 abstract public class AbstractExceptionHandler implements ExceptionHandler {
-	
-	//class attributes
-	protected static boolean printStackTrace = false;
-	
-	/**
-	 * @param 	inThrowable java.lang.Throwable
-	 * @return java.lang.Throwable 
-	 */
-	public Throwable convert(Throwable inThrowable) {
-		return convert(inThrowable, null);
-	}
 
-	/**
-	 * @param inCatchingObject java.lang.Object
-	 * @param inThrowable java.lang.Throwable
-	 */
-	public void handle(Object inCatchingObject, Throwable inThrowable) {
-		this.handle(inCatchingObject, inThrowable, printStackTrace );
-	}
+    // class attributes
+    protected static boolean printStackTrace;
 
-	/**
-	 * @param inCatchingObject java.lang.Object
-	 * @param inThrowable java.lang.Throwable
-	 * @param inPrintStackTrace boolean
-	 */
-	public void handle(Object inCatchingObject, Throwable inThrowable, boolean inPrintStackTrace) {
-		// Pre: throwable not null
-		VSys.assertNotNull(this, "handle", inThrowable);
-	
-		// Delegate to concrete implementation
-		protectedHandle(inCatchingObject, inThrowable, inPrintStackTrace);
-	}
+    /** @param inThrowable java.lang.Throwable
+     * @return java.lang.Throwable */
+    @Override
+    public Throwable convert(final Throwable inThrowable) {
+        return convert(inThrowable, null);
+    }
 
-	/**
-	 * @param inThrowable java.lang.Throwable
-	 */
-	public void handle(Throwable inThrowable) {
-		this.handle(null, inThrowable );
-	}
+    /** @param inCatchingObject java.lang.Object
+     * @param inThrowable java.lang.Throwable */
+    @Override
+    public void handle(final Object inCatchingObject, final Throwable inThrowable) {
+        this.handle(inCatchingObject, inThrowable, printStackTrace);
+    }
 
-	/**
-	 * @param inCatchingObject java.lang.Object
-	 * @param inPrintStackTrace boolean
-	 */
-	public void handle(Throwable inThrowable, boolean inPrintStackTrace) {
-		this.handle(null, inThrowable, inPrintStackTrace);
-	}
+    /** @param inCatchingObject java.lang.Object
+     * @param inThrowable java.lang.Throwable
+     * @param inPrintStackTrace boolean */
+    @Override
+    public void handle(final Object inCatchingObject, final Throwable inThrowable, final boolean inPrintStackTrace) {
+        // Pre: throwable not null
+        VSys.assertNotNull(this, "handle", inThrowable);
 
-	/**
-	 * 	@return boolean
-	 * 	@param inThrowable java.lang.Throwable
-	 */
-	protected final static boolean isVException( Throwable inThrowable ) {
-		VSys.assertNotNull(AbstractExceptionHandler.class, "isVException", inThrowable);
-		
-		return ( 	(inThrowable instanceof VError) 
-			     || (inThrowable instanceof VRuntimeException) 
-			     || (inThrowable instanceof VException));
-	}
+        // Delegate to concrete implementation
+        protectedHandle(inCatchingObject, inThrowable, inPrintStackTrace);
+    }
 
-	/**
-	 * 	Called from the AbstractExceptionHandler.
-	 * 
-	 * 	@param inCatchingObject java.lang.Object
-	 * 	@param inThrowable java.lang.Throwable
-	 * 	@param inPrintStackTrace boolean
-	 */
-	abstract protected void protectedHandle( Object inCatchingObject, Throwable inThrowable, boolean inPrintStackTrace );
+    /** @param inThrowable java.lang.Throwable */
+    @Override
+    public void handle(final Throwable inThrowable) {
+        this.handle(null, inThrowable);
+    }
 
-	/**
-	 * @param inThrowable java.lang.Throwable
-	 * @exception java.lang.Throwable The exception description.
-	 */
-	public void rethrow(Throwable inThrowable) throws Throwable {
-		throw convert(inThrowable).fillInStackTrace();
-	}
+    /** @param inCatchingObject java.lang.Object
+     * @param inPrintStackTrace boolean */
+    @Override
+    public void handle(final Throwable inThrowable, final boolean inPrintStackTrace) {
+        this.handle(null, inThrowable, inPrintStackTrace);
+    }
+
+    /** @return boolean
+     * @param inThrowable java.lang.Throwable */
+    protected final static boolean isVException(final Throwable inThrowable) {
+        VSys.assertNotNull(AbstractExceptionHandler.class, "isVException", inThrowable);
+
+        return inThrowable instanceof VError
+                || inThrowable instanceof VRuntimeException
+                || inThrowable instanceof VException;
+    }
+
+    /** Called from the AbstractExceptionHandler.
+     *
+     * @param inCatchingObject java.lang.Object
+     * @param inThrowable java.lang.Throwable
+     * @param inPrintStackTrace boolean */
+    abstract protected void protectedHandle(Object inCatchingObject, Throwable inThrowable, boolean inPrintStackTrace);
+
+    /** @param inThrowable java.lang.Throwable
+     * @exception java.lang.Throwable The exception description. */
+    @Override
+    public void rethrow(final Throwable inThrowable) throws Throwable {
+        throw convert(inThrowable).fillInStackTrace();
+    }
 }

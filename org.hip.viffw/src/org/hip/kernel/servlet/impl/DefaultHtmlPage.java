@@ -1,8 +1,6 @@
-package org.hip.kernel.servlet.impl;
-
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2015, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -17,33 +15,28 @@ package org.hip.kernel.servlet.impl;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+package org.hip.kernel.servlet.impl;
 
 import org.hip.kernel.servlet.Context;
 
-/**
- * 	Implements a default html page
+/** Implements a default html page
  *
- *	@author	Benno Luthiger
- */
-
+ * @author Benno Luthiger */
+@SuppressWarnings("serial")
 public class DefaultHtmlPage extends AbstractHtmlPage {
-	/**
-	 * DefaultHtmlPage constructor comment.
-	 */
-	public DefaultHtmlPage() {
-		super();
-	}
-	
-	/**
-	 * 
-	 * @param inContext org.hip.kernel.servlet.Context
-	 */
-	public DefaultHtmlPage(Context inContext) {
-		super(inContext);
-	}
-	
-	protected String getXMLName() {
-		return null;
-	}
+    /** DefaultHtmlPage constructor comment. */
+    public DefaultHtmlPage() {
+        super();
+    }
+
+    /** @param inContext org.hip.kernel.servlet.Context */
+    public DefaultHtmlPage(final Context inContext) {
+        super(inContext);
+    }
+
+    @Override
+    protected String getXMLName() { // NOPMD by lbenno 
+        return null;
+    }
 }

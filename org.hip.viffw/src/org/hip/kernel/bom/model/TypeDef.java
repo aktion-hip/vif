@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -19,33 +19,31 @@
 
 package org.hip.kernel.bom.model;
 
-/**
- * 	This class provides access to type informations.
- * 
- * 	@author	Benno Luthiger
- */
-public interface TypeDef extends ModelObject {
+/** This class provides access to type informations.
+ *
+ * @author Benno Luthiger */
+public interface TypeDef extends ModelObject { // NOPMD by lbenno 
 
-	// class variables
-	public final static String String		= "String".intern();
-	public final static String LongVarchar	= "LongVarchar".intern();
-	public final static String Integer		= "Integer".intern();
-	public final static String Long			= "Long".intern();
-	public final static String Double		= "Double".intern();
-	public final static String Boolean		= "Boolean".intern();
-	public final static String Date			= "Date".intern();	
-	public final static String Timestamp	= "Timestamp".intern();
-	public final static String BigInteger	= "BigInteger".intern();
-	public final static String BigDecimal	= "BigDecimal".intern();
-	public final static String Number		= "Number".intern();
-	public final static String Binary		= "Binary".intern();
+    // class variables
+    String String = "String".intern(); // NOPMD
+    String LongVarchar = "LongVarchar".intern(); // NOPMD
+    String Integer = "Integer".intern(); // NOPMD
+    String Long = "Long".intern(); // NOPMD
+    String Double = "Double".intern(); // NOPMD
+    String Boolean = "Boolean".intern(); // NOPMD
+    String Date = "Date".intern(); // NOPMD
+    String Timestamp = "Timestamp".intern(); // NOPMD
+    String BigInteger = "BigInteger".intern(); // NOPMD
+    String BigDecimal = "BigDecimal".intern(); // NOPMD
+    String Number = "Number".intern(); // NOPMD
+    String Binary = "Binary".intern(); // NOPMD
 
-	public final static String[][] valueTypes = {
-		{Number, 	"java.lang.Number"},
-		{Long, 		"java.lang.Long"},
-		{String, 	"java.lang.String"},
-		{Timestamp, "java.sql.Timestamp"},
-		{Date, 		"java.sql.Date"},
-		{Binary,	Binary}
-	};
+    String[][] valueTypes = { // NOPMD by lbenno 
+            { Number, "java.lang.Number" },
+            { Long, "java.lang.Long" },
+            { String, "java.lang.String" },
+            { Timestamp, "java.sql.Timestamp" },
+            { Date, "java.sql.Date" },
+            { Binary, Binary }
+    };
 }

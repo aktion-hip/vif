@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the application VIF.
- Copyright (C) 2008, Benno Luthiger
+ Copyright (C) 2008-2015, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -28,72 +28,65 @@ import org.hip.vif.core.bom.MemberHome;
 import org.hip.vif.core.member.AbstractMemberInformation;
 import org.hip.vif.core.member.IMemberInformation;
 
-/**
- *
- * @author Luthiger
- * Created: 07.01.2008
- */
+/** @author Luthiger Created: 07.01.2008 */
 public class LDAPMemberInformation extends AbstractMemberInformation implements IMemberInformation {
-	private final static Object[][] MEMBER_PROPERTIES = {{MemberHome.KEY_USER_ID, ""}, 
-		{MemberHome.KEY_NAME, ""},
-		{MemberHome.KEY_FIRSTNAME, ""},
-		{MemberHome.KEY_MAIL, ""},
-		{MemberHome.KEY_SEX, new Integer(-1)},
-		{MemberHome.KEY_CITY, ""},
-		{MemberHome.KEY_STREET, ""},
-		{MemberHome.KEY_ZIP, ""},
-		{MemberHome.KEY_PHONE, ""},
-		{MemberHome.KEY_FAX, ""}};
+    private final static Object[][] MEMBER_PROPERTIES = { { MemberHome.KEY_USER_ID, "" },
+            { MemberHome.KEY_NAME, "" },
+            { MemberHome.KEY_FIRSTNAME, "" },
+            { MemberHome.KEY_MAIL, "" },
+            { MemberHome.KEY_SEX, Integer.valueOf(-1) },
+            { MemberHome.KEY_CITY, "" },
+            { MemberHome.KEY_STREET, "" },
+            { MemberHome.KEY_ZIP, "" },
+            { MemberHome.KEY_PHONE, "" },
+            { MemberHome.KEY_FAX, "" } };
 
-	private String userID = "";
-	
-	public LDAPMemberInformation(Member inSource) throws VException {
-		userID = loadValues(inSource);
-	}
+    private transient String userID = ""; // NOPMD by lbenno
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.member.MemberInformation#update(org.hip.vif.bom.Member)
-	 */
-	public void update(Member inMember) throws SQLException, VException {
-		setAllTo(inMember);
-		inMember.update(true);
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.member.MemberInformation#insert(org.hip.vif.bom.Member)
-	 */
-	public Long insert(Member inMember) throws SQLException, VException {
-		setAllTo(inMember);
-		return inMember.insert(true);
-	}
-	
-	private String loadValues(Member inSource) throws VException {
-		for (int i = 0; i < MEMBER_PROPERTIES.length; i++) {
-			String lKey = MEMBER_PROPERTIES[i][0].toString();
-			Object lValue = null;
-			try {
-				lValue = inSource.get(lKey);
-			} catch (GettingException exc) {
-				lValue = MEMBER_PROPERTIES[i][1];
-			}
-			put(lKey, lValue);
-		}
-		return inSource.get(MemberHome.KEY_USER_ID).toString();
-	}
+    /** LDAPMemberInformation constructor.
+     *
+     * @param inSource {@link Member} the member instance backing this information
+     * @throws VException */
+    public LDAPMemberInformation(final Member inSource) throws VException {
+        super();
+        userID = loadValues(inSource);
+    }
 
-	private void setAllTo(Member inMember) throws VException {
-		for (Map.Entry<String, Object> lEntry : entries()) {
-			inMember.set((String)lEntry.getKey(), lEntry.getValue());
-		}
-	}
+    @Override
+    public void update(final Member inMember) throws SQLException, VException { // NOPMD by lbenno
+        setAllTo(inMember);
+        inMember.update(true);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.member.MemberInformation#getUserID()
-	 */
-	public String getUserID() {
-		return userID;
-	}
+    @Override
+    public Long insert(final Member inMember) throws SQLException, VException { // NOPMD by lbenno
+        setAllTo(inMember);
+        return inMember.insert(true);
+    }
+
+    private String loadValues(final Member inSource) throws VException {
+        for (int i = 0; i < MEMBER_PROPERTIES.length; i++) {
+            final String lKey = MEMBER_PROPERTIES[i][0].toString();
+            Object lValue = null;
+            try {
+                lValue = inSource.get(lKey);
+            } catch (final GettingException exc) {
+                lValue = MEMBER_PROPERTIES[i][1];
+            }
+            put(lKey, lValue);
+        }
+        return inSource.get(MemberHome.KEY_USER_ID).toString();
+    }
+
+    private void setAllTo(final Member inMember) throws VException {
+        for (final Map.Entry<String, Object> lEntry : entries()) {
+            inMember.set(lEntry.getKey(), lEntry.getValue());
+        }
+    }
+
+    @Override
+    public String getUserID() { // NOPMD by lbenno
+        return userID;
+    }
 
 }

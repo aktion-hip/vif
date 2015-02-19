@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the framework used for the application VIF.
-	Copyright (C) 2006, Benno Luthiger
+	Copyright (C) 2006-2015, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -15,8 +15,7 @@
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
+ */
 package org.hip.kernel.servlet.impl;
 
 import java.io.IOException;
@@ -27,37 +26,29 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.hip.kernel.servlet.ISourceCreatorStrategy;
 
-/**
- * Strategy to create a source defined by a fully qualified name of the XSL file.
+/** Strategy to create a source defined by a fully qualified name of the XSL file.
  *
- * @author Luthiger
- * Created on 24.11.2007
- */
+ * @author Luthiger Created on 24.11.2007 */
+@SuppressWarnings("serial")
 public class FullyQualifiedNameStrategy implements ISourceCreatorStrategy, Serializable {
-	
-	private String xslName;
 
-	/**
-	 * FullyQualifiedNameStrategy constructor
-	 * 
-	 * @param inXSLName String fully qualified path to the XSL file in the file system.
-	 */
-	public FullyQualifiedNameStrategy(String inXSLName) {
-		xslName = inXSLName;
-	}
+    private final String xslName;
 
-	/* (non-Javadoc)
-	 * @see org.hip.kernel.servlet.ISourceCreatorStrategy#createSource()
-	 */
-	public Source createSource() throws IOException {
-		return new StreamSource("file:" + xslName);
-	}
+    /** FullyQualifiedNameStrategy constructor
+     *
+     * @param inXSLName String fully qualified path to the XSL file in the file system. */
+    public FullyQualifiedNameStrategy(final String inXSLName) {
+        xslName = inXSLName;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.hip.kernel.servlet.ISourceCreatorStrategy#getResourceId()
-	 */
-	public String getResourceId() {
-		return xslName;
-	}
+    @Override
+    public Source createSource() throws IOException { // NOPMD by lbenno 
+        return new StreamSource("file:" + xslName);
+    }
+
+    @Override
+    public String getResourceId() { // NOPMD by lbenno 
+        return xslName;
+    }
 
 }

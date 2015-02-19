@@ -1,8 +1,6 @@
-package org.hip.kernel.sys;
-
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2015, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -17,24 +15,15 @@ package org.hip.kernel.sys;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+package org.hip.kernel.sys;
 
-/**
- * This is a generic base class. Inherit from VObject
- * instead of java.lang.Object.
- * Actually, this class does not add any functionality
- * to java.lang.Object.
+/** This is a generic base class. Inherit from VObject instead of java.lang.Object. Actually, this class does not add any
+ * functionality to java.lang.Object.
  *
- * @author		Benno Luthiger
- * @version		1.0
- * @see			java.lang.Object
- *
- */
-public class VObject {
-/**
- * VObject default constructor
- */
-public VObject() {
-	super();
-}
+ * @author Benno Luthiger
+ * @version 1.0
+ * @see java.lang.Object */
+public class VObject { // NOPMD by lbenno 
+
 }

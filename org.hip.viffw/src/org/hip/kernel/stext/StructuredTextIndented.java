@@ -1,8 +1,6 @@
-package org.hip.kernel.stext;
-
-/*
+/**
 	This package is part of the structured text framework used for the application VIF.
-	Copyright (C) 2003, Benno Luthiger
+	Copyright (C) 2003-2015, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -17,11 +15,11 @@ package org.hip.kernel.stext;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+package org.hip.kernel.stext;
 
-/**
- * This class implements a indented StructuredText paragraph, i.e. 
- * a paragraph in a bulleted or numbered list element.
+/** This class implements a indented StructuredText paragraph, i.e. a paragraph in a bulleted or numbered list element.
+ * 
  * <pre>
  * <li>
  *    <p>Some text</p>
@@ -29,28 +27,23 @@ package org.hip.kernel.stext;
  * </li>
  * <li><p>more list elements</p></li>
  * </pre>
- * 
- * @author: Benno Luthiger
- */
+ *
+ * @author: Benno Luthiger */
 public class StructuredTextIndented extends StructuredTextPlain {
 
-	/**
-	 * Constructor for StructuredTextIndented.
-	 * 
-	 * @param inRawParagraph
-	 */
-	public StructuredTextIndented(String inRawParagraph) {
-		super(inRawParagraph);
-	}
+    /** Constructor for StructuredTextIndented.
+     * 
+     * @param inRawParagraph */
+    public StructuredTextIndented(final String inRawParagraph) {
+        super(inRawParagraph);
+    }
 
-	
-	/**
-	 * Returns the type of this paragraph.
-	 * 
-	 * @return int
-	 * @see org.hip.kernel.stext.StructuredTextParagraph
-	 */
-	public int getParagraphType() {
-		return PARAGRAPH_INDENTED;
-	}
+    /** Returns the type of this paragraph.
+     * 
+     * @return int
+     * @see org.hip.kernel.stext.StructuredTextParagraph */
+    @Override
+    public int getParagraphType() {
+        return PARAGRAPH_INDENTED;
+    }
 }

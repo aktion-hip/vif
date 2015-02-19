@@ -28,63 +28,59 @@ import org.hip.vif.core.exc.InvalidAuthenticationException;
 import org.hip.vif.core.member.AbstractMemberAuthenticator;
 import org.hip.vif.core.member.IAuthenticator;
 
-/**
- * Authenticator for setups where member entries are provided by a LDAP server.
- * 
- * @author Luthiger 22.04.2007
- */
+/** Authenticator for setups where member entries are provided by a LDAP server.
+ *
+ * @author Luthiger 22.04.2007 */
 public class LDAPAuthenticator extends AbstractMemberAuthenticator implements
-		IAuthenticator {
+IAuthenticator {
 
-	public LDAPAuthenticator() throws VException {
-		super();
-	}
+    public LDAPAuthenticator() throws VException { // NOPMD by lbenno 
+        super();
+    }
 
-	@Override
-	public void checkAuthentication(final String inUserID,
-			final String inPassword) throws InvalidAuthenticationException,
-			VException, SQLException {
-		Member lMember = null;
-		try {
-			authenticationHome.checkAuthentication(inUserID, inPassword);
+    @Override
+    public void checkAuthentication(final String inUserID, // NOPMD by lbenno 
+            final String inPassword) throws InvalidAuthenticationException,
+            VException, SQLException {
+        Member lMember = null;
+        try {
+            authenticationHome.checkAuthentication(inUserID, inPassword);
 
-			// authentication passed, therefore, update the member cache:
-			// default ID for guests
-			final Long lActorID = VIFAuthorization.GUEST_ID;
+            // authentication passed, therefore, update the member cache:
+            // default ID for guests
+            final Long lActorID = VIFAuthorization.GUEST_ID;
 
-			// but if guest login, nothing to cache
-			if ("".equals(inUserID)) {
-				setActorToContext(lActorID, inUserID);
-				return;
-			}
+            // but if guest login, nothing to cache
+            if ("".equals(inUserID)) {
+                setActorToContext(lActorID, inUserID);
+                return;
+            }
 
-			lMember = updateMemberCache(new LDAPMemberInformation(
-					authenticationHome.getMemberByUserID(inUserID)), inUserID);
-		}
-		catch (final InvalidAuthenticationException exc) {
-			// I'm the SU, let me in
-			lMember = checkSU(inUserID, inPassword, exc);
-		}
-		setActorToContext(new Long(lMember.get(MemberHome.KEY_ID).toString()),
-				inUserID);
-	}
+            lMember = updateMemberCache(new LDAPMemberInformation(
+                    authenticationHome.getMemberByUserID(inUserID)), inUserID);
+        } catch (final InvalidAuthenticationException exc) {
+            // I'm the SU, let me in
+            lMember = checkSU(inUserID, inPassword, exc);
+        }
+        setActorToContext(Long.parseLong(lMember.get(MemberHome.KEY_ID).toString()), inUserID);
+    }
 
-	@Override
-	public boolean isExternal() {
-		return true;
-	}
+    @Override
+    public boolean isExternal() { // NOPMD by lbenno 
+        return true;
+    }
 
-	@Override
-	public String encrypt(final String inPassword) {
-		// not used in this case
-		return "";
-	}
+    @Override
+    public String encrypt(final String inPassword) { // NOPMD by lbenno 
+        // not used in this case
+        return "";
+    }
 
-	@Override
-	public boolean matches(final String inEncryptedPassword,
-			final String inEnteredPassword) {
-		// not used in this case
-		return false;
-	}
+    @Override
+    public boolean matches(final String inEncryptedPassword, // NOPMD by lbenno 
+            final String inEnteredPassword) {
+        // not used in this case
+        return false;
+    }
 
 }

@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2009, Benno Luthiger
+	Copyright (C) 2009-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,29 +15,24 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package org.hip.kernel.bom.impl;
 
-/**
- * The <code>NULL</code> value in a SQL statement.
+/** The <code>NULL</code> value in a SQL statement.
  *
- * @author Luthiger
- * Created 29.08.2009 
- */
+ * @author Luthiger Created 29.08.2009 */
 public class SQLNull {
-	
-	/**
-	 * Convenience method.
-	 * 
-	 * @return SQLNull
-	 */
-	public static SQLNull getInstance() {
-		return new SQLNull();
-	}
-	
-	@Override
-	public String toString() {
-		return "NULL";
-	}
+
+    /** Convenience method.
+     * 
+     * @return SQLNull */
+    public static SQLNull getInstance() {
+        return new SQLNull();
+    }
+
+    @Override
+    public String toString() { // NOPMD by lbenno 
+        return "NULL";
+    }
 
 }

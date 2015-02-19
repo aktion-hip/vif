@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the application VIF.
- Copyright (C) 2005, Benno Luthiger
+ Copyright (C) 2005-2015, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public
@@ -18,40 +18,37 @@
  */
 package org.hip.vif.core.search;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.lucene.document.Document;
 
-/**
- * A contribution domain object backed by a lucene Document object.
- * This domain object can be used as result of a full text search.
- * 
- * @author Benno Luthiger
- * Created on 02.10.2005
- */
+/** A contribution domain object backed by a lucene Document object. This domain object can be used as result of a full
+ * text search.
+ *
+ * @author Benno Luthiger Created on 02.10.2005 */
 public class ContentHitsObject extends AbstractHitsDomainObject {
-	private static List<String> fields = new Vector<String>();
-	static {
-		for (AbstractSearching.IndexField lField : AbstractSearching.CONTENT_FIELDS) {
-			fields.add(lField.fieldName);
-		}
-	}
+    private static List<String> fields = new ArrayList<String>();
+    static {
+        for (final AbstractSearching.IndexField lField : AbstractSearching.CONTENT_FIELDS) {
+            fields.add(lField.fieldName);
+        }
+    }
 
-	/**
-	 * ContentHitsObject constructor.
-	 * 
-	 * @param inDocument Document
-	 */
-	public ContentHitsObject(Document inDocument) {
-		super(inDocument);
-	}
+    /** ContentHitsObject constructor.
+     *
+     * @param inDocument Document */
+    public ContentHitsObject(final Document inDocument) {
+        super(inDocument);
+    }
 
-	protected List<String> getFields() {
-		return fields;
-	}
+    @Override
+    protected List<String> getFields() { // NOPMD
+        return fields;
+    }
 
-	protected String getIDFieldName() {
-		return AbstractSearching.IndexField.CONTRIBUTION_ID.fieldName;
-	}
+    @Override
+    protected String getIDFieldName() { // NOPMD
+        return AbstractSearching.IndexField.CONTRIBUTION_ID.fieldName;
+    }
 }

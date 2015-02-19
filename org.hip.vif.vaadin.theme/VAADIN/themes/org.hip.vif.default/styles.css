@@ -1,9 +1,7 @@
 @import "../runo/legacy-styles.css";
 
 .vif-main,
-.ripla-main {
-    background-color:white;
-}
+.ripla-main,
 .vif-window {
     background-color:white;
 }
@@ -98,13 +96,7 @@
 .vif-table .v-table-cell-content {
     vertical-align:text-top;
 }
-.vif-table .v-label div. {
-    font-size:13pt;
-    font-weight:bold;
-    color:#FF9417;
-    background-color:inherit;
-    margin-bottom:10px;
-}
+
 .vif-view .v-label div.vif-description,
 .vif-table .v-label div.vif-description {
     font-style:italic;
@@ -405,9 +397,8 @@
 }
 
 .vif-view .vif-padding-left {
-    padding-left:15px;
+    padding-left: 15px;
 }
-
 
 .vif-footer {
 	padding: 2px 0 5px 10px;

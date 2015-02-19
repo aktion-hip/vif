@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -24,23 +24,21 @@ import java.io.Serializable;
 import org.hip.kernel.bom.ColumnModifier;
 import org.hip.kernel.sys.VObject;
 
-/**
- * Default column modifier, doesn't anything.
- * 
+/** Default column modifier, doesn't anything.
+ *
  * Created on 11.09.2002
- * @author Benno Luthiger
- */
+ * 
+ * @author Benno Luthiger */
 @SuppressWarnings("serial")
-public class DefaultColumnModifier extends VObject implements ColumnModifier, Serializable {
+public class DefaultColumnModifier extends VObject implements ColumnModifier, Serializable { // NOPMD by lbenno 
 
-	/**
-	 * This method returns the specified column name unmodified.
-	 * 
-	 * @param inColumnName java.lang.String
-	 * @return java.lang.String
-	 */
-	public String modifyColumn(String inColumnName) {
-		return inColumnName;
-	}
+    /** This method returns the specified column name unmodified.
+     * 
+     * @param inColumnName java.lang.String
+     * @return java.lang.String */
+    @Override
+    public String modifyColumn(final String inColumnName) {
+        return inColumnName;
+    }
 
 }

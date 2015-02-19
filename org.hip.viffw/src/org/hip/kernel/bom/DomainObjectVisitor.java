@@ -1,8 +1,6 @@
-package org.hip.kernel.bom;
-
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -17,47 +15,37 @@ package org.hip.kernel.bom;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-/**
- * 	A Visitor for DomainObjects
- * 
- * 	@author	Benno Luthiger
  */
+package org.hip.kernel.bom;
+
+/** A Visitor for DomainObjects
+ *
+ * @author Benno Luthiger */
 public interface DomainObjectVisitor {
-	public final static String PROPERTY_SET_TAG = "propertySet";
-	
-	/**
-	 * Execute the visit of a DomainObject.
-	 * 
-	 * @param inObject org.hip.kernel.bom.GeneralDomainObject
-	 */
-	void visitDomainObject(GeneralDomainObject inObject);
-	
-	/**
-	 * Execute the visit of a DomainObjectIterator.
-	 * 
-	 * @param inIterator org.hip.kernel.bom.DomainObjectIterator
-	 */
-	void visitDomainObjectIterator(DomainObjectIterator inIterator);
-	
-	/**
-	 * 	Execute the visit of a property.
-	 * 
-	 * 	@param inProperty org.hip.kernel.bom.Property
-	 */
-	void visitProperty(Property inProperty);
-	
-	/**
-	 * Execute the visit of a PropertySet.
-	 * 
-	 * @param inSet org.hip.kernel.bom.PropertySet
-	 */
-	void visitPropertySet(PropertySet inSet);
-	
-	/**
-	 * Execute the visit of a SortedArray.
-	 * 
-	 * @param inSortedArray org.hip.kernel.bom.SortedArray
-	 */
-	void visitSortedArray(SortedArray inSortedArray);
+    String PROPERTY_SET_TAG = "propertySet";
+
+    /** Execute the visit of a DomainObject.
+     *
+     * @param inObject org.hip.kernel.bom.GeneralDomainObject */
+    void visitDomainObject(GeneralDomainObject inObject);
+
+    /** Execute the visit of a DomainObjectIterator.
+     *
+     * @param inIterator org.hip.kernel.bom.DomainObjectIterator */
+    void visitDomainObjectIterator(DomainObjectIterator inIterator);
+
+    /** Execute the visit of a property.
+     *
+     * @param inProperty org.hip.kernel.bom.Property */
+    void visitProperty(Property inProperty);
+
+    /** Execute the visit of a PropertySet.
+     *
+     * @param inSet org.hip.kernel.bom.PropertySet */
+    void visitPropertySet(PropertySet inSet);
+
+    /** Execute the visit of a SortedArray.
+     *
+     * @param inSortedArray org.hip.kernel.bom.SortedArray */
+    void visitSortedArray(SortedArray inSortedArray);
 }

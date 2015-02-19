@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2007, Benno Luthiger
+	Copyright (C) 2007-2014, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,14 +15,14 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 package org.hip.vif.member.ldap;
 
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
+import java.util.List;
 
 import javax.naming.NamingException;
 
@@ -41,148 +41,122 @@ import org.hip.vif.core.util.ExternalObjectDefUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Home class for member objects retrieved from a LDAP server.
+/** Home class for member objects retrieved from a LDAP server.
  *
- * @author Luthiger
- * 03.07.2007
- */
+ * @author Luthiger 03.07.2007 */
 @SuppressWarnings("serial")
-public class LDAPMemberHome extends LDAPObjectHome implements MemberHome {
-	private static final Logger LOG = LoggerFactory.getLogger(LDAPMemberHome.class);
-	
-	private final static String OBJECT_DEF_FILE = "LDAPOBJECTDEF.xml";
-	public final static String OBJECT_CLASS_NAME = "org.hip.vif.member.ldap.LDAPMemberObject";
+public class LDAPMemberHome extends LDAPObjectHome implements MemberHome { // NOPMD by lbenno
+    private static final Logger LOG = LoggerFactory.getLogger(LDAPMemberHome.class);
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.kernel.bom.GeneralDomainObjectHome#getObjectClassName()
-	 */
-	public String getObjectClassName() {
-		return OBJECT_CLASS_NAME;
-	}
+    private final static String OBJECT_DEF_FILE = "LDAPOBJECTDEF.xml";
+    public final static String OBJECT_CLASS_NAME = "org.hip.vif.member.ldap.LDAPMemberObject";
 
-	/**
-	 * Reads the content of the file <code>$TOMCAT_HOME/webapps/vifapp/WEB-INF/conf/LDAPOBJECTDEF.xml</code>.
-	 */
-	protected String getObjectDefString() {
-		File lObjectDefFile = ExternalObjectDefUtil.getObjectDefFile(OBJECT_DEF_FILE);
-		if (!lObjectDefFile.exists()) {
-			return "";
-		}
-		
-		return ExternalObjectDefUtil.readObjectDef(lObjectDefFile);
-	}
+    @Override
+    public String getObjectClassName() { // NOPMD by lbenno
+        return OBJECT_CLASS_NAME;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.bom.MemberHome#checkAuthentication(java.lang.String, java.lang.String, org.hip.vif.servlets.VIFContext)
-	 */
-	public Member checkAuthentication(String inUserID, String inPassword) throws InvalidAuthenticationException, BOMChangeValueException {
-		String lMessage = getClass().getName() + ": Couldn't validate";
-		try {
-			if (LDAPContextManager.getInstance().checkAuthentication(getKeyColumn(), getBaseDir(), inUserID, inPassword)) {
-				return null;				
-			}
-		} 
-		catch (VException exc) {
-			lMessage = exc.getMessage();
-		}
-		throw new InvalidAuthenticationException(lMessage);
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.bom.MemberHome#getMemberByUserID(java.lang.String)
-	 */
-	public Member getMemberByUserID(String inUserID) throws BOMInvalidKeyException {
-		KeyObject lKey = new KeyObjectImpl();
-		try {
-			lKey.setValue(MemberHome.KEY_USER_ID, inUserID);
-			return (Member)findByKey(lKey);
-		}
-		catch (VException exc) {
-			throw new BOMInvalidKeyException(exc.getMessage());
-		}
-	}
+    /** Reads the content of the file <code>$TOMCAT_HOME/webapps/vifapp/WEB-INF/conf/LDAPOBJECTDEF.xml</code>. */
+    @Override
+    protected String getObjectDefString() {
+        final File lObjectDefFile = ExternalObjectDefUtil.getObjectDefFile(OBJECT_DEF_FILE);
+        if (!lObjectDefFile.exists()) {
+            return "";
+        }
 
-	/**
-	 * Not applicable in this case, therefore, no implementation provided.
-	 * 
-	 * @see org.hip.vif.bom.MemberHome#getActor(org.hip.vif.servlets.VIFContext)
-	 */
-	public Member getActor() throws BOMInvalidKeyException {
-		// intentionally left empty
-		return null;
-	}
+        return ExternalObjectDefUtil.readObjectDef(lObjectDefFile);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.bom.MemberHome#getMember(java.lang.String)
-	 */
-	public Member getMember(String inMemberID) throws BOMInvalidKeyException {
-		//create a key for the MemberID
-		KeyObject lKeyUserID = new KeyObjectImpl();
-		try {
-			LOG.debug("LDAPMemberHome.getMember({})", inMemberID);
-			lKeyUserID.setValue(KEY_ID, inMemberID);
-			return (Member)findByKey(lKeyUserID);
-		}
-		catch (VException exc) {
-			throw new BOMInvalidKeyException(exc.getMessage());
-		}
-	}
+    @Override
+    public Member checkAuthentication(final String inUserID, final String inPassword) // NOPMD by lbenno
+            throws InvalidAuthenticationException, BOMChangeValueException {
+        String lMessage = getClass().getName() + ": Couldn't validate";
+        try {
+            if (LDAPContextManager.getInstance()
+                    .checkAuthentication(getKeyColumn(), getBaseDir(), inUserID, inPassword)) {
+                return null;
+            }
+        } catch (final VException exc) {
+            lMessage = exc.getMessage();
+        }
+        throw new InvalidAuthenticationException(lMessage);
+    }
 
-	/**
-	 * Not applicable in this case, therefore, no implementation provided.
-	 * 
-	 * @see org.hip.vif.bom.MemberHome#getMember(java.lang.Long)
-	 */
-	public Member getMember(Long inMemberID) throws BOMInvalidKeyException {
-		// intentionally left empty
-		return null;
-	}
+    @Override
+    public Member getMemberByUserID(final String inUserID) throws BOMInvalidKeyException { // NOPMD by lbenno
+        final KeyObject lKey = new KeyObjectImpl();
+        try {
+            lKey.setValue(MemberHome.KEY_USER_ID, inUserID);
+            return (Member) findByKey(lKey);
+        } catch (final VException exc) {
+            throw new BOMInvalidKeyException(exc.getMessage(), exc);
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.core.bom.MemberHome#getMembers(java.util.Collection)
-	 */
-	public Collection<Member> getMembers(Collection<Long> inMemberIDs) {
-		Collection<Member> outMembers = new ArrayList<Member>();
-		for (Long lMemberID : inMemberIDs) {			
-			try {
-				outMembers.add(getMember(lMemberID));
-			}
-			catch (BOMInvalidKeyException exc) {
-				//left blank intentionally
-			}
-		}
-		return outMembers;
-	}
+    /** Not applicable in this case, therefore, no implementation provided.
+     *
+     * @see org.hip.vif.bom.MemberHome#getActor(org.hip.vif.servlets.VIFContext) */
+    public Member getActor() throws BOMInvalidKeyException {
+        // intentionally left empty
+        return null;
+    }
 
-	/**
-	 * Not applicable in this case, therefore, no implementation provided.
-	 * 
-	 * @see org.hip.vif.bom.MemberHome#updateMemberCache(org.hip.vif.member.IMemberInformation)
-	 */
-	public Member updateMemberCache(IMemberInformation inInformation) throws SQLException, VException {
-		// intentionally left empty
-		return null;
-	}
+    @Override
+    public Member getMember(final String inMemberID) throws BOMInvalidKeyException { // NOPMD by lbenno
+        // create a key for the MemberID
+        final KeyObject lKeyUserID = new KeyObjectImpl();
+        try {
+            LOG.debug("LDAPMemberHome.getMember({})", inMemberID);
+            lKeyUserID.setValue(KEY_ID, inMemberID);
+            return (Member) findByKey(lKeyUserID);
+        } catch (final VException exc) {
+            throw new BOMInvalidKeyException(exc.getMessage(), exc);
+        }
+    }
 
-	/**
-	 * Not applicable in this case, therefore, no implementation provided.
-	 * 
-	 * @see org.hip.kernel.bom.directory.LDAPObjectHome#checkStructure(java.lang.String)
-	 */
-	public boolean checkStructure(String inSchemaPattern) throws SQLException, NamingException {
-		// intentionally left empty
-		return false;
-	}
+    /** Not applicable in this case, therefore, no implementation provided.
+     *
+     * @see org.hip.vif.bom.MemberHome#getMember(java.lang.Long) */
+    @Override
+    public Member getMember(final Long inMemberID) throws BOMInvalidKeyException {
+        // intentionally left empty
+        return null;
+    }
 
-	@Override
-	protected Vector<Object> createTestObjects() {
-		return null;
-	}
-	
+    @Override
+    public Collection<Member> getMembers(final Collection<Long> inMemberIDs) { // NOPMD by lbenno
+        final Collection<Member> outMembers = new ArrayList<Member>();
+        for (final Long lMemberID : inMemberIDs) {
+            try {
+                outMembers.add(getMember(lMemberID));
+            } catch (final BOMInvalidKeyException exc) { // NOPMD by lbenno
+                // left blank intentionally
+            }
+        }
+        return outMembers;
+    }
+
+    /** Not applicable in this case, therefore, no implementation provided.
+     *
+     * @see org.hip.vif.bom.MemberHome#updateMemberCache(org.hip.vif.member.IMemberInformation) */
+    @Override
+    public Member updateMemberCache(final IMemberInformation inInformation) throws SQLException, VException {
+        // intentionally left empty
+        return null;
+    }
+
+    /** Not applicable in this case, therefore, no implementation provided.
+     *
+     * @see org.hip.kernel.bom.directory.LDAPObjectHome#checkStructure(java.lang.String) */
+    @Override
+    public boolean checkStructure(final String inSchemaPattern) throws SQLException, NamingException {
+        // intentionally left empty
+        return false;
+    }
+
+    @Override
+    protected List<Object> createTestObjects() { // NOPMD by lbenno 
+        return null;
+    }
+
 }

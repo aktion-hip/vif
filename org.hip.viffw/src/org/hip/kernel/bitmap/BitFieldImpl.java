@@ -1,8 +1,6 @@
-package org.hip.kernel.bitmap;
-
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -17,348 +15,344 @@ package org.hip.kernel.bitmap;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+package org.hip.kernel.bitmap; // NOPMD by lbenno
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import org.hip.kernel.sys.VObject;
 
-/**
- * Implemantation of a bit field.
- * 
- * @author Benno Luthiger
- */
-public class BitFieldImpl extends VObject implements BitField, Cloneable {
-	private List<Tuple> fieldTuples;
-	
-//	private class Tuples extends VectorAdapter {
-//		public Tuples() {
-//			super();
-//		}
-//		
-//		public boolean add(Tuple inTuple) {
-//			return addElement(inTuple);
-//		}
-//	}
-	
-	/**
-	 * Constructor for BitFieldImpl.
-	 */
-	public BitFieldImpl() {
-		super();
-		fieldTuples = new Vector<Tuple>();
-//		fieldTuples = new Tuples();
-	}
+/** Implemantation of a bit field.
+ *
+ * @author Benno Luthiger */
+public class BitFieldImpl extends VObject implements BitField, Cloneable { // NOPMD by lbenno
+    private transient List<Tuple> fieldTuples;
 
-	/**
-	 * Adds the specified tuple at the end of the rows.
-	 * 
-	 * @param inTuple org.hip.kernel.bitmap.Tuple
-	 */
-	public void addRow(Tuple inTuple) {
-		if (!equalRowSize(inTuple.getTupleBitRow())) {
-			fieldTuples.add(new Tuple(inTuple.getTupleObject(), resizeRow(inTuple.getTupleBitRow())));
-		}
-		else {
-			fieldTuples.add(inTuple);
-		}
-	}
+    // private class Tuples extends VectorAdapter {
+    // public Tuples() {
+    // super();
+    // }
+    //
+    // public boolean add(Tuple inTuple) {
+    // return addElement(inTuple);
+    // }
+    // }
 
-	/**
-	 * Adds the specified object and bit row at the end of the rows.
-	 * 
-	 * @param inObject java.lang.Object
-	 * @param inRow org.hip.kernel.bitmap.BitRow
-	 */
-	public void addRow(Object inObject, BitRow inRow) {
-		if (!equalRowSize(inRow)) {
-			fieldTuples.add(new Tuple(inObject, resizeRow(inRow)));
-		}
-		else {
-			fieldTuples.add(new Tuple(inObject, inRow));
-		}
-	}
-	
-	private boolean equalRowSize(BitRow inRow) {
-		if (fieldTuples.size() == 0) return true;
-		return ((Tuple)fieldTuples.get(0)).getTupleBitRow().getSize() == inRow.getSize();
-	}
-	
-	private BitRow resizeRow(BitRow inRow) {
-		BitRow outRow = new BitRowImpl(getColumnSize());
-		outRow.setBitValue(inRow.getBitValue());
-		return outRow;
-	}
+    /** Constructor for BitFieldImpl. */
+    public BitFieldImpl() {
+        super();
+        fieldTuples = new ArrayList<Tuple>();
+    }
 
-	/**
-	 * @see BitField#removeRow(int)
-	 */
-	public Tuple removeRow(int inRowPosition) {
-		return (Tuple)fieldTuples.remove(inRowPosition);
-	}
-	
-	/**
-	 * Returns the tuple at the specified position.
-	 * 
-	 * @param inRowPosition int
-	 * @return org.hip.kernel.bitmap.Tuple
-	 */	
-	public Tuple getTuple(int inRowPosition) {
-		return (Tuple)fieldTuples.get(inRowPosition);
-	}
-	
-	/**
-	 * Returns the object at the specified row position.
-	 * 
-	 * @param inRowPosition int
-	 * @return java.lang.Object
-	 */	
-	public Object getObject(int inRowPosition) {
-		return ((Tuple)fieldTuples.get(inRowPosition)).getTupleObject();
-	}
-	
-	/**
-	 * Returns the bit pattern at the specified row position.
-	 * 
-	 * @param inRowPosition int
-	 * @return org.hip.kernel.bitmap.BitRow
-	 */	
-	public BitRow getBitRow(int inRowPosition) {
-		return ((Tuple)fieldTuples.get(inRowPosition)).getTupleBitRow();
-	}
-	
-	/**
-	 * @see BitField#getRowSize()
-	 */
-	public int getRowSize() {
-		return fieldTuples.size();
-	}
+    /** Adds the specified tuple at the end of the rows.
+     *
+     * @param inTuple org.hip.kernel.bitmap.Tuple */
+    @Override
+    public void addRow(final Tuple inTuple) {
+        if (equalRowSize(inTuple.getTupleBitRow())) {
+            fieldTuples.add(inTuple);
+        }
+        else {
+            fieldTuples.add(new Tuple(inTuple.getTupleObject(), resizeRow(inTuple.getTupleBitRow())));
+        }
+    }
 
-	/**
-	 * @see BitField#getColumnSize()
-	 */
-	public int getColumnSize() {
-		if (fieldTuples == null) return 0;
-		if (fieldTuples.size() == 0) return 0;
-		return ((Tuple)fieldTuples.get(0)).getTupleBitRow().getSize();
-	}
+    /** Adds the specified object and bit row at the end of the rows.
+     *
+     * @param inObject java.lang.Object
+     * @param inRow org.hip.kernel.bitmap.BitRow */
+    @Override
+    public void addRow(final Object inObject, final BitRow inRow) {
+        if (equalRowSize(inRow)) {
+            fieldTuples.add(new Tuple(inObject, inRow));
+        }
+        else {
+            fieldTuples.add(new Tuple(inObject, resizeRow(inRow)));
+        }
+    }
 
-	/**
-	 * @see BitField#getBit(int, int)
-	 */
-	public boolean getBit(int inRowPosition, int inColumnPosition) {
-		return ((Tuple)fieldTuples.get(inRowPosition)).getTupleBitRow().getBit(inColumnPosition);
-	}
+    private boolean equalRowSize(final BitRow inRow) {
+        if (fieldTuples.isEmpty()) {
+            return true;
+        }
+        return fieldTuples.get(0).getTupleBitRow().getSize() == inRow.getSize();
+    }
 
-	/**
-	 * @see BitField#getBit(MatrixPosition)
-	 */
-	public boolean getBit(MatrixPosition inPosition) {
-		return ((Tuple)fieldTuples.get(inPosition.getRowPosition())).getTupleBitRow().getBit(inPosition.getColumnPosition());
-	}
+    private BitRow resizeRow(final BitRow inRow) {
+        final BitRow outRow = new BitRowImpl(getColumnSize());
+        outRow.setBitValue(inRow.getBitValue());
+        return outRow;
+    }
 
-	/**
-	 * @see BitField#setBit(int, int, boolean)
-	 */
-	public void setBit(int inRowPosition, int inColumnPosition, boolean inValue) {
-		((Tuple)fieldTuples.get(inRowPosition)).getTupleBitRow().setBit(inColumnPosition, inValue);
-	}
+    /** @see BitField#removeRow(int) */
+    @Override
+    public Tuple removeRow(final int inRowPosition) {
+        return fieldTuples.remove(inRowPosition);
+    }
 
-	/**
-	 * @see BitField#setBit(MatrixPosition, boolean)
-	 */
-	public void setBit(MatrixPosition inPosition, boolean inValue) {
-		((Tuple)fieldTuples.get(inPosition.getRowPosition())).getTupleBitRow().setBit(inPosition.getColumnPosition(), inValue);
-	}
+    /** Returns the tuple at the specified position.
+     *
+     * @param inRowPosition int
+     * @return org.hip.kernel.bitmap.Tuple */
+    @Override
+    public Tuple getTuple(final int inRowPosition) {
+        return fieldTuples.get(inRowPosition);
+    }
 
-	/**
-	 * @see BitField#invert()
-	 */
-	public BitField invert() {
-		BitField outField = new BitFieldImpl();
-		for (Iterator<?> lTuples = fieldTuples.iterator(); lTuples.hasNext();)
-			outField.addRow(((Tuple)lTuples.next()).invert());
-			
-		return outField;
-	}
+    /** Returns the object at the specified row position.
+     *
+     * @param inRowPosition int
+     * @return java.lang.Object */
+    @Override
+    public Object getObject(final int inRowPosition) {
+        return fieldTuples.get(inRowPosition).getTupleObject();
+    }
 
-	/**
-	 * @see BitField#and(BitField)
-	 */
-	public BitField and(BitField inAnd) {
-		int lSize = Math.min(getRowSize(), inAnd.getRowSize());
-		BitField outField = new BitFieldImpl();
-		for (int i = 0; i < lSize; i++)
-			outField.addRow(getTuple(i).and(inAnd.getTuple(i)));
-			
-		return outField;
-	}
+    /** Returns the bit pattern at the specified row position.
+     *
+     * @param inRowPosition int
+     * @return org.hip.kernel.bitmap.BitRow */
+    @Override
+    public BitRow getBitRow(final int inRowPosition) {
+        return fieldTuples.get(inRowPosition).getTupleBitRow();
+    }
 
-	/**
-	 * @see BitField#or(BitField)
-	 */
-	public BitField or(BitField inOr) {
-		int lSize = Math.min(getRowSize(), inOr.getRowSize());
-		BitField outField = new BitFieldImpl();
-		for (int i = 0; i < lSize; i++)
-			outField.addRow(getTuple(i).or(inOr.getTuple(i)));
-			
-		return outField;
-	}
+    /** @see BitField#getRowSize() */
+    @Override
+    public int getRowSize() {
+        return fieldTuples.size();
+    }
 
-	/**
-	 * @see BitField#xor(BitField)
-	 */
-	public BitField xor(BitField inXOr) {
-		int lSize = Math.min(getRowSize(), inXOr.getRowSize());
-		BitField outField = new BitFieldImpl();
-		for (int i = 0; i < lSize; i++)
-			outField.addRow(getTuple(i).xor(inXOr.getTuple(i)));
-			
-		return outField;
-	}
+    /** @see BitField#getColumnSize() */
+    @Override
+    public int getColumnSize() {
+        if (fieldTuples == null) {
+            return 0;
+        }
+        if (fieldTuples.isEmpty()) {
+            return 0;
+        }
+        return fieldTuples.get(0).getTupleBitRow().getSize();
+    }
 
-	/**
-	 * Compares this bit field with the specified bit field and
-	 * returns a collection of positions the two bit fields differ.
-	 * 
-	 * @param inCompare org.hip.kernel.bitmap.BitField
-	 * @return org.hip.kernel.bitmap.MatrixPositions
-	 * @deprecated Use <code>{@link #getDifferences2(BitField)}</code> instead.
-	 */
-	public MatrixPositions getDifferences(BitField inCompare) {
-		MatrixPositions outPositions = new MatrixPositions();
-		
-		int lColumnSize = getColumnSize();
-		int lRowSize = Math.min(getRowSize(), inCompare.getRowSize());
-		
-		for (int i = 0; i < lRowSize; i++) {
-			for (int j = 0; j < lColumnSize; j++) {
-				if (getBit(i, j) ^ inCompare.getBit(i, j))
-					outPositions.add(i, j);
-			} //columns
-		} //rows
-		
-		return outPositions;
-	}
+    /** @see BitField#getBit(int, int) */
+    @Override
+    public boolean getBit(final int inRowPosition, final int inColumnPosition) {
+        return fieldTuples.get(inRowPosition).getTupleBitRow().getBit(inColumnPosition);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.kernel.bitmap.BitField#getDifferences2(org.hip.kernel.bitmap.BitField)
-	 */
-	public Collection<MatrixPosition> getDifferences2(BitField inCompare) {
-		Collection<MatrixPosition> outPositions = new Vector<MatrixPosition>();
-		
-		int lColumnSize = getColumnSize();
-		int lRowSize = Math.min(getRowSize(), inCompare.getRowSize());
-		
-		for (int i = 0; i < lRowSize; i++) {
-			for (int j = 0; j < lColumnSize; j++) {
-				if (getBit(i, j) ^ inCompare.getBit(i, j)) {
-					outPositions.add(new MatrixPosition(i, j));
-				}
-			} //columns
-		} //rows
-		
-		return outPositions;	
-	}
-	
-	/**
-	 * Returns a hash code value for this bit pattern.
-	 * 
-	 * @return int
-	 */
-	public int hashCode() {
-		int outCode = 0;
-		for (Iterator<?> lTuples = fieldTuples.iterator(); lTuples.hasNext();) 
-			outCode ^= ((Tuple)lTuples.next()).hashCode();
-			
-		return outCode;
-	}
-	
-	/**
-	 * Compares this object against the specified object.
-	 * 
-	 * @param inObject java.lang.Object
-	 * @return boolean
-	 */
-	public boolean equals(Object inObject) {
-		if (inObject == null) return false;
-		if (getClass() != inObject.getClass()) return false;
-		
-		BitField lToCompare = (BitField)inObject;
-		if (getRowSize() != lToCompare.getRowSize()) return false;
-		if (getColumnSize() != lToCompare.getColumnSize()) return false;
-		
-		for (int i = 0; i < getRowSize(); i++) {
-			if (!getTuple(i).equals(lToCompare.getTuple(i)))
-				return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * Returns a string representation of this bit pattern.
-	 * 
-	 * @param java.lang.String
-	 */
-	public String toString() {
-		return "";
-	}
-	
-	/**
-	 * Returns a collection of checked positions of the specified row.
-	 * Note: The positions contain indexes in the matrix.
-	 * 
-	 * @param inRowPosition int
-	 * @return org.hip.kernel.bitmap.MatrixPositions
-	 * @deprecated Use <code>BitFieldImpl#getCheckedOfRow2(int inRowPosition)</code> instead.
-	 */
-	public MatrixPositions getCheckedOfRow(int inRowPosition) {
-		BitRow lBitRow = getBitRow(inRowPosition);
-		MatrixPositions outPositions = new MatrixPositions();
-		for (int i = 0; i < lBitRow.getSize(); i++) {
-			if (lBitRow.getBit(i))
-				outPositions.add(inRowPosition, i);
-		}
-		return outPositions;
-	}
-	
-	/**
-	 * Returns a collection of checked positions of the specified row.
-	 * Note: The positions contain indexes in the matrix.
- 
-	 * @param inRowPosition int The element's position in the row.
-	 * @return Collection<MatrixPosition>
-	 */
-	public Collection<MatrixPosition> getCheckedOfRow2(int inRowPosition) {
-		BitRow lBitRow = getBitRow(inRowPosition);
-		Collection<MatrixPosition> outPositions = new Vector<MatrixPosition>();
-		for (int i = 0; i < lBitRow.getSize(); i++) {
-			if (lBitRow.getBit(i)) {
-				outPositions.add(new MatrixPosition(inRowPosition, i));
-			}
-		}		
-		return outPositions;
-	}
-	
-	/**
-	 * Creates and returns a copy of this object.
-	 * Note: The bit pattern of the copy is empty.
-	 * 
-	 * @return java.lang.Object
-	 */
-	public Object clone() {
-		BitField outField = new BitFieldImpl();
-		for (int i = 0; i < getRowSize(); i++) {
-			Tuple lTuple = (Tuple)getTuple(i).clone();
-			lTuple.setTupleBitRowEmpty();
-			outField.addRow(lTuple);
-		}		
-		return outField;
-	}
+    /** @see BitField#getBit(MatrixPosition) */
+    @Override
+    public boolean getBit(final MatrixPosition inPosition) {
+        return fieldTuples.get(inPosition.getRowPosition()).getTupleBitRow().getBit(inPosition.getColumnPosition());
+    }
+
+    /** @see BitField#setBit(int, int, boolean) */
+    @Override
+    public void setBit(final int inRowPosition, final int inColumnPosition, final boolean inValue) {
+        fieldTuples.get(inRowPosition).getTupleBitRow().setBit(inColumnPosition, inValue);
+    }
+
+    /** @see BitField#setBit(MatrixPosition, boolean) */
+    @Override
+    public void setBit(final MatrixPosition inPosition, final boolean inValue) {
+        fieldTuples.get(inPosition.getRowPosition()).getTupleBitRow().setBit(inPosition.getColumnPosition(), inValue);
+    }
+
+    /** @see BitField#invert() */
+    @Override
+    public BitField invert() {
+        final BitField outField = new BitFieldImpl();
+        for (final Iterator<?> lTuples = fieldTuples.iterator(); lTuples.hasNext();) {
+            outField.addRow(((Tuple) lTuples.next()).invert());
+        }
+
+        return outField;
+    }
+
+    /** @see BitField#and(BitField) */
+    @Override
+    public BitField and(final BitField inAnd) {
+        final int lSize = Math.min(getRowSize(), inAnd.getRowSize());
+        final BitField outField = new BitFieldImpl();
+        for (int i = 0; i < lSize; i++) {
+            outField.addRow(getTuple(i).and(inAnd.getTuple(i)));
+        }
+
+        return outField;
+    }
+
+    /** @see BitField#or(BitField) */
+    @Override
+    public BitField or(final BitField inOr) { // NOPMD by lbenno
+        final int lSize = Math.min(getRowSize(), inOr.getRowSize());
+        final BitField outField = new BitFieldImpl();
+        for (int i = 0; i < lSize; i++) {
+            outField.addRow(getTuple(i).or(inOr.getTuple(i)));
+        }
+
+        return outField;
+    }
+
+    /** @see BitField#xor(BitField) */
+    @Override
+    public BitField xor(final BitField inXOr) {
+        final int lSize = Math.min(getRowSize(), inXOr.getRowSize());
+        final BitField outField = new BitFieldImpl();
+        for (int i = 0; i < lSize; i++) {
+            outField.addRow(getTuple(i).xor(inXOr.getTuple(i)));
+        }
+
+        return outField;
+    }
+
+    /** Compares this bit field with the specified bit field and returns a collection of positions the two bit fields
+     * differ.
+     *
+     * @param inCompare org.hip.kernel.bitmap.BitField
+     * @return org.hip.kernel.bitmap.MatrixPositions
+     * @deprecated Use <code>{@link #getDifferences2(BitField)}</code> instead. */
+    @Deprecated
+    @Override
+    public MatrixPositions getDifferences(final BitField inCompare) {
+        final MatrixPositions outPositions = new MatrixPositions();
+
+        final int lColumnSize = getColumnSize();
+        final int lRowSize = Math.min(getRowSize(), inCompare.getRowSize());
+
+        for (int i = 0; i < lRowSize; i++) {
+            for (int j = 0; j < lColumnSize; j++) {
+                if (getBit(i, j) ^ inCompare.getBit(i, j)) {
+                    outPositions.add(i, j);
+                }
+            } // columns
+        } // rows
+
+        return outPositions;
+    }
+
+    @Override
+    public Collection<MatrixPosition> getDifferences2(final BitField inCompare) { // NOPMD by lbenno
+        final Collection<MatrixPosition> outPositions = new ArrayList<MatrixPosition>();
+
+        final int lColumnSize = getColumnSize();
+        final int lRowSize = Math.min(getRowSize(), inCompare.getRowSize());
+
+        for (int i = 0; i < lRowSize; i++) {
+            for (int j = 0; j < lColumnSize; j++) {
+                if (getBit(i, j) ^ inCompare.getBit(i, j)) {
+                    outPositions.add(new MatrixPosition(i, j));
+                }
+            } // columns
+        } // rows
+
+        return outPositions;
+    }
+
+    /** Returns a hash code value for this bit pattern.
+     *
+     * @return int */
+    @Override
+    public int hashCode() {
+        int outCode = 0;
+        for (final Iterator<?> lTuples = fieldTuples.iterator(); lTuples.hasNext();) {
+            outCode ^= ((Tuple) lTuples.next()).hashCode();
+        }
+
+        return outCode;
+    }
+
+    /** Compares this object against the specified object.
+     *
+     * @param inObject java.lang.Object
+     * @return boolean */
+    @Override
+    public boolean equals(final Object inObject) {
+        if (inObject == null) {
+            return false;
+        }
+        if (getClass() != inObject.getClass()) {
+            return false;
+        }
+
+        final BitField lToCompare = (BitField) inObject;
+        if (getRowSize() != lToCompare.getRowSize()) {
+            return false;
+        }
+        if (getColumnSize() != lToCompare.getColumnSize()) {
+            return false;
+        }
+
+        for (int i = 0; i < getRowSize(); i++) {
+            if (!getTuple(i).equals(lToCompare.getTuple(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Returns a string representation of this bit pattern.
+     *
+     * @param java.lang.String */
+    @Override
+    public String toString() {
+        return "";
+    }
+
+    /** Returns a collection of checked positions of the specified row. Note: The positions contain indexes in the
+     * matrix.
+     *
+     * @param inRowPosition int
+     * @return org.hip.kernel.bitmap.MatrixPositions
+     * @deprecated Use <code>BitFieldImpl#getCheckedOfRow2(int inRowPosition)</code> instead. */
+    @Deprecated
+    @Override
+    public MatrixPositions getCheckedOfRow(final int inRowPosition) {
+        final BitRow lBitRow = getBitRow(inRowPosition);
+        final MatrixPositions outPositions = new MatrixPositions();
+        for (int i = 0; i < lBitRow.getSize(); i++) {
+            if (lBitRow.getBit(i)) {
+                outPositions.add(inRowPosition, i);
+            }
+        }
+        return outPositions;
+    }
+
+    /** Returns a collection of checked positions of the specified row. Note: The positions contain indexes in the
+     * matrix.
+     *
+     * @param inRowPosition int The element's position in the row.
+     * @return Collection<MatrixPosition> */
+    @Override
+    public Collection<MatrixPosition> getCheckedOfRow2(final int inRowPosition) {
+        final BitRow lBitRow = getBitRow(inRowPosition);
+        final Collection<MatrixPosition> outPositions = new ArrayList<MatrixPosition>();
+        for (int i = 0; i < lBitRow.getSize(); i++) {
+            if (lBitRow.getBit(i)) {
+                outPositions.add(new MatrixPosition(inRowPosition, i));
+            }
+        }
+        return outPositions;
+    }
+
+    /** Creates and returns a copy of this object. Note: The bit pattern of the copy is empty.
+     *
+     * @return java.lang.Object
+     * @throws CloneNotSupportedException */
+    @Override
+    public BitField clone() throws CloneNotSupportedException {
+        final BitField outField = (BitFieldImpl) super.clone();
+        ((BitFieldImpl) outField).fieldTuples = new ArrayList<Tuple>();
+        final int size = getRowSize();
+        for (int i = 0; i < size; i++) {
+            final Tuple lTuple = getTuple(i).clone();
+            lTuple.setTupleBitRowEmpty();
+            outField.addRow(lTuple);
+        }
+        return outField;
+    }
 
 }

@@ -57,7 +57,7 @@ public class Skin implements ISkin {
     public Component getHeader(final String inAppName) {
         final HorizontalLayout outLayout = new HorizontalLayout();
         outLayout.setWidth("100%");
-        outLayout.setHeight(80, Unit.PIXELS);
+        outLayout.setHeight(115, Unit.PIXELS);
         outLayout.setStyleName("vif-green-head");
 
         final Embedded lImage = new Embedded();
@@ -82,7 +82,7 @@ public class Skin implements ISkin {
     public Component getFooter() {
         final FooterHelper out = FooterHelper
                 .createFooter(ApplicationConstants.FOOTER_TEXT);
-        out.setHeight(19);
+        out.setHeight(22);
         out.setStyleName("vif-footer");
         return out;
     }

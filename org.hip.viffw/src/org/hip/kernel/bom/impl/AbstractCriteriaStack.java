@@ -1,4 +1,4 @@
-/*
+/**
 	This package is part of the framework used for the application VIF.
 	Copyright (C) 2006, Benno Luthiger
 
@@ -15,56 +15,49 @@
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.kernel.bom.impl;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hip.kernel.bom.ICriteriaStack;
 import org.hip.kernel.bom.KeyObject.BinaryBooleanOperator;
 
-/**
- * Abstract class for <code>IOperandStack</code>.
+/** Abstract class for <code>IOperandStack</code>.
  *
- * @author Luthiger
- * Created on 10.07.2007
- */
-public abstract class AbstractCriteriaStack implements ICriteriaStack {
-	protected Vector<String> criteria = new Vector<String>();
-	protected Vector<BinaryBooleanOperator> operators = new Vector<BinaryBooleanOperator>();
-	protected String join = "";
+ * @author Luthiger Created on 10.07.2007 */
+@SuppressWarnings("serial")
+public abstract class AbstractCriteriaStack implements ICriteriaStack { // NOPMD
+    protected List<String> criteria = new ArrayList<String>();
+    protected List<BinaryBooleanOperator> operators = new ArrayList<BinaryBooleanOperator>();
+    protected String join = "";
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.kernel.bom.IOperandStack#addOperand(java.lang.StringBuffer)
-	 */
-	public void addCriterium(StringBuffer inCriterium) {
-		criteria.add(new String(inCriterium));
-	}
+    @Override
+    public void addCriterium(final StringBuffer inCriterium) { // NOPMD
+        criteria.add(new String(inCriterium));
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.kernel.bom.IOperandStack#addOperator(java.lang.Boolean)
-	 */
-	public void addOperator(BinaryBooleanOperator inBinaryOperator) {
-		operators.add(inBinaryOperator);
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.kernel.bom.ICriteriaStack#setJoin(java.lang.String)
-	 */
-	public void setJoin(String inJoin) {
-		join = inJoin;
-	}
-	
-	/**
-	 * To be called after rendering.
-	 */
-	protected void reset() {
-		criteria = new Vector<String>();
-		operators = new Vector<BinaryBooleanOperator>();
-	}
+    @Override
+    public void addCriterium(final StringBuilder inCriterium) { // NOPMD
+        criteria.add(new String(inCriterium));
+    }
+
+    @Override
+    public void addOperator(final BinaryBooleanOperator inBinaryOperator) { // NOPMD
+        operators.add(inBinaryOperator);
+    }
+
+    @Override
+    public void setJoin(final String inJoin) { // NOPMD
+        join = inJoin;
+    }
+
+    /** To be called after rendering. */
+    protected void reset() {
+        criteria = new ArrayList<String>();
+        operators = new ArrayList<BinaryBooleanOperator>();
+    }
 
 }

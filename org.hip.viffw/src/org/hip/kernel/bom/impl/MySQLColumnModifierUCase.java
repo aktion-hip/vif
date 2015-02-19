@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -22,19 +22,17 @@ package org.hip.kernel.bom.impl;
 import org.hip.kernel.bom.ColumnModifier;
 import org.hip.kernel.sys.VObject;
 
-/**
- * Modifies a column value in a MySQL database to upper case, i.e. <code>UCASE</code>.
- * 
+/** Modifies a column value in a MySQL database to upper case, i.e. <code>UCASE</code>.
+ *
  * Created on 25.09.2002
- * @author Benno Luthiger
- */
-public class MySQLColumnModifierUCase extends VObject implements ColumnModifier {
+ * 
+ * @author Benno Luthiger */
+public class MySQLColumnModifierUCase extends VObject implements ColumnModifier { // NOPMD by lbenno 
 
-	/**
-	 * @see org.hip.kernel.bom.ColumnModifier#modifyColumn(String)
-	 */
-	public String modifyColumn(String inColumnName) {
-		return "UCASE(" + inColumnName + ")";
-	}
+    /** @see org.hip.kernel.bom.ColumnModifier#modifyColumn(String) */
+    @Override
+    public String modifyColumn(final String inColumnName) {
+        return "UCASE(" + inColumnName + ")";
+    }
 
 }

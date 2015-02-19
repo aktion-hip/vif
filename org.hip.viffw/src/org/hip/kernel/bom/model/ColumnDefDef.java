@@ -1,8 +1,6 @@
-package org.hip.kernel.bom.model;
-
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -17,20 +15,23 @@ package org.hip.kernel.bom.model;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
-/**
- * Holds information about columns used for the joining of domain objects.
- * 
- * @author	Benno Luthiger
  */
-public interface ColumnDefDef extends MetaModelObject {
-	public final static String columnName 	= "columnName".intern();
-	public final static String domainObject	= "domainObject".intern();
-	public final static String alias 		= "alias".intern();
-	public final static String as 			= "as".intern();
-	public final static String nestedObject = "nestedObject".intern();
-	public final static String modifier 	= "modifier".intern();
-	public final static String template		= "template".intern();
-	public final static String valueType	= "valueType".intern();
+package org.hip.kernel.bom.model;
+
+/** Holds information about columns used for the joining of domain objects.
+ *
+ * @author Benno Luthiger */
+public final class ColumnDefDef {
+    public final static String columnName = "columnName".intern(); // NOPMD
+    public final static String domainObject = "domainObject".intern(); // NOPMD
+    public final static String alias = "alias".intern(); // NOPMD by lbenno
+    public final static String as = "as".intern(); // NOPMD
+    public final static String nestedObject = "nestedObject".intern(); // NOPMD
+    public final static String modifier = "modifier".intern(); // NOPMD
+    public final static String template = "template".intern(); // NOPMD
+    public final static String valueType = "valueType".intern(); // NOPMD
+
+    private ColumnDefDef() {
+        // prevent instantiation
+    }
 }

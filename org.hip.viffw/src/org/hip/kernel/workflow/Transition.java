@@ -1,8 +1,6 @@
-package org.hip.kernel.workflow;
-
-/*
-	This class is part of the workflow framework of the application VIF.
-	Copyright (C) 2003, Benno Luthiger
+/**
+    This class is part of the workflow framework of the application VIF.
+    Copyright (C) 2003-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -17,28 +15,22 @@ package org.hip.kernel.workflow;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
-/**
- * This interface is used to describe transitions.
- * Transitions come from one state and go to another.
- * 
- * Created on 03.07.2003
- * @author Benno Luthiger
- * (inspired by itools by Juan David Ibáñez Palomar <jdavid@itaapy.com>)
  */
+package org.hip.kernel.workflow;
+
+/** This interface is used to describe transitions. Transitions come from one state and go to another.
+ *
+ * Created on 03.07.2003
+ *
+ * @author Benno Luthiger (inspired by itools by Juan David Ibï¿½ï¿½ez Palomar <jdavid@itaapy.com>) */
 public interface Transition {
-	/**
-	 * Returns the state the transition starts from.
-	 * 
-	 * @return java.lang.String
-	 */
-	public String getStateFrom();
-	
-	/**
-	 * Returns the state the transition is going to.
-	 * 
-	 * @return java.lang.String
-	 */
-	public String getStateTo();
+    /** Returns the state the transition starts from.
+     *
+     * @return java.lang.String */
+    String getStateFrom();
+
+    /** Returns the state the transition is going to.
+     *
+     * @return java.lang.String */
+    String getStateTo();
 }

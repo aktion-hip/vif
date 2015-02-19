@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -21,20 +21,16 @@ package org.hip.kernel.bom.impl;
 
 import org.hip.kernel.bom.GeneralDomainObjectHome;
 
-/**
- * 	This is a default implementation of the QueryStatement interface.
- * 
- * 	@author		Benno Luthiger
- */
+/** This is a default implementation of the QueryStatement interface.
+ *
+ * @author Benno Luthiger */
 @SuppressWarnings("serial")
 public class DefaultQueryStatement extends AbstractQueryStatement {
 
-	/**
-	 * DefaultQueryStatement default constructor.
-	 *
-	 * @param inHome org.hip.kernel.bom.GeneralDomainObjectHome
-	 */
-	public DefaultQueryStatement(GeneralDomainObjectHome inHome) {
-		super(inHome);
-	}
+    /** DefaultQueryStatement default constructor.
+     *
+     * @param inHome org.hip.kernel.bom.GeneralDomainObjectHome */
+    public DefaultQueryStatement(final GeneralDomainObjectHome inHome) {
+        super(inHome);
+    }
 }

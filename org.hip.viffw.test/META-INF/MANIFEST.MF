@@ -4,7 +4,7 @@ Bundle-Name: Test Fragment for org.hip.viffw bundle
 Bundle-SymbolicName: org.hip.viffw.test
 Bundle-Version: 1.1.0
 Fragment-Host: org.hip.viffw
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: RelationWare
 Import-Package: com.mysql.jdbc;version="5.1.18",
  com.mysql.jdbc.jdbc2.optional;version="5.1.18"

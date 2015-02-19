@@ -1,6 +1,6 @@
 /**
 	This package is part of the application VIF.
-	Copyright (C) 2007-2014, Benno Luthiger
+	Copyright (C) 2007-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -44,20 +44,22 @@ import org.hip.vif.core.search.NoHitsException;
 /** Class for searching member entries using a LDAP server.
  *
  * @author Luthiger 03.07.2007 */
-public class LDAPMemberSearcher implements IMemberSearcher {
-    private static String MEMBER_HOME_CLASS_NAME = MemberImpl.HOME_CLASS_NAME;
+public class LDAPMemberSearcher implements IMemberSearcher { // NOPMD by lbenno 
+    private final static String MEMBER_HOME_CLASS_NAME = MemberImpl.HOME_CLASS_NAME;
 
-    private final MemberHome memberHome;
-    private KeyObject searchKey;
+    private transient MemberHome memberHome;
+    private transient KeyObject searchKey;
 
-    public LDAPMemberSearcher() {
-        super();
-        memberHome = getMemberAuthenticationHome();
+    private MemberHome getHomeLazy() {
+        if (memberHome == null) {
+            memberHome = getMemberAuthenticationHome();
+        }
+        return memberHome;
     }
 
     @Override
-    public void prepareSearch(final String inQueryTerm) throws IOException, ParseException, NoHitsException,
-    VException, SQLException {
+    public void prepareSearch(final String inQueryTerm) throws IOException, ParseException, NoHitsException, // NOPMD
+            VException, SQLException {
         final KeyObject lKey = new KeyObjectImpl();
         lKey.setValue(MemberHome.KEY_NAME, inQueryTerm + "*");
         lKey.setValue(MemberHome.KEY_FIRSTNAME, inQueryTerm + "*", "=", BinaryBooleanOperator.OR);
@@ -66,9 +68,9 @@ public class LDAPMemberSearcher implements IMemberSearcher {
     }
 
     @Override
-    public void prepareSearch(final String inName, final String inFirstName, final String inStreet,
+    public void prepareSearch(final String inName, final String inFirstName, final String inStreet, // NOPMD
             final String inPostal, final String inCity, final String inMail)
-                    throws NoHitsException, ParseException, IOException, VException, SQLException {
+            throws NoHitsException, ParseException, IOException, VException, SQLException {
         final KeyObject lKey = new KeyObjectImpl();
         modifySearch(lKey, inName, MemberHome.KEY_NAME);
         modifySearch(lKey, inFirstName, MemberHome.KEY_FIRSTNAME);
@@ -83,25 +85,25 @@ public class LDAPMemberSearcher implements IMemberSearcher {
     private void modifySearch(final KeyObject inKey, final String inSearch, final String inColumnName)
             throws VException {
         if (inSearch.length() != 0) {
-            if (memberHome.getColumnNameFor(inColumnName).length() != 0) {
+            if (getHomeLazy().getColumnNameFor(inColumnName).length() != 0) {
                 inKey.setValue(inColumnName, inSearch + "*");
             }
         }
     }
 
     @Override
-    public boolean canShowAll() {
+    public boolean canShowAll() { // NOPMD by lbenno
         return false;
     }
 
     @Override
-    public QueryResult doSearch(final OrderObject inOrder) throws VException, SQLException {
+    public QueryResult doSearch(final OrderObject inOrder) throws VException, SQLException { // NOPMD by lbenno
         VSys.assertNotNull(Assert.ERROR, this, "doSearch", searchKey);
-        return memberHome.select(searchKey);
+        return getHomeLazy().select(searchKey);
     }
 
     @Override
-    public boolean canReorder() {
+    public boolean canReorder() { // NOPMD by lbenno
         return false;
     }
 
@@ -122,7 +124,7 @@ public class LDAPMemberSearcher implements IMemberSearcher {
     }
 
     @Override
-    public Collection<Long> createMemberCacheEntryChecked(final Collection<Long> inMemberIDs) throws VException,
+    public Collection<Long> createMemberCacheEntryChecked(final Collection<Long> inMemberIDs) throws VException, // NOPMD
     SQLException {
         final Collection<Long> outIDs = new ArrayList<Long>(inMemberIDs.size());
         final MemberHome lHome = getMemberAuthenticationHome();
@@ -135,13 +137,13 @@ public class LDAPMemberSearcher implements IMemberSearcher {
     }
 
     @Override
-    public Long getAssociatedCacheID(final Long inMemberID) throws VException, SQLException {
+    public Long getAssociatedCacheID(final Long inMemberID) throws VException, SQLException { // NOPMD by lbenno
         final IMemberInformation lInformation = new LDAPMemberInformation(getMemberAuthenticationHome().getMember(
                 inMemberID));
         final String lUserID = lInformation.getUserID();
         try {
             final Member lMember = getMemberCacheHome().getMemberByUserID(lUserID);
-            return new Long(lMember.get(MemberHome.KEY_ID).toString());
+            return Long.parseLong(lMember.get(MemberHome.KEY_ID).toString());
         } catch (final BOMInvalidKeyException exc) {
             // the member entry is not cached yet, therefore, we do that now
             final Member lMember = (Member) getMemberCacheHome().create();

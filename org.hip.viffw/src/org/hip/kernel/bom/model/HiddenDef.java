@@ -1,8 +1,6 @@
-package org.hip.kernel.bom.model;
-
-/*
+/**
  This package is part of the persistency framework used for the application VIF.
- Copyright (C) 2004, Benno Luthiger
+ Copyright (C) 2004-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -18,14 +16,12 @@ package org.hip.kernel.bom.model;
  License along with this library; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+package org.hip.kernel.bom.model;
 
-/**
- * Holds information about hidden columns used for the joining of domain objects.
- * 
- * @author Benno Luthiger
- * Created on Nov 1, 2004
- */
-public interface HiddenDef extends MetaModelObject {
-	public final static String columnName 	= "columnName".intern();
-	public final static String domainObject	= "domainObject".intern();
+/** Holds information about hidden columns used for the joining of domain objects.
+ *
+ * @author Benno Luthiger Created on Nov 1, 2004 */
+public interface HiddenDef extends MetaModelObject { // NOPMD by lbenno 
+    String columnName = "columnName".intern(); // NOPMD by lbenno 
+    String domainObject = "domainObject".intern(); // NOPMD by lbenno 
 }

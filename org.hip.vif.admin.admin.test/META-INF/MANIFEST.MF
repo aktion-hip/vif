@@ -8,4 +8,5 @@ Fragment-Host: org.hip.vif.admin.admin;bundle-version="1.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.hip.kernel.workflow,
  org.hip.vif.markup.serializer,
+ org.hip.vif.web,
  org.hip.vif.web.bom;version="1.0.0"

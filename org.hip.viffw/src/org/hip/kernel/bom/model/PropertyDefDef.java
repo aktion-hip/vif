@@ -1,8 +1,6 @@
-package org.hip.kernel.bom.model;
-
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -17,22 +15,21 @@ package org.hip.kernel.bom.model;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
-/**
- * 	The PropertyDefDef describes the PropertyDef.
- * 
- * 	@author	Benno Luthiger
  */
-public interface PropertyDefDef extends MetaModelObject {
-	public final static String propertyTypeSimple 		= 	"simple".intern()		;
-	public final static String propertyTypeComposite 	= 	"composite".intern()	;
-	public final static String propertyTypeObjectRef 	= 	"objectRef".intern()	;
-	
-	public final static String propertyName 	= 	"propertyName".intern()	;
-	public final static String propertyType 	= 	"propertyType".intern()	;
-	public final static String valueType 		= 	"valueType".intern()	;
-	public final static String formatPattern 	= 	"formatPattern".intern();
-	public final static String mappingDef 		= 	"mappingDef".intern()	;
-	public final static String relationshipDef 	= 	"relationshipDef".intern();
+package org.hip.kernel.bom.model;
+
+/** The PropertyDefDef describes the PropertyDef.
+ *
+ * @author Benno Luthiger */
+public interface PropertyDefDef extends MetaModelObject { // NOPMD by lbenno 
+    String propertyTypeSimple = "simple".intern(); // NOPMD by lbenno 
+    String propertyTypeComposite = "composite".intern(); // NOPMD by lbenno 
+    String propertyTypeObjectRef = "objectRef".intern(); // NOPMD by lbenno 
+
+    String propertyName = "propertyName".intern(); // NOPMD by lbenno 
+    String propertyType = "propertyType".intern(); // NOPMD by lbenno 
+    String valueType = "valueType".intern(); // NOPMD by lbenno 
+    String formatPattern = "formatPattern".intern(); // NOPMD by lbenno 
+    String mappingDef = "mappingDef".intern(); // NOPMD by lbenno 
+    String relationshipDef = "relationshipDef".intern(); // NOPMD by lbenno 
 }

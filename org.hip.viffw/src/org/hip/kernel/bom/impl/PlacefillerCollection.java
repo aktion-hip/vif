@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the framework used for the application VIF.
- Copyright (C) 2004, Benno Luthiger
+ Copyright (C) 2004-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -19,66 +19,57 @@
 
 package org.hip.kernel.bom.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Vector;
 
 import org.hip.kernel.bom.GeneralDomainObjectHome;
 import org.hip.kernel.bom.KeyObject;
 import org.hip.kernel.sys.VObject;
 
-/**
- * A collection of objects to fill in the placeholders in nested/joined homes.
- * 
- * @author Benno Luthiger
- * Created on Nov 8, 2004
- */
-public class PlacefillerCollection extends VObject {
-	private Collection<Placefiller> placefillers = new Vector<Placefiller>();
-	
-	public class Placefiller {
-		GeneralDomainObjectHome home;
-		KeyObject key;
-		String alias;
-		public Placefiller(GeneralDomainObjectHome inHome, KeyObject inKey, String inAlias) {
-			super();
-			home = inHome;
-			key = inKey;
-			alias = inAlias;
-		}
-	}
+/** A collection of objects to fill in the placeholders in nested/joined homes.
+ *
+ * @author Benno Luthiger Created on Nov 8, 2004 */
+public class PlacefillerCollection extends VObject { // NOPMD by lbenno
+    private final transient Collection<Placefiller> placefillers = new ArrayList<Placefiller>();
 
-	/**
-	 * PlacefillerCollection constructor.
-	 */
-	public PlacefillerCollection() {
-		super();
-	}
+    /** The place holder class. */
+    public static class Placefiller {
+        protected transient GeneralDomainObjectHome home;
+        protected transient KeyObject key;
+        protected transient String alias;
 
-	/**
-	 * Adds a new placefiller to the collection.
-	 * 
-	 * @param inHome GeneralDomainObjectHome The home that fills the place.
-	 * @param inKey KeyObject The key to select.
-	 * @param inAlias String The placeholder's id.
-	 */
-	public void add(GeneralDomainObjectHome inHome, KeyObject inKey, String inAlias) {
-		placefillers.add(new Placefiller(inHome, inKey, inAlias));
-	}
-	
-	/**
-	 * Returns an iterator over the placefiller objects.
-	 * 
-	 * @return Iterator
-	 */
-	public Iterator<Placefiller> iterator() {
-		return placefillers.iterator();
-	}
-	
-	/**
-	 * @return int
-	 */
-	public int size() {
-		return placefillers.size();
-	}
+        /** Placefiller constructor.
+         *
+         * @param inHome {@link GeneralDomainObjectHome}
+         * @param inKey {@link KeyObject}
+         * @param inAlias String */
+        public Placefiller(final GeneralDomainObjectHome inHome, final KeyObject inKey, final String inAlias) {
+            super();
+            home = inHome;
+            key = inKey;
+            alias = inAlias;
+        }
+    }
+
+    /** Adds a new placefiller to the collection.
+     *
+     * @param inHome GeneralDomainObjectHome The home that fills the place.
+     * @param inKey KeyObject The key to select.
+     * @param inAlias String The placeholder's id. */
+    public void add(final GeneralDomainObjectHome inHome, final KeyObject inKey, final String inAlias) {
+        placefillers.add(new Placefiller(inHome, inKey, inAlias));
+    }
+
+    /** Returns an iterator over the placefiller objects.
+     *
+     * @return Iterator */
+    public Iterator<Placefiller> iterator() {
+        return placefillers.iterator();
+    }
+
+    /** @return int */
+    public int size() {
+        return placefillers.size();
+    }
 }

@@ -1,8 +1,6 @@
-package org.hip.kernel.bom.impl;
-
-/*
+/**
  This package is part of the framework used for the application VIF.
- Copyright (C) 2005, Benno Luthiger
+ Copyright (C) 2005-2014, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -18,21 +16,14 @@ package org.hip.kernel.bom.impl;
  License along with this library; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+package org.hip.kernel.bom.impl;
 
 import org.hip.kernel.bom.GroupByObject;
 
-/**
- * Implementation of <code>GroupByObject</code>.
- * 
- * @author Benno Luthiger
- * Created on Apr 13, 2005
- */
-public class GroupByObjectImpl extends OrderObjectImpl implements GroupByObject {
+/** Implementation of <code>GroupByObject</code>.
+ *
+ * @author Benno Luthiger Created on Apr 13, 2005 */
+@SuppressWarnings("serial")
+public class GroupByObjectImpl extends OrderObjectImpl implements GroupByObject { // NOPMD by lbenno 
 
-	/**
-	 * GroupByObjectImpl constructor.
-	 */
-	public GroupByObjectImpl() {
-		super();
-	}
 }

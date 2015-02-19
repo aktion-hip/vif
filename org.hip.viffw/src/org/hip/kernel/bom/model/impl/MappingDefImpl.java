@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -23,137 +23,126 @@ import org.hip.kernel.bom.Property;
 import org.hip.kernel.bom.SettingException;
 import org.hip.kernel.bom.model.MappingDef;
 import org.hip.kernel.bom.model.MappingDefDef;
-import org.hip.kernel.bom.model.PropertyDef;
-import org.hip.kernel.bom.model.MetaModelObject;
 import org.hip.kernel.bom.model.MetaModelHome;
+import org.hip.kernel.bom.model.MetaModelObject;
+import org.hip.kernel.bom.model.PropertyDef;
 import org.hip.kernel.util.Debug;
-import org.hip.kernel.exc.DefaultExceptionHandler;
 
-/**
- * 	Implements the MappingDef interface
- * 
- * 	@author		Benno Luthiger
- * 	@see		org.hip.kernel.bom.model.MappingDef
- */
+/** Implements the MappingDef interface
+ *
+ * @author Benno Luthiger
+ * @see org.hip.kernel.bom.model.MappingDef */
+@SuppressWarnings("serial")
 public class MappingDefImpl extends AbstractModelObject implements MappingDef {
-		// Instance variables
-		private PropertyDef propertyDef		= null  ;
-		private	Property	optimTableName	= null	;
-		private Property	optimColumnName	= null	;
+    // Instance variables
+    private PropertyDef propertyDef;
+    private Property optimTableName;
+    private Property optimColumnName;
 
-	/**
-	 * MappingDefImpl default constructor.
-	 */
-	public MappingDefImpl() {
-		super();
-	}
-	/**
-	 * MappingDefImpl constructor with initial values.
-	 * The array of the objects contains the names in the first column and the values in the second.
-	 * 
-	 * @param inInitialValues java.lang.Object[][]
-	 */
-	public MappingDefImpl(java.lang.Object[][] inInitialValues) {
-		super(inInitialValues);
-	}
-	/**
-	 * MappingDefs are equal if their tableName and columnName
-	 * attribute are equal.
-	 *
-	 * @return boolean
-	 */
-	public boolean equals(Object inObject) {
-		if (inObject == null) return false;
-		if (!(inObject instanceof MappingDef)) return false;
-	
-		MappingDef lMappingDef = (MappingDef)inObject;
-		try {
-			return ((String)get(MappingDefDef.tableName)).equals(lMappingDef.get(MappingDefDef.tableName)) &&
-				   ((String)get(MappingDefDef.columnName)).equals(lMappingDef.get(MappingDefDef.columnName));
-		}
-		catch (GettingException exc) {
-			return false;
-		}
-	}
-	/**
-	 * 	@return java.lang.String
-	 */
-	public String getColumnName() {
-		if ( optimColumnName == null ) {
-			 try { 
-				 optimColumnName = (Property)this.propertySet().get(MappingDefDef.columnName);
-			 } 
-			 catch ( Exception exc ) {
-				 DefaultExceptionHandler.instance().handle(exc);
-			 }
-		}	
-		return (String)optimColumnName.getValue();
-	}
-	/**
-	 * @return org.hip.kernel.bom.model.MetaModelObject
-	 */
-	public MetaModelObject getMetaModelObject() {
-		return MetaModelHome.singleton.getMappingDefDef() ;
-	}
-	/**
-	 * 	@return org.hip.kernel.bom.model.PropertyDef
-	 */
-	public PropertyDef getPropertyDef() {
-		return propertyDef ;
-	}
-	/**
-	 * 	@return java.lang.String
-	 */
-	public String getTableName() {
-		if ( optimTableName == null ) {
-			 try { 
-				 optimTableName = (Property)this.propertySet().get(MappingDefDef.tableName);
-			 }
-			 catch ( Exception exc ) {
-			 	DefaultExceptionHandler.instance().handle(exc);
-			 }
-		}	
-		return (String) optimTableName.getValue();
-	}
-	/**
-	 * Returns a hash code value for the object def.
-	 *
-	 * @return int
-	 */
-	public int hashCode() {
-		int outCode = 1;
-		try {
-			outCode = ((String)get(MappingDefDef.tableName)).hashCode() ^
-						((String)get(MappingDefDef.columnName)).hashCode();
-		}
-		catch (GettingException exc) {
-			//left blank intentionally
-		}
-		return outCode;
-	}
-	/**
-	 * 	@param inPropertyDef org.hip.kernel.bom.model.PropertyDef
-	 */
-	public void setPropertyDef( PropertyDef inPropertyDef ) {
-	
-		propertyDef = inPropertyDef ;
-	}
-	
-	public void set(String inName, Object inValue) throws SettingException {
-		if (!MappingDefDef.tableName.equals(inName)) {
-			//transform value of column name to upper case to fix problem with case insensitive databases (like Derby)
-			inValue = ((String)inValue).intern().toUpperCase();
-		}
-		super.set(inName, inValue);
-	}
-	
-	public String toString() {
-		String lMessage = "";
-		try {
-			lMessage = MappingDefDef.tableName + "=\"" + (String)get(MappingDefDef.tableName) +
-						"\" " + MappingDefDef.columnName + "=\"" + (String)get(MappingDefDef.columnName) + "\"";
-		}
-		catch (GettingException esc) {}
-		return Debug.classMarkupString(this, lMessage);
-	}
+    /** MappingDefImpl default constructor. */
+    public MappingDefImpl() {
+        super();
+    }
+
+    /** MappingDefImpl constructor with initial values. The array of the objects contains the names in the first column
+     * and the values in the second.
+     *
+     * @param inInitialValues java.lang.Object[][] */
+    public MappingDefImpl(final java.lang.Object[][] inInitialValues) { // NOPMD by lbenno 
+        super(inInitialValues);
+    }
+
+    /** MappingDefs are equal if their tableName and columnName attribute are equal.
+     *
+     * @return boolean */
+    @Override
+    public boolean equals(final Object inObject) {
+        if (inObject == null) {
+            return false;
+        }
+        if (!(inObject instanceof MappingDef)) {
+            return false;
+        }
+
+        final MappingDef lMappingDef = (MappingDef) inObject;
+        try {
+            return ((String) get(MappingDefDef.tableName)).equals(lMappingDef.get(MappingDefDef.tableName)) &&
+                    ((String) get(MappingDefDef.columnName)).equals(lMappingDef.get(MappingDefDef.columnName));
+        } catch (final GettingException exc) {
+            return false;
+        }
+    }
+
+    /** @return java.lang.String */
+    @Override
+    public String getColumnName() {
+        if (optimColumnName == null) {
+            optimColumnName = (Property) this.propertySet().get(MappingDefDef.columnName);
+        }
+        return (String) optimColumnName.getValue();
+    }
+
+    /** @return org.hip.kernel.bom.model.MetaModelObject */
+    @Override
+    public MetaModelObject getMetaModelObject() {
+        return MetaModelHome.singleton.getMappingDefDef();
+    }
+
+    /** @return org.hip.kernel.bom.model.PropertyDef */
+    @Override
+    public PropertyDef getPropertyDef() {
+        return propertyDef;
+    }
+
+    /** @return java.lang.String */
+    @Override
+    public String getTableName() {
+        if (optimTableName == null) {
+            optimTableName = (Property) this.propertySet().get(MappingDefDef.tableName);
+        }
+        return (String) optimTableName.getValue();
+    }
+
+    /** Returns a hash code value for the object def.
+     *
+     * @return int */
+    @Override
+    public int hashCode() {
+        int outCode = 1;
+        try {
+            outCode = ((String) get(MappingDefDef.tableName)).hashCode() ^
+                    ((String) get(MappingDefDef.columnName)).hashCode();
+        } catch (final GettingException exc) { // NOPMD by lbenno
+            // left blank intentionally
+        }
+        return outCode;
+    }
+
+    /** @param inPropertyDef org.hip.kernel.bom.model.PropertyDef */
+    @Override
+    public void setPropertyDef(final PropertyDef inPropertyDef) {
+
+        propertyDef = inPropertyDef;
+    }
+
+    @Override
+    public void set(final String inName, Object inValue) throws SettingException { // NOPMD by lbenno
+        if (!MappingDefDef.tableName.equals(inName)) {
+            // transform value of column name to upper case to fix problem with case insensitive databases (like Derby)
+            inValue = ((String) inValue).intern().toUpperCase();
+        }
+        super.set(inName, inValue);
+    }
+
+    @Override
+    public String toString() { // NOPMD by lbenno
+        String lMessage = "";
+        try {
+            lMessage = MappingDefDef.tableName + "=\"" + (String) get(MappingDefDef.tableName) +
+                    "\" " + MappingDefDef.columnName + "=\"" + (String) get(MappingDefDef.columnName) + "\"";
+        } catch (final GettingException esc) { // NOPMD by lbenno 
+            // intentionally left empty
+        }
+        return Debug.classMarkupString(this, lMessage);
+    }
 }

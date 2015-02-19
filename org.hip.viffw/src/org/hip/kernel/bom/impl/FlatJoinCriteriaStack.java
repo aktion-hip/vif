@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the framework used for the application VIF.
-	Copyright (C) 2006, Benno Luthiger
+	Copyright (C) 2006-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -15,34 +15,30 @@
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.kernel.bom.impl;
 
-/**
- * Critieria stack where nested levels are flatted and joined uniformly using the specified join.
+/** Critieria stack where nested levels are flatted and joined uniformly using the specified join.
  *
- * @author Luthiger
- * Created on 13.07.2007
- */
-public class FlatJoinCriteriaStack extends AbstractCriteriaStack {
+ * @author Luthiger Created on 13.07.2007 */
+@SuppressWarnings("serial")
+public class FlatJoinCriteriaStack extends AbstractCriteriaStack { // NOPMD by lbenno 
 
-	/* (non-Javadoc)
-	 * @see org.hip.kernel.bom.ICriteriaStack#render()
-	 */
-	public String render() {
-		StringBuffer outSQL = new StringBuffer();
-		
-		boolean lFirst = true;
-		for (String lCriterium : criteria) {
-			if (!lFirst) {
-				outSQL.append(join);
-			}
-			lFirst = false;
-			outSQL.append(lCriterium);
-		}
-		reset();
-		return new String(outSQL);
-	}
+    @Override
+    public String render() { // NOPMD by lbenno 
+        final StringBuffer outSQL = new StringBuffer();
+
+        boolean lFirst = true;
+        for (final String lCriterium : criteria) {
+            if (!lFirst) {
+                outSQL.append(join);
+            }
+            lFirst = false;
+            outSQL.append(lCriterium);
+        }
+        reset();
+        return new String(outSQL);
+    }
 
 }

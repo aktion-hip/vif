@@ -1,8 +1,6 @@
-package org.hip.kernel.bom.model;
-
-/*
+/**
 	This package is part of the framework used for the application VIF.
-	Copyright (C) 2004, Benno Luthiger
+	Copyright (C) 2004-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -17,28 +15,21 @@ package org.hip.kernel.bom.model;
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
-/**
- * This interface defines the behaviour of placeholder objects in joined domain objects.
- * 
- * @author Benno Luthiger
- * Created on Nov 10, 2004
  */
-public interface PlaceholderDef extends ModelObject {
-	/**
-	 * Returns the nestings name, i.e. the alias of the nested query.
-	 * 
-	 * @return String
-	 */
-	String getName();
+package org.hip.kernel.bom.model;
 
-	/**
-	 * @param position The position to set.
-	 */
-	void setPosition(int inPosition);
-	/**
-	 * @return Returns the position.
-	 */
-	int getPosition();
+/** This interface defines the behaviour of placeholder objects in joined domain objects.
+ *
+ * @author Benno Luthiger Created on Nov 10, 2004 */
+public interface PlaceholderDef extends ModelObject {
+    /** Returns the nestings name, i.e. the alias of the nested query.
+     * 
+     * @return String */
+    String getName();
+
+    /** @param position The position to set. */
+    void setPosition(int inPosition);
+
+    /** @return Returns the position. */
+    int getPosition();
 }

@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -18,80 +18,87 @@
  */
 package org.hip.kernel.util;
 
-/**
- * This class is a utility class.
- * The class searchs for umlauts in a specified string.
- * The position and value of the first found umlaut are remembered.
+/** This class is a utility class. The class searchs for umlauts in a specified string. The position and value of the
+ * first found umlaut are remembered.
  *
- * @author	Benno Luthiger
- */
+ * @author Benno Luthiger */
 public class FindFirstUmlaut {
-	private int position = -1;
-	private boolean found = false;
-	private String foundUmlaut;
-	private String foundCorrespondingUmlaut;
-	private String starting;
-	private String ending;
-	
-	// we only compar uppercases
-	private static String[] umlautsShort = {"Ä", "Ö", "Ü"};
-	private static String[] umlautsLong = {"AE", "OE", "UE"};
-	
-	/**
-	 * FindFirstUmlaut constructor for the specified string.
-	 */
-	public FindFirstUmlaut(String inSearchString) {
-		super();
-	
-		checkForUmlauts(inSearchString, umlautsShort);
-		checkForUmlauts(inSearchString, umlautsLong);
-	}
-	private void checkForUmlauts(String inSearchString, String[] inUmlauts) {
-		
-		int lFoundPosition;
-		for (int i = 0; i < inUmlauts.length; i++) {
-			if ((lFoundPosition = inSearchString.indexOf(inUmlauts[i])) >= 0) {
-				if ((position < 0) || ((position > 0) & (lFoundPosition < position))) {
-					position = lFoundPosition;
-					foundUmlaut = umlautsShort[i];
-					foundCorrespondingUmlaut = umlautsLong[i];
-					starting = inSearchString.substring(0, lFoundPosition);
-					ending = inSearchString.substring(lFoundPosition + inUmlauts[i].length());
-					found = true;
-				} // if
-			} // if
-		}	// for
-	}
-	public String getEnding() {
-		return ending;
-	}
-	public String getFoundCorresponding() {
-		return foundCorrespondingUmlaut;
-	}
-	public String getFoundUmlaut() {
-		return foundUmlaut;
-	}
-	public int getPosition() {
-		return position;
-	}
-	public String getStarting() {
-		return starting;
-	}
-	public boolean hasUmlauts() {
-		return found;
-	}
-	
-	/**
-	 * @return java.lang.String
-	 */
-	public String toString() {
-		String lMessage = "";
-		if (hasUmlauts()) {
-			lMessage = "Umlaut found at position " + getPosition();
-		}
-		else {
-			lMessage = "No umlaut found";
-		}
-		return Debug.classMarkupString(this, lMessage);
-	}
+    private transient int position = -1;
+    private transient boolean found;
+    private transient String foundUmlaut;
+    private transient String foundCorrespondingUmlaut;
+    private transient String starting;
+    private transient String ending;
+
+    // we only compar uppercases
+    private static String[] umlautsShort = { "Ä", "Ö", "Ü" };
+    private static String[] umlautsLong = { "AE", "OE", "UE" };
+
+    /** FindFirstUmlaut constructor for the specified string. */
+    public FindFirstUmlaut(final String inSearchString) {
+        super();
+
+        checkForUmlauts(inSearchString, umlautsShort);
+        checkForUmlauts(inSearchString, umlautsLong);
+    }
+
+    private void checkForUmlauts(final String inSearchString, final String... inUmlauts) {
+        int lFoundPosition;
+        for (int i = 0; i < inUmlauts.length; i++) {
+            lFoundPosition = inSearchString.indexOf(inUmlauts[i]);
+            if (lFoundPosition >= 0) {
+                if (position < 0 || (position > 0) & (lFoundPosition < position)) {
+                    position = lFoundPosition;
+                    foundUmlaut = umlautsShort[i];
+                    foundCorrespondingUmlaut = umlautsLong[i];
+                    starting = inSearchString.substring(0, lFoundPosition);
+                    ending = inSearchString.substring(lFoundPosition + inUmlauts[i].length());
+                    found = true;
+                } // if
+            } // if
+        } // for
+    }
+
+    /** @return String */
+    public String getEnding() {
+        return ending;
+    }
+
+    /** @return String */
+    public String getFoundCorresponding() {
+        return foundCorrespondingUmlaut;
+    }
+
+    /** @return String */
+    public String getFoundUmlaut() {
+        return foundUmlaut;
+    }
+
+    /** @return String */
+    public int getPosition() {
+        return position;
+    }
+
+    /** @return String */
+    public String getStarting() {
+        return starting;
+    }
+
+    /** @return boolean */
+    public boolean hasUmlauts() {
+        return found;
+    }
+
+    /** @return java.lang.String */
+    @Override
+    public String toString() {
+        String lMessage = "";
+        if (hasUmlauts()) {
+            lMessage = "Umlaut found at position " + getPosition();
+        }
+        else {
+            lMessage = "No umlaut found";
+        }
+        return Debug.classMarkupString(this, lMessage);
+    }
 }

@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-package org.hip.kernel.sys;
+package org.hip.kernel.sys; // NOPMD by lbenno
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,45 +32,42 @@ import java.util.ResourceBundle;
 import org.hip.kernel.bom.HomeManager;
 import org.hip.kernel.bom.impl.HomeManagerImpl;
 import org.hip.kernel.servlet.impl.ServletContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** This is a wrapper around java.lang.System.
  *
  * @autor Benno Luthiger
  * @version 1.0
  * @see java.lang.Object */
-public class VSys extends VObject {
-    private static final Logger LOG = LoggerFactory.getLogger(VSys.class);
+public class VSys extends VObject { // NOPMD by lbenno
 
-    public static String nl = "\n";
+    public static String nl = "\n"; // NOPMD by lbenno
 
     /** This static attribute provides access to the currently set input stream. Actually this maps to
      * java.langSystem.out. Future releases may extend the default behaviour.
-     * 
+     *
      * @see java.lang.System */
-    public final static InputStream in = java.lang.System.in;
+    public final static InputStream in = java.lang.System.in; // NOPMD by lbenno
 
     /** This static attribute provides access to the currently set standard output stream. Actually this maps to
      * java.lang.System.out Future releases may extend the default behaviour.
-     * 
+     *
      * @see java.lang.System */
-    public final static PrintStream out = java.lang.System.out;
+    public final static PrintStream out = java.lang.System.out; // NOPMD by lbenno
 
     /** This static attribute provides access to the currently set standard output stream. Actually this maps to
      * java.lang.System.out Future releases may extend the default behaviour.
-     * 
+     *
      * @see java.lang.System */
-    public final static PrintStream err = java.lang.System.err;
+    public final static PrintStream err = java.lang.System.err; // NOPMD by lbenno
 
     /** Access to the current assertLevel. By default this is the default level defined in the org.hip.kernel.sys.Assert
      * class. This can be changed if another policy is required. */
-    public final static int assertLevel = Assert.DEFAULT_LEVEL;
+    public final static int assertLevel = Assert.DEFAULT_LEVEL; // NOPMD by lbenno
 
     /** Access to the HomeManager singleton */
-    public final static HomeManager homeManager = HomeManagerImpl.getSingleton();
+    public final static HomeManager homeManager = HomeManagerImpl.getSingleton(); // NOPMD by lbenno
 
-    private final static String cSep = System.getProperty("file.separator");
+    private final static String cSep = System.getProperty("file.separator"); // NOPMD by lbenno
 
     private static String cContextPath = "";
     private final static String CONF_PATH = cSep + "WEB-INF" + cSep + "conf" + cSep;
@@ -78,15 +75,15 @@ public class VSys extends VObject {
 
     private static String cSysName = "vif";
     public final static String SYS_FILE_EXT = ".properties";
-    public final static Locale dftLocale = Locale.US;
-    public final static String dftLanguage = dftLocale.getLanguage();
-    public final static String dftCountry = dftLocale.getCountry();
+    public final static Locale dftLocale = Locale.US; // NOPMD by lbenno
+    public final static String dftLanguage = dftLocale.getLanguage(); // NOPMD by lbenno
+    public final static String dftCountry = dftLocale.getCountry(); // NOPMD by lbenno
 
     private static boolean doTracing = true;
     private static String cLogPath;
 
     // Private
-    private static Properties cSysProperties = null;
+    private static Properties cSysProperties;
 
     /** This method is propagated to Assert.assertNotNull().
      *
@@ -138,14 +135,14 @@ public class VSys extends VObject {
     }
 
     /** Returns the path where the messages are logged.
-     * 
+     *
      * @return java.lang.String */
     @Deprecated
     public static String getLogPath() {
-        if (cLogPath == null) {
+        if (cLogPath == null) { // NOPMD by lbenno
             try {
                 cLogPath = getVSysProperties().getProperty(VSysConstants.LOGFILE_PATH);
-                if (cLogPath == null) {
+                if (cLogPath == null) { // NOPMD by lbenno
                     cLogPath = "";
                 }
                 else {
@@ -153,7 +150,12 @@ public class VSys extends VObject {
                     File lLogDir = new File(cLogPath);
                     if (!lLogDir.exists()) {
                         final String lProperty = ServletContainer.getInstance().getBasePath();
-                        if (lProperty != null) {
+                        if (lProperty == null) {
+                            if (log_mkdir(lLogDir)) {
+                                cLogPath = lLogDir.getCanonicalPath() + File.separator;
+                            }
+                        }
+                        else {
                             lLogDir = new File(lProperty + File.separator + cLogPath);
 
                             cLogPath = "";
@@ -168,11 +170,6 @@ public class VSys extends VObject {
                                 }
                             }
                         }
-                        else {
-                            if (log_mkdir(lLogDir)) {
-                                cLogPath = lLogDir.getCanonicalPath() + File.separator;
-                            }
-                        }
                     }
                 }
             } catch (final IOException ex) {
@@ -183,7 +180,7 @@ public class VSys extends VObject {
         return cLogPath;
     }
 
-    private static boolean log_mkdir(final File inLogDir) {
+    private static boolean log_mkdir(final File inLogDir) { // NOPMD by lbenno
         if (inLogDir.mkdir()) {
             if (inLogDir.exists()) {
                 return true;
@@ -196,7 +193,7 @@ public class VSys extends VObject {
      * $APPLICATION_CONTEXT/WEB-INF/conf/
      *
      * @return java.util.Properties */
-    public static Properties getVSysProperties() throws IOException {
+    public synchronized static Properties getVSysProperties() throws IOException { // NOPMD by lbenno
         if (cSysProperties == null) {
             cSysProperties = new Properties();
             final File lDir = new File(cContextPath + (cUseConfPath ? CONF_PATH : ""));
@@ -206,7 +203,9 @@ public class VSys extends VObject {
             }
             else {
                 final InputStream lStream = VSys.class.getResourceAsStream("/" + cSysName + SYS_FILE_EXT);
-                cSysProperties.load(lStream);
+                if (lStream != null) {
+                    cSysProperties.load(lStream);
+                }
             }
 
             // //Read some application specific properties and write them to the system properties
@@ -226,7 +225,7 @@ public class VSys extends VObject {
      * <p>
      * This method should only be used in the bundle activation phase.
      * </p>
-     * 
+     *
      * @param inKey String
      * @return String the property value */
     public static String getBundleProperty(final String inKey) {
@@ -242,7 +241,7 @@ public class VSys extends VObject {
         // else, load the properties file from appContext/WEB-INF/conf/
         try {
             return getVSysProperties().getProperty(inKey);
-        } catch (final IOException exc) {
+        } catch (final IOException exc) { // NOPMD by lbenno
             // intentionally left empty
         }
         return null;
@@ -255,17 +254,18 @@ public class VSys extends VObject {
 
     /** Sets the path to context in the servlet container the application is running in. This attribute should be set in
      * the servlet's init() method.
-     * 
+     *
      * @param inContextPath java.lang.String
      * @see javax.servlet.GenericServlet */
     public static void setContextPath(final String inContextPath) {
-        if (inContextPath == null)
+        if (inContextPath == null) {
             return;
+        }
         cContextPath = inContextPath;
     }
 
     /** Returns the servlet context's real path.
-     * 
+     *
      * @return a <code>String</code> specifying the servlet context's real path, or <code>null</code> if the translation
      *         cannot be performed
      * @see ServletContext.getRealPath() */
@@ -274,14 +274,14 @@ public class VSys extends VObject {
     }
 
     /** Sets the flag that indicates to use the WEB-INF/conf/ path to find the application's system properties.
-     * 
+     *
      * @param inUseConfPath */
     public static void useConfPath(final boolean inUseConfPath) {
         cUseConfPath = inUseConfPath;
     }
 
     /** Sets the name of the application's properties file. This attribute should be set in the servlet's init() method.
-     * 
+     *
      * @param inSysName java.lang.String
      * @see javax.servlet.GenericServlet */
     public static void setSysName(final String inSysName) {
@@ -289,22 +289,21 @@ public class VSys extends VObject {
     }
 
     /** This method invokes some test against VSys.
-     * 
+     *
      * @param args java.lang.String[] */
-    public static void main(final String args[]) {
-
+    public static void main(final String args[]) { // NOPMD by lbenno
         try {
             VSys.getVSysProperties();
-        } catch (final java.io.IOException exc) {
+        } catch (final IOException exc) {
             VSys.err.println("The system property file not found. Make sure the System can find a VSys.properties");
             VSys.err.println(exc);
-            System.exit(-1);
+            System.exit(-1); // NOPMD by lbenno
         }
     }
 
     /** Sets application properties to the specified properties. Properties == null resets/clears the application
      * properties.
-     * 
+     *
      * @param inProperties java.util.Properties */
     public static void setVSysProperties(final Properties inProperties) {
         cSysProperties = inProperties;
@@ -313,7 +312,7 @@ public class VSys extends VObject {
     /** This convenience method returns the canonical notation of the path specified in the application's property file.
      * If the file system object doesn't exist, an empty string is returned. The directory path returned is ended with a
      * path separator.
-     * 
+     *
      * @param inPropertyName String
      * @return String The path specified by the property name or an empty string. */
     public static String getVSysCanonicalPath(final String inPropertyName) {
@@ -322,21 +321,21 @@ public class VSys extends VObject {
 
     /** This convenience method returns the canonical notation of the path specified in the application's property file.
      * If <code>inCreate</code> is set to true, the file system object is created if it doesn't exist yet.
-     * 
+     *
      * @param inPropertyName String
      * @param inCreate boolean If true, the directory is created if it doesn't exist yet.
      * @return String The path specified by the property name or an empty string. */
     public static String getVSysCanonicalPath(final String inPropertyName, final boolean inCreate) {
         try {
             return getVSysFile(inPropertyName, inCreate).getCanonicalPath() + File.separator;
-        } catch (final Exception exc) {
+        } catch (final Exception exc) { // NOPMD by lbenno
             return "";
         }
     }
 
     /** Convenience method: Returns the file object of the path specified in the application's property file. If the file
      * system object doesn't exist, <code>null</code> is returned.
-     * 
+     *
      * @param inPropertyName String
      * @return File The File specified by the property name or null. */
     public static File getVSysFile(final String inPropertyName) {
@@ -345,7 +344,7 @@ public class VSys extends VObject {
 
     /** Convenience method: Returns the file object of the path specified in the application's property file. If
      * <code>inCreate</code> is set to true, the file system object is created if it doesn't exist yet.
-     * 
+     *
      * @param inPropertyName String
      * @param inCreate boolean If true, the directory is created if it doesn't exist yet.
      * @return File The File specified by the property name or null. */
@@ -369,21 +368,21 @@ public class VSys extends VObject {
 
     /** This convenience method returns the canonical notation of the path specified in the application's property file.
      * Use this method if the property specifies a path relative to the specified prefix.
-     * 
+     *
      * @param inPropertyName String
      * @param inPrefix String
      * @return String Canonical notation of the specified property of empty string. */
     public static String getVSysCanonicalPath(final String inPropertyName, final String inPrefix) {
         try {
             return getVSysFile(inPropertyName, inPrefix).getCanonicalPath() + File.separator;
-        } catch (final Exception exc) {
+        } catch (final Exception exc) { // NOPMD by lbenno
             return "";
         }
     }
 
     /** Convenience method: Returns the file object of the path specified in the application's property file. Use this
      * method if the property specifies a path relative to the specified prefix.
-     * 
+     *
      * @param inPropertyName String
      * @param inPrefix String
      * @return File */
@@ -401,7 +400,7 @@ public class VSys extends VObject {
     }
 
     /** Method to call during the application's shut down. Closes all handlers attached to the application's loggers.
-     * 
+     *
      * @deprecated */
     @Deprecated
     public static void closeLoggers() {

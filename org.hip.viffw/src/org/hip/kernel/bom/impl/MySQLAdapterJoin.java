@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the framework used for the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -22,26 +22,25 @@ package org.hip.kernel.bom.impl;
 import org.hip.kernel.bom.DBAdapterJoin;
 import org.hip.kernel.bom.model.JoinedObjectDef;
 
-/**
- * Joined  database adapter for MySQL database.
- * "SELECT COUNT(tblTestMember.TESTMEMBERID) FROM tblTestMember INNER JOIN tblLinkGroupMember ON tblTestMember.TESTMEMBERID = tblLinkGroupMember.MEMBERID WHERE " + lWhereList + " ORDER BY " + lOrderByList
- * 
+/** Joined database adapter for MySQL database.
+ * "SELECT COUNT(tblTestMember.TESTMEMBERID) FROM tblTestMember INNER JOIN tblLinkGroupMember ON tblTestMember.TESTMEMBERID = tblLinkGroupMember.MEMBERID WHERE "
+ * + lWhereList + " ORDER BY " + lOrderByList
+ *
  * Created on 30.08.2002
- * @author Benno Luthiger
- */
+ * 
+ * @author Benno Luthiger */
 public class MySQLAdapterJoin extends AbstractDBAdapterJoin implements DBAdapterJoin {
-		
-	/**
-	 * Constructor for MySQLAdapterJoin.
-	 * 
-	 * @param inObjectDef org.hip.kernel.bom.model.JoinedObjectDef
-	 */
-	public MySQLAdapterJoin(JoinedObjectDef inObjectDef) {
-		super(inObjectDef);
-	}	
 
-	protected String getWhereAdder() {
-		return SQL_WHERE;
-	}
+    /** Constructor for MySQLAdapterJoin.
+     * 
+     * @param inObjectDef org.hip.kernel.bom.model.JoinedObjectDef */
+    public MySQLAdapterJoin(final JoinedObjectDef inObjectDef) {
+        super(inObjectDef);
+    }
+
+    @Override
+    protected String getWhereAdder() { // NOPMD by lbenno 
+        return SQL_WHERE;
+    }
 
 }

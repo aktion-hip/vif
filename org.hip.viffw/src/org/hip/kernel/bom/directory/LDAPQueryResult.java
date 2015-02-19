@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the framework used for the application VIF.
-	Copyright (C) 2006, Benno Luthiger
+	Copyright (C) 2006-2014, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU Lesser General Public
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.kernel.bom.directory;
 
@@ -37,154 +37,138 @@ import org.hip.kernel.exc.VException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Implementation of <code>QueryResult</code> for LDAP queries.
+/** Implementation of <code>QueryResult</code> for LDAP queries.
  *
- * @author Luthiger
- * Created on 03.07.2007
- * @see org.hip.kernel.bom.QueryResult
- */
+ * @author Luthiger Created on 03.07.2007
+ * @see org.hip.kernel.bom.QueryResult */
 @SuppressWarnings("serial")
 public class LDAPQueryResult extends AbstractQueryResult {
-	private static final Logger LOG = LoggerFactory.getLogger(LDAPQueryResult.class);
-	
-	private LDAPObjectHome home = null;
-	private Iterator<SearchResult> result = null;
-	private LDAPQueryStatement statement = null;
-	
-	private GeneralDomainObject next = null;
-	private GeneralDomainObject current = null;
-	private int count = 0;
-	
-	/**
-	 * LDAPQueryResult constructor
-	 * 
-	 * @param inHome LDAPObjectHome
-	 * @param inResult Iterator<SearchResult>
-	 * @param inCount int number of entries in the result enumeration
-	 * @param inStatement LDAPQueryStatement
-	 */
-	public LDAPQueryResult(LDAPObjectHome inHome, Iterator<SearchResult> inResult, int inCount, LDAPQueryStatement inStatement) {
-		super(inHome);
-		
-		home = inHome;
-		result = inResult;
-		count = inCount;
-		statement = inStatement;
-		
-		LOG.debug("count: {}", inCount);
-		firstRead();
-	}
+    private static final Logger LOG = LoggerFactory.getLogger(LDAPQueryResult.class);
 
-	private void firstRead() {
-		try {
-			if (result.hasNext()) {
-				next = home.newInstance(result.next());
-			}
-		} 
-		catch (VException exc) {
-			DefaultExceptionHandler.instance().handle(exc);
-		}
-	}
+    private LDAPObjectHome home;
+    private Iterator<SearchResult> result;
+    private LDAPQueryStatement statement;
 
-	/* (non-Javadoc)
-	 * @see org.hip.kernel.bom.QueryResult#close()
-	 */
-	public void close() throws SQLException {
-		if (statement != null) {
-			statement.close();
-		}
-	}
+    private GeneralDomainObject nextObj;
+    private GeneralDomainObject current;
+    private final int count;
 
-	/* (non-Javadoc)
-	 * @see org.hip.kernel.bom.QueryResult#getCurrent()
-	 */
-	public GeneralDomainObject getCurrent() {
-		return current;
-	}
+    /** LDAPQueryResult constructor
+     *
+     * @param inHome LDAPObjectHome
+     * @param inResult Iterator<SearchResult>
+     * @param inCount int number of entries in the result enumeration
+     * @param inStatement LDAPQueryStatement */
+    public LDAPQueryResult(final LDAPObjectHome inHome, final Iterator<SearchResult> inResult, final int inCount,
+            final LDAPQueryStatement inStatement) {
+        super(inHome);
 
-	/* (non-Javadoc)
-	 * @see org.hip.kernel.bom.QueryResult#getKey()
-	 */
-	public KeyObject getKey() throws BOMNotFoundException {
-		if (current != null) {
-			 return current.getKey();
-		} 
-		else {
-			throw new BOMNotFoundException();
-		}	
-	}
+        home = inHome;
+        result = inResult;
+        count = inCount;
+        statement = inStatement;
 
-	/* (non-Javadoc)
-	 * @see org.hip.kernel.bom.QueryResult#hasMoreElements()
-	 */
-	public boolean hasMoreElements() {
-		return (next != null);
-	}
+        LOG.debug("count: {}", inCount);
+        firstRead();
+    }
 
-	/* (non-Javadoc)
-	 * @see org.hip.kernel.bom.QueryResult#next()
-	 */
-	public GeneralDomainObject next() throws SQLException, BOMException {
-		GeneralDomainObject outModel = null;
-		if (result != null) {
-			current = next;
-			outModel = current;
-			if (result.hasNext()) {
-				next = home.newInstance(result.next());
-			}
-			else {
-				next = null;
-				this.close();
-				result = null;
-			}
-		}
-		return outModel;
-	}
+    private void firstRead() {
+        try {
+            if (result.hasNext()) {
+                nextObj = home.newInstance(result.next());
+            }
+        } catch (final VException exc) {
+            DefaultExceptionHandler.instance().handle(exc);
+        }
+    }
 
-	private void writeObject(ObjectOutputStream out) throws IOException {
-		out.writeObject(home);
-		out.writeObject(current);
-		out.writeObject(next);
-		out.writeObject(statement);
-	}
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		home = (LDAPObjectHome)in.readObject();
-		GeneralDomainObject lCurrent = (GeneralDomainObject)in.readObject();
-		next = (GeneralDomainObject)in.readObject();
-		statement = (LDAPQueryStatement)in.readObject();
-		
-		try {
-			//we retrieve the NamingEnumeration backing this object using the LDAPQueryStatement
-			result = statement.retrieveStatement();
-			if (result == null) return;
-			
-			//now we position the cursor on the correct place
-			if (lCurrent == null) {
-				firstRead();
-			}
-			else {
-				while (!lCurrent.equals(current)) {
-					next();
-					if (!hasMoreElements()) return;
-				}
-			}
-		}
-		catch (SQLException exc) {
-			throw new IOException(exc.getMessage());
-		} 
-		catch (BOMException exc) {
-			throw new IOException(exc.getMessage());
-		}
-	}
+    @Override
+    public void close() throws SQLException { // NOPMD by lbenno
+        if (statement != null) {
+            statement.close();
+        }
+    }
 
-	/**
-	 * Returns the number of entries contained in this result.
-	 * 
-	 * @return int the number of entries the result enumeration contains.
-	 */
-	public int getCount() {
-		return count;
-	}
-	
+    @Override
+    public GeneralDomainObject getCurrent() { // NOPMD by lbenno
+        return current;
+    }
+
+    @Override
+    public KeyObject getKey() throws BOMNotFoundException { // NOPMD by lbenno
+        if (current == null) {
+            throw new BOMNotFoundException();
+        }
+        else {
+            return current.getKey(); // NOPMD by lbenno
+        }
+    }
+
+    @Override
+    public boolean hasMoreElements() { // NOPMD by lbenno
+        return nextObj != null;
+    }
+
+    @Override
+    public GeneralDomainObject next() throws SQLException, BOMException { // NOPMD by lbenno
+        GeneralDomainObject outModel = null;
+        if (result != null) {
+            current = nextObj;
+            outModel = current;
+            if (result.hasNext()) {
+                nextObj = home.newInstance(result.next());
+            }
+            else {
+                nextObj = null; // NOPMD by lbenno
+                this.close();
+                result = null; // NOPMD by lbenno
+            }
+        }
+        return outModel;
+    }
+
+    private void writeObject(final ObjectOutputStream out) throws IOException {
+        out.writeObject(home);
+        out.writeObject(current);
+        out.writeObject(nextObj);
+        out.writeObject(statement);
+    }
+
+    private void readObject(final ObjectInputStream inStream) throws IOException, ClassNotFoundException {
+        home = (LDAPObjectHome) inStream.readObject();
+        final GeneralDomainObject lCurrent = (GeneralDomainObject) inStream.readObject();
+        nextObj = (GeneralDomainObject) inStream.readObject();
+        statement = (LDAPQueryStatement) inStream.readObject();
+
+        try {
+            // we retrieve the NamingEnumeration backing this object using the LDAPQueryStatement
+            result = statement.retrieveStatement();
+            if (result == null) {
+                return;
+            }
+
+            // now we position the cursor on the correct place
+            if (lCurrent == null) {
+                firstRead();
+            }
+            else {
+                while (!lCurrent.equals(current)) {
+                    next();
+                    if (!hasMoreElements()) {
+                        return;
+                    }
+                }
+            }
+        } catch (final SQLException | BOMException exc) {
+            throw new IOException(exc.getMessage(), exc);
+        }
+    }
+
+    /** Returns the number of entries contained in this result.
+     *
+     * @return int the number of entries the result enumeration contains. */
+    public int getCount() {
+        return count;
+    }
+
 }

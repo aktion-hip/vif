@@ -20,27 +20,36 @@ package org.hip.kernel.bom;
 
 import org.hip.kernel.exc.VException;
 
-/**
- * This class simply inherits from org.hip.kernel.exc.VException. Actually it
- * does not add any functionality.
- * 
- * @author Benno Luthiger
- */
+/** This class simply inherits from org.hip.kernel.exc.VException. Actually it does not add any functionality.
+ *
+ * @author Benno Luthiger */
 @SuppressWarnings("serial")
 public class BOMException extends VException {
-	/**
-	 * BOMException default constructor.
-	 */
-	public BOMException() {
-	}
 
-	/**
-	 * Calls parent constructor.
-	 * 
-	 * @param inMessage
-	 *            java.lang.String
-	 */
-	public BOMException(final String inMessage) {
-		super(inMessage);
-	}
+    /** BOMException default constructor. */
+    public BOMException() {
+        super();
+    }
+
+    /** BOMException constructor.
+     *
+     * @param inExc {@link Throwable} */
+    public BOMException(final Throwable inExc) {
+        super(inExc);
+    }
+
+    /** Calls parent constructor.
+     *
+     * @param inMessage java.lang.String */
+    public BOMException(final String inMessage) {
+        super(inMessage);
+    }
+
+    /** Calls parent constructor.
+     *
+     * @param inMessage java.lang.String
+     * @param inExc {@link Throwable} the root cause */
+    public BOMException(final String inMessage, final Throwable inExc) {
+        super(inMessage, inExc);
+    }
 }
