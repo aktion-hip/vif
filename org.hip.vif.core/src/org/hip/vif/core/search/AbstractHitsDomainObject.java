@@ -173,7 +173,7 @@ public abstract class AbstractHitsDomainObject implements GeneralDomainObject {
      * @return List<String> */
     protected abstract List<String> getFields();
 
-    @Override
+    @Override // NOPMD by lbenno 
     public Object clone() throws CloneNotSupportedException { // NOPMD
         return super.clone();
     }

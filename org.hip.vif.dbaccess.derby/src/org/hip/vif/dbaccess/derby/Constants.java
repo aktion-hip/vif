@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,16 +15,17 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.dbaccess.derby;
 
-/**
- * @author Luthiger
- * Created: 29.01.2012
- */
-public class Constants {
+/** @author Luthiger Created: 29.01.2012 */
+public final class Constants {
 
-	public static final String DRIVER_NAME_EMBEDDED = "org.apache.derby.jdbc.EmbeddedDriver";
-	public static final String DRIVER_NAME_CLIENT = "org.apache.derby.jdbc.ClientDriver";
+    public static final String DRIVER_NAME_EMBEDDED = "org.apache.derby.jdbc.EmbeddedDriver";
+    public static final String DRIVER_NAME_CLIENT = "org.apache.derby.jdbc.ClientDriver";
+
+    private Constants() {
+        // prevent instantiation
+    }
 }

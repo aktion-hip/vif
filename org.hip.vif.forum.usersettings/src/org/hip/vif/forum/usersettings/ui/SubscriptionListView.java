@@ -19,6 +19,9 @@
 
 package org.hip.vif.forum.usersettings.ui;
 
+import java.sql.SQLException;
+
+import org.hip.kernel.exc.VException;
 import org.hip.vif.forum.usersettings.Activator;
 import org.hip.vif.forum.usersettings.data.SubscriptionBean;
 import org.hip.vif.forum.usersettings.data.SubscriptionContainer;
@@ -51,12 +54,18 @@ public class SubscriptionListView extends AbstactUsersettingsView {
      * @param inSubscriptions {@link SubscriptionContainer}
      * @param inTask {@link SubscriptionsManageTask} */
     public SubscriptionListView(final SubscriptionContainer inSubscriptions, final SubscriptionsManageTask inTask) {
+        super();
         confirmationMode = false;
         final IMessages lMessages = Activator.getMessages();
+
         final Label lSubtitle = new Label(String.format(VIFViewHelper.TMPL_WARNING,
                 lMessages.getMessage("ui.usersettings.delete.subscription.warning")), ContentMode.HTML); //$NON-NLS-1$
-
         final VerticalLayout lLayout = createLayout(lMessages, lSubtitle, "usersettings.menu.subscription"); //$NON-NLS-1$
+
+        if (inSubscriptions.getItemIds().isEmpty()) {
+            lLayout.addComponent(new Label(lMessages.getMessage("ui.usersettings.subscription.empty"))); //$NON-NLS-1$
+            return;
+        }
 
         final Table lTable = createTable(inTask);
         lTable.setContainerDataSource(inSubscriptions);
@@ -64,13 +73,13 @@ public class SubscriptionListView extends AbstactUsersettingsView {
         lTable.addGeneratedColumn(SubscriptionContainer.ITEM_CHK, new VIFViewHelper.CheckBoxColumnGenerator(
                 new VIFViewHelper.IConfirmationModeChecker() {
                     @Override
-                    public boolean inConfirmationMode() {
+                    public boolean inConfirmationMode() { // NOPMD
                         return confirmationMode;
                     }
                 }));
         lTable.addGeneratedColumn(SubscriptionContainer.ITEM_LOCAL, new Table.ColumnGenerator() {
             @Override
-            public Object generateCell(final Table inSource, final Object inItemId, final Object inColumnId) {
+            public Object generateCell(final Table inSource, final Object inItemId, final Object inColumnId) { // NOPMD
                 return createCheck((SubscriptionBean) inItemId, inTask, lMessages);
             }
         });
@@ -85,7 +94,7 @@ public class SubscriptionListView extends AbstactUsersettingsView {
         final Button lDelete = new Button(lMessages.getMessage("ui.usersettings.button.delete")); //$NON-NLS-1$
         lDelete.addClickListener(new Button.ClickListener() {
             @Override
-            public void buttonClick(final ClickEvent inEvent) {
+            public void buttonClick(final ClickEvent inEvent) { // NOPMD
                 if (confirmationMode) {
                     if (!inTask.deleteSubscriptions()) {
                         Notification.show(lMessages.getMessage("errmsg.subscription.delete"), Type.WARNING_MESSAGE); //$NON-NLS-1$
@@ -105,6 +114,12 @@ public class SubscriptionListView extends AbstactUsersettingsView {
         lLayout.addComponent(lDelete);
     }
 
+    /** Creates a check box for the list entries to switch the range of the subscription.
+     *
+     * @param inEntry {@link SubscriptionBean}
+     * @param inTask {@link SubscriptionsManageTask}
+     * @param inMessages {@link IMessages}
+     * @return {@link CheckBox} */
     public CheckBox createCheck(final SubscriptionBean inEntry, final SubscriptionsManageTask inTask,
             final IMessages inMessages) {
         final CheckBox out = new CheckBox();
@@ -112,7 +127,7 @@ public class SubscriptionListView extends AbstactUsersettingsView {
         out.setValue(inEntry.getLocal());
         out.addValueChangeListener(new ValueChangeListener() {
             @Override
-            public void valueChange(final ValueChangeEvent inEvent) {
+            public void valueChange(final ValueChangeEvent inEvent) { // NOPMD
                 final boolean isLocal = ((CheckBox) inEvent.getProperty()).getValue();
                 inEntry.setChecked(isLocal);
                 try {
@@ -120,7 +135,7 @@ public class SubscriptionListView extends AbstactUsersettingsView {
                     Notification.show(
                             inMessages.getMessage("msg.question.subscription.updated"), Type.TRAY_NOTIFICATION); //$NON-NLS-1$
                 }
-                catch (final Exception exc) {
+                catch (final VException | SQLException exc) {
                     Notification.show(inMessages.getMessage("errmsg.subscription.change"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                 }
             }

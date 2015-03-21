@@ -108,27 +108,27 @@ public class HitsQueryResultTest {
         final String lTemplate1 = "" + nl +
                 "<MemberHitsObject>" + nl +
                 "    <propertySet>" + nl +
-                "        <memberCity>StadtT</memberCity>" + nl +
-                "        <memberFirstname>VornameT1</memberFirstname>" + nl +
-                "        <memberUserID>TestUsr-DHK1</memberUserID>" + nl +
                 "        <memberMail>1.mail@test</memberMail>" + nl +
-                "        <memberName>NameT1</memberName>" + nl +
                 "        <memberPostal>PLZ-T</memberPostal>" + nl +
+                "        <memberUserID>TestUsr-DHK1</memberUserID>" + nl +
+                "        <memberCity>StadtT</memberCity>" + nl +
+                "        <memberName>NameT1</memberName>" + nl +
                 "        <memberStreet>StrasseT</memberStreet>" + nl +
                 "        <memberID>%s</memberID>" + nl +
+                "        <memberFirstname>VornameT1</memberFirstname>" + nl +
                 "    </propertySet>" + nl +
                 "</MemberHitsObject>";
         final String lTemplate2 = "" + nl +
                 "<MemberHitsObject>" + nl +
                 "    <propertySet>" + nl +
-                "        <memberCity>StadtT</memberCity>" + nl +
-                "        <memberFirstname>VornameT2</memberFirstname>" + nl +
-                "        <memberUserID>TestUsr-DHK2</memberUserID>" + nl +
                 "        <memberMail>2.mail@test</memberMail>" + nl +
-                "        <memberName>NameT2</memberName>" + nl +
                 "        <memberPostal>PLZ-T</memberPostal>" + nl +
+                "        <memberUserID>TestUsr-DHK2</memberUserID>" + nl +
+                "        <memberCity>StadtT</memberCity>" + nl +
+                "        <memberName>NameT2</memberName>" + nl +
                 "        <memberStreet>StrasseT</memberStreet>" + nl +
                 "        <memberID>%s</memberID>" + nl +
+                "        <memberFirstname>VornameT2</memberFirstname>" + nl +
                 "    </propertySet>" + nl +
                 "</MemberHitsObject>";
         final Collection<String> lExpected = new ArrayList<String>();
@@ -139,6 +139,7 @@ public class HitsQueryResultTest {
 
         final MemberHitsResult lResult = new MemberHitsResult(hits);
         assertTrue(lResult.hasMoreElements());
+
         assertTrue(lExpected.contains(lResult.nextAsXMLString()));
         assertTrue(lResult.hasMoreElements());
         assertTrue(lExpected.contains(lResult.nextAsXMLString()));

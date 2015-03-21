@@ -50,7 +50,7 @@ public class PropertyImpl extends AbstractNameValue implements Property {
 
     /** PropertyImpl constructor without value.
      *
-     * @param inSet org.hip.kernel.bom.PropertySet
+     * @param inSet {@link PropertySet} the owning set
      * @param inName java.lang.String */
     public PropertyImpl(final PropertySet inSet, final String inName) {
         this(inSet, inName, null);
@@ -59,7 +59,7 @@ public class PropertyImpl extends AbstractNameValue implements Property {
 
     /** PropertyImpl constructor which initializes with name and value.
      *
-     * @param inSet org.hip.kernel.bom.PropertySet
+     * @param inSet {@link PropertySet} the owning set
      * @param inName java.lang.String
      * @param inValue java.lang.Object */
     public PropertyImpl(final PropertySet inSet, final String inName, final Object inValue) {
@@ -70,7 +70,7 @@ public class PropertyImpl extends AbstractNameValue implements Property {
     /** PropertyImpl constructor which initializes with name and value. The Property also has typeInformation to check
      * the value.
      *
-     * @param inSet org.hip.kernel.bom.PropertySet
+     * @param inSet {@link PropertySet} the owning set
      * @param inName java.lang.String
      * @param inValue java.lang.Object
      * @param inTypeInformation java.lang.String
@@ -289,7 +289,7 @@ public class PropertyImpl extends AbstractNameValue implements Property {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException { // NOPMD by lbenno
         final PropertyImpl out = (PropertyImpl) super.clone();
         out.setVirgin();
         out.value(CloneHelper.getCloned(getValue()));

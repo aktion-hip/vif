@@ -16,12 +16,12 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package org.hip.vif.web.bom.impl;
+package org.hip.vif.web.bom.impl; // NOPMD
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -66,7 +66,7 @@ import org.slf4j.LoggerFactory;
  * @see org.hip.vif.core.bom.Group */
 @SuppressWarnings("serial")
 public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
-        Group, WorkflowAware, VIFGroupWorkflow {
+Group, WorkflowAware, VIFGroupWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(GroupImpl.class);
 
     public final static String HOME_CLASS_NAME = "org.hip.vif.web.bom.impl.GroupHomeImpl";
@@ -83,7 +83,7 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
     private final static String MSG_REACTIVATED = "org.hip.vif.msg.notification.state.reactivated";
 
     // instance variables
-    WorkflowAwareImpl workflowAware;
+    private final WorkflowAwareImpl workflowAware;
 
     /** Constructor for GroupImpl. */
     public GroupImpl() throws WorkflowException {
@@ -110,11 +110,11 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
      * @exception org.hip.vif.core.exc.bom.impl.BOMChangeValueException
      * @exception org.hip.vif.core.exc.bom.impl.ExternIDNotUniqueException */
     @Override
-    public Long ucNew(final String inName, final String inDescription,
+    public Long ucNew(final String inName, final String inDescription, // NOPMD
             final String inReviewers, final String inGuestDepth,
             final String inMinGoupSize, final boolean inIsPrivate)
-            throws BOMChangeValueException, ExternIDNotUniqueException {
-        Long outGroupID = new Long(0);
+                    throws BOMChangeValueException, ExternIDNotUniqueException {
+        Long outGroupID = Long.valueOf(0);
         preCheck(inName, inDescription);
 
         if (checkIdUnique(inName)) {
@@ -122,19 +122,19 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
                     inMinGoupSize, inIsPrivate ? GroupHome.IS_PRIVATE
                             : GroupHome.IS_PUBLIC);
             try {
-                set(GroupHome.KEY_STATE, new Long(1));
+                set(GroupHome.KEY_STATE, Long.valueOf(1));
                 outGroupID = insert(true);
             } catch (final VException exc) {
-                throw new BOMChangeValueException(exc.getMessage());
+                throw new BOMChangeValueException(exc.getMessage(), exc);
             } catch (final SQLException exc) {
-                throw new BOMChangeValueException(exc.getMessage());
+                throw new BOMChangeValueException(exc.getMessage(), exc);
             }
 
             // save group administrators?
 
         } else {
             throw new ExternIDNotUniqueException(String.format(
-                    "Group-Name %s not unique", inName));
+                    "Group-Name %s not unique", inName)); // NOPMD
         }
         return outGroupID;
     }
@@ -146,23 +146,23 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
      * @throws ExternIDNotUniqueException */
     @Override
     public Long ucNew() throws BOMChangeValueException,
-            ExternIDNotUniqueException {
-        Long outGroupID = new Long(0);
+    ExternIDNotUniqueException {
+        Long outGroupID = Long.valueOf(0);
         String lName = "";
         boolean lIdUnique = true;
         try {
             lName = get(GroupHome.KEY_NAME).toString();
             preCheck(lName, get(GroupHome.KEY_DESCRIPTION).toString());
             if (checkIdUnique(lName)) {
-                set(GroupHome.KEY_STATE, new Long(1));
+                set(GroupHome.KEY_STATE, Long.valueOf(1));
                 outGroupID = insert(true);
             } else {
                 lIdUnique = false;
             }
         } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
         if (!lIdUnique) {
             throw new ExternIDNotUniqueException(String.format(
@@ -183,13 +183,13 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
      * @exception WorkflowException
      * @throws ExternIDNotUniqueException */
     @Override
-    public void ucSave(final String inName, final String inDescription,
+    public void ucSave(final String inName, final String inDescription, // NOPMD
             final String inReviewers, final String inGuestDepth,
             final String inMinGoupSize, final boolean inIsPrivate)
-            throws VException, WorkflowException, ExternIDNotUniqueException {
+                    throws VException, WorkflowException, ExternIDNotUniqueException {
         preCheck(inName, inDescription);
 
-        if (!compareID(inName) && !checkIdUnique(inName)) {
+        if (!compareID(inName) && !checkIdUnique(inName)) { // NOPMD
             throw new ExternIDNotUniqueException(String.format(
                     "Group-Name %s not unique", inName));
         } else {
@@ -229,17 +229,17 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
                 }
             }
         } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
     @Override
-    public void ucSave(final String inGroupNameBefore,
+    public void ucSave(final String inGroupNameBefore, // NOPMD
             final int inMinGroupSizeBefore) throws VException,
             WorkflowException, ExternIDNotUniqueException {
         final String lName = get(GroupHome.KEY_NAME).toString();
         preCheck(lName, get(GroupHome.KEY_DESCRIPTION).toString());
-        if (!compareID(inGroupNameBefore) && !checkIdUnique(lName)) {
+        if (!compareID(inGroupNameBefore) && !checkIdUnique(lName)) { // NOPMD
             throw new ExternIDNotUniqueException(String.format(
                     "Group-Name %s not unique", lName));
         } else {
@@ -265,21 +265,24 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
 
     }
 
-    private void setValues(final String inName, final String inDescription,
+    private void setValues(final String inName, final String inDescription, // NOPMD
             final String inReviewers, final String inGuestDepth,
             final String inMinGoupSize, final Integer inPrivate)
-            throws BOMChangeValueException {
+                    throws BOMChangeValueException {
         // the specified GroupID does not exist yet, therefore, we can continue
-        Long lReviewers = new Long(DEFAULT_REVIEWERS);
-        Long lGuestDepth = new Long(DEFAULT_GUEST_DEPTH);
-        Long lMinGoupSize = new Long(DEFAULT_MIN_GROUP_SIZE);
+        Long lReviewers = Long.valueOf(DEFAULT_REVIEWERS);
+        Long lGuestDepth = Long.valueOf(DEFAULT_GUEST_DEPTH);
+        Long lMinGoupSize = Long.valueOf(DEFAULT_MIN_GROUP_SIZE);
 
-        if (!"".equals(inReviewers))
-            lReviewers = new Long(inReviewers);
-        if (!"".equals(inGuestDepth))
-            lGuestDepth = new Long(inGuestDepth);
-        if (!"".equals(inMinGoupSize))
-            lMinGoupSize = new Long(inMinGoupSize);
+        if (!inReviewers.isEmpty()) {
+            lReviewers = Long.valueOf(inReviewers);
+        }
+        if (!inGuestDepth.isEmpty()) {
+            lGuestDepth = Long.valueOf(inGuestDepth);
+        }
+        if (!inMinGoupSize.isEmpty()) {
+            lMinGoupSize = Long.valueOf(inMinGoupSize);
+        }
 
         try {
             set(GroupHome.KEY_NAME, inName);
@@ -287,29 +290,27 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
             set(GroupHome.KEY_REVIEWERS, lReviewers);
             set(GroupHome.KEY_GUEST_DEPTH, lGuestDepth);
             set(GroupHome.KEY_MIN_GROUP_SIZE, lMinGoupSize);
-            set(GroupHome.KEY_PRIVATE, new Long(inPrivate));
+            set(GroupHome.KEY_PRIVATE, Long.valueOf(inPrivate));
         } catch (final SettingException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
     private boolean checkIdUnique(final String inGroupID)
             throws BOMChangeValueException {
-
-        final GroupHomeImpl lHome = (GroupHomeImpl) VifBOMHelper.getGroupHome();
-
         // create a key for the GroupID
         final KeyObject lKeyGroupID = new KeyObjectImpl();
         try {
             lKeyGroupID.setValue(GroupHome.KEY_NAME, inGroupID);
         } catch (final VInvalidNameException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         } catch (final VInvalidValueException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
 
         // check whether the key exists yet
         try {
+            final GroupHomeImpl lHome = (GroupHomeImpl) VifBOMHelper.getGroupHome();
             lHome.findByKey(lKeyGroupID);
             return false;
         } catch (final BOMNotFoundException exc) {
@@ -369,7 +370,7 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
     public Collection<String> getTransitions() throws VException {
         final int lState = Integer
                 .parseInt(get(GroupHome.KEY_STATE).toString());
-        final Collection<String> outTransitions = new Vector<String>();
+        final Collection<String> outTransitions = new ArrayList<String>();
         switch (lState) {
         case S_CREATED:
             outTransitions.add(VIFGroupWorkflow.TRANS_OPEN);
@@ -393,6 +394,7 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
         case S_CLOSED:
             outTransitions.add(VIFGroupWorkflow.TRANS_REACTIVATE);
             break;
+        default:
         }
         return outTransitions;
     }
@@ -410,6 +412,7 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
             return TRANS_CLOSE2;
         case S_SETTLED:
             return TRANS_CLOSE3;
+        default:
         }
         return TRANS_CLOSE1;
     }
@@ -431,6 +434,7 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
             } else {
                 return TRANS_REOPEN;
             }
+        default:
         }
         return TRANS_REACTIVATE1;
     }
@@ -442,7 +446,7 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
     @Override
     public int getNumberOfRegistered() throws VException {
         return VifBOMHelper.getParticipantHome().getParticipantsOfGroup(
-                new Long(get(GroupHome.KEY_ID).toString()));
+                Long.valueOf(get(GroupHome.KEY_ID).toString()));
     }
 
     /** Returns the minimal number of participants needed for this group to be active.
@@ -462,14 +466,14 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
      * @throws GettingException */
     @Override
     public Long getGuestDepth() throws GettingException {
-        return new Long(get(GroupHome.KEY_GUEST_DEPTH).toString());
+        return Long.valueOf(get(GroupHome.KEY_GUEST_DEPTH).toString());
     }
 
     private void setState(final String inNewState) {
         try {
-            set(GroupHome.KEY_STATE, new Long(inNewState));
+            set(GroupHome.KEY_STATE, Long.valueOf(inNewState));
             update(true);
-        } catch (final Exception exc) {
+        } catch (final VException | SQLException exc) {
             DefaultExceptionHandler.instance().handle(this, exc);
         }
     }
@@ -481,7 +485,7 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
         try {
             workflowAware.enterWorkflow(createWorkflow(getActualStateValue()),
                     new Object[] {}, this);
-        } catch (final Exception exc) {
+        } catch (final VException | WorkflowException exc) {
             DefaultExceptionHandler.instance().handle(this, exc);
         }
     }
@@ -524,7 +528,7 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
     @Override
     public boolean isParticipant(final Long inActorID) throws VException {
         return VifBOMHelper.getParticipantHome().isParticipantOfGroup(
-                new Long(get(GroupHome.KEY_ID).toString()), inActorID);
+                Long.valueOf(get(GroupHome.KEY_ID).toString()), inActorID);
     }
 
     /** Checks the group's activation state against the specified value. If the number exceeds the minimal group size,
@@ -555,10 +559,10 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
      * @throws AddressException */
     @Override
     public InternetAddress[] getParticipantsMail() throws VException,
-            SQLException, AddressException {
+    SQLException, AddressException {
         final Collection<String> lMails = BOMHelper
                 .getJoinParticipantToMemberHome().getParticipantsMail(
-                        new Long(get(GroupHome.KEY_ID).toString()));
+                        Long.valueOf(get(GroupHome.KEY_ID).toString()));
         final StringBuffer lAddresses = new StringBuffer();
         boolean lFirst = true;
         for (final String lMailAddress : lMails) {
@@ -571,13 +575,8 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
         return InternetAddress.parse(new String(lAddresses));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.hip.vif.bom.Group#isDeletable()
-     */
     @Override
-    public boolean isDeletable() throws VException {
+    public boolean isDeletable() throws VException { // NOPMD
         final String lState = get(GroupHome.KEY_STATE).toString();
         return lState.equals(VIFGroupWorkflow.STATE_CREATED)
                 || lState.equals(VIFGroupWorkflow.STATE_CLOSED);
@@ -601,7 +600,7 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
      * @throws SQLException
      * @throws VException */
     private void deleteContentFromIndex() throws VException, SQLException,
-            IOException {
+    IOException {
         final VIFContentIndexer lIndexer = new VIFContentIndexer();
         lIndexer.removeGroupContent(get(GroupHome.KEY_ID).toString());
     }
@@ -610,31 +609,31 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
     // Handle group workflow
 
     @Override
-    public void doTransition(final String inTransitionName,
-            final Object[] inArgs) throws WorkflowException {
+    public void doTransition(final String inTransitionName, // NOPMD
+            final Object... inArgs) throws WorkflowException {
         workflowAware.doTransition(inTransitionName, inArgs, this);
     }
 
     @Override
-    public String getStateName() {
+    public String getStateName() { // NOPMD
         return workflowAware.getStateName();
     }
 
     @Override
-    public State getState() throws WorkflowException {
+    public State getState() throws WorkflowException { // NOPMD
         return workflowAware.getState();
     }
 
     @Override
-    public void enterWorkflow(final Workflow inWorkflow, final Object[] inArgs)
+    public void enterWorkflow(final Workflow inWorkflow, final Object... inArgs) // NOPMD
             throws WorkflowException {
         workflowAware.enterWorkflow(inWorkflow, inArgs, this);
     }
 
     @Override
-    public void enterWorkflow(final Workflow inWorkflow,
-            final String inInitialStateName, final Object[] inArgs)
-            throws WorkflowException {
+    public void enterWorkflow(final Workflow inWorkflow, // NOPMD
+            final String inInitialStateName, final Object... inArgs)
+                    throws WorkflowException {
         workflowAware.enterWorkflow(inWorkflow, inInitialStateName, inArgs,
                 this);
     }
@@ -670,84 +669,84 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
     // The following methods define the interface of the workflow.
 
     /** STATE_CREATED */
-    public void onEnter_1(final GroupStateChangeParameters inParameters) {
+    public void onEnter_1(final GroupStateChangeParameters inParameters) { // NOPMD
         LOG.trace("onEnter_1(): STATE_CREATED");
     }
 
     /** STATE_CREATED */
-    public void onLeave_1(final GroupStateChangeParameters inParameters) {
+    public void onLeave_1(final GroupStateChangeParameters inParameters) { // NOPMD
         LOG.trace("onLeave_1(): STATE_CREATED");
     }
 
     /** STATE_OPEN */
-    public void onEnter_2(final GroupStateChangeParameters inParameters) {
+    public void onEnter_2(final GroupStateChangeParameters inParameters) { // NOPMD
         LOG.trace("onEnter_2(): STATE_OPEN");
     }
 
     /** STATE_OPEN */
-    public void onLeave_2(final GroupStateChangeParameters inParameters) {
+    public void onLeave_2(final GroupStateChangeParameters inParameters) { // NOPMD
         LOG.trace("onLeave_2(): STATE_OPEN");
     }
 
     /** STATE_ACTIVE */
-    public void onEnter_3(final GroupStateChangeParameters inParameters) {
+    public void onEnter_3(final GroupStateChangeParameters inParameters) { // NOPMD
         LOG.trace("onEnter_3(): STATE_ACTIVE");
     }
 
     /** STATE_ACTIVE */
-    public void onLeave_3(final GroupStateChangeParameters inParameters) {
+    public void onLeave_3(final GroupStateChangeParameters inParameters) { // NOPMD
         LOG.trace("onLeave_3(): STATE_ACTIVE");
     }
 
     /** STATE_SUSPENDED */
-    public void onEnter_4(final GroupStateChangeParameters inParameters) {
+    public void onEnter_4(final GroupStateChangeParameters inParameters) { // NOPMD
         LOG.trace("onEnter_4(): STATE_SUSPENDED");
         setParameters(MSG_SUSPENDED, inParameters);
     }
 
     /** STATE_SUSPENDED */
-    public void onLeave_4(final GroupStateChangeParameters inParameters) {
+    public void onLeave_4(final GroupStateChangeParameters inParameters) { // NOPMD
         LOG.trace("onLeave_4(): STATE_SUSPENDED");
     }
 
     /** STATE_SETTLED */
-    public void onEnter_5(final GroupStateChangeParameters inParameters) {
+    public void onEnter_5(final GroupStateChangeParameters inParameters) { // NOPMD
         LOG.trace("onEnter_5(): STATE_SETTLED");
         setParameters(MSG_SETTLED, inParameters);
     }
 
     /** STATE_SETTLED */
-    public void onLeave_5(final GroupStateChangeParameters inParameters) {
+    public void onLeave_5(final GroupStateChangeParameters inParameters) { // NOPMD
         LOG.trace("onLeave_5(): STATE_SETTLED");
     }
 
     /** STATE_CLOSED */
-    public void onEnter_6(final GroupStateChangeParameters inParameters) {
+    public void onEnter_6(final GroupStateChangeParameters inParameters) { // NOPMD
         LOG.trace("onEnter_6(): STATE_CLOSED");
         setParameters(MSG_CLOSED, inParameters);
         try {
             deleteContentFromIndex();
-        } catch (final Exception exc) {
+        } catch (final VException | SQLException | IOException exc) {
             DefaultExceptionHandler.instance().handle(this, exc);
         }
     }
 
     /** STATE_CLOSED */
-    public void onLeave_6(final GroupStateChangeParameters inParameters) {
+    public void onLeave_6(final GroupStateChangeParameters inParameters) { // NOPMD
         LOG.trace("onLeave_6(): STATE_CLOSED");
     }
 
-    public void onTransition_Open(final GroupStateChangeParameters inParameters) {
+    public void onTransition_Open(final GroupStateChangeParameters inParameters) { // NOPMD
         LOG.trace("onTransition_Open(): Open");
         setState(STATE_OPEN);
         try {
             indexContent();
-        } catch (final Exception exc) {
+        } catch (final VException | SQLException | IOException exc) {
             DefaultExceptionHandler.instance().handle(this, exc);
         }
     }
 
-    public void onTransition_Activate(
+    public void onTransition_Activate( // NOPMD
             final GroupStateChangeParameters inParameters) {
         LOG.trace("onTransition_Activate(): Activate");
         setState(STATE_ACTIVE);
@@ -759,76 +758,76 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
                     (String) get(GroupHome.KEY_NAME), true);
             lMail.send();
             LOG.trace("onTransition_Activate(): A notification mail to the group's participants has been sent.");
-        } catch (final Exception exc) {
+        } catch (final AddressException | VException | SQLException exc) {
             DefaultExceptionHandler.instance().handle(this, exc);
         }
     }
 
-    public void onTransition_Deactivate(
+    public void onTransition_Deactivate( // NOPMD
             final GroupStateChangeParameters inParameters) {
         LOG.trace("onTransition_Deactivate(): Deactivate");
         setState(STATE_OPEN);
         setParameters(MSG_DEACTIVATED, inParameters);
     }
 
-    public void onTransition_Suspend(
+    public void onTransition_Suspend( // NOPMD
             final GroupStateChangeParameters inParameters) {
         LOG.trace("onTransition_Suspend(): Suspend");
         setState(STATE_SUSPENDED);
     }
 
-    public void onTransition_Settle(
+    public void onTransition_Settle( // NOPMD
             final GroupStateChangeParameters inParameters) {
         LOG.trace("onTransition_Settle(): Settle");
         setState(STATE_SETTLED);
     }
 
-    public void onTransition_Close1(
+    public void onTransition_Close1( // NOPMD
             final GroupStateChangeParameters inParameters) {
         LOG.trace("onTransition_Close1(): Close1");
         setState(STATE_CLOSED);
     }
 
-    public void onTransition_Close2(
+    public void onTransition_Close2( // NOPMD
             final GroupStateChangeParameters inParameters) {
         LOG.trace("onTransition_Close2(): Close2");
         setState(STATE_CLOSED);
     }
 
-    public void onTransition_Close3(
+    public void onTransition_Close3( // NOPMD
             final GroupStateChangeParameters inParameters) {
         LOG.trace("onTransition_Close3(): Close3");
         setState(STATE_CLOSED);
     }
 
-    public void onTransition_Reactivate1(
+    public void onTransition_Reactivate1( // NOPMD
             final GroupStateChangeParameters inParameters) {
         LOG.trace("onTransition_Reactivate1(): Reactivate1");
         setState(STATE_ACTIVE);
         setParameters(MSG_REACTIVATED, inParameters);
     }
 
-    public void onTransition_Reactivate2(
+    public void onTransition_Reactivate2( // NOPMD
             final GroupStateChangeParameters inParameters) {
         LOG.trace("onTransition_Reactivate2(): Reactivate2");
         setState(STATE_ACTIVE);
         setParameters(MSG_REACTIVATED, inParameters);
     }
 
-    public void onTransition_Reactivate3(
+    public void onTransition_Reactivate3( // NOPMD
             final GroupStateChangeParameters inParameters) {
         LOG.trace("onTransition_Reactivate3(): Reactivate3");
         setState(STATE_ACTIVE);
         setParameters(MSG_REACTIVATED, inParameters);
     }
 
-    public void onTransition_Reopen(
+    public void onTransition_Reopen( // NOPMD
             final GroupStateChangeParameters inParameters) {
         LOG.trace("onTransition_Reopen(): Reopen");
         setState(STATE_OPEN);
         try {
             indexContent();
-        } catch (final Exception exc) {
+        } catch (final VException | SQLException | IOException exc) {
             DefaultExceptionHandler.instance().handle(this, exc);
         }
     }
@@ -842,25 +841,21 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
                     .getSubject(lGroupName));
             inParameters.setMailBody(GroupStateChangeNotification.getBody(
                     lGroupName, Activator.getMessages()
-                            .getMessage(inMessageKey)));
+                    .getMessage(inMessageKey)));
             inParameters.setGroupName(lGroupName);
             inParameters.setGroupID(get(GroupHome.KEY_ID).toString());
-        } catch (final Exception exc) {
+        } catch (final VException exc) {
             DefaultExceptionHandler.instance().handle(this, exc);
         }
     }
 
     @Override
-    public boolean isValid() {
+    public boolean isValid() { // NOPMD
         try {
             preCheck(get(GroupHome.KEY_NAME).toString(),
                     get(GroupHome.KEY_DESCRIPTION).toString());
             return true;
-        } catch (final GettingException exc) {
-            return false;
-        } catch (final AssertionFailedError exc) {
-            return false;
-        } catch (final NullPointerException exc) {
+        } catch (final GettingException | AssertionFailedError | NullPointerException exc) { // NOPMD
             return false;
         }
     }
@@ -868,7 +863,7 @@ public class GroupImpl extends org.hip.vif.core.bom.impl.GroupImpl implements
     // ====
 
     @Override
-    protected void doActivation() throws WorkflowException {
+    protected void doActivation() throws WorkflowException { // NOPMD
         final GroupStateChangeParameters lParameters = new GroupStateChangeParameters();
         doTransition(TRANS_ACTIVATE, new Object[] { lParameters });
     }

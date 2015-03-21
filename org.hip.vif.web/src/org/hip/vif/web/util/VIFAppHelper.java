@@ -19,13 +19,25 @@
 package org.hip.vif.web.util;
 
 import java.io.File;
+import java.sql.SQLException;
 
 import org.hip.kernel.dbaccess.DataSourceRegistry;
+import org.hip.kernel.exc.VException;
 import org.hip.kernel.sys.VSys;
+import org.hip.vif.core.ApplicationConstants;
+import org.hip.vif.core.exc.InvalidAuthenticationException;
+import org.hip.vif.core.service.MemberUtility;
 import org.hip.vif.core.service.PreferencesHandler;
 import org.hip.vif.web.Constants;
+import org.osgi.service.useradmin.User;
+import org.osgi.service.useradmin.UserAdmin;
+import org.ripla.exceptions.LoginException;
+import org.ripla.interfaces.IAuthenticator;
 import org.ripla.util.ParameterObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
@@ -34,6 +46,9 @@ import com.vaadin.ui.UI;
  *
  * @author lbenno */
 public final class VIFAppHelper {
+    private static final Logger LOG = LoggerFactory.getLogger(VIFAppHelper.class);
+
+    private static final String NL = System.getProperty("line.separator"); // NOPMD by lbenno
 
     private VIFAppHelper() {
         // prevent instantiation
@@ -43,9 +58,8 @@ public final class VIFAppHelper {
      * This method sets the servlet's context path to <code>VSys</code> and initializes the
      * <code>DataSourceRegistry</code> singleton. */
     public static void initializeContext() {
-        // String lContextDir = getContext().getBaseDirectory().getPath();
         final String lContextDir = VaadinServlet.getCurrent().getServletContext().getContextPath();
-        if (lContextDir.length() <= 1) {
+        if (lContextDir.length() <= 1) { // NOPMD by lbenno
             // embedded app, i.e. Jetty
             VSys.useConfPath(false);
             final String lConfigPath = new File("").getAbsolutePath(); //$NON-NLS-1$
@@ -138,6 +152,38 @@ public final class VIFAppHelper {
     public static String getMainAdminURL() {
         final String outServletPath = UI.getCurrent().getPage().getLocation().toString();
         return outServletPath.replaceAll(Constants.CONTEXT_FORUM, Constants.CONTEXT_ADMIN);
+    }
+
+    /** Creates an instance of <code>IAuthenticator</code> for the <code>org.ripla.interfaces.IAppConfiguration</code>.
+     *
+     * @return {@link IAuthenticator} */
+    public static IAuthenticator createLoginAuthenticator() {
+        return new IAuthenticator() {
+
+            @Override
+            public User authenticate(final String inName, // NOPMD
+                    final String inPassword, final UserAdmin inUserAdmin)
+                    throws LoginException {
+                try {
+                    // first we check whether the user can be authenticated
+                    // this will create an OSGi user object when the VIF user is set to the context
+                    MemberUtility.INSTANCE.getActiveAuthenticator().checkAuthentication(inName, inPassword);
+                    // if authentication is successful, we can retrieve the OSGi user object from the user admin
+                    // instance
+                    return inUserAdmin.getUser(ApplicationConstants.VIF_USER, inName);
+                } catch (final InvalidAuthenticationException exc) {
+                    final StringBuilder lLog = new StringBuilder(200);
+                    lLog.append(NL).append("   Note: Invalid try to authenticate:").append(NL).append("   User: ")
+                    .append(inName).append(NL).append("   IP number: ")
+                    .append(Page.getCurrent().getWebBrowser().getAddress()).append(NL);
+                    LOG.warn(new String(lLog));
+                    throw new LoginException(exc.getMessage()); // NOPMD
+                } catch (final VException | SQLException exc) {
+                    LOG.warn("Problem during login encoutered!", exc);
+                    throw new LoginException(exc.getMessage()); // NOPMD
+                }
+            }
+        };
     }
 
 }

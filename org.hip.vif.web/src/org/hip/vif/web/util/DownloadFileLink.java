@@ -44,7 +44,7 @@ public class DownloadFileLink extends Link {
      * @param inID Long the ID of the <code>DownloadText</code> business model */
     public DownloadFileLink(final String inCaption, final Long inID) {
         super();
-        setWidth(SIZE_UNDEFINED, Unit.PIXELS);
+        setWidthUndefined();
         setCaption(inCaption);
         setDescription(Activator.getMessages().getMessage("download.link.description")); //$NON-NLS-1$
         setTargetName(TARGET_NAME);
@@ -52,7 +52,7 @@ public class DownloadFileLink extends Link {
     }
 
     @Override
-    public void attach() {
+    public void attach() { // NOPMD
         super.attach();
         prepareResource();
     }

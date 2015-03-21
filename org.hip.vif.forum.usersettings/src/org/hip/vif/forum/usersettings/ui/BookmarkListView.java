@@ -47,19 +47,25 @@ public class BookmarkListView extends AbstactUsersettingsView {
      * @param inBookmarks {@link BookmarkContainer}
      * @param inTask {@link BookmarksManageTask} */
     public BookmarkListView(final BookmarkContainer inBookmarks, final BookmarksManageTask inTask) {
+        super();
+
         confirmationMode = false;
         final IMessages lMessages = Activator.getMessages();
         final Label lSubtitle = new Label(String.format(VIFViewHelper.TMPL_WARNING,
                 lMessages.getMessage("ui.usersettings.delete.bookmark.warning")), ContentMode.HTML); //$NON-NLS-1$
-
         final VerticalLayout lLayout = createLayout(lMessages, lSubtitle, "usersettings.menu.bookmarks"); //$NON-NLS-1$
+
+        if (inBookmarks.getItemIds().isEmpty()) {
+            lLayout.addComponent(new Label(lMessages.getMessage("ui.usersettings.bookmark.empty"))); //$NON-NLS-1$
+            return;
+        }
 
         final Table lTable = createTable(inTask);
         lTable.setContainerDataSource(inBookmarks);
         lTable.addGeneratedColumn(BookmarkContainer.ITEM_CHK, new VIFViewHelper.CheckBoxColumnGenerator(
                 new VIFViewHelper.IConfirmationModeChecker() {
                     @Override
-                    public boolean inConfirmationMode() {
+                    public boolean inConfirmationMode() { // NOPMD
                         return confirmationMode;
                     }
                 }));
@@ -72,7 +78,7 @@ public class BookmarkListView extends AbstactUsersettingsView {
         final Button lDelete = new Button(lMessages.getMessage("ui.usersettings.button.delete")); //$NON-NLS-1$
         lDelete.addClickListener(new Button.ClickListener() {
             @Override
-            public void buttonClick(final ClickEvent inEvent) {
+            public void buttonClick(final ClickEvent inEvent) { // NOPMD
                 if (confirmationMode) {
                     if (!inTask.deleteBookmarks()) {
                         Notification.show(lMessages.getMessage("errmsg.bookmark.delete"), Type.WARNING_MESSAGE); //$NON-NLS-1$

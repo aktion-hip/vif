@@ -23,21 +23,19 @@ import java.util.Locale;
 
 import org.hip.kernel.exc.VException;
 import org.hip.vif.app.forum.internal.VIFEventDispatcher;
-import org.hip.vif.core.ApplicationConstants;
 import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.Member;
 import org.hip.vif.core.bom.MemberHome;
-import org.hip.vif.core.exc.InvalidAuthenticationException;
-import org.hip.vif.core.service.MemberUtility;
 import org.hip.vif.web.components.VIFBody;
 import org.hip.vif.web.interfaces.IVIFEventDispatcher;
 import org.hip.vif.web.util.RoleHelper;
 import org.hip.vif.web.util.VIFAppHelper;
+import org.hip.vif.web.util.VIFPreferencesHelper;
 import org.osgi.service.useradmin.User;
 import org.osgi.service.useradmin.UserAdmin;
-import org.ripla.exceptions.LoginException;
 import org.ripla.interfaces.IAppConfiguration;
 import org.ripla.interfaces.IAuthenticator;
+import org.ripla.util.PreferencesHelper;
 import org.ripla.web.RiplaApplication;
 import org.ripla.web.interfaces.IBodyComponent;
 import org.ripla.web.services.ISkin;
@@ -53,17 +51,17 @@ import com.vaadin.server.VaadinSession;
  * @author lbenno */
 @SuppressWarnings("serial")
 @Theme(ForumApplication.DFT_SKIN_ID)
-public class ForumApplication extends RiplaApplication {
+public class ForumApplication extends RiplaApplication { // NOPMD
     private static final Logger LOG = LoggerFactory
             .getLogger(ForumApplication.class);
 
     public static final String DFT_SKIN_ID = "org.hip.vif.default";
     private static final String APP_NAME = "VIF Forum";
 
-    private VIFEventDispatcher eventDispatcher;
+    private VIFEventDispatcher eventDispatcher; // NOPMD
 
     @Override
-    protected void beforeInitializeLayout() {
+    protected void beforeInitializeLayout() { // NOPMD
         Page.getCurrent().setTitle(APP_NAME);
 
         eventDispatcher = new VIFEventDispatcher();
@@ -79,7 +77,7 @@ public class ForumApplication extends RiplaApplication {
     }
 
     @Override
-    public void showAfterLogin(final User inUser) {
+    public void showAfterLogin(final User inUser) { // NOPMD
         // we put the user's language to the preferences, it will be set to the session in super.showAfterLogin()
         getPreferences().setLocale(getUserLocale(inUser), inUser);
         super.showAfterLogin(inUser);
@@ -89,68 +87,45 @@ public class ForumApplication extends RiplaApplication {
         try {
             final Member lMember = BOMHelper.getMemberHome().getMemberByUserID(inUser.getName());
             return new Locale((String) lMember.get(MemberHome.KEY_LANGUAGE));
-        } catch (final Exception exc) {
+        } catch (final Exception exc) { // NOPMD
             LOG.error("Error encountered while looking up the user's language!", exc);
         }
         return getLocale();
     }
 
     @Override
-    protected IAppConfiguration getAppConfiguration() {
+    protected IAppConfiguration getAppConfiguration() { // NOPMD
         return new IAppConfiguration() {
 
             @Override
-            public IAuthenticator getLoginAuthenticator() {
-                return new IAuthenticator() {
-
-                    @Override
-                    public User authenticate(final String inName,
-                            final String inPassword, final UserAdmin inUserAdmin)
-                            throws LoginException {
-
-                        try {
-                            // first we check whether the user can be authenticated
-                            // this will create an OSGi user object when the VIF user is set to the context
-                            MemberUtility.INSTANCE.getActiveAuthenticator().checkAuthentication(inName, inPassword);
-                            // if authentication is successful, we can retrieve the OSGi user object from the user admin
-                            // instance
-                            return inUserAdmin.getUser(ApplicationConstants.VIF_USER, inName);
-                        } catch (final InvalidAuthenticationException exc) {
-                            LOG.error("User with ID '{}' could not authenticate!", inName, exc);
-                        } catch (final VException exc) {
-                            LOG.error("Problem during login encoutered!", exc);
-                        } catch (final SQLException exc) {
-                            LOG.error("Problem during login encoutered!", exc);
-                        }
-                        return null;
-                    }
-                };
+            public IAuthenticator getLoginAuthenticator() { // NOPMD
+                return VIFAppHelper.createLoginAuthenticator();
             }
 
             @Override
-            public String getWelcome() {
+            public String getWelcome() { // NOPMD
                 return Activator.getMessages().getMessage("LoginViewInformation.welcome.forum");
             }
 
             @Override
-            public String getDftSkinID() {
+            public String getDftSkinID() { // NOPMD
                 return DFT_SKIN_ID;
             }
 
             @Override
-            public String getAppName() {
+            public String getAppName() { // NOPMD
                 return APP_NAME;
             }
 
             @Override
-            public String getMenuTagFilter() {
+            public String getMenuTagFilter() { // NOPMD
                 return "vif.forum.*";
             }
         };
     }
 
     @Override
-    public void setUserAdmin(final UserAdmin inUserAdmin) {
+    public void setUserAdmin(final UserAdmin inUserAdmin) { // NOPMD
         super.setUserAdmin(inUserAdmin);
 
         VIFAppHelper.initializeContext();
@@ -169,14 +144,19 @@ public class ForumApplication extends RiplaApplication {
     }
 
     @Override
-    protected void initializePermissions() {
+    protected void initializePermissions() { // NOPMD
         // we do nothing at the moment
         // super.initializePermissions();
     }
 
     @Override
-    protected IBodyComponent createBodyView(final ISkin inSkin) {
+    protected IBodyComponent createBodyView(final ISkin inSkin) { // NOPMD
         return VIFBody.createVIFInstance(inSkin, this, getAppConfiguration().getMenuTagFilter());
+    }
+
+    @Override
+    protected PreferencesHelper createPreferencesHelper() { // NOPMD
+        return new VIFPreferencesHelper();
     }
 
 }

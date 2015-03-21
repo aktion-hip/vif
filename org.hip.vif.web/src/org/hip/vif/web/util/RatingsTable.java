@@ -23,7 +23,6 @@ import org.hip.vif.core.util.RatingsHelper;
 import org.hip.vif.web.Activator;
 import org.ripla.interfaces.IMessages;
 
-import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
@@ -42,10 +41,11 @@ public class RatingsTable extends CustomComponent {
      *
      * @param inRatings {@link RatingsHelper} the helper object to access the calculated values */
     public RatingsTable(final RatingsHelper inRatings) {
-        setWidth(SIZE_UNDEFINED, Unit.PIXELS);
+        super();
+        setWidthUndefined();
         final VerticalLayout lLayout = new VerticalLayout();
         setCompositionRoot(lLayout);
-        lLayout.setWidth(SIZE_UNDEFINED, Unit.PIXELS);
+        lLayout.setWidthUndefined();
 
         lLayout.addComponent(new Label(String.format(VIFViewHelper.TMPL_TITLE,
                 "vif-caption", Activator.getMessages().getMessage("ratings.table.title")), ContentMode.HTML)); //$NON-NLS-1$ //$NON-NLS-2$
@@ -102,7 +102,7 @@ public class RatingsTable extends CustomComponent {
 
     private Label createLabel(final String inText) {
         final Label out = new Label(inText);
-        out.setWidth(Sizeable.SIZE_UNDEFINED, Unit.PIXELS);
+        out.setWidthUndefined();
         return out;
     }
 

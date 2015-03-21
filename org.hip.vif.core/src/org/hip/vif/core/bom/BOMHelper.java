@@ -16,7 +16,7 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package org.hip.vif.core.bom;
+package org.hip.vif.core.bom; // NOPMD
 
 import java.io.IOException;
 
@@ -54,9 +54,8 @@ public final class BOMHelper {
 
     /** Returns the MemberHome for the <code>Member</code> objects the user are authenticated against.
      *
-     * @return {@link MemberHome}
-     * @throws Exception */
-    public static MemberHome getMemberHome() throws Exception {
+     * @return {@link MemberHome} */
+    public static MemberHome getMemberHome() {
         final IMemberSearcher lMemberSearcher = MemberUtility.INSTANCE
                 .getActiveMemberSearcher();
         if (lMemberSearcher != null) {
@@ -68,9 +67,8 @@ public final class BOMHelper {
 
     /** Returns the MemberHome for the cached <code>Member</code> objects.
      *
-     * @return {@link MemberHome}
-     * @throws Exception */
-    public static MemberHome getMemberCacheHome() throws Exception {
+     * @return {@link MemberHome} */
+    public static MemberHome getMemberCacheHome() {
         final IMemberSearcher lMemberSearcher = MemberUtility.INSTANCE
                 .getActiveMemberSearcher();
         if (lMemberSearcher != null) {
@@ -371,6 +369,7 @@ public final class BOMHelper {
                 .getHome(NestedGroup.HOME_CLASS_NAME);
     }
 
+    /** @return {@link NestedGroupHome2} */
     public static NestedGroupHome2 getNestedGroupHome2() {
         return (NestedGroupHome2) VSys.homeManager
                 .getHome(NestedGroup.HOME2_CLASS_NAME);
@@ -467,7 +466,7 @@ public final class BOMHelper {
      * <p>
      * <b>Note:</b> this will return the home for the text model which is not workflow aware!
      * </p>
-     * 
+     *
      * @return {@link TextHome} */
     public static TextHome getTextHome() {
         return (TextHome) VSys.homeManager.getHome(TextImpl.HOME_CLASS_NAME);
@@ -527,9 +526,9 @@ public final class BOMHelper {
             final KeyObject lKey = new KeyObjectImpl();
             lKey.setValue(inFindKey, inFindValue);
             final DomainObject lNew = inHome.findByKey(lKey);
-            return new Long(lNew.get(inIDKey).toString());
+            return Long.parseLong(lNew.get(inIDKey).toString());
         } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
@@ -542,7 +541,7 @@ public final class BOMHelper {
      * @throws VInvalidNameException
      * @throws VInvalidValueException */
     public static KeyObject getKeyStates(final String inFieldState,
-            final Integer[] inStates) throws VInvalidNameException,
+            final Integer... inStates) throws VInvalidNameException,
             VInvalidValueException {
         final KeyObject outKey = new KeyObjectImpl();
         for (int i = 0; i < inStates.length; i++) {

@@ -30,65 +30,57 @@ import org.ripla.web.util.ControllerStack;
 
 import com.vaadin.ui.Component;
 
-/**
- * Reruns the last task, thus, mimicking the back button.
- * 
- * @author Luthiger Created: 14.07.2011
- */
-public class BackTask extends AbstractWebController {
+/** Reruns the last task, thus, mimicking the back button.
+ *
+ * @author Luthiger Created: 14.07.2011 */
+public class BackTask extends AbstractWebController { // NOPMD
 
-	@Override
-	protected Component runChecked() throws RiplaException {
-		final ControllerStack controllers = ControllerStack
-				.getControllerStack();
-		controllers.pop();
-		controllers.pop();
-		return controllers.peek().run();
-	}
+    @Override
+    protected Component runChecked() throws RiplaException { // NOPMD
+        final ControllerStack controllers = ControllerStack
+                .getControllerStack();
+        controllers.pop();
+        controllers.pop();
+        return controllers.peek().run();
+    }
 
-	@Override
-	protected String needsPermission() {
-		return ""; //$NON-NLS-1$
-	}
+    @Override
+    protected String needsPermission() { // NOPMD
+        return ""; //$NON-NLS-1$
+    }
 
-	// ---
+    // ---
 
-	/**
-	 * Implementation of <code>IContextMenuItem</code> for the back task.
-	 */
-	public static class ContextMenuItemBack implements IContextMenuItem {
-		private final Class<? extends IPluggable> backClass;
+    /** Implementation of <code>IContextMenuItem</code> for the back task. */
+    public static class ContextMenuItemBack implements IContextMenuItem {
+        private final transient Class<? extends IPluggable> backClass;
 
-		/**
-		 * @param inClass
-		 *            the bundle's implementation of the back task class.
-		 */
-		public ContextMenuItemBack(final Class<? extends IPluggable> inClass) {
-			backClass = inClass;
-		}
+        /** @param inClass the bundle's implementation of the back task class. */
+        public ContextMenuItemBack(final Class<? extends IPluggable> inClass) {
+            backClass = inClass;
+        }
 
-		@Override
-		public Class<? extends IPluggable> getControllerClass() {
-			return backClass;
-		}
+        @Override
+        public Class<? extends IPluggable> getControllerClass() { // NOPMD
+            return backClass;
+        }
 
-		@Override
-		public String getTitleMsg() {
-			return Activator.getMessages().getMessage("context.menu.item.back"); //$NON-NLS-1$
-		}
+        @Override
+        public String getTitleMsg() { // NOPMD
+            return Activator.getMessages().getMessage("context.menu.item.back"); //$NON-NLS-1$
+        }
 
-		@Override
-		public String getMenuPermission() {
-			return ""; //$NON-NLS-1$
-		}
+        @Override
+        public String getMenuPermission() { // NOPMD
+            return ""; //$NON-NLS-1$
+        }
 
-		@Override
-		public boolean checkConditions(final User inUser,
-				final Authorization inAuthorization,
-				final ParameterObject inParameters) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-	}
+        @Override
+        public boolean checkConditions(final User inUser, // NOPMD
+                final Authorization inAuthorization,
+                final ParameterObject inParameters) {
+            return true;
+        }
+    }
 
 }

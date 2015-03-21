@@ -2,11 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Derby DB Access
 Bundle-SymbolicName: org.hip.vif.dbaccess.derby
-Bundle-Version: 1.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
- J2SE-1.5
+Bundle-Version: 1.0.1.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: javax.sql,
- org.apache.derby.jdbc,
- org.osgi.service.jdbc;version="1.0.0"
+ org.apache.derby.jdbc;version="[10.9.1.0,11.0.0)",
+ org.osgi.service.jdbc;version="[1.0.0,2.0.0)"
 Service-Component: OSGI-INF/dbaccess_embedded.xml, OSGI-INF/dbaccess_client.xml 
 Bundle-Vendor: RelationWare

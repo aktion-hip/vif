@@ -36,20 +36,17 @@ import org.slf4j.LoggerFactory;
 /** The controller class of the workflow to create the DB access.
  *
  * @author Luthiger Created: 11.02.2012 */
-public class DBAccessWorkflow {
+public final class DBAccessWorkflow {
     private static final Logger LOG = LoggerFactory
             .getLogger(DBAccessWorkflow.class);
 
+    /** The workflow's return codes */
     public static final int OK_SU = 1;
     public static final int OK_LOGIN = 2;
     public static final int ERROR = 3;
 
-    // public enum ReturnCode {
-    // OK_SU, OK_LOGIN, ERROR;
-    // }
-
-    private IWorkflowItem workflowItem;
-    private final IWorkflowListener workflowListener;
+    private transient IWorkflowItem workflowItem;
+    private transient final IWorkflowListener workflowListener;
 
     /** Private constructor for the DB access workflow.
      *
@@ -94,6 +91,20 @@ public class DBAccessWorkflow {
         return outWorkflow;
     }
 
+    /** The workflow to be used to guide the sysadmin through the step of SU creation.
+     *
+     * @param inWorkflowListener {@link IWorkflowListener}
+     * @return {@link DBAccessWorkflow} */
+    public static DBAccessWorkflow getInitialTblCreation(final IWorkflowListener inWorkflowListener) {
+        final IWorkflowItem lCreateTables = new CreateTables();
+        final IWorkflowItem lCreateSU = new CreateSU();
+        lCreateTables.registerSuccessItem(lCreateSU);
+
+        final DBAccessWorkflow outWorkflow = new DBAccessWorkflow(
+                lCreateTables, inWorkflowListener);
+        return outWorkflow;
+    }
+
     /** Creates the workflow to create and initialize the tables within a DB schema.
      *
      * @param inWorkflowListener {@link IWorkflowListener}
@@ -133,7 +144,7 @@ public class DBAccessWorkflow {
     }
 
     /** Package protected: run the workflow's next step. */
-    protected void nextStep() {
+    protected void nextStep() { // NOPMD
         try {
             if (workflowItem.hasNextStep()) {
                 workflowItem = workflowItem.getNextStep();

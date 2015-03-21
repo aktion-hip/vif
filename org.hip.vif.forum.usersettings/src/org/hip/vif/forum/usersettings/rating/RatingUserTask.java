@@ -16,12 +16,13 @@
  License along with this library; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package org.hip.vif.forum.usersettings.rating;
+package org.hip.vif.forum.usersettings.rating; // NOPMD
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.hip.kernel.bom.KeyObject;
@@ -38,7 +39,7 @@ import org.hip.vif.core.bom.impl.JoinRatingsToRater;
 import org.hip.vif.core.bom.impl.RatingsHome;
 import org.hip.vif.forum.usersettings.Activator;
 import org.hip.vif.forum.usersettings.data.RatingsContainer;
-import org.hip.vif.forum.usersettings.data.RatingsContainer.RatingItem;
+import org.hip.vif.forum.usersettings.data.RatingsContainer.RatingItem; // NOPMD
 import org.hip.vif.forum.usersettings.tasks.ShowCompletedRatingTask;
 import org.hip.vif.forum.usersettings.tasks.UserTasksManageTask;
 import org.hip.vif.forum.usersettings.ui.ShowRatingView;
@@ -56,13 +57,13 @@ import com.vaadin.ui.Component;
 /** User task: after publishing a contribution, the author and reviewer have to rate the interaction.
  *
  * @author Luthiger */
-public class RatingUserTask extends AbstractUserTask {
+public class RatingUserTask extends AbstractUserTask { // NOPMD
     private static final Logger LOG = LoggerFactory.getLogger(RatingUserTask.class);
 
-    private Long memberID;
+    private transient Long memberID;
 
     @Override
-    public String getId() {
+    public String getId() { // NOPMD
         return RatingUserTask.class.getName();
     }
 
@@ -77,9 +78,9 @@ public class RatingUserTask extends AbstractUserTask {
     }
 
     @Override
-    public Collection<Component> createUserTaskViews(final Long inMemberID) throws Exception {
+    public Collection<Component> createUserTaskViews(final Long inMemberID) throws VException, SQLException { // NOPMD
         memberID = inMemberID;
-        final Collection<Component> outViews = new Vector<Component>();
+        final Collection<Component> outViews = new ArrayList<Component>();
 
         // for all the member's open rating tasks:
         final QueryResult lQuery = BOMHelper.getJoinRatingsToRaterHome().select(createKeyOpenTasks(inMemberID));
@@ -135,12 +136,16 @@ public class RatingUserTask extends AbstractUserTask {
             showNotification(Activator.getMessages().getMessage("msg.ratings.feedback.success")); //$NON-NLS-1$
             sendEvent(UserTasksManageTask.class);
             return true;
-        } catch (final Exception exc) {
+        } catch (final VException | SQLException | AddressException exc) {
             LOG.error("Error encountered while saving the ratings!", exc); //$NON-NLS-1$
         }
         return false;
     }
 
+    /** Saves the user input.
+     *
+     * @param inRating {@link JoinRatingsToRater}
+     * @return boolean <code>true</code> in case of successful saving */
     public boolean saveRatings(final JoinRatingsToRater inRating) {
         final Long lRatingEventsID = BeanWrapperHelper.getLong(RatingsHome.KEY_RATINGEVENTS_ID, inRating);
         try {
@@ -160,13 +165,13 @@ public class RatingUserTask extends AbstractUserTask {
             showNotification(Activator.getMessages().getMessage("msg.ratings.feedback.success")); //$NON-NLS-1$
             sendEvent(UserTasksManageTask.class);
             return true;
-        } catch (final Exception exc) {
+        } catch (final VException | SQLException | AddressException exc) {
             LOG.error("Error encountered while saving the ratings!", exc); //$NON-NLS-1$
         }
         return false;
     }
 
-    private String getMailAddresses(final Long inRaterID, final Long inRatedID) throws Exception {
+    private String getMailAddresses(final Long inRaterID, final Long inRatedID) throws VException {
         final MemberHome lHome = BOMHelper.getMemberCacheHome();
         VIFMember lMember = (VIFMember) lHome.getMember(inRaterID);
         final StringBuilder outAddresses = new StringBuilder(lMember.getMailAddress());
@@ -176,39 +181,29 @@ public class RatingUserTask extends AbstractUserTask {
         return new String(outAddresses);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.ripla.web.controllers.AbstractController#needsPermission()
-     */
     @Override
-    protected String needsPermission() {
-        // TODO Auto-generated method stub
+    protected String needsPermission() { // NOPMD
+        // not used
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.ripla.web.controllers.AbstractController#runChecked()
-     */
     @Override
-    protected Component runChecked() throws VIFWebException {
-        // TODO Auto-generated method stub
+    protected Component runChecked() throws VIFWebException { // NOPMD
+        // not used
         return null;
     }
 
     // --- private class ---
 
-    private static class RatingCompletedMail extends AbstractNotification {
+    private static class RatingCompletedMail extends AbstractNotification { // NOPMD
         private final static String KEY_SUBJECT = "usersettings.ratings.mail.subject"; //$NON-NLS-1$
         private final static String KEY_HELLO = "usersettings.ratings.mail.hello"; //$NON-NLS-1$
         private final static String KEY_BODY = "usersettings.ratings.mail.body"; //$NON-NLS-1$
         private final static String KEY_TERM = "usersettings.ratings.mail.term"; //$NON-NLS-1$
         private static final String TMPL_URL = "<a href=\"%s\">%s</a>"; //$NON-NLS-1$
 
-        private final IMessages messages;
-        private final String url;
+        private transient final IMessages messages;
+        private transient final String url;
 
         RatingCompletedMail(final InternetAddress[] inReceiverMails, final IMessages inMessages, final String inURL) {
             super(inReceiverMails, false);
@@ -217,25 +212,25 @@ public class RatingUserTask extends AbstractUserTask {
         }
 
         @Override
-        protected StringBuilder getBody() {
-            final StringBuilder outBody = new StringBuilder(getMessage(messages, KEY_HELLO));
-            outBody.append("\n\n").append(getFormattedMessage(messages, KEY_BODY, url)); //$NON-NLS-1$
-            outBody.append(getMailGreetings());
+        protected StringBuilder getBody() { // NOPMD
+            final StringBuilder outBody = new StringBuilder(200);
+            outBody.append(getMessage(messages, KEY_HELLO)).append("\n\n")
+            .append(getFormattedMessage(messages, KEY_BODY, url)).append(getMailGreetings());
             return outBody;
         }
 
         @Override
-        protected StringBuilder getBodyHtml() {
+        protected StringBuilder getBodyHtml() { // NOPMD
             final String lUrl = String.format(TMPL_URL, url, getMessage(messages, KEY_TERM));
-            final StringBuilder outBody = new StringBuilder();
-            outBody.append("<p>").append(getMessage(messages, KEY_HELLO)).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$
-            outBody.append("<p>").append(getFormattedMessage(messages, KEY_BODY, lUrl)).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$
-            outBody.append("<p>").append(getMailGreetingsHtml()); //$NON-NLS-1$
+            final StringBuilder outBody = new StringBuilder(200);
+            outBody.append("<p>").append(getMessage(messages, KEY_HELLO)).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$  // NOPMD
+            outBody.append("<p>").append(getFormattedMessage(messages, KEY_BODY, lUrl)).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$ // NOPMD
+            outBody.append("<p>").append(getMailGreetingsHtml()); //$NON-NLS-1$ // NOPMD
             return outBody;
         }
 
         @Override
-        protected String getSubjectText() {
+        protected String getSubjectText() { // NOPMD
             return new String(getSubjectID().append(" ").append(getMessage(messages, KEY_SUBJECT))); //$NON-NLS-1$
         }
     }

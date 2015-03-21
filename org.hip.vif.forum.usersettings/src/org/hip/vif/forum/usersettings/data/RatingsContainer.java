@@ -1,6 +1,6 @@
 /**
     This package is part of the application VIF.
-    Copyright (C) 2011-2014, Benno Luthiger
+    Copyright (C) 2011-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,13 +30,15 @@ import com.vaadin.ui.AbstractSelect;
 @SuppressWarnings("serial")
 public class RatingsContainer extends AbstractSelect {
     private static final String[] LABELS = { "ui.rating.label.negative", "ui.rating.label.neutral",
-            "ui.rating.label.positive" };
+    "ui.rating.label.positive" };
 
     private RatingsContainer() {
+        super();
+
         final IMessages lMessages = Activator.getMessages();
-        addItem(new RatingItem(1, lMessages.getMessage(LABELS[2]))); //$NON-NLS-1$
-        addItem(new RatingItem(0, lMessages.getMessage(LABELS[1]))); //$NON-NLS-1$
-        addItem(new RatingItem(-1, lMessages.getMessage(LABELS[0]))); //$NON-NLS-1$
+        addItem(new RatingsContainer.RatingItem(1, lMessages.getMessage(LABELS[2]))); //$NON-NLS-1$
+        addItem(new RatingsContainer.RatingItem(0, lMessages.getMessage(LABELS[1]))); //$NON-NLS-1$
+        addItem(new RatingsContainer.RatingItem(-1, lMessages.getMessage(LABELS[0]))); //$NON-NLS-1$
     }
 
     /** Factory method, creates the data source for the option group.
@@ -51,13 +53,14 @@ public class RatingsContainer extends AbstractSelect {
      * @param inValue int
      * @return {@link RatingItem} */
     public static RatingItem getRatingItem(final int inValue) {
-        return new RatingItem(inValue, Activator.getMessages().getMessage(LABELS[inValue + 1]));
+        return new RatingsContainer.RatingItem(inValue, Activator.getMessages().getMessage(LABELS[inValue + 1]));
     }
 
     // ---
 
+    /** The bean for the rating item. */
     public static class RatingItem {
-        private final int id;
+        private transient final int id; // NOPMD
         private final String caption;
 
         private RatingItem(final int inID, final String inCaption) {
@@ -65,12 +68,13 @@ public class RatingsContainer extends AbstractSelect {
             caption = inCaption;
         }
 
+        /** @return int the rating id */
         public int getId() {
             return id;
         }
 
         @Override
-        public String toString() {
+        public String toString() { // NOPMD
             return caption;
         }
     }

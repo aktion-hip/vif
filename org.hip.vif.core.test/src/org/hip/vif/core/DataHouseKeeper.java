@@ -84,8 +84,8 @@ import org.xml.sax.SAXException;
  * @author: Benno Luthiger */
 public class DataHouseKeeper {
     private static final Logger LOG = LoggerFactory.getLogger(DataHouseKeeper.class);
-    private static final int SLEEP_PERIOD = 5; // milliseconds 50 200
-    private static final String EMBEDDED_DERBY = "org.apache.derby.jdbc.EmbeddedDriver/Derby (embedded)/10.5.1.1";
+    private static final int SLEEP_PERIOD = 50; // milliseconds 50 200
+    private static final String EMBEDDED_DERBY = "org.apache.derby.jdbc.EmbeddedDriver/Derby (embedded)/10.9.1.0_1";
 
     private static DataHouseKeeper singleton = new DataHouseKeeper();
 
@@ -629,10 +629,12 @@ public class DataHouseKeeper {
 
     public void checkForEmptyTable() {
         try {
-            if (getMemberHome().getCount() > 0)
+            if (getMemberHome().getCount() > 0) {
                 fail("Don't test with non empty member table!");
-            if (getLinkMemberRoleHome().getCount() > 0)
+            }
+            if (getLinkMemberRoleHome().getCount() > 0) {
                 fail("Don't test with non empty link table!");
+            }
         } catch (final Exception exc) {
             fail(exc.getMessage());
         }
@@ -934,8 +936,9 @@ public class DataHouseKeeper {
      *
      * @return org.hip.vif.bom.impl.test.Test2DomainObjectHomeImpl */
     public Test2DomainObjectHomeImpl getSimpleHome() {
-        if (simpleHome == null)
+        if (simpleHome == null) {
             simpleHome = (Test2DomainObjectHomeImpl) VSys.homeManager.getHome(SIMPLE_HOME_NAME);
+        }
 
         return simpleHome;
     }
@@ -974,10 +977,12 @@ public class DataHouseKeeper {
             fail(exc.getMessage());
         } finally {
             try {
-                if (lStatement != null)
+                if (lStatement != null) {
                     lStatement.close();
-                if (lConnection != null)
+                }
+                if (lConnection != null) {
                     lConnection.close();
+                }
             } catch (final SQLException exc) {
                 fail(exc.getMessage());
             }
@@ -1003,8 +1008,9 @@ public class DataHouseKeeper {
         } finally {
             try {
                 // if (lStatement != null) lStatement.close();
-                if (lConnection != null)
+                if (lConnection != null) {
                     lConnection.close();
+                }
             } catch (final SQLException exc) {
                 fail(exc.getMessage());
             }

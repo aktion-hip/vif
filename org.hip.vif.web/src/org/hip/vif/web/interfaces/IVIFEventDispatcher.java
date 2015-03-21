@@ -25,10 +25,15 @@ import java.util.Map;
  *
  * @author lbenno */
 public interface IVIFEventDispatcher {
+    /** The event available in this application. */
     public enum Event {
-        SEND, LOOKUP;
+        SEND, LOOKUP, LOGIN;
     }
 
+    /** Dispatches the specified event.
+     *
+     * @param inType {@link Event}
+     * @param inProperties Map<String, Object> */
     void dispatch(final Event inType, final Map<String, Object> inProperties);
 
 }

@@ -52,10 +52,6 @@ public class JoinParticipantToGroupHome extends JoinedDomainObjectHomeImpl {
                     + "' domainObject='org.hip.vif.core.bom.impl.ParticipantImpl'/>	\n"
                     +
                     "		<columnDef columnName='"
-                    + ParticipantHome.KEY_GROUP_ID
-                    + "' domainObject='org.hip.vif.core.bom.impl.ParticipantImpl'/>	\n"
-                    +
-                    "		<columnDef columnName='"
                     + GroupHome.KEY_ID
                     + "' domainObject='org.hip.vif.core.bom.impl.GroupImpl'/>	\n"
                     +

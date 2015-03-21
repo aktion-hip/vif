@@ -24,7 +24,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Vector;
 
 import org.hip.kernel.bom.BOMInvalidKeyException;
 import org.hip.kernel.bom.BOMNotFoundException;
@@ -53,8 +52,7 @@ import org.hip.vif.core.exc.BOMChangeValueException;
  * @author Benno Luthiger
  * @see org.hip.vif.core.bom.ParticipantHome */
 @SuppressWarnings("serial")
-public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
-        ParticipantHome {
+public class ParticipantHomeImpl extends DomainObjectHomeImpl implements ParticipantHome { // NOPMD
 
     /*
      * Every home has to know the class it handles. They provide access to this name through the method
@@ -75,11 +73,11 @@ public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
             + "		</keyDef>	\n"
             + "	</keyDefs>	\n"
             + "	<propertyDefs>	\n"
-            + "		<propertyDef propertyName='"
+            + "		<propertyDef propertyName='" // NOPMD
             + KEY_MEMBER_ID
             + "' valueType='Long' propertyType='simple'>	\n"
             + "			<mappingDef tableName='tblParticipant' columnName='MemberID'/>	\n"
-            + "		</propertyDef>	\n"
+            + "		</propertyDef>	\n" // NOPMD
             + "		<propertyDef propertyName='"
             + KEY_GROUP_ID
             + "' valueType='Long' propertyType='simple'>	\n"
@@ -109,9 +107,9 @@ public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
     }
 
     @Override
-    public Collection<Long> saveRegisterings(final Long inActorID,
+    public Collection<Long> saveRegisterings(final Long inActorID, // NOPMD
             final Collection<Long> inGroupIDs) throws BOMChangeValueException {
-        final Collection<Long> outDeletedAdmins = new Vector<Long>();
+        final Collection<Long> outDeletedAdmins = new ArrayList<Long>();
 
         try {
             // Retrieve all public groups the actor is participating.
@@ -123,8 +121,8 @@ public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
             final QueryResult lExisting = BOMHelper
                     .getJoinParticipantToGroupHome().select(lKey);
             while (lExisting.hasMoreElements()) {
-                final Long lGroupID = new Long(lExisting.nextAsDomainObject()
-                        .get(KEY_GROUP_ID).toString());
+                final Long lGroupID = Long.parseLong(lExisting.nextAsDomainObject()
+                        .get(GroupHome.KEY_ID).toString());
                 // Check whether the actor retains participation.
                 if (inGroupIDs.contains(lGroupID)) {
                     // If yes, remove groupID from collection.
@@ -151,12 +149,8 @@ public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
                 create(inActorID, lNewEntries.next());
             }
             return outDeletedAdmins;
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final WorkflowException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (final VException | SQLException | WorkflowException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
@@ -186,10 +180,8 @@ public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
                         .nextAsDomainObject();
                 outGroupIDs.add((Long) lEntry.get(KEY_GROUP_ID));
             }
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (final VException | SQLException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
         return outGroupIDs;
     }
@@ -200,10 +192,8 @@ public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
             final KeyObject lKey = new KeyObjectImpl();
             lKey.setValue(KEY_MEMBER_ID, inActorID);
             return select(lKey);
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (final VException | SQLException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
@@ -218,8 +208,8 @@ public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
     @Override
     public DomainObject create(final String inMemberID, final String inGroupID)
             throws VException, WorkflowException, SQLException {
-        final Long lMemberID = new Long(inMemberID);
-        final Long lGroupID = new Long(inGroupID);
+        final Long lMemberID = Long.parseLong(inMemberID);
+        final Long lGroupID = Long.parseLong(inGroupID);
         create(lMemberID, lGroupID);
         return find(lMemberID, lGroupID);
     }
@@ -235,11 +225,11 @@ public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
     @Override
     public boolean createChecked(final String inMemberID, final String inGroupID)
             throws VException, WorkflowException, SQLException {
-        return createChecked(new Long(inMemberID), new Long(inGroupID));
+        return createChecked(Long.parseLong(inMemberID), Long.parseLong(inGroupID));
     }
 
     @Override
-    public boolean createChecked(final Long inMemberID, final Long inGroupID)
+    public boolean createChecked(final Long inMemberID, final Long inGroupID) // NOPMD
             throws VException, WorkflowException, SQLException {
         try {
             find(inMemberID, inGroupID);
@@ -291,10 +281,8 @@ public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
             final KeyObject lKey = new KeyObjectImpl();
             lKey.setValue(KEY_MEMBER_ID, inActorID);
             return getCount(lKey) > 0;
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (final VException | SQLException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
@@ -312,10 +300,8 @@ public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
             lKey.setValue(KEY_GROUP_ID, inGroupID);
             lKey.setValue(KEY_MEMBER_ID, inActorID);
             return getCount(lKey) > 0;
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (final VException | SQLException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
@@ -331,10 +317,8 @@ public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
             final KeyObject lKey = new KeyObjectImpl();
             lKey.setValue(KEY_GROUP_ID, inGroupID);
             return getCount(lKey);
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (final VException | SQLException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
@@ -351,10 +335,8 @@ public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
             lKey.setValue(KEY_GROUP_ID, inGroupID);
             lKey.setValue(KEY_MEMBER_ID, inMemberID);
             delete(lKey, true);
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (final VException | SQLException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
@@ -380,10 +362,8 @@ public class ParticipantHomeImpl extends DomainObjectHomeImpl implements
                     this, lChange, lWhere);
             lStatement.executeUpdate();
             lStatement.commit();
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (final VException | SQLException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 

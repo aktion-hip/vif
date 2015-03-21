@@ -1,22 +1,21 @@
 /**
-	This package is part of the application VIF.
-	Copyright (C) 2011-2014, Benno Luthiger
+    This package is part of the application VIF.
+    Copyright (C) 2014, Benno Luthiger
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.hip.vif.web.components;
 
 import org.hip.kernel.exc.VException;
@@ -30,11 +29,15 @@ import org.hip.vif.web.util.PasswordInputChecker;
 import org.ripla.interfaces.IMessages;
 import org.ripla.web.util.AbstractFormCreator;
 import org.ripla.web.util.LabelValueTable;
+import org.ripla.web.util.Popup;
+import org.ripla.web.util.Popup.PopupWindow;
 import org.ripla.web.util.RiplaViewHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
@@ -43,36 +46,32 @@ import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.Window.CloseListener;
 
 /** Child window displaying the field for that the SU can provide the information to create his SU account.
  *
- * @author Luthiger */
-@SuppressWarnings("serial")
+ * @author lbenno */
 public class CreateSUPopup extends AbstractConfigurationPopup {
     private static final Logger LOG = LoggerFactory.getLogger(CreateSUPopup.class);
 
     private static final int DFT_WIDTH_INPUT = 300;
 
-    /** Constructor.
+    private transient final PopupWindow popup;
+
+    /** CreateSUPopup constructor.
      *
-     * @param inMember {@link Member}
-     * @param inCreateSU {@link CreateSU} */
+     * @param inMember {@link Member} the member entra
+     * @param inCreateSU {@link CreateSU} the workflow item */
     public CreateSUPopup(final Member inMember, final CreateSU inCreateSU) {
+        super();
         final IMessages lMessages = Activator.getMessages();
-
-        final Window lPopup = createPopup(lMessages.getMessage("ui.member.editor.title")); //$NON-NLS-1$
-        lPopup.setWidth(540, Unit.PIXELS);
-        lPopup.setHeight(445, Unit.PIXELS);
-
-        final VerticalLayout lLayout = createLayout((VerticalLayout) lPopup.getContent());
+        final VerticalLayout lLayout = createLayout();
         lLayout.addComponent(getCreateForm(inMember, lMessages, inCreateSU));
-        lLayout.addComponent(createCloseButton());
-        UI.getCurrent().addWindow(lPopup);
+        popup = Popup.displayPopup(lMessages.getMessage("ui.member.editor.title"), lLayout, 590, 420);
     }
 
+    @SuppressWarnings("serial")
     private Component getCreateForm(final Member inMember, final IMessages inMessages, final CreateSU inController) {
         final VerticalLayout outLayout = new VerticalLayout();
 
@@ -83,15 +82,15 @@ public class CreateSUPopup extends AbstractConfigurationPopup {
         final Button lSave = new Button(inMessages.getMessage("config.button.save")); //$NON-NLS-1$
         lSave.addClickListener(new Button.ClickListener() {
             @Override
-            public void buttonClick(final ClickEvent inEvent) {
+            public void buttonClick(final ClickEvent inEvent) { // NOPMD
                 try {
                     lForm.commit();
-                    inMember.set(MemberHome.KEY_SEX, new Long(lForm.getAddress().getValue().toString()));
+                    inMember.set(MemberHome.KEY_SEX, Long.parseLong(lForm.getAddress().getValue().toString()));
                     if (lForm.checkPassword()) {
                         inController.save(inMember);
                     }
                 }
-                catch (final CommitException exc) {
+                catch (final CommitException exc) { // NOPMD
                     // intentionally left empty
                 }
                 catch (final VException exc) {
@@ -99,23 +98,30 @@ public class CreateSUPopup extends AbstractConfigurationPopup {
                 }
             }
         });
+        lSave.setClickShortcut(KeyCode.ENTER);
+        lSave.setImmediate(true);
         outLayout.addComponent(lSave);
 
         return outLayout;
     }
 
+    /** @param inListener {@link CloseListener} adds close listener to popup */
+    public void addCloseListener(final CloseListener inListener) {
+        popup.addCloseListener(inListener);
+    }
+
     // ---
 
-    private class FormCreator extends AbstractFormCreator {
+    private class FormCreator extends AbstractFormCreator { // NOPMD
         private static final int WIDTH_ZIP = 50;
         private static final int WIDTH_CITY = 240;
 
         // private final Member member;
-        private final IMessages messages;
-        private final ComboBox address;
-        private TextField firstfield;
-        private PasswordField pass1;
-        private PasswordField pass2;
+        private transient final IMessages messages;
+        private transient final ComboBox address;
+        private transient TextField firstfield;
+        private transient PasswordField pass1;
+        private transient PasswordField pass2;
 
         FormCreator(final Member inMember) {
             super(MemberBean.createMemberBean(inMember));
@@ -125,7 +131,7 @@ public class CreateSUPopup extends AbstractConfigurationPopup {
         }
 
         @Override
-        protected Component createTable() {
+        protected Component createTable() { // NOPMD
             String lFieldLabel = messages.getMessage("ui.member.editor.label.userid"); //$NON-NLS-1$
             firstfield = RiplaViewHelper.createTextField(DFT_WIDTH_INPUT);
             focusInit();
@@ -193,15 +199,15 @@ public class CreateSUPopup extends AbstractConfigurationPopup {
             return out;
         }
 
-        boolean checkPassword() {
+        protected boolean checkPassword() { // NOPMD
             return new PasswordInputChecker(pass1, pass2).checkInput();
         }
 
-        ComboBox getAddress() {
+        protected ComboBox getAddress() { // NOPMD
             return address;
         }
 
-        void focusInit() {
+        protected void focusInit() { // NOPMD
             firstfield.focus();
         }
     }

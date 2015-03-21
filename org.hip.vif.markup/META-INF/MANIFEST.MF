@@ -8,9 +8,9 @@ Bundle-ClassPath: .,
  lib/org.eclipse.mylyn.wikitext.core_1.5.0.v20110608-1400.jar,
  lib/org.eclipse.mylyn.wikitext.textile.core_1.5.0.v20110608-1400.jar,
  lib/jtidy-r938.jar
-Export-Package: org.hip.vif.markup,
- org.hip.vif.markup.html,
- org.hip.vif.markup.serializer
+Export-Package: org.hip.vif.markup;version="1.0.0",
+ org.hip.vif.markup.html;version="1.0.0",
+ org.hip.vif.markup.serializer;version="1.0.0"
 Import-Package: org.hip.kernel.bom,
  org.hip.kernel.bom.impl,
  org.hip.kernel.exc,

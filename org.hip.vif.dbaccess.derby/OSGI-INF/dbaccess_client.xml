@@ -6,5 +6,5 @@
    </service>
    <property name="osgi.jdbc.driver.class" type="String" value="org.apache.derby.jdbc.ClientDriver"/>
    <property name="osgi.jdbc.driver.name" type="String" value="Derby (client)"/>
-   <property name="osgi.jdbc.driver.version" type="String" value="10.5.1.1"/>
+   <property name="osgi.jdbc.driver.version" type="String" value="10.9.1.0_1"/>
 </scr:component>

@@ -46,7 +46,7 @@ public class ExceptionData {
     public static final String DATA_MSG_PARMS = "msg_parms";
 
     private static String cMsgBundleBasename = DEFAULT_ERR_MSG_BUNDLE_BASENAME;
-    private static Map<Locale, ResourceBundle> cMessagesHashtable;
+    // private static Map<Locale, ResourceBundle> cMessagesHashtable;
 
     // instance attributes
     private transient String msgCache;
@@ -217,22 +217,8 @@ public class ExceptionData {
     /** Dynamically loads the Bundle for the requested Language (ONLY LANGUAGE!!)
      *
      * @return java.util.ResourceBundle */
-    private static synchronized ResourceBundle messages(final Locale inLocale) { // NOPMD
-        ResourceBundle outBundle = null;
-
-        // create table for bundles
-        if (cMessagesHashtable == null) {
-            cMessagesHashtable = new HashMap<Locale, ResourceBundle>(5);
-        }
-
-        // load bundle if not already loaded
-        outBundle = cMessagesHashtable.get(inLocale);
-        if (outBundle == null) {
-            outBundle = PropertyResourceBundle.getBundle(cMsgBundleBasename, new Locale(inLocale.getLanguage(), ""));
-            cMessagesHashtable.put(inLocale, outBundle);
-        }
-
-        return outBundle;
+    private static ResourceBundle messages(final Locale inLocale) { // NOPMD
+        return PropertyResourceBundle.getBundle(cMsgBundleBasename, new Locale(inLocale.getLanguage(), ""));
     }
 
     /** Puts a name-value pair to this object.
@@ -261,4 +247,5 @@ public class ExceptionData {
     public String toString() {
         return getMessage();
     }
+
 }

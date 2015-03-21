@@ -46,7 +46,8 @@ public interface IUserTask extends IPluggableWithLookup {
      *
      * @param inMemberID Long
      * @return {@link Collection} of <code>Component</code>
-     * @throws Exception */
-    Collection<Component> createUserTaskViews(Long inMemberID) throws Exception;
+     * @throws VException
+     * @throws SQLException */
+    Collection<Component> createUserTaskViews(Long inMemberID) throws VException, SQLException;
 
 }

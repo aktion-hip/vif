@@ -1,6 +1,6 @@
 /**
 	This package is part of the application VIF.
-	Copyright (C) 2012-2014, Benno Luthiger
+	Copyright (C) 2012-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -16,15 +16,15 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package org.hip.vif.web.tasks;
+package org.hip.vif.web.tasks; // NOPMD
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.hip.kernel.bom.KeyObject;
 import org.hip.kernel.bom.KeyObject.BinaryBooleanOperator;
@@ -68,13 +68,15 @@ import com.vaadin.ui.Notification;
 /** Base class for controllers of the VIF application.
  *
  * @author lbenno */
-public abstract class AbstractWebController extends AbstractController implements IPluggableWithLookup {
+public abstract class AbstractWebController extends AbstractController implements IPluggableWithLookup { // NOPMD
     private static final Logger LOG = LoggerFactory.getLogger(AbstractWebController.class);
 
     public static final String EVENT_TOPIC_LOOKUP = "org/hip/vif/web/LookupEvent/LOOKUP"; //$NON-NLS-1$
     public static final String EVENT_PROPERTY_LOOKUP_TYPE = "lookup.type"; //$NON-NLS-1$
     public static final String EVENT_PROPERTY_LOOKUP_ID = "lookup.id"; //$NON-NLS-1$
     public static final String EVENT_PROPERTY_LOOKUP_CONTROLLER = "lookup.controller"; //$NON-NLS-1$
+    public static final String EVENT_PROPERTY_LOGIN_USER = "login.user"; //$NON-NLS-1$
+    public static final String EVENT_PROPERTY_LOGIN_PWD = "login.pass"; //$NON-NLS-1$
     public static final String DFT_PATTERN = "MM/dd/yyyy"; //$NON-NLS-1$
 
     /** Creates a view component displaying the message 'Please contact the administrator' after the application
@@ -185,7 +187,7 @@ public abstract class AbstractWebController extends AbstractController implement
      *
      * @param inControllerName String the fully qualified name of the next task/controller */
     protected void sendEvent(final String inControllerName) {
-        final Map<String, Object> lProperties = new HashMap<String, Object>();
+        final Map<String, Object> lProperties = new ConcurrentHashMap<String, Object>(); // NOPMD
         lProperties.put(Constants.EVENT_PROPERTY_NEXT_TASK, inControllerName);
         getRiplaDispatcher().dispatch(IRiplaEventDispatcher.Event.LOAD_CONTROLLER, lProperties);
     }
@@ -212,7 +214,7 @@ public abstract class AbstractWebController extends AbstractController implement
 
     /** Use Vaadin event service to trigger a refresh of the dash board. */
     protected void refreshDash() {
-        final Map<String, Object> lProperties = new HashMap<String, Object>();
+        final Map<String, Object> lProperties = new ConcurrentHashMap<String, Object>(); // NOPMD
         lProperties.put(Constants.EVENT_PROPERTY_REFRESH, "refresh");
         getDispatcher().dispatch(Event.SEND, lProperties);
     }
@@ -234,7 +236,7 @@ public abstract class AbstractWebController extends AbstractController implement
     @Override
     public void requestLookup(final LinkButtonHelper.LookupType inType,
             final String inTextID) {
-        final Map<String, Object> lProperties = new HashMap<String, Object>();
+        final Map<String, Object> lProperties = new ConcurrentHashMap<String, Object>(); // NOPMD
         lProperties.put(EVENT_PROPERTY_LOOKUP_TYPE, inType);
         lProperties.put(EVENT_PROPERTY_LOOKUP_ID, inTextID);
         lProperties.put(EVENT_PROPERTY_LOOKUP_CONTROLLER, this);
@@ -268,15 +270,15 @@ public abstract class AbstractWebController extends AbstractController implement
      *
      * @return DateFormat
      * @see <code>vif.properties</code>: org.hip.vif.datePattern */
-    protected static DateFormat getFormat() {
+    protected DateFormat getFormat() {
         String lPattern = DFT_PATTERN;
         try {
             lPattern = PreferencesHandler.INSTANCE
                     .get(PreferencesHandler.KEY_DATE_PATTERN);
-        } catch (final IOException exc) {
+        } catch (final IOException exc) { // NOPMD
             // intentionally left empty
         }
-        return new SimpleDateFormat(lPattern);
+        return new SimpleDateFormat(lPattern, getLocaleChecked());
     }
 
     /** Creates an OrderObject from the specified String. The method expects a comma separated list of Property names of
@@ -289,7 +291,7 @@ public abstract class AbstractWebController extends AbstractController implement
             final boolean inDescending) throws VException {
         final OrderObject outOrder = new OrderObjectImpl();
         final StringTokenizer lTokens = new StringTokenizer(inOrder, ","); //$NON-NLS-1$
-        int i = 0;
+        int i = 0; // NOPMD
         while (lTokens.hasMoreTokens()) {
             outOrder.setValue(lTokens.nextToken().trim(), inDescending, i++);
         }
@@ -305,7 +307,7 @@ public abstract class AbstractWebController extends AbstractController implement
      * @param inStates Integer[] the group states
      * @return {@link KeyObject}
      * @throws VException */
-    protected KeyObject createKey(final Integer[] inStates) throws VException {
+    protected KeyObject createKey(final Integer... inStates) throws VException {
         final KeyObject outKey = new KeyObjectImpl();
         for (int i = 0; i < inStates.length; i++) {
             outKey.setValue(GroupHome.KEY_STATE, inStates[i], "=", BinaryBooleanOperator.OR); //$NON-NLS-1$
@@ -319,7 +321,7 @@ public abstract class AbstractWebController extends AbstractController implement
     // .getTargetOf(inAlias));
     // }
 
-    protected Locale getLocaleChecked() {
+    protected Locale getLocaleChecked() { // NOPMD
         try {
             VaadinSession.getCurrent().getLockInstance().lock();
             return VaadinSession.getCurrent().getLocale();
@@ -352,7 +354,7 @@ public abstract class AbstractWebController extends AbstractController implement
      * @return Long the model's id */
     protected Long getModelIdFromParameter() {
         final ParameterObject lParameters = getParameters();
-        return new Long(lParameters.get(
+        return Long.parseLong(lParameters.get(
                 lParameters.get(ApplicationConstants.PARAMETER_KEY_GENERIC).toString()).toString());
     }
 

@@ -27,7 +27,7 @@ import org.hip.vif.admin.admin.data.ConfigurationHelper;
 import org.hip.vif.admin.admin.ui.ConfigView;
 import org.hip.vif.core.service.PreferencesHandler;
 import org.hip.vif.core.util.DBConnectionProber;
-import org.hip.vif.web.components.BlankPopup;
+import org.hip.vif.web.components.AbstractConfigurationPopup;
 import org.hip.vif.web.tasks.AbstractWebController;
 import org.hip.vif.web.tasks.DBAccessWorkflow;
 import org.hip.vif.web.tasks.DBAccessWorkflowItems.WorkflowException;
@@ -36,6 +36,7 @@ import org.ripla.annotations.UseCaseController;
 import org.ripla.exceptions.RiplaException;
 import org.ripla.interfaces.IMessages;
 import org.ripla.interfaces.IWorkflowListener;
+import org.ripla.web.util.Popup;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -45,24 +46,24 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.VerticalLayout;
 
 /** The task for the application configuration.<br />
  * Displays the content of <code>vif.properties</code>.
  *
  * @author Luthiger Created: 06.01.2012 */
 @UseCaseController
-public class ConfigTask extends AbstractWebController implements
-        IWorkflowListener {
+public class ConfigTask extends AbstractWebController implements IWorkflowListener { // NOPMD
 
-    private ConfigurationHelper configHelper;
+    private transient ConfigurationHelper configHelper;
 
     @Override
-    protected String needsPermission() {
+    protected String needsPermission() { // NOPMD
         return Constants.PERMISSION_CONFIGURATION;
     }
 
     @Override
-    protected Component runChecked() throws RiplaException {
+    protected Component runChecked() throws RiplaException { // NOPMD
         try {
             emptyContextMenu();
             return new ConfigView(ConfigurationItem.createConfiguration(), this);
@@ -72,12 +73,11 @@ public class ConfigTask extends AbstractWebController implements
     }
 
     /** Callback method to save the changed configuration settings.
-     * 
+     *
      * @param inConfiguration {@link ConfigurationItem}
      * @return boolean <code>true</code> if the view should display a success message */
     public boolean save(final ConfigurationItem inConfiguration) {
         configHelper = new ConfigurationHelper(inConfiguration);
-        final boolean outShowSuccess = inConfiguration.saveChanges();
 
         switch (configHelper.getConfigurationTask()) {
         case DB:
@@ -91,7 +91,7 @@ public class ConfigTask extends AbstractWebController implements
         case NONE:
         default:
         }
-        return outShowSuccess;
+        return inConfiguration.saveChanges();
     }
 
     private void handleDBAccess(final ConfigurationHelper inHelper) {
@@ -126,7 +126,7 @@ public class ConfigTask extends AbstractWebController implements
                 }
                 return;
             }
-        } catch (final Exception exc) {
+        } catch (final Exception exc) { // NOPMD
             handleFailureRestore();
         }
         // in case of a simple switch of a fully configured DB, we only need to
@@ -142,7 +142,7 @@ public class ConfigTask extends AbstractWebController implements
     }
 
     @Override
-    public void workflowExit(final int inReturnCode, final String inMessage) {
+    public void workflowExit(final int inReturnCode, final String inMessage) { // NOPMD
         // error case
         if (inReturnCode == DBAccessWorkflow.ERROR) {
             handleFailureRestore();
@@ -155,24 +155,21 @@ public class ConfigTask extends AbstractWebController implements
     @SuppressWarnings("serial")
     private void displayDBConfigFeedback() {
         final IMessages lMessages = Activator.getMessages();
-        final BlankPopup lFeedback = new BlankPopup(
-                lMessages.getMessage("admin.config.sub.database"), 320, 180); //$NON-NLS-1$
-        lFeedback.setClosable(false);
-        lFeedback
-                .addComponent(new Label(
-                        lMessages.getMessage("admin.config.success.db.index"), ContentMode.HTML)); //$NON-NLS-1$
+        final VerticalLayout lLayout = AbstractConfigurationPopup.createLayout();
+        lLayout.addComponent(new Label(
+                lMessages.getMessage("admin.config.success.db.index"), ContentMode.HTML));
+
         final Button lOk = new Button(
                 lMessages.getMessage("admin.config.button.feedback")); //$NON-NLS-1$
         lOk.setClickShortcut(KeyCode.ENTER);
         lOk.addClickListener(new Button.ClickListener() {
             @Override
-            public void buttonClick(final ClickEvent inEvent) {
+            public void buttonClick(final ClickEvent inEvent) { // NOPMD
                 logout();
             }
         });
-        lFeedback.addComponent(lOk);
-
-        lFeedback.show();
+        lLayout.addComponent(lOk);
+        Popup.newPopup(lMessages.getMessage("admin.config.sub.database"), lLayout, 320, 180).setClosable(false).build();
     }
 
 }

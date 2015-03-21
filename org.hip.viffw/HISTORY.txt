@@ -3,6 +3,47 @@ $Id: HISTORY.txt,v 1.4 2006/07/11 12:43:53 aktion-hip Exp $
 VIF framework: HISTORY
 ======================
 
+Release 1.3.0:
+==============
+- Added proper sematic versioning to all exportet packages.
+- Improved code quality using PMD.
+- Replaced all occurrences of Vector by ArrayList.
+
+Release 1.2.1:
+==============
+- Added proper semantic versioning to Manifest.mf.
+- org.hip.kernel.bom.model.TypeDef: adjusted values of valueTypes array.
+
+Release 1.2.0:
+==============
+- Replaced DB provider service by OSGi DB access service.
+- Removed VIF logging in favor of SLF4J logging.
+
+Release 1.1.3:
+==============
+- InObjectImpl: Made class correctly working with generics. Added constructor with collection parameter.
+- KeyObjectImpl, ValueForSQL: Improved behavior, classes convert passed collections to InObjectImpl internally.
+- VSys: replaced JUL by slf4j.Logger.
+
+Release 1.1.2:
+==============
+- HtmlView: Using the servlet's writer to stream the view, for that the view's encoding is handled correctly.
+- Made DomainObjects returning entry id as Long.
+- Mails can be sent as html.
+- Added possibility to select distinct rows and to create joins based on composed foreign keys.
+- Added possibility to upload files using apache.commons.fileupload.
+
+Release 1.1.1:
+==============
+- Added Object SQLNull to make statement like '... WHERE column IS NULL' possible.
+- Added org.hip.kernel.bom.QueryResult.load() with additional parameter MaxEntries.
+- Improved org.hip.kernel.bom.impl.AbstractDomainObjectHome.select() with GroupByObject parameter.
+- Improved org.hip.kernel.bom.impl.DomainObjectImpl.loadFromResultSet() for calculated fields.
+- org.hip.kernel.servlet.Context: Added setter/getter for MIMEFile.
+- org.hip.kernel.servlet.MIMEFile: Added methods getFileName(), getMIMEType() and getLength().
+- Refactoring org.hip.kernel.servlet.impl.AbstractRequestHandler: factored out protected method writeToResponse().
+- Refactoring: moved framework constants to new class org.hip.kernel.sys.VSysConstants.
+
 Release 1.1:
 ==============
 - Made VIF Framework an OSGi bundle.

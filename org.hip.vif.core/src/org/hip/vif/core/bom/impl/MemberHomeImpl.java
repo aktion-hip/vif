@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the persistency layer of the application VIF.
-	Copyright (C) 2001, Benno Luthiger
+	Copyright (C) 2001-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ package org.hip.vif.core.bom.impl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import org.hip.kernel.bom.BOMInvalidKeyException;
 import org.hip.kernel.bom.BOMNotFoundException;
@@ -36,18 +35,13 @@ import org.hip.vif.core.bom.MemberHome;
 import org.hip.vif.core.exc.BOMChangeValueException;
 import org.hip.vif.core.exc.InvalidAuthenticationException;
 import org.hip.vif.core.member.IMemberInformation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** This domain object home implements the MemberHome interface.
  *
  * @author: Benno Luthiger
  * @see org.hip.vif.core.bom.MemberHome */
 @SuppressWarnings("serial")
-public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome {
-    private static final Logger LOG = LoggerFactory
-            .getLogger(MemberHomeImpl.class);
-
+public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome { // NOPMD by lbenno
     /* Key for error message invalid user */
     protected static final String INVALID_USER_ERROR_MESSAG_KEY = "org.hip.vif.errmsg.input.invalidUserId";
     /* Key for error message invalid key */
@@ -69,14 +63,14 @@ public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome {
             + "		</keyDef>	\n"
             + "	</keyDefs>	\n"
             + "	<propertyDefs>	\n"
-            + "		<propertyDef propertyName='"
+            + "		<propertyDef propertyName='" // NOPMD by lbenno
             + KEY_ID
             + "' valueType='Long' propertyType='simple'>	\n"
             + "			<mappingDef tableName='tblMember' columnName='MEMBERID'/>	\n"
-            + "		</propertyDef>	\n"
+            + "		</propertyDef>	\n" // NOPMD by lbenno
             + "		<propertyDef propertyName='"
             + KEY_USER_ID
-            + "' valueType='String' propertyType='simple'>	\n"
+            + "' valueType='String' propertyType='simple'>	\n" // NOPMD by lbenno
             + "			<mappingDef tableName='tblMember' columnName='SUSERID'/>	\n"
             + "		</propertyDef>	\n"
             + "		<propertyDef propertyName='"
@@ -145,13 +139,8 @@ public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome {
             + "			<mappingDef tableName='tblMember' columnName='DTMUTATION'/>	\n"
             + "		</propertyDef>			\n" + "	</propertyDefs>	\n" + "</objectDef>";
 
-    /** MemberHomeImpl default constructor. */
-    public MemberHomeImpl() {
-        super();
-    }
-
     @Override
-    public Member checkAuthentication(final String inUserID,
+    public Member checkAuthentication(final String inUserID, // NOPMD by lbenno
             final String inPassword) throws InvalidAuthenticationException,
             BOMChangeValueException {
         // create a key for the UserID
@@ -167,27 +156,16 @@ public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome {
                 return lMember;
             }
         } catch (final BOMNotFoundException exc) {
-            logInvalidAuthentication(inUserID);
-            throw new InvalidAuthenticationException(
+            throw new InvalidAuthenticationException( // NOPMD
                     "org.hip.vif.errmsg.input.invalidUserId", VSys.dftLocale);
         } catch (final VException exc) {
-            logInvalidAuthentication(inUserID);
-            throw new InvalidAuthenticationException(
+            throw new InvalidAuthenticationException( // NOPMD
                     "org.hip.vif.errmsg.input.invalidUserId", VSys.dftLocale);
         }
     }
 
-    private void logInvalidAuthentication(final String inUserID) {
-        final StringBuilder lLog = new StringBuilder(
-                "Note: Invalid try to authenticate:\n");
-        lLog.append("   User: ").append(inUserID).append("\n");
-        // TODO
-        //		lLog.append("   IP number: ").append(((WebBrowser) ApplicationData.getWindow().getTerminal()).getAddress()).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
-        LOG.warn(new String(lLog));
-    }
-
     @Override
-    protected Vector<Object> createTestObjects() {
+    protected ArrayList<Object> createTestObjects() { // NOPMD by lbenno
         return null;
     }
 
@@ -199,7 +177,7 @@ public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome {
     @Override
     public Member getMember(final String inMemberID)
             throws BOMInvalidKeyException {
-        return getMember(new Long(inMemberID));
+        return getMember(Long.parseLong(inMemberID));
     }
 
     /** Returns the member identified by the specified ID
@@ -216,7 +194,7 @@ public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome {
             lKey.setValue(KEY_ID, inMemberID);
             return (Member) findByKey(lKey);
         } catch (final VException exc) {
-            throw new BOMInvalidKeyException(exc.getMessage());
+            throw new BOMInvalidKeyException(exc.getMessage(), exc);
         }
     }
 
@@ -233,7 +211,7 @@ public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome {
             lKeyMemberID.setValue(KEY_USER_ID, inUserID);
             return (Member) findByKey(lKeyMemberID);
         } catch (final VException exc) {
-            throw new BOMInvalidKeyException(exc.getMessage());
+            throw new BOMInvalidKeyException(exc.getMessage(), exc);
         }
     }
 
@@ -247,7 +225,7 @@ public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome {
         for (final Long lMemberID : inMemberIDs) {
             try {
                 outMembers.add(getMember(lMemberID));
-            } catch (final BOMInvalidKeyException exc) {
+            } catch (final BOMInvalidKeyException exc) { // NOPMD by lbenno
                 // left blank intentionally
             }
         }
@@ -272,7 +250,7 @@ public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome {
     }
 
     @Override
-    public Member updateMemberCache(final IMemberInformation inInformation)
+    public Member updateMemberCache(final IMemberInformation inInformation) // NOPMD by lbenno
             throws SQLException, VException {
         try {
             final Member outMember = getMemberByUserID(inInformation

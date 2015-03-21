@@ -37,7 +37,7 @@ import org.xml.sax.SAXException;
 public class DataHouseKeeper {
     private static final Logger LOG = LoggerFactory.getLogger(DataHouseKeeper.class);
     private static final int SLEEP_PERIOD = 50; // milliseconds 50 200
-    private static final String EMBEDDED_DERBY = "org.apache.derby.jdbc.EmbeddedDriver/Derby (embedded)/10.5.1.1";
+    private static final String EMBEDDED_DERBY = "org.apache.derby.jdbc.EmbeddedDriver/Derby (embedded)/10.9.1.0_1";
 
     private static DataHouseKeeper singleton = new DataHouseKeeper();
 

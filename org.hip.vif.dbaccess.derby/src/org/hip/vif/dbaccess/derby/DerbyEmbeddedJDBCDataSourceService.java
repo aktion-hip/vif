@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.dbaccess.derby;
 
@@ -33,83 +33,72 @@ import org.apache.derby.jdbc.EmbeddedDriver;
 import org.apache.derby.jdbc.EmbeddedXADataSource;
 import org.osgi.service.jdbc.DataSourceFactory;
 
-/**
- * The Derby data source provider service in case of an embedded Derby DB.
- * 
- * @author Luthiger
- * Created: 29.01.2012
- */
-public class DerbyEmbeddedJDBCDataSourceService implements DataSourceFactory {
-	
-	/**
-	 * Starts the service.
-	 * 
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws ClassNotFoundException
-	 */
-	public void start() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-		Class<?> lClass = Class.forName(Constants.DRIVER_NAME_EMBEDDED);
-		lClass.newInstance();
-	}	
+/** The Derby data source provider service in case of an embedded Derby DB.
+ *
+ * @author Luthiger Created: 29.01.2012 */
+public class DerbyEmbeddedJDBCDataSourceService implements DataSourceFactory { // NOPMD
 
-	/* (non-Javadoc)
-	 * @see org.osgi.service.jdbc.DataSourceFactory#createDataSource(java.util.Properties)
-	 */
-	public DataSource createDataSource(Properties inProperties) throws SQLException {
-		EmbeddedDataSource outSource = new EmbeddedDataSource();
-		setup(outSource, inProperties);
-		return outSource;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.osgi.service.jdbc.DataSourceFactory#createConnectionPoolDataSource(java.util.Properties)
-	 */
-	public ConnectionPoolDataSource createConnectionPoolDataSource(Properties inProperties) throws SQLException {
-		EmbeddedConnectionPoolDataSource outSource = new EmbeddedConnectionPoolDataSource();
-		setup(outSource, inProperties);
-		return outSource;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.osgi.service.jdbc.DataSourceFactory#createXADataSource(java.util.Properties)
-	 */
-	public XADataSource createXADataSource(Properties inProperties) throws SQLException {
-		EmbeddedXADataSource outSource = new EmbeddedXADataSource();
-		setup(outSource, inProperties);
-		return outSource;
-	}
+    /** Starts the service.
+     *
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws ClassNotFoundException */
+    public void start() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+        final Class<?> lClass = Class.forName(Constants.DRIVER_NAME_EMBEDDED);
+        lClass.newInstance();
+    }
 
-	/* (non-Javadoc)
-	 * @see org.osgi.service.jdbc.DataSourceFactory#createDriver(java.util.Properties)
-	 */
-	public Driver createDriver(Properties inProperties) throws SQLException {
-		return new EmbeddedDriver();
-	}
-	
-	protected void setup(EmbeddedDataSource inSource, Properties inProperties) {
-		if (inProperties == null) {
-			return;
-		}
-		if (inProperties.containsKey(DataSourceFactory.JDBC_DATABASE_NAME)) {
-			inSource.setDatabaseName(inProperties.getProperty(DataSourceFactory.JDBC_DATABASE_NAME));
-			inSource.setCreateDatabase("create");
-		}
-		if (inProperties.containsKey(DataSourceFactory.JDBC_DATASOURCE_NAME)) {
-			//not supported?
-		}
-		if (inProperties.containsKey(DataSourceFactory.JDBC_DESCRIPTION)) {
-			//not supported?
-		}
-		if (inProperties.containsKey(DataSourceFactory.JDBC_NETWORK_PROTOCOL)) {
-			//not supported?
-		}
-		if (inProperties.containsKey(DataSourceFactory.JDBC_PASSWORD)) {
-			inSource.setPassword(inProperties.getProperty(DataSourceFactory.JDBC_PASSWORD));
-		}
-		if (inProperties.containsKey(DataSourceFactory.JDBC_USER)) {
-			inSource.setUser(inProperties.getProperty(DataSourceFactory.JDBC_USER));
-		}
-	}
+    @Override
+    public DataSource createDataSource(final Properties inProperties) throws SQLException { // NOPMD
+        final EmbeddedDataSource outSource = new EmbeddedDataSource();
+        setup(outSource, inProperties);
+        return outSource;
+    }
+
+    @Override
+    public ConnectionPoolDataSource createConnectionPoolDataSource(final Properties inProperties) throws SQLException { // NOPMD
+        final EmbeddedConnectionPoolDataSource outSource = new EmbeddedConnectionPoolDataSource();
+        setup(outSource, inProperties);
+        return outSource;
+    }
+
+    @Override
+    public XADataSource createXADataSource(final Properties inProperties) throws SQLException { // NOPMD
+        final EmbeddedXADataSource outSource = new EmbeddedXADataSource();
+        setup(outSource, inProperties);
+        return outSource;
+    }
+
+    @Override
+    public Driver createDriver(final Properties inProperties) throws SQLException { // NOPMD
+        return new EmbeddedDriver();
+    }
+
+    /** @param inSource {@link EmbeddedDataSource}
+     * @param inProperties {@link Properties} */
+    protected void setup(final EmbeddedDataSource inSource, final Properties inProperties) {
+        if (inProperties == null) {
+            return;
+        }
+        if (inProperties.containsKey(DataSourceFactory.JDBC_DATABASE_NAME)) {
+            inSource.setDatabaseName(inProperties.getProperty(DataSourceFactory.JDBC_DATABASE_NAME));
+            inSource.setCreateDatabase("create");
+        }
+        if (inProperties.containsKey(DataSourceFactory.JDBC_DATASOURCE_NAME)) {
+            // not supported?
+        }
+        if (inProperties.containsKey(DataSourceFactory.JDBC_DESCRIPTION)) {
+            // not supported?
+        }
+        if (inProperties.containsKey(DataSourceFactory.JDBC_NETWORK_PROTOCOL)) {
+            // not supported?
+        }
+        if (inProperties.containsKey(DataSourceFactory.JDBC_PASSWORD)) {
+            inSource.setPassword(inProperties.getProperty(DataSourceFactory.JDBC_PASSWORD));
+        }
+        if (inProperties.containsKey(DataSourceFactory.JDBC_USER)) {
+            inSource.setUser(inProperties.getProperty(DataSourceFactory.JDBC_USER));
+        }
+    }
 
 }

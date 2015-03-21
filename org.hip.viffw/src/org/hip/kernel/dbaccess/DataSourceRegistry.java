@@ -51,8 +51,6 @@ public enum DataSourceRegistry {
     private static final Logger LOG = LoggerFactory.getLogger(DataSourceRegistry.class);
 
     private final Map<String, FactoryProperties> factories = new ConcurrentHashMap<String, FactoryProperties>(); // NOPMD
-                                                                                                                 // by
-                                                                                                                 // lbenno
     private DBAccessConfiguration activeConfiguration;
     private DataSourceFactory activeFactory = new NOOpFactory();
 
@@ -171,6 +169,10 @@ public enum DataSourceRegistry {
         }
 
         if (NOOpFactory.class.equals(activeFactory.getClass())) {
+            if (activeConfiguration.getDBSourceID() == null) {
+                throw new VException(String.format("Configuration problem: no data access bundle provided for \"%s\".",
+                        activeConfiguration.getDBSourceID()));
+            }
             final FactoryProperties lFactory = factories.get(activeConfiguration.getDBSourceID());
             if (lFactory == null) {
                 throw new VException(String.format("Configuration problem: no data access bundle provided for \"%s\".",

@@ -20,28 +20,29 @@ package org.hip.vif.core.exc;
 
 import org.hip.kernel.bom.BOMException;
 
-/**
- * This exception is used whenever an exception caused by changing a domain
- * objects values occurs.
- * 
- * @author: Benno Luthiger
- */
+/** This exception is used whenever an exception caused by changing a domain objects values occurs.
+ *
+ * @author: Benno Luthiger */
 @SuppressWarnings("serial")
 public class BOMChangeValueException extends BOMException {
-	/**
-	 * BOMChangeValueException constructor comment.
-	 */
-	public BOMChangeValueException() {
-		super();
-	}
+    /** BOMChangeValueException constructor. */
+    public BOMChangeValueException() {
+        super();
+    }
 
-	/**
-	 * BOMChangeValueException constructor comment.
-	 * 
-	 * @param inMessage
-	 *            java.lang.String
-	 */
-	public BOMChangeValueException(final String inMessage) {
-		super(inMessage);
-	}
+    /** BOMChangeValueException constructor.
+     * 
+     * @param inMessage java.lang.String */
+    public BOMChangeValueException(final String inMessage) {
+        super(inMessage);
+    }
+
+    /** BOMChangeValueException constructor.
+     * 
+     * @param inMessage {@link String}
+     * @param inExc {@link Throwable} */
+    public BOMChangeValueException(final String inMessage, final Throwable inExc) {
+        super(inMessage, inExc);
+    }
+
 }

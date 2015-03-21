@@ -1,6 +1,6 @@
 /**
 	This package is part of the application VIF.
-	Copyright (C) 2011-2014, Benno Luthiger
+	Copyright (C) 2011-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@
 package org.hip.vif.web.usertasks;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.Map;
-import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.hip.kernel.exc.VException;
 
@@ -35,7 +35,7 @@ import com.vaadin.ui.Component;
 public enum UsertasksRegistry {
     INSTANCE;
 
-    private final Map<String, IUserTask> registry = new Hashtable<String, IUserTask>();
+    private final Map<String, IUserTask> registry = new ConcurrentHashMap<String, IUserTask>(); // NOPMD
 
     /** Checks whether the user with the specified ID has open tasks.
      *
@@ -58,11 +58,10 @@ public enum UsertasksRegistry {
      * @return {@link Collection} of <code>Component</code>
      * @throws SQLException
      * @throws VException */
-    public Collection<Component> getTasksViews(final Long inMemberID) throws Exception {
-        final Collection<Component> outViews = new Vector<Component>();
+    public Collection<Component> getTasksViews(final Long inMemberID) throws VException, SQLException {
+        final Collection<Component> outViews = new ArrayList<Component>();
         for (final IUserTask lTask : registry.values()) {
             if (lTask.isOpen(inMemberID)) {
-                // lTask.setEventAdmin(inEventAdmin);
                 outViews.addAll(lTask.createUserTaskViews(inMemberID));
             }
         }

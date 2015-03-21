@@ -1,174 +1,198 @@
-/*
-	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+/**
+    This package is part of the application VIF.
+    Copyright (C) 2014, Benno Luthiger
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 package org.hip.vif.web.components;
 
 import java.io.IOException;
 
-import org.hip.vif.core.util.EmbeddedDBHelper;
 import org.hip.vif.web.Activator;
 import org.hip.vif.web.tasks.DBAccessWorkflowItems.ShowConfigPopup;
+import org.hip.vif.web.util.ConfigViewHelper;
+import org.hip.vif.web.util.ConfigViewHelper.IConfigForm;
 import org.hip.vif.web.util.ConfigurationItem;
 import org.hip.vif.web.util.DBDriverSelect;
-import org.hip.vif.web.util.VIFViewHelper;
+import org.hip.vif.web.util.DBDriverSelect.DBDriverBean;
 import org.ripla.interfaces.IMessages;
-import org.ripla.web.util.GenericSelect.IProcessor;
+import org.ripla.web.util.AbstractFormCreator;
 import org.ripla.web.util.LabelValueTable;
+import org.ripla.web.util.Popup;
 
-import com.vaadin.data.Property;
-import com.vaadin.data.Validator.InvalidValueException;
+import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.data.util.BeanItem;
+import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Form;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 
 /** Child window displaying the field for that the SU can provide the information for initial DB access configuration.
  *
- * @author Luthiger Created: 08.02.2012 */
-@SuppressWarnings("serial")
+ * @author lbenno */
 public class DBConfigurationPopup extends AbstractConfigurationPopup {
     private static final int WIDTH = 300;
 
-    private int counter = 0;
-
-    /** Constructor.
+    /** DBConfigurationPopup constructor.
      *
-     * @param inShowConfigPopup {@link ShowConfigPopup}
+     * @param inShowConfigPopup {@link ShowConfigPopup} the workflow item
      * @throws IOException */
-    public DBConfigurationPopup(final ShowConfigPopup inShowConfigPopup) throws IOException {
-        final Window lPopup = createPopup(Activator.getMessages().getMessage("config.label.db.title")); //$NON-NLS-1$
-        lPopup.setWidth(700, Unit.PIXELS);
-        lPopup.setHeight(300, Unit.PIXELS);
-
-        final VerticalLayout lLayout = createLayout((VerticalLayout) lPopup.getContent());
+    public DBConfigurationPopup(final ShowConfigPopup inShowConfigPopup) throws IOException { // NOPMD
+        super();
+        final VerticalLayout lLayout = createLayout();
         lLayout.addComponent(getDBAccessConfig(ConfigurationItem.createConfiguration(), inShowConfigPopup));
-        lLayout.addComponent(createCloseButton());
-        UI.getCurrent().addWindow(lPopup);
+        Popup.displayPopup(Activator.getMessages().getMessage("config.label.db.title"), lLayout, 670, 270);
     }
 
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings("serial")
     private VerticalLayout getDBAccessConfig(final ConfigurationItem inConfiguration, final ShowConfigPopup inController) {
         final IMessages lMessages = Activator.getMessages();
 
         final VerticalLayout outLayout = new VerticalLayout();
-        final LabelValueTable lTable = new LabelValueTable();
-        // TODO
-        final Form lForm = new Form();
-        lForm.setValidationVisible(true);
 
-        counter = 0;
-
-        final TextField lServer = createInput(ConfigurationItem.PropertyDef.DB_SERVER, inConfiguration);
-        final String lServerField = lMessages.getMessage("config.label.db.server"); //$NON-NLS-1$
-        final TextField lSchema = createInput(ConfigurationItem.PropertyDef.DB_SCHEMA, inConfiguration);
-        final String lSchemaField = lMessages.getMessage("config.label.db.schema"); //$NON-NLS-1$
-        final TextField lUser = createInput(ConfigurationItem.PropertyDef.DB_USER, inConfiguration);
-        final String lUserField = lMessages.getMessage("config.label.db.user"); //$NON-NLS-1$
-        final TextField lPassword = createInput(ConfigurationItem.PropertyDef.DB_PASSWD, inConfiguration);
-        final String lPasswordField = lMessages.getMessage("config.label.db.password"); //$NON-NLS-1$
-
-        final IProcessor lProcessor = new IProcessor() {
-            @Override
-            public void process(final String inItemID) {
-                final boolean lEnabled = !EmbeddedDBHelper.checkEmbedded(inItemID);
-                decorateField(lServer, lEnabled, lMessages, lServerField);
-                decorateField(lSchema, lEnabled, lMessages, lSchemaField);
-                decorateField(lUser, lEnabled, lMessages, lUserField);
-                decorateField(lPassword, lEnabled, lMessages, lPasswordField);
-            }
-        };
-        final Property<String> lDriver = inConfiguration.getItemProperty(ConfigurationItem.PropertyDef.DB_DRIVER
-                .getPID());
-        final ComboBox lSelect = DBDriverSelect.getDBDriverSelection(lDriver, WIDTH, false, lProcessor);
-        lSelect.focus();
-        lTable.addRow(
-                lMessages.getMessage("config.label.db.driver"), createInput(lSelect, "config.desc.db.driver", lMessages, lForm)); //$NON-NLS-1$ //$NON-NLS-2$
-        final boolean lEnabled = !EmbeddedDBHelper.checkEmbedded(lDriver.getValue().toString());
-        lTable.addRow(lServerField, addToForm(decorateField(lServer, lEnabled, lMessages, lSchemaField), lForm));
-        lTable.addRow(lSchemaField, addToForm(decorateField(lSchema, lEnabled, lMessages, lServerField), lForm));
-        lTable.addRow(lUserField, addToForm(decorateField(lUser, lEnabled, lMessages, lUserField), lForm));
-        lTable.addRow(lPasswordField, addToForm(decorateField(lPassword, lEnabled, lMessages, lPasswordField), lForm));
-        lTable.addEmtpyRow();
-
-        lForm.getLayout().addComponent(lTable);
-        outLayout.addComponent(lForm);
+        final FormCreator lForm = new FormCreator(inConfiguration);
+        outLayout.addComponent(lForm.createForm());
 
         final Button lSave = new Button(lMessages.getMessage("config.button.save")); //$NON-NLS-1$
         lSave.addClickListener(new Button.ClickListener() {
             @Override
-            public void buttonClick(final ClickEvent inEvent) {
+            public void buttonClick(final ClickEvent inEvent) { // NOPMD
                 try {
                     lForm.commit();
                     inController.save(inConfiguration);
-                }
-                catch (final InvalidValueException exc) {
+                } catch (final CommitException exc) { // NOPMD
                     // intentionally left empty
                 }
             }
         });
-        lTable.addRow(lSave);
+        lSave.setClickShortcut(KeyCode.ENTER);
+        lSave.setImmediate(true);
+        outLayout.addComponent(lSave);
 
-        outLayout.addComponent(lTable);
         return outLayout;
     }
 
-    private HorizontalLayout createInput(final AbstractField inInput, final String inMsgKey,
-            final IMessages inMessages, final Form inForm) {
-        final HorizontalLayout out = new HorizontalLayout();
-        out.setSizeFull();
-        inForm.addField(String.valueOf(++counter), inInput);
-        out.addComponent(inInput);
+    // ---
 
-        final Label lDescription = new Label(String.format(VIFViewHelper.TMPL_TITLE,
-                "vif-contribution-date", inMessages.getMessage(inMsgKey)), Label.CONTENT_XHTML); //$NON-NLS-1$
-        out.addComponent(lDescription);
-        out.setExpandRatio(lDescription, 1);
-        return out;
+    private class FormCreator extends AbstractFormCreator implements IConfigForm { // NOPMD
+
+        /** @param inItem */
+        public FormCreator(final ConfigurationItem inConfiguration) {
+            super(new BeanItem<ConfigurationBean>(new ConfigurationBean(inConfiguration)));
+        }
+
+        @Override
+        protected Component createTable() { // NOPMD
+            final IMessages lMessages = Activator.getMessages();
+            final LabelValueTable outTable = new LabelValueTable();
+
+            final ConfigViewHelper lViewHelper = new ConfigViewHelper(this);
+            final ComboBox lSelect = DBDriverSelect.getDBDriverSelection(WIDTH, false, lViewHelper.createProcessor());
+            addField(ConfigurationBean.KEY_DB_DRIVER, lSelect);
+            outTable.addRow(
+                    lMessages.getMessage("config.label.db.driver"), lViewHelper.createInput(lSelect, "config.desc.db.driver", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+            outTable.addRow(lViewHelper.getServerField(), lViewHelper.getServer());
+            outTable.addRow(lViewHelper.getSchemaField(), lViewHelper.getSchema());
+            outTable.addRow(lViewHelper.getUserField(), lViewHelper.getUser());
+            outTable.addRow(lViewHelper.getPasswordField(), lViewHelper.getPassword());
+            outTable.addEmtpyRow();
+
+            return outTable;
+        }
+
+        @Override
+        public Field<?> prepareField(final AbstractField<?> inInput, final String inKey, // NOPMD
+                final String inRequiredFieldLbl) {
+            inInput.setWidth(WIDTH, Unit.PIXELS);
+            inInput.setStyleName("vif-input-config"); //$NON-NLS-1$
+            if (inRequiredFieldLbl == null) {
+                addField(inKey, inInput);
+            }
+            else {
+                addFieldRequired(inKey, inInput, inRequiredFieldLbl);
+            }
+            return inInput;
+        }
     }
 
-    private TextField createInput(final ConfigurationItem.PropertyDef inPropertyDef,
-            final ConfigurationItem inConfiguration) {
-        final TextField out = new TextField(inConfiguration.getItemProperty(inPropertyDef.getPID()));
-        out.setWidth(WIDTH, Unit.PIXELS);
-        out.setStyleName("vif-input-config"); //$NON-NLS-1$
-        out.setImmediate(true);
-        return out;
-    }
+    /** The bean wrapping the configuration. */
+    public static class ConfigurationBean {
+        protected static final String KEY_DB_DRIVER = "dbDriver";
+        // protected static final String KEY_DB_SERVER = "dbServer";
+        // protected static final String KEY_DB_SCHEMA = "dbSchema";
+        // protected static final String KEY_DB_USER = "dbUser";
+        // protected static final String KEY_DB_PASSWD = "dbPasswd";
 
-    private AbstractField addToForm(final AbstractField inInput, final Form inForm) {
-        inForm.addField(String.valueOf(++counter), inInput);
-        return inInput;
-    }
+        private transient final ConfigurationItem configuration;
 
-    private AbstractField decorateField(final AbstractField inInput, final boolean inEnable,
-            final IMessages inMessages, final String inFieldName) {
-        inInput.setRequired(inEnable);
-        inInput.setRequiredError(inMessages.getFormattedMessage("errmsg.error.not.empty", inFieldName)); //$NON-NLS-1$
-        inInput.setEnabled(inEnable);
-        return inInput;
+        /** ConfigurationBean constructor.
+         *
+         * @param inConfiguration {@link ConfigurationItem} the wrapped configuration */
+        protected ConfigurationBean(final ConfigurationItem inConfiguration) {
+            configuration = inConfiguration;
+        }
+
+        private String getPropertyValue(final String inId) {
+            return configuration.getItemProperty(inId).getValue().toString();
+        }
+
+        @SuppressWarnings("unchecked")
+        private void setPropertyValue(final String inId, final String inValue) {
+            configuration.getItemProperty(inId).setValue(inValue);
+        }
+
+        public DBDriverBean getDbDriver() { // NOPMD
+            return DBDriverSelect.createDriverBean(getPropertyValue(ConfigurationItem.PropertyDef.DB_DRIVER.getPID()));
+        }
+
+        public void setDbDriver(final DBDriverBean inValue) { // NOPMD
+            setPropertyValue(ConfigurationItem.PropertyDef.DB_DRIVER.getPID(), inValue == null ? "" : inValue.getID());
+        }
+
+        public String getDbServer() { // NOPMD
+            return getPropertyValue(ConfigurationItem.PropertyDef.DB_SERVER.getPID());
+        }
+
+        public void setDbServer(final String inValue) { // NOPMD
+            setPropertyValue(ConfigurationItem.PropertyDef.DB_SERVER.getPID(), inValue);
+        }
+
+        public String getDbSchema() { // NOPMD
+            return getPropertyValue(ConfigurationItem.PropertyDef.DB_SCHEMA.getPID());
+        }
+
+        public void setDbSchema(final String inValue) { // NOPMD
+            setPropertyValue(ConfigurationItem.PropertyDef.DB_SCHEMA.getPID(), inValue);
+        }
+
+        public String getDbUser() { // NOPMD
+            return getPropertyValue(ConfigurationItem.PropertyDef.DB_USER.getPID());
+        }
+
+        public void setDbUser(final String inValue) { // NOPMD
+            setPropertyValue(ConfigurationItem.PropertyDef.DB_USER.getPID(), inValue);
+        }
+
+        public String getDbPasswd() { // NOPMD
+            return getPropertyValue(ConfigurationItem.PropertyDef.DB_PASSWD.getPID());
+        }
     }
 
 }

@@ -56,10 +56,10 @@ public class DBAccessConfiguration {
         password = inPassword;
 
         state = State.NEW;
-        if (dbSourceID != null && dbSourceID.length() != 0) {
+        if (dbSourceID != null && !dbSourceID.isEmpty()) {
             state = State.INITIALIZED;
-            if (server != null && server.length() != 0 &&
-                    schema != null && schema.length() != 0) {
+            if (server != null && !server.isEmpty() &&
+                    schema != null && !schema.isEmpty()) {
                 state = State.CONFIGURED;
             }
         }
@@ -103,7 +103,7 @@ public class DBAccessConfiguration {
     }
 
     @Override
-    public String toString() { // NOPMD by lbenno 
+    public String toString() { // NOPMD by lbenno
         return String.format("DBAccessConfiguration[server=%s, schema=%s, user=%s]", server, schema, user);
     }
 

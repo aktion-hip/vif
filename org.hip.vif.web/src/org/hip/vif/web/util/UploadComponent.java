@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-package org.hip.vif.web.util;
+package org.hip.vif.web.util; // NOPMD
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,7 +47,6 @@ import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptAll;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
-import com.vaadin.server.Sizeable;
 import com.vaadin.server.StreamVariable;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -73,7 +72,7 @@ import com.vaadin.ui.Upload.SucceededEvent;
  *
  * @author Luthiger Created: 17.08.2011 */
 @SuppressWarnings("serial")
-public class UploadComponent extends CustomComponent {
+public class UploadComponent extends CustomComponent { // NOPMD
     private static final Logger LOG = LoggerFactory
             .getLogger(UploadComponent.class);
 
@@ -99,6 +98,7 @@ public class UploadComponent extends CustomComponent {
      * @throws SQLException */
     public UploadComponent(final QueryResult inDownloads,
             final IBibliographyTask inTask) throws VException, SQLException {
+        super();
         hasDownloads = false;
         dialog = createDialog(inTask);
 
@@ -120,7 +120,7 @@ public class UploadComponent extends CustomComponent {
             final DownloadFileLink lDownloadLink = new DownloadFileLink(
                     BeanWrapperHelper.getString(DownloadTextHome.KEY_LABEL,
                             lDownload), BeanWrapperHelper.getLong(
-                                    DownloadTextHome.KEY_ID, lDownload));
+                            DownloadTextHome.KEY_ID, lDownload));
             layout.addComponent(downloadDelete);
             layout.addComponent(lDownloadLink);
             lLast = lDownloadLink;
@@ -136,7 +136,7 @@ public class UploadComponent extends CustomComponent {
                 lMessages.getMessage("ui.button.delete.file")); //$NON-NLS-1$
         outDelete.addClickListener(new Button.ClickListener() {
             @Override
-            public void buttonClick(final ClickEvent inEvent) {
+            public void buttonClick(final ClickEvent inEvent) { // NOPMD
                 if (inTask.deleteDownloads()) {
                     // update view component
                     layout.removeAllComponents();
@@ -158,7 +158,7 @@ public class UploadComponent extends CustomComponent {
         return outLayout;
     }
 
-    private void addComponents(final Component... inComponents) {
+    private void addComponents(final Component... inComponents) { // NOPMD
         for (final Component lComponent : inComponents) {
             layout.addComponent(lComponent);
         }
@@ -176,7 +176,7 @@ public class UploadComponent extends CustomComponent {
                         lMessages.getMessage("ui.upload.dialog.title"), lMessages.getMessage("ui.upload.dialog.question")); //$NON-NLS-1$ //$NON-NLS-2$
         outDialog.addYesListener(new Button.ClickListener() {
             @Override
-            public void buttonClick(final ClickEvent inEvent) {
+            public void buttonClick(final ClickEvent inEvent) { // NOPMD
                 dialog.setVisible(false);
                 checkUploadState();
                 if (tempUpload != null) {
@@ -186,7 +186,7 @@ public class UploadComponent extends CustomComponent {
         });
         outDialog.addNoListener(new Button.ClickListener() {
             @Override
-            public void buttonClick(final ClickEvent inEvent) {
+            public void buttonClick(final ClickEvent inEvent) { // NOPMD
                 dialog.setVisible(false);
                 checkUploadState();
                 handleDeleteTemp();
@@ -220,12 +220,12 @@ public class UploadComponent extends CustomComponent {
         final DragAndDropWrapper outDrop = new DragAndDropWrapper(lDropPane);
         outDrop.setDropHandler(new DropHandler() {
             @Override
-            public AcceptCriterion getAcceptCriterion() {
+            public AcceptCriterion getAcceptCriterion() { // NOPMD
                 return AcceptAll.get();
             }
 
             @Override
-            public void drop(final DragAndDropEvent inEvent) {
+            public void drop(final DragAndDropEvent inEvent) { // NOPMD
                 final Transferable lTransferable = inEvent.getTransferable();
                 if (lTransferable instanceof WrapperTransferable) {
                     final Html5File[] lFiles = ((WrapperTransferable) lTransferable)
@@ -245,10 +245,10 @@ public class UploadComponent extends CustomComponent {
 
     private Upload createUpload(final IBibliographyTask inTask) {
         final Upload outUpload = new Upload();
-        outUpload.setWidth(SIZE_UNDEFINED, Sizeable.Unit.POINTS);
+        outUpload.setWidthUndefined();
         outUpload.setReceiver(new Upload.Receiver() {
             @Override
-            public OutputStream receiveUpload(final String inFilename,
+            public OutputStream receiveUpload(final String inFilename, // NOPMD
                     final String inMimeType) {
                 return createStream(inFilename);
             }
@@ -261,10 +261,10 @@ public class UploadComponent extends CustomComponent {
 
         outUpload.addStartedListener(new Upload.StartedListener() {
             @Override
-            public void uploadStarted(final StartedEvent inEvent) {
+            public void uploadStarted(final StartedEvent inEvent) { // NOPMD
                 fileInfo = new FileInfo(inEvent.getFilename(), inEvent
                         .getMIMEType());
-                tempUpload = null;
+                tempUpload = null; // NOPMD
                 uploadFinished = false;
                 outUpload.setVisible(false);
                 if (hasDownloads) {
@@ -274,14 +274,14 @@ public class UploadComponent extends CustomComponent {
         });
         outUpload.addFinishedListener(new Upload.FinishedListener() {
             @Override
-            public void uploadFinished(final FinishedEvent inEvent) {
+            public void uploadFinished(final FinishedEvent inEvent) { // NOPMD
                 uploadFinished = true;
                 outUpload.setVisible(true);
             }
         });
         outUpload.addSucceededListener(new Upload.SucceededListener() {
             @Override
-            public void uploadSucceeded(final SucceededEvent inEvent) {
+            public void uploadSucceeded(final SucceededEvent inEvent) { // NOPMD
                 if (!hasDownloads) {
                     handleUpload(inTask, false);
                 }
@@ -289,7 +289,7 @@ public class UploadComponent extends CustomComponent {
         });
         outUpload.addFailedListener(new Upload.FailedListener() {
             @Override
-            public void uploadFailed(final FailedEvent inEvent) {
+            public void uploadFailed(final FailedEvent inEvent) { // NOPMD
                 handleDeleteTemp();
             }
         });
@@ -297,19 +297,19 @@ public class UploadComponent extends CustomComponent {
         return outUpload;
     }
 
-    private StreamVariable createStreamVariable(final String inFileName,
+    private StreamVariable createStreamVariable(final String inFileName, // NOPMD
             final IBibliographyTask inTask) {
         return new StreamVariable() {
             @Override
-            public OutputStream getOutputStream() {
+            public OutputStream getOutputStream() { // NOPMD
                 return createStream(inFileName);
             }
 
             @Override
-            public void streamingStarted(final StreamingStartEvent inEvent) {
+            public void streamingStarted(final StreamingStartEvent inEvent) { // NOPMD
                 fileInfo = new FileInfo(inEvent.getFileName(),
                         inEvent.getMimeType());
-                tempUpload = null;
+                tempUpload = null; // NOPMD
                 uploadFinished = false;
                 upload.setVisible(false);
                 if (hasDownloads) {
@@ -318,7 +318,7 @@ public class UploadComponent extends CustomComponent {
             }
 
             @Override
-            public void streamingFinished(final StreamingEndEvent inEvent) {
+            public void streamingFinished(final StreamingEndEvent inEvent) { // NOPMD
                 uploadFinished = true;
                 upload.setVisible(true);
                 if (!hasDownloads) {
@@ -327,21 +327,22 @@ public class UploadComponent extends CustomComponent {
             }
 
             @Override
-            public void streamingFailed(final StreamingErrorEvent inEvent) {
+            public void streamingFailed(final StreamingErrorEvent inEvent) { // NOPMD
                 handleDeleteTemp();
             }
 
             @Override
-            public void onProgress(final StreamingProgressEvent inEvent) {
+            public void onProgress(final StreamingProgressEvent inEvent) { // NOPMD
+                // intentionally left empty
             }
 
             @Override
-            public boolean listenProgress() {
+            public boolean listenProgress() { // NOPMD
                 return false;
             }
 
             @Override
-            public boolean isInterrupted() {
+            public boolean isInterrupted() { // NOPMD
                 return false;
             }
         };
@@ -362,7 +363,7 @@ public class UploadComponent extends CustomComponent {
         if (tempUpload.length() > getMaxSize() * MEGA) {
             handleDeleteTemp();
             Notification
-            .show(lMessages.getFormattedMessage("errmsg.upload.exceeded", getMaxSize()), Notification.Type.WARNING_MESSAGE);//$NON-NLS-1$
+                    .show(lMessages.getFormattedMessage("errmsg.upload.exceeded", getMaxSize()), Notification.Type.WARNING_MESSAGE);//$NON-NLS-1$
             return;
         }
         try {
@@ -371,7 +372,7 @@ public class UploadComponent extends CustomComponent {
             if (lDownloadID == 0) {
                 // show error notification
                 Notification
-                .show(lMessages.getMessage("errmsg.save.general"), Notification.Type.ERROR_MESSAGE);//$NON-NLS-1$
+                        .show(lMessages.getMessage("errmsg.save.general"), Notification.Type.ERROR_MESSAGE);//$NON-NLS-1$
             } else {
                 // update download layout
                 hasDownloads = true;
@@ -381,7 +382,7 @@ public class UploadComponent extends CustomComponent {
             }
         } catch (final ProhibitedFileException exc) {
             Notification
-            .show(lMessages.getMessage("errmsg.upload.prohibited"), Notification.Type.ERROR_MESSAGE);//$NON-NLS-1$
+                    .show(lMessages.getMessage("errmsg.upload.prohibited"), Notification.Type.ERROR_MESSAGE);//$NON-NLS-1$
         }
     }
 
@@ -408,7 +409,7 @@ public class UploadComponent extends CustomComponent {
     }
 
     @Override
-    public void attach() {
+    public void attach() { // NOPMD
         super.attach();
         if (hasDownloads) {
             dialog.setVisible(false);
@@ -420,16 +421,16 @@ public class UploadComponent extends CustomComponent {
     }
 
     @Override
-    public void detach() {
+    public void detach() { // NOPMD
         super.detach();
         dialog.close();
     }
 
     // ---
 
-    private static class NoOpStream extends OutputStream {
+    private static class NoOpStream extends OutputStream { // NOPMD
         @Override
-        public void write(final int inByte) throws IOException {
+        public void write(final int inByte) throws IOException { // NOPMD
             // No operation
         }
     }
@@ -438,8 +439,8 @@ public class UploadComponent extends CustomComponent {
      *
      * @author Luthiger Created: 22.08.2011 */
     private static class FileInfo {
-        String fileName;
-        String mimeType;
+        private final String fileName;
+        private final String mimeType;
 
         FileInfo(final String inFileName, final String inMimeType) {
             fileName = inFileName;

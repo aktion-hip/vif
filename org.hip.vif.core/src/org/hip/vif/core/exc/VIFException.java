@@ -23,179 +23,134 @@ import java.util.Locale;
 import org.hip.kernel.exc.ExceptionData;
 import org.ripla.exceptions.RiplaException;
 
-/**
- * Base exception class for the VIF application.
- * 
- * @author lbenno
- */
+/** Base exception class for the VIF application.
+ *
+ * @author lbenno */
 @SuppressWarnings("serial")
 public class VIFException extends RiplaException {
 
-	private Throwable rootCause;
-	private ExceptionData exceptionData = null;
+    private Throwable rootCause;
+    private ExceptionData exceptionData;
 
-	/**
-	 * @param inSimpleMessage
-	 */
-	public VIFException() {
-		super("");
-	}
+    /** @param inSimpleMessage */
+    public VIFException() {
+        super("");
+    }
 
-	/**
-	 * @param inSimpleMessage
-	 */
-	public VIFException(final String inSimpleMessage) {
-		super("");
-		exceptionData = new ExceptionData(this, inSimpleMessage);
-	}
+    /** @param inSimpleMessage */
+    public VIFException(final String inSimpleMessage) {
+        super("");
+        exceptionData = new ExceptionData(this, inSimpleMessage);
+    }
 
-	/**
-	 * @param inMsgKey
-	 * @param inLocale
-	 */
-	public VIFException(final String inMsgKey, final Locale inLocale) {
-		this(inMsgKey, null, inLocale);
-	}
+    /** @param inMsgKey
+     * @param inLocale */
+    public VIFException(final String inMsgKey, final Locale inLocale) {
+        this(inMsgKey, null, inLocale);
+    }
 
-	/**
-	 * VException constructor with message key and parameters
-	 * 
-	 * @param inMsgKey
-	 *            java.lang.String The key of the error message in the ressource
-	 *            bundle.
-	 * @param inMsgParameters
-	 *            java.lang.Object[]
-	 */
-	public VIFException(final String inMsgKey, final Object[] inMsgParameters) {
-		this((String) null, inMsgKey, inMsgParameters);
-	}
+    /** VException constructor with message key and parameters
+     *
+     * @param inMsgKey java.lang.String The key of the error message in the ressource bundle.
+     * @param inMsgParameters java.lang.Object[] */
+    public VIFException(final String inMsgKey, final Object... inMsgParameters) {
+        this((String) null, inMsgKey, inMsgParameters);
+    }
 
-	/**
-	 * VException constructor with message key, parameters and application
-	 * context
-	 * 
-	 * @param inMsgKey
-	 *            String The key of the error message in the resource bundle.
-	 * @param inMsgParameters
-	 *            java.lang.Object[]
-	 * @param inLocale
-	 *            Locale
-	 */
-	public VIFException(final String inMsgKey, final Object[] inMsgParameters,
-			final Locale inLocale) {
-		this((String) null, inMsgKey, inMsgParameters);
-		exceptionData.setLocale(inLocale);
-	}
+    /** VException constructor with message key, parameters and application context
+     *
+     * @param inMsgKey String The key of the error message in the resource bundle.
+     * @param inMsgParameters java.lang.Object[]
+     * @param inLocale Locale */
+    public VIFException(final String inMsgKey, final Object[] inMsgParameters,
+            final Locale inLocale) {
+        this((String) null, inMsgKey, inMsgParameters);
+        exceptionData.setLocale(inLocale);
+    }
 
-	/**
-	 * VException constructor with message source, key and parameters
-	 * 
-	 * @param inMsgSource
-	 *            java.lang.String The source the error happened.
-	 * @param inMsgKey
-	 *            java.lang.String The key of the error message in the ressource
-	 *            bundle.
-	 * @param inMsgParameters
-	 *            java.lang.Object[]
-	 */
-	public VIFException(final String inMsgSource, final String inMsgKey,
-			final Object[] inMsgParameters) {
-		super("");
-		exceptionData = new ExceptionData(this, inMsgSource, inMsgKey,
-				inMsgParameters);
-	}
+    /** VException constructor with message source, key and parameters
+     *
+     * @param inMsgSource java.lang.String The source the error happened.
+     * @param inMsgKey java.lang.String The key of the error message in the ressource bundle.
+     * @param inMsgParameters java.lang.Object[] */
+    public VIFException(final String inMsgSource, final String inMsgKey,
+            final Object... inMsgParameters) {
+        super("");
+        exceptionData = new ExceptionData(this, inMsgSource, inMsgKey,
+                inMsgParameters);
+    }
 
-	/**
-	 * Returns the original exception if any.
-	 * 
-	 * @return java.lang.Throwable
-	 */
-	public final Throwable getRootCause() {
-		return rootCause;
-	}
+    /** Returns the original exception if any.
+     *
+     * @return java.lang.Throwable */
+    public final Throwable getRootCause() {
+        return rootCause;
+    }
 
-	/**
-	 * Returns true if this exception contains a root cause exception.
-	 * 
-	 * @return boolean
-	 */
-	public boolean hasRootCause() {
-		return rootCause != null;
-	}
+    /** Returns true if this exception contains a root cause exception.
+     *
+     * @return boolean */
+    public boolean hasRootCause() {
+        return rootCause != null;
+    }
 
-	/**
-	 * Setter for the root cause exception.
-	 * 
-	 * @param inRootCause
-	 *            java.lang.Throwable
-	 */
-	public synchronized void setRootCause(final Throwable inRootCause) {
-		rootCause = inRootCause;
-	}
+    /** Setter for the root cause exception.
+     *
+     * @param inRootCause java.lang.Throwable */
+    public void setRootCause(final Throwable inRootCause) {
+        rootCause = inRootCause;
+    }
 
-	/**
-	 * A hook to allow subclasses to define their own ExceptionData classes.
-	 * 
-	 * @return org.hip.kernel.exc.ExceptionData
-	 */
-	protected ExceptionData createExceptionData() {
-		return new ExceptionData(this);
-	}
+    /** A hook to allow subclasses to define their own ExceptionData classes.
+     *
+     * @return org.hip.kernel.exc.ExceptionData */
+    protected ExceptionData createExceptionData() {
+        return new ExceptionData(this);
+    }
 
-	/**
-	 * Creates the ExceptionData
-	 * 
-	 * @return org.hip.kernel.exc.ExceptionData
-	 */
-	private ExceptionData excData() {
-		if (exceptionData == null) {
-			exceptionData = createExceptionData();
-		}
-		return exceptionData;
-	}
+    /** Creates the ExceptionData
+     *
+     * @return org.hip.kernel.exc.ExceptionData */
+    private ExceptionData excData() {
+        if (exceptionData == null) {
+            exceptionData = createExceptionData();
+        }
+        return exceptionData;
+    }
 
-	/**
-	 * Returns the message localized according to the actual language setting
-	 * 
-	 * @return java.lang.String
-	 */
-	@Override
-	public String getLocalizedMessage() {
-		return excData().getLocalizedMessage();
-	}
+    /** Returns the message localized according to the actual language setting
+     *
+     * @return java.lang.String */
+    @Override
+    public String getLocalizedMessage() {
+        return excData().getLocalizedMessage();
+    }
 
-	/**
-	 * Returns the message localized according to the specified language
-	 * 
-	 * @return java.lang.String
-	 * @param inLanguage
-	 *            java.util.Locale
-	 */
-	public String getLocalizedMessage(final Locale inLanguage) {
-		return excData().getLocalizedMessage(inLanguage);
-	}
+    /** Returns the message localized according to the specified language
+     *
+     * @return java.lang.String
+     * @param inLanguage java.util.Locale */
+    public String getLocalizedMessage(final Locale inLanguage) {
+        return excData().getLocalizedMessage(inLanguage);
+    }
 
-	/**
-	 * Returns the exception's message
-	 * 
-	 * @return java.lang.String
-	 */
-	@Override
-	public String getMessage() {
-		return excData().getMessage();
-	}
+    /** Returns the exception's message
+     *
+     * @return java.lang.String */
+    @Override
+    public String getMessage() {
+        return excData().getMessage();
+    }
 
-	/**
-	 * We override this method to invoke the getMessage.
-	 * 
-	 * @return java.lang.String
-	 */
-	@Override
-	public String toString() {
-		final String lMessage = (excData().get(ExceptionData.DATA_MSG_KEY) == null) ? excData()
-				.getMessage() : excData().get(ExceptionData.DATA_MSG_KEY)
-				.toString();
-		return String.format("%s: %s", this.getClass().getName(), lMessage);
-	}
+    /** We override this method to invoke the getMessage.
+     *
+     * @return java.lang.String */
+    @Override
+    public String toString() {
+        final String lMessage = (excData().get(ExceptionData.DATA_MSG_KEY) == null) ? excData()
+                .getMessage() : excData().get(ExceptionData.DATA_MSG_KEY)
+                .toString();
+                return String.format("%s: %s", this.getClass().getName(), lMessage);
+    }
 
 }
