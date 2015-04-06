@@ -17,7 +17,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-package org.hip.vif.admin.permissions.tasks;
+package org.hip.vif.admin.permissions.tasks; // NOPMD
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,7 +31,6 @@ import org.hip.kernel.bom.Home;
 import org.hip.kernel.bom.QueryResult;
 import org.hip.kernel.code.CodeList;
 import org.hip.kernel.code.CodeListHome;
-import org.hip.kernel.code.CodeListNotFoundException;
 import org.hip.kernel.exc.VException;
 import org.hip.kernel.sys.VSys;
 import org.hip.vif.admin.permissions.Activator;
@@ -44,7 +43,6 @@ import org.hip.vif.core.bom.LinkPermissionRoleHome;
 import org.hip.vif.core.bom.Permission;
 import org.hip.vif.core.bom.PermissionHome;
 import org.hip.vif.core.bom.impl.LinkPermissionRoleAlternate;
-import org.hip.vif.core.exc.BOMChangeValueException;
 import org.hip.vif.core.exc.ExternIDNotUniqueException;
 import org.hip.vif.web.tasks.AbstractWebController;
 import org.ripla.annotations.UseCaseController;
@@ -56,20 +54,20 @@ import com.vaadin.ui.Component;
 
 /** Task to edit permissions and their associations to rules.
  *
- * @author Luthiger Created: 14.12.2011 */
+ * @author Luthiger */
 @UseCaseController
-public class PermissionsEditTask extends AbstractWebController {
+public class PermissionsEditTask extends AbstractWebController { // NOPMD
     private static final Logger LOG = LoggerFactory.getLogger(PermissionsEditTask.class);
 
-    private LoadedPermissionContainer permissions;
+    private transient LoadedPermissionContainer permissions;
 
     @Override
-    protected String needsPermission() {
+    protected String needsPermission() { // NOPMD
         return Constants.PERMISSION_EDIT;
     }
 
     @Override
-    protected Component runChecked() throws RiplaException {
+    protected Component runChecked() throws RiplaException { // NOPMD
         try {
             emptyContextMenu();
 
@@ -78,13 +76,7 @@ public class PermissionsEditTask extends AbstractWebController {
             permissions = LoadedPermissionContainer.createData(
                     BOMHelper.getPermissionHome().select(createOrder("ID", true)), retrieveAssociations()); //$NON-NLS-1$
             return new PermissionEditView(permissions, lRoles, this);
-        } catch (final SQLException exc) {
-            throw createContactAdminException(exc);
-        } catch (final CodeListNotFoundException exc) {
-            throw createContactAdminException(exc);
-        } catch (final BOMException exc) {
-            throw createContactAdminException(exc);
-        } catch (final VException exc) {
+        } catch (final SQLException | VException exc) {
             throw createContactAdminException(exc);
         }
     }
@@ -100,7 +92,7 @@ public class PermissionsEditTask extends AbstractWebController {
         final QueryResult lContent = ((DomainObjectHome) lHome).select();
         final Collection<AlternativeModel> outContent = lContent.load(new AlternativeModelFactory() {
             @Override
-            public AlternativeModel createModel(final ResultSet inResultSet) throws SQLException {
+            public AlternativeModel createModel(final ResultSet inResultSet) throws SQLException { // NOPMD
                 return new LinkPermissionRoleAlternate(inResultSet.getLong(LinkPermissionRoleHome.KEY_PERMISSION_ID),
                         inResultSet.getLong(LinkPermissionRoleHome.KEY_ROLE_ID));
             }
@@ -115,7 +107,7 @@ public class PermissionsEditTask extends AbstractWebController {
         try {
             final PermissionHome lPermissionHome = BOMHelper.getPermissionHome();
             final LinkPermissionRoleHome lLinkHome = BOMHelper.getLinkPermissionRoleHome();
-            int i = 0;
+            int i = 0; // NOPMD
             for (final LoadedPermissionBean lPermission : permissions.getItemIds()) {
                 if (lPermission.isChecked()) {
                     final Long lPermissionID = lPermission.getPermissionID();
@@ -127,9 +119,7 @@ public class PermissionsEditTask extends AbstractWebController {
             showNotification(Activator.getMessages().getFormattedMessage("msg.permissions.deleted", i)); //$NON-NLS-1$
             sendEvent(PermissionsEditTask.class);
             return true;
-        } catch (final VException exc) {
-            LOG.error("Error encountered while deleting the permission!", exc); //$NON-NLS-1$
-        } catch (final SQLException exc) {
+        } catch (final VException | SQLException exc) {
             LOG.error("Error encountered while deleting the permission!", exc); //$NON-NLS-1$
         }
         return false;
@@ -141,18 +131,22 @@ public class PermissionsEditTask extends AbstractWebController {
     public boolean saveChanges() {
         try {
             final LinkPermissionRoleHome lLinkHome = BOMHelper.getLinkPermissionRoleHome();
+            boolean lDoRefresh = false;
             for (final LoadedPermissionBean lPermission : permissions.getItemIds()) {
                 if (lPermission.isDirty()) {
                     final Long lPermissionID = lPermission.getPermissionID();
                     lLinkHome.delete(lPermissionID);
                     createAssociations(lPermission, lPermissionID, lLinkHome);
+                    lDoRefresh = true;
                 }
+            }
+            if (lDoRefresh) {
+                refreshPermissions();
+                refreshBody();
             }
             showNotification(Activator.getMessages().getMessage("msg.permissions.saved")); //$NON-NLS-1$
             return true;
-        } catch (final VException exc) {
-            LOG.error("Error encountered while saving the changes!", exc); //$NON-NLS-1$
-        } catch (final SQLException exc) {
+        } catch (final VException | SQLException exc) {
             LOG.error("Error encountered while saving the changes!", exc); //$NON-NLS-1$
         }
         return false;
@@ -181,14 +175,11 @@ public class PermissionsEditTask extends AbstractWebController {
             showNotification(Activator.getMessages().getFormattedMessage("msg.permissions.added", inLabel)); //$NON-NLS-1$
             sendEvent(PermissionsEditTask.class);
             return true;
-        } catch (final BOMChangeValueException exc) {
-            LOG.error("Error encountered while creating the permission!", exc); //$NON-NLS-1$
-        } catch (final ExternIDNotUniqueException exc) {
-            throw exc;
         } catch (final BOMException exc) {
             LOG.error("Error encountered while creating the permission!", exc); //$NON-NLS-1$
+        } catch (final ExternIDNotUniqueException exc) { // NOPMD
+            throw exc;
         }
         return false;
     }
-
 }

@@ -45,14 +45,13 @@ public class VIFEventDispatcher extends AbstractVIFEventDispatcher implements IV
 
     @Override
     public void dispatch(final Event inType, final Map<String, Object> inProperties) { // NOPMD
-        // TODO Auto-generated method stub
         switch (inType) {
-        case SEND:
-            //
+        case REFRESH_AUTHORIZATION:
+            ((AdminApplication) application).refreshPermissions();
             break;
         case LOOKUP:
             final LinkButtonHelper.LookupType lType = (LookupType) inProperties
-            .get(AbstractWebController.EVENT_PROPERTY_LOOKUP_TYPE);
+                    .get(AbstractWebController.EVENT_PROPERTY_LOOKUP_TYPE);
             LOG.debug("Lookup event {}.", lType);
             final AbstractWebController lController = (AbstractWebController) inProperties
                     .get(AbstractWebController.EVENT_PROPERTY_LOOKUP_CONTROLLER);

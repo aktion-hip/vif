@@ -19,8 +19,8 @@
 
 package org.hip.vif.admin.admin.ui;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import org.hip.vif.admin.admin.Activator;
 import org.hip.vif.admin.admin.Constants;
@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.server.Page;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -48,13 +49,14 @@ public class ReindexView extends AbstractAdminView {
     private static final Logger LOG = LoggerFactory.getLogger(ReindexView.class);
 
     private static final String FORMAT_LABEL = "<div class=\"vif-check-label\">%s</div>"; //$NON-NLS-1$
-    private final Collection<CheckBox> checkBoxes = new Vector<CheckBox>();
+    private final Collection<CheckBox> checkBoxes = new ArrayList<CheckBox>();
     private final Button reindex;
 
     /** Constructor
-     * 
+     *
      * @param inTask {@link RefreshIndexTask} */
     public ReindexView(final RefreshIndexTask inTask) {
+        super();
         final IMessages lMessages = Activator.getMessages();
         final VerticalLayout lLayout = initLayout(lMessages, "admin.reindex.title.page"); //$NON-NLS-1$
 
@@ -78,12 +80,13 @@ public class ReindexView extends AbstractAdminView {
         reindex.setEnabled(false);
         reindex.addClickListener(new Button.ClickListener() {
             @Override
-            public void buttonClick(final ClickEvent inEvent) {
+            public void buttonClick(final ClickEvent inEvent) { // NOPMD
                 try {
                     final String lFeedback = inTask.reindex(checkBoxes);
-                    Notification.show(lFeedback, Type.TRAY_NOTIFICATION);
+                    new Notification(lMessages.getMessage("admin.reindex.check.content"), lFeedback,
+                            Type.TRAY_NOTIFICATION, true).show(Page.getCurrent());
                 }
-                catch (final Exception exc) {
+                catch (final Exception exc) { // NOPMD
                     LOG.error("Error encountered during search index refresh!", exc);
                     Notification.show(
                             lMessages.getMessage("errmsg.reindex"), Type.WARNING_MESSAGE); //$NON-NLS-1$
@@ -101,7 +104,7 @@ public class ReindexView extends AbstractAdminView {
         outCheckBox.setImmediate(true);
         outCheckBox.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
-            public void valueChange(final ValueChangeEvent inEvent) {
+            public void valueChange(final ValueChangeEvent inEvent) { // NOPMD
                 for (final CheckBox lCheckBox : checkBoxes) {
                     final Boolean lValue = lCheckBox.getValue();
                     if (lValue != null && lValue.booleanValue()) {

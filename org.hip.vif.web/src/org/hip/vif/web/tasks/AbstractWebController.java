@@ -219,6 +219,11 @@ public abstract class AbstractWebController extends AbstractController implement
         getDispatcher().dispatch(Event.SEND, lProperties);
     }
 
+    /** Refresh the application's permissions. */
+    protected void refreshPermissions() {
+        getDispatcher().dispatch(Event.REFRESH_AUTHORIZATION, new ConcurrentHashMap<String, Object>());
+    }
+
     /** Use Vaadin event service to call a lookup window.
      *
      * @param inType {@link LookupType} the type of lookup

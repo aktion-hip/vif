@@ -43,10 +43,10 @@ import com.vaadin.ui.Component;
  * @author Luthiger */
 @SuppressWarnings("serial")
 public class VIFRequestHandler extends RiplaRequestHandler implements RequestHandler {
-    private static final String TMPL_REQUEST_URL = "%s?%s=%s&%s=%s"; //$NON-NLS-1$
+    private static final String TMPL_REQUEST_URL = "%s?%s=%s"; //$NON-NLS-1$
 
     @Override
-    protected IRequestParameter createRequestParameter(final String inControllerName) {
+    protected IRequestParameter createRequestParameter(final String inControllerName) { // NOPMD
         return new RequestParameter(inControllerName);
     }
 
@@ -75,23 +75,28 @@ public class VIFRequestHandler extends RiplaRequestHandler implements RequestHan
      * @return the bookmarkable URL to the view of the specified task */
     public static String createRequestedURL(final Class<? extends IPluggable> inTask, final boolean inIsForum,
             final String inKey, final Long inValue) {
-        return String.format(TMPL_REQUEST_URL,
+        final String out = String.format(TMPL_REQUEST_URL,
                 inIsForum ? VIFAppHelper.getMainForumURL() : VIFAppHelper.getMainAdminURL(),
-                org.ripla.web.Constants.KEY_REQUEST_PARAMETER,
-                UseCaseHelper.createFullyQualifiedControllerName(inTask),
-                inKey, inValue.toString());
+                        org.ripla.web.Constants.KEY_REQUEST_PARAMETER,
+                        UseCaseHelper.createFullyQualifiedControllerName(inTask));
+        if (inValue == null) {
+            return out;
+        }
+        return out + "&" + inKey + "=" + inValue.toString();
     }
 
     // ---
 
+    /** Helper class. */
     private static class RequestParameter extends DftRequestParameter {
 
+        /** @param inControllerName String */
         public RequestParameter(final String inControllerName) {
             super(inControllerName);
         }
 
         @Override
-        public void handleParameters(final VaadinSession inSession, final VaadinRequest inRequest,
+        public void handleParameters(final VaadinSession inSession, final VaadinRequest inRequest, // NOPMD
                 final VaadinResponse inResponse) {
             final String lGroupID = inRequest.getParameter(ApplicationConstants.KEY_GROUP_ID);
             if (lGroupID != null) {
@@ -108,7 +113,7 @@ public class VIFRequestHandler extends RiplaRequestHandler implements RequestHan
         }
 
         @Override
-        public boolean process(final IBodyComponent inBody) {
+        public boolean process(final IBodyComponent inBody) { // NOPMD
             final Component component = getComponent(getControllerName());
             if (component != null) {
                 inBody.setContentView(component);

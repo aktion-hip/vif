@@ -48,6 +48,8 @@ import org.hip.vif.web.components.CreateSUPopup;
 import org.hip.vif.web.components.DBConfigurationPopup;
 import org.hip.vif.web.interfaces.IVIFEventDispatcher;
 import org.hip.vif.web.util.ConfigurationItem;
+import org.hip.vif.web.util.RoleHelper;
+import org.osgi.service.useradmin.UserAdmin;
 import org.ripla.interfaces.IMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -272,6 +274,13 @@ public class DBAccessWorkflowItems {
             IWorkflowItem {
         protected transient int returnCode = DBAccessWorkflow.ERROR;
         private transient CreateSUPopup createView;
+        private final transient UserAdmin userAdmin;
+
+        /** @param inUserAdmin */
+        public CreateSU(final UserAdmin inUserAdmin) {
+            super();
+            userAdmin = inUserAdmin;
+        }
 
         @SuppressWarnings("serial")
         @Override
@@ -328,6 +337,7 @@ public class DBAccessWorkflowItems {
         private void loginAsSU(final Member inMember, final String inPwrd)
                 throws InvalidAuthenticationException, VException,
                 SQLException, GettingException {
+            RoleHelper.createRolesAndPermissions(userAdmin);
             final Map<String, Object> lProperties = new ConcurrentHashMap<String, Object>(2); // NOPMD
             lProperties.put(AbstractWebController.EVENT_PROPERTY_LOGIN_USER, inMember.get(MemberHome.KEY_USER_ID)
                     .toString());
@@ -351,6 +361,11 @@ public class DBAccessWorkflowItems {
     /** Step to display the form to create the application's SU (the super user).<br />
      * This step doesn't process the SU login. Instead, a notification for a new login is displayed. */
     public static class CreateSUNoLogin extends CreateSU { // NOPMD
+
+        /** CreateSUNoLogin constructor. */
+        public CreateSUNoLogin() {
+            super(null);
+        }
 
         @Override
         public void save(final Member inMember) { // NOPMD

@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of application VIF.
-	Copyright (C) 2003, Benno Luthiger
+	Copyright (C) 2003-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ import org.hip.vif.core.bom.ParticipantHome;
  *
  * @author Benno Luthiger */
 @SuppressWarnings("serial")
-public class JoinParticipantToGroupHome extends JoinedDomainObjectHomeImpl {
+public class JoinParticipantToGroupHome extends JoinedDomainObjectHomeImpl { // NOPMD
     // Every home has to know the class it handles. They provide access to
     // this name through the method <I>getObjectClassName</I>;
     private final static String JOIN_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinParticipantToGroup";
@@ -47,13 +47,13 @@ public class JoinParticipantToGroupHome extends JoinedDomainObjectHomeImpl {
                     "<joinedObjectDef objectName='JoinParticipantToGroup' parent='org.hip.kernel.bom.ReadOnlyDomainObject' version='1.0'>	\n"
                     +
                     "	<columnDefs>	\n" +
-                    "		<columnDef columnName='"
+                    "		<columnDef columnName='" // NOPMD
                     + ParticipantHome.KEY_MEMBER_ID
                     + "' domainObject='org.hip.vif.core.bom.impl.ParticipantImpl'/>	\n"
                     +
                     "		<columnDef columnName='"
                     + GroupHome.KEY_ID
-                    + "' domainObject='org.hip.vif.core.bom.impl.GroupImpl'/>	\n"
+                    + "' domainObject='org.hip.vif.core.bom.impl.GroupImpl'/>	\n" // NOPMD
                     +
                     "		<columnDef columnName='"
                     + GroupHome.KEY_NAME
@@ -103,11 +103,6 @@ public class JoinParticipantToGroupHome extends JoinedDomainObjectHomeImpl {
                     "		</joinCondition>	\n" +
                     "	</joinDef>	\n" +
                     "</joinedObjectDef>";
-
-    /** Constructor for JoinParticipantToGroupHome. */
-    public JoinParticipantToGroupHome() {
-        super();
-    }
 
     /** @see org.hip.kernel.bom.GeneralDomainObjectHome#getObjectClassName() */
     @Override

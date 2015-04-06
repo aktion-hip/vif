@@ -62,6 +62,7 @@ public class ForumApplication extends RiplaApplication { // NOPMD
 
     @Override
     protected void beforeInitializeLayout() { // NOPMD
+        VIFAppHelper.initializeContext();
         Page.getCurrent().setTitle(APP_NAME);
 
         eventDispatcher = new VIFEventDispatcher();
@@ -72,7 +73,7 @@ public class ForumApplication extends RiplaApplication { // NOPMD
         } finally {
             VaadinSession.getCurrent().getLockInstance().unlock();
         }
-
+        initializePermissions();
         super.beforeInitializeLayout();
     }
 
@@ -86,7 +87,12 @@ public class ForumApplication extends RiplaApplication { // NOPMD
     private Locale getUserLocale(final User inUser) {
         try {
             final Member lMember = BOMHelper.getMemberHome().getMemberByUserID(inUser.getName());
-            return new Locale((String) lMember.get(MemberHome.KEY_LANGUAGE));
+            final Object lLanguage = lMember.get(MemberHome.KEY_LANGUAGE);
+            if (lLanguage == null) {
+                LOG.error("Error encountered while looking up the user's language!");
+                return getLocale();
+            }
+            return new Locale((String) lLanguage);
         } catch (final Exception exc) { // NOPMD
             LOG.error("Error encountered while looking up the user's language!", exc);
         }
@@ -125,27 +131,17 @@ public class ForumApplication extends RiplaApplication { // NOPMD
     }
 
     @Override
-    public void setUserAdmin(final UserAdmin inUserAdmin) { // NOPMD
-        super.setUserAdmin(inUserAdmin);
-
-        VIFAppHelper.initializeContext();
-        try {
-            RoleHelper.createRolesAndPermissions(inUserAdmin);
-            initializePermissions();
-        } catch (final SQLException exc) {
-            LOG.error(
-                    "Error encountered while creating the OSGi roles for the VIF application!",
-                    exc);
-        } catch (final VException exc) {
-            LOG.error(
-                    "Error encountered while creating the OSGi roles for the VIF application!",
-                    exc);
-        }
-    }
-
-    @Override
     protected void initializePermissions() { // NOPMD
-        // we do nothing at the moment
+        final UserAdmin lUserAdmin = getUserAdmin();
+        if (lUserAdmin != null) {
+            try {
+                RoleHelper.createRolesAndPermissions(lUserAdmin);
+            } catch (SQLException | VException exc) {
+                LOG.error(
+                        "Error encountered while creating the OSGi roles for the VIF application!",
+                        exc);
+            }
+        }
         // super.initializePermissions();
     }
 

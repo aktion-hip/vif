@@ -54,18 +54,25 @@ public final class RoleHelper {
      * @throws VException */
     @SuppressWarnings("unchecked")
     public static void createRolesAndPermissions(final UserAdmin inUserAdmin) throws SQLException, VException {
-        createVIFRoles(inUserAdmin);
+        // first we create the roles as top level OSGi groups
+        if (createVIFRoles(inUserAdmin)) {
+            // leave, if roles and permissions are already initialized
+            return;
+        }
 
+        // then we create the permissions as second level OSGi groups
         final LinkPermissionRoleHome lLinkHome = BOMHelper.getLinkPermissionRoleHome();
         final QueryResult lPermissions = BOMHelper.getPermissionHome().select();
         while (lPermissions.hasMoreElements()) {
             final GeneralDomainObject lPermissionBOM = lPermissions.next();
+            // create the permission group, identified by the permission label
             final Group lPermission = (Group) inUserAdmin.createRole(
                     (String) lPermissionBOM.get(PermissionHome.KEY_LABEL), org.osgi.service.useradmin.Role.GROUP);
             if (lPermission != null) {
                 final Dictionary<String, String> lProperties = lPermission.getProperties();
                 lProperties.put(Constants.PERMISSION_DESCRIPTION_KEY,
                         (String) lPermissionBOM.get(PermissionHome.KEY_DESCRIPTION));
+                // retrieve the roles the permission is linked to
                 final Collection<Role> lRoles = lLinkHome.getRolesOf(Long.parseLong(lPermissionBOM.get(
                         PermissionHome.KEY_ID).toString()));
                 addRoles(inUserAdmin, lPermission, lRoles);
@@ -73,6 +80,11 @@ public final class RoleHelper {
         }
     }
 
+    /** We link the permission groups as members of the role groups.
+     *
+     * @param inUserAdmin {@link UserAdmin}
+     * @param inPermission {@link Group} the permission group to link to the role group
+     * @param inRoles Collection of VIF roles the permission group has to be added as member */
     private static void addRoles(final UserAdmin inUserAdmin, final Group inPermission, final Collection<Role> inRoles) {
         for (final Role lRole : inRoles) {
             final org.osgi.service.useradmin.Role lOSGiRole = inUserAdmin.getRole(lRole.getElementID());
@@ -82,24 +94,81 @@ public final class RoleHelper {
         }
     }
 
-    /** Creates OSGi roles for the VIF application.
+    /** Method to refresh the permissions, e.g. after the su changed the settings linking permissions to roles.
+     *
      *
      * @param inUserAdmin {@link UserAdmin}
+     * @throws VException
+     * @throws SQLException */
+    @SuppressWarnings("unchecked")
+    public static void refreshPermissions(final UserAdmin inUserAdmin) throws VException, SQLException {
+        final LinkPermissionRoleHome lLinkHome = BOMHelper.getLinkPermissionRoleHome();
+        final QueryResult lPermissions = BOMHelper.getPermissionHome().select();
+        while (lPermissions.hasMoreElements()) {
+            final GeneralDomainObject lPermissionBOM = lPermissions.next();
+            // create the permission group, identified by the permission label
+            final Group lPermission = (Group) inUserAdmin
+                    .getRole((String) lPermissionBOM.get(PermissionHome.KEY_LABEL));
+            if (lPermission != null) {
+                final Dictionary<String, String> lProperties = lPermission.getProperties();
+                lProperties.put(Constants.PERMISSION_DESCRIPTION_KEY,
+                        (String) lPermissionBOM.get(PermissionHome.KEY_DESCRIPTION));
+                // retrieve the roles the permission is linked to
+                final Collection<Role> lRoles = lLinkHome.getRolesOf(Long.parseLong(lPermissionBOM.get(
+                        PermissionHome.KEY_ID).toString()));
+                final Collection<org.osgi.service.useradmin.Role> lRolesNew = getRolesNew(lRoles, inUserAdmin);
+                final org.osgi.service.useradmin.Role[] lRolesOld = lPermission.getMembers();
+                for (final org.osgi.service.useradmin.Role lRoleOld : lRolesOld) {
+                    // if the new role is an old role, we ignore it
+                    if (lRolesNew.contains(lRoleOld)) {
+                        lRolesNew.remove(lRoleOld);
+                    }
+                    // else, the old role has to be removed
+                    else {
+                        lPermission.removeMember(lRoleOld);
+                    }
+                }
+                // finally, add the remaining new roles
+                for (final org.osgi.service.useradmin.Role lRoleNew : lRolesNew) {
+                    lPermission.addMember(lRoleNew);
+                }
+
+            }
+        }
+    }
+
+    private static Collection<org.osgi.service.useradmin.Role> getRolesNew(final Collection<Role> inRoles,
+            final UserAdmin inUserAdmin) {
+        final Collection<org.osgi.service.useradmin.Role> out = new ArrayList<org.osgi.service.useradmin.Role>(
+                inRoles.size());
+        for (final Role lRole : inRoles) {
+            out.add(inUserAdmin.getRole(lRole.getElementID()));
+        }
+        return out;
+    }
+
+    /** Create the VIF roles as top level OSGi groups.<br />
+     * Note: The role groups are identified by the <code>CodeID</code>.
+     *
+     * @param inUserAdmin {@link UserAdmin}
+     * @return boolean <code>true</code> if the roles and permissions are already initialized
      * @throws SQLException
      * @throws VException */
-    private static void createVIFRoles(final UserAdmin inUserAdmin)
+    private static boolean createVIFRoles(final UserAdmin inUserAdmin)
             throws SQLException, VException {
         final QueryResult lRoles = BOMHelper.getRoleHome().select();
+        boolean lDoCheck = true;
         while (lRoles.hasMoreElements()) {
             final String lGroupName = (String) lRoles.nextAsDomainObject().get(
                     RoleHome.KEY_CODE_ID);
-            final Group lGroup = (Group) inUserAdmin.createRole(lGroupName,
-                    org.osgi.service.useradmin.Role.GROUP);
-            if (lGroup != null) {
-                lGroup.addMember(inUserAdmin
-                        .getRole(org.osgi.service.useradmin.Role.USER_ANYONE));
+            if (lDoCheck && inUserAdmin.getRole(lGroupName) != null) {
+                return true;
             }
+            lDoCheck = false;
+            inUserAdmin.createRole(lGroupName, org.osgi.service.useradmin.Role.GROUP);
+
         }
+        return false;
     }
 
     /** Creates a OSGi user object for the specified VIF actor and assigns it the OSGi roles according to the user's VIF
@@ -129,14 +198,14 @@ public final class RoleHelper {
         final QueryResult lRoles = BOMHelper.getRoleHome().select();
         while (lRoles.hasMoreElements()) {
             final GeneralDomainObject lRole = lRoles.nextAsDomainObject();
-            final Group lGroup = (Group) inUserAdmin.getRole((String) lRole
-                    .get(RoleHome.KEY_DESCRIPTION));
-            if (lGroup != null
-                    && lRoleIds.contains(lRole.get(RoleHome.KEY_CODE_ID))) {
-                lGroup.addRequiredMember(lUser);
+            if (lRoleIds.contains(lRole.get(RoleHome.KEY_CODE_ID))) {
+                final Group lGroup = (Group) inUserAdmin.getRole((String) lRole
+                        .get(RoleHome.KEY_CODE_ID));
+                if (lGroup != null) {
+                    lGroup.addMember(lUser);
+                }
             }
         }
-
     }
 
     private static Collection<String> getRoleIds(final Long inMemberID)

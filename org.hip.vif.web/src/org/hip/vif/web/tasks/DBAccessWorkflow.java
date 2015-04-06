@@ -29,6 +29,7 @@ import org.hip.vif.web.tasks.DBAccessWorkflowItems.ShowConfigPopup;
 import org.hip.vif.web.tasks.DBAccessWorkflowItems.ShowLogin;
 import org.hip.vif.web.tasks.DBAccessWorkflowItems.TryConnect;
 import org.hip.vif.web.tasks.DBAccessWorkflowItems.WorkflowException;
+import org.osgi.service.useradmin.UserAdmin;
 import org.ripla.interfaces.IWorkflowListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,14 +62,16 @@ public final class DBAccessWorkflow {
     /** Creates the workflow for the initial DB access.
      *
      * @param inWorkflowListener {@link IWorkflowListener}
+     * @param inUserAdmin {@link UserAdmin}
      * @return {@link DBAccessWorkflow} */
-    public static DBAccessWorkflow getInitialWorkflow(final IWorkflowListener inWorkflowListener) {
+    public static DBAccessWorkflow getInitialWorkflow(final IWorkflowListener inWorkflowListener,
+            final UserAdmin inUserAdmin) {
         // instantiate the workflow steps we need
         final IWorkflowItem lShowDBConfig = new ShowConfigPopup();
         final IWorkflowItem lTryConnect = new TryConnect();
         final IWorkflowItem lCheckNoTables = new CheckNoTables();
         final IWorkflowItem lCreateTables = new CreateTables();
-        final IWorkflowItem lCreateSU = new CreateSU();
+        final IWorkflowItem lCreateSU = new CreateSU(inUserAdmin);
         final IWorkflowItem lCheckSUExistance = new CheckSUExistance();
         final IWorkflowItem lShowLogin = new ShowLogin();
 
@@ -94,10 +97,12 @@ public final class DBAccessWorkflow {
     /** The workflow to be used to guide the sysadmin through the step of SU creation.
      *
      * @param inWorkflowListener {@link IWorkflowListener}
+     * @param inUserAdmin {@link UserAdmin}
      * @return {@link DBAccessWorkflow} */
-    public static DBAccessWorkflow getInitialTblCreation(final IWorkflowListener inWorkflowListener) {
+    public static DBAccessWorkflow getInitialTblCreation(final IWorkflowListener inWorkflowListener,
+            final UserAdmin inUserAdmin) {
         final IWorkflowItem lCreateTables = new CreateTables();
-        final IWorkflowItem lCreateSU = new CreateSU();
+        final IWorkflowItem lCreateSU = new CreateSU(inUserAdmin);
         lCreateTables.registerSuccessItem(lCreateSU);
 
         final DBAccessWorkflow outWorkflow = new DBAccessWorkflow(

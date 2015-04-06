@@ -81,18 +81,18 @@ public class VMultiPartMessage { // NOPMD
         getContent().addBodyPart(lBodyPart);
     }
 
-    /** Returns array with addresses of the blind carbon copy recipiants
+    /** Returns array with addresses of the blind carbon copy recipients.
      *
-     * @return javax.mail.internet.InternetAddress[] */
+     * @return javax.mail.internet.InternetAddress[], may be null */
     public InternetAddress[] getBccAddresses() {
-        return bccAddresses.clone();
+        return bccAddresses == null ? bccAddresses : bccAddresses.clone(); // NOPMD
     }
 
-    /** Returns array with addresses of the carbon copy recipiants
+    /** Returns array with addresses of the carbon copy recipients.
      *
-     * @return javax.mail.internet.InternetAddress[] */
+     * @return javax.mail.internet.InternetAddress[], may be null */
     public InternetAddress[] getCcAddresses() {
-        return ccAddresses.clone();
+        return ccAddresses == null ? ccAddresses : ccAddresses.clone(); // NOPMD
     }
 
     /** Gets the content of the prepared message.
@@ -137,7 +137,7 @@ public class VMultiPartMessage { // NOPMD
      *
      * @return javax.mail.internet.InternetAddress[] */
     public InternetAddress[] getToAddresses() {
-        return toAddresses.clone();
+        return toAddresses == null ? toAddresses : toAddresses.clone(); // NOPMD
     }
 
     /** Sets array with addresses of blind carbon copy recipients.

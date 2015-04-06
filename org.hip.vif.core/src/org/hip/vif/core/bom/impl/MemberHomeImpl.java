@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.hip.kernel.bom.BOMInvalidKeyException;
-import org.hip.kernel.bom.BOMNotFoundException;
 import org.hip.kernel.bom.KeyObject;
 import org.hip.kernel.bom.impl.DomainObjectHomeImpl;
 import org.hip.kernel.bom.impl.KeyObjectImpl;
@@ -35,6 +34,8 @@ import org.hip.vif.core.bom.MemberHome;
 import org.hip.vif.core.exc.BOMChangeValueException;
 import org.hip.vif.core.exc.InvalidAuthenticationException;
 import org.hip.vif.core.member.IMemberInformation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** This domain object home implements the MemberHome interface.
  *
@@ -42,6 +43,8 @@ import org.hip.vif.core.member.IMemberInformation;
  * @see org.hip.vif.core.bom.MemberHome */
 @SuppressWarnings("serial")
 public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome { // NOPMD by lbenno
+    private static final Logger LOG = LoggerFactory.getLogger(MemberHomeImpl.class);
+
     /* Key for error message invalid user */
     protected static final String INVALID_USER_ERROR_MESSAG_KEY = "org.hip.vif.errmsg.input.invalidUserId";
     /* Key for error message invalid key */
@@ -155,10 +158,8 @@ public class MemberHomeImpl extends DomainObjectHomeImpl implements MemberHome {
                 lMember.checkAuthentication(inPassword, VSys.dftLocale);
                 return lMember;
             }
-        } catch (final BOMNotFoundException exc) {
-            throw new InvalidAuthenticationException( // NOPMD
-                    "org.hip.vif.errmsg.input.invalidUserId", VSys.dftLocale);
         } catch (final VException exc) {
+            LOG.error("Error encountered while checking the authentication!", exc);
             throw new InvalidAuthenticationException( // NOPMD
                     "org.hip.vif.errmsg.input.invalidUserId", VSys.dftLocale);
         }

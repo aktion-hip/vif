@@ -67,11 +67,11 @@ public class AdminApplication extends RiplaApplication { // NOPMD
     public static final String DFT_SKIN_ID = "org.hip.vif.default";
     private static final String APP_NAME = "VIF Administration";
 
-    private UserAdmin userAdmin;
     private VIFEventDispatcher eventDispatcher; // NOPMD by lbenno
 
     @Override
     protected void beforeInitializeLayout() { // NOPMD
+        VIFAppHelper.initializeContext();
         Page.getCurrent().setTitle(APP_NAME);
 
         eventDispatcher = new VIFEventDispatcher();
@@ -83,6 +83,9 @@ public class AdminApplication extends RiplaApplication { // NOPMD
         } finally {
             VaadinSession.getCurrent().getLockInstance().unlock();
         }
+        if (!new DBConnectionProber().needsDBConfiguration()) {
+            initializePermissions();
+        }
         super.beforeInitializeLayout();
     }
 
@@ -93,12 +96,12 @@ public class AdminApplication extends RiplaApplication { // NOPMD
         try {
             if (lProber.needsDBConfiguration()) {
                 inBodyView.addComponent(getDftView(inConfiguration));
-                DBAccessWorkflow.getInitialWorkflow(inWorkflowListener).startWorkflow();
+                DBAccessWorkflow.getInitialWorkflow(inWorkflowListener, getUserAdmin()).startWorkflow();
                 return false;
             }
             else if (lProber.needsTableCreation()) {
                 inBodyView.addComponent(getDftView(inConfiguration));
-                DBAccessWorkflow.getInitialTblCreation(inWorkflowListener).startWorkflow();
+                DBAccessWorkflow.getInitialTblCreation(inWorkflowListener, getUserAdmin()).startWorkflow();
                 return false;
             }
             else if (lProber.needsSUCreation()) {
@@ -133,9 +136,8 @@ public class AdminApplication extends RiplaApplication { // NOPMD
      * @param inPassword String */
     public void showAfterLogin(final String inName, final String inPassword) {
         try {
-            setUpRolesAndPermissions();
             final User lUser = getAppConfiguration().getLoginAuthenticator()
-                    .authenticate(inName, inPassword, userAdmin);
+                    .authenticate(inName, inPassword, getUserAdmin());
             showAfterLogin(lUser);
         } catch (final LoginException exc) {
             LOG.error("Error encountered during login!", exc);
@@ -185,35 +187,32 @@ public class AdminApplication extends RiplaApplication { // NOPMD
     }
 
     @Override
-    public void setUserAdmin(final UserAdmin inUserAdmin) { // NOPMD
-        super.setUserAdmin(inUserAdmin);
-        userAdmin = inUserAdmin;
-
-        VIFAppHelper.initializeContext();
-        if (!new DBConnectionProber().needsDBConfiguration()) {
-            setUpRolesAndPermissions();
-        }
-    }
-
-    private void setUpRolesAndPermissions() {
-        try {
-            RoleHelper.createRolesAndPermissions(userAdmin);
-            initializePermissions();
-        } catch (final SQLException exc) {
-            LOG.error(
-                    "Error encountered while creating the OSGi roles for the VIF application!",
-                    exc);
-        } catch (final VException exc) {
-            LOG.error(
-                    "Error encountered while creating the OSGi roles for the VIF application!",
-                    exc);
-        }
-    }
-
-    @Override
     protected void initializePermissions() { // NOPMD
-        // we do nothing at the moment
+        final UserAdmin lUserAdmin = getUserAdmin();
+        if (lUserAdmin != null) {
+            try {
+                RoleHelper.createRolesAndPermissions(lUserAdmin);
+            } catch (SQLException | VException exc) {
+                LOG.error(
+                        "Error encountered while creating the OSGi roles for the VIF application!",
+                        exc);
+            }
+        }
         // super.initializePermissions();
+    }
+
+    /** Refresh the permissions for the VIF application. */
+    public void refreshPermissions() {
+        final UserAdmin lUserAdmin = getUserAdmin();
+        if (lUserAdmin != null) {
+            try {
+                RoleHelper.refreshPermissions(lUserAdmin);
+            } catch (VException | SQLException exc) {
+                LOG.error(
+                        "Error encountered while refreshing the OSGi permisssions for the VIF application!",
+                        exc);
+            }
+        }
     }
 
     @Override

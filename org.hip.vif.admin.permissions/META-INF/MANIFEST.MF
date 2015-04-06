@@ -37,5 +37,5 @@ Import-Package: com.vaadin.data;version="[7.4.0,8.0.0)",
  org.slf4j;version="[1.7.5,2.0.0)"
 Eclipse-RegisterBuddy: org.hip.vifapp
 Service-Component: OSGI-INF/useCase.xml
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: RelationWare
