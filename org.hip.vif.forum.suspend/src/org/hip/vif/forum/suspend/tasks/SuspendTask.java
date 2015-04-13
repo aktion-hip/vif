@@ -33,7 +33,6 @@ import org.hip.vif.core.bom.GroupHome;
 import org.hip.vif.core.bom.ParticipantHome;
 import org.hip.vif.core.bom.VIFGroupWorkflow;
 import org.hip.vif.core.bom.impl.JoinParticipantToGroupHome;
-import org.hip.vif.core.bom.impl.NestedGroupHome;
 import org.hip.vif.forum.suspend.Constants;
 import org.hip.vif.forum.suspend.data.GroupContainer;
 import org.hip.vif.forum.suspend.ui.SuspendView;
@@ -50,22 +49,23 @@ import com.vaadin.ui.Component;
  *
  * @author Luthiger Created: 02.10.2011 */
 @UseCaseController
-public class SuspendTask extends AbstractWebController {
+public class SuspendTask extends AbstractWebController { // NOPMD
     private static final Logger LOG = LoggerFactory.getLogger(SuspendTask.class);
 
+    /** The possible states */
     public enum SuspendState {
         INITIAL, HAS_DATES;
     }
 
-    private static final String DFT_SORT = GroupHome.KEY_NAME + ", " + NestedGroupHome.KEY_GROUP_ID; //$NON-NLS-1$
+    private static final String DFT_SORT = GroupHome.KEY_NAME + ", " + GroupHome.KEY_ID; //$NON-NLS-1$
 
     @Override
-    protected String needsPermission() {
+    protected String needsPermission() { // NOPMD
         return Constants.PERMISSION_SUSPEND;
     }
 
     @Override
-    protected Component runChecked() throws VIFWebException {
+    protected Component runChecked() throws VIFWebException { // NOPMD
         emptyContextMenu();
 
         final Long lActorID = getActor().getActorID();
@@ -118,10 +118,10 @@ public class SuspendTask extends AbstractWebController {
 
     // ---
 
-    public static class DatePrepare {
-        private Timestamp from;
-        private Timestamp to;
-        private SuspendState suspendState = SuspendState.INITIAL;
+    public static class DatePrepare { // NOPMD
+        private transient Timestamp from;
+        private transient Timestamp to; // NOPMD
+        private transient SuspendState suspendState = SuspendState.INITIAL;
 
         DatePrepare(final ParticipantHome inHome, final Long inActorID) throws VException, SQLException {
             initialize(inHome.getActorSuspend(inActorID).iterator());
@@ -135,7 +135,7 @@ public class SuspendTask extends AbstractWebController {
                 suspendState = SuspendState.INITIAL;
                 from = lNow;
             }
-            else if ((from.before(lNow)) && (to.before(lNow))) {
+            else if (from.before(lNow) && to.before(lNow)) {
                 suspendState = SuspendState.INITIAL;
                 from = lNow;
             }
@@ -144,18 +144,18 @@ public class SuspendTask extends AbstractWebController {
             }
         }
 
-        public Date getFromDate() {
+        public Date getFromDate() { // NOPMD
             return new Date(from.getTime());
         }
 
-        public Date getToDate() {
+        public Date getToDate() { // NOPMD
             if (getSuspendDateState() == SuspendState.INITIAL) {
                 return null;
             }
             return new Date(to.getTime());
         }
 
-        public SuspendState getSuspendDateState() {
+        public SuspendState getSuspendDateState() { // NOPMD
             return suspendState;
         }
     }

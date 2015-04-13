@@ -42,10 +42,10 @@ import com.vaadin.ui.Notification.Type;
 /** Functionality for completion tasks.
  *
  * @author Luthiger Created: 10.07.2010 */
-public abstract class AbstractCompletionTask extends AbstractWebController {
+public abstract class AbstractCompletionTask extends AbstractWebController { // NOPMD
 
     @Override
-    public Component runChecked() throws RiplaException {
+    public Component runChecked() throws RiplaException { // NOPMD
         final Long lActorID = getActor().getActorID();
         final IMessages lMessages = Activator.getMessages();
         try {
@@ -63,12 +63,12 @@ public abstract class AbstractCompletionTask extends AbstractWebController {
             final QueryResult lCompletions = BOMHelper.getJoinCompletionToMemberHome().getAuthorView(lQuestionID,
                     lActorID);
 
-            loadContextMenu(Constants.MENU_SET_ID_GROUP_CONTENT);
+            loadContextMenu(Constants.MENU_SET_ID_EDIT);
             final CodeList lCodeList = CodeListHome.instance().getCodeList(QuestionState.class,
                     getAppLocale().getLanguage());
             return new CompletionView(getCompletionText(), getActCompletionID(), lQuestion, lCompletions, lGroup,
                     lCodeList, this); //$NON-NLS-1$
-        } catch (final Exception exc) {
+        } catch (final VException | SQLException exc) {
             throw createContactAdminException(exc);
         }
     }

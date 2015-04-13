@@ -40,17 +40,18 @@ import com.vaadin.ui.Component;
  *
  * @author Luthiger Created: 13.03.2008 */
 @UseCaseController
-public class CompletionShowTask extends AbstractGroupsTask {
+public class CompletionShowTask extends AbstractGroupsTask { // NOPMD
 
     @Override
-    protected String needsPermission() {
+    protected String needsPermission() { // NOPMD
         return Constants.PERMISSION_NEW_COMPLETION;
     }
 
     @Override
-    protected Component runChecked() throws RiplaException {
+    protected Component runChecked() throws RiplaException { // NOPMD
         try {
             final Long lCompletionID = getCompletionID();
+            final String lCompletionIDs = lCompletionID.toString();
             final Long lQuestionID = getQuestionID();
             final String lQuestionIDs = lQuestionID.toString();
             final Long lGroupID = getGroupID();
@@ -65,14 +66,13 @@ public class CompletionShowTask extends AbstractGroupsTask {
 
             final CodeList lCodeList = CodeListHome.instance().getCodeList(QuestionState.class,
                     getAppLocale().getLanguage());
-            return new ContributionReView(lCompletion,
-                    VifBOMHelper.getGroupHome().getGroup(lGroupID),
-                    lQuestion, lSiblings, getPublishedBibliography(lQuestionID),
+            return new ContributionReView(lCompletion, getCompletionAuthors(lCompletionIDs),
+                    getCompletionReviewers(lCompletionIDs),
+                    VifBOMHelper.getGroupHome().getGroup(lGroupID), lQuestion, lSiblings,
+                    getPublishedBibliography(lQuestionID),
                     getAuthors(lQuestionIDs), getReviewers(lQuestionIDs),
                     lCodeList, this);
-        } catch (final SQLException exc) {
-            throw createContactAdminException(exc);
-        } catch (final VException exc) {
+        } catch (final SQLException | VException exc) {
             throw createContactAdminException(exc);
         }
     }

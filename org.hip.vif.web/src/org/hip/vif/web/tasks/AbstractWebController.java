@@ -212,13 +212,6 @@ public abstract class AbstractWebController extends AbstractController implement
         }
     }
 
-    /** Use Vaadin event service to trigger a refresh of the dash board. */
-    protected void refreshDash() {
-        final Map<String, Object> lProperties = new ConcurrentHashMap<String, Object>(); // NOPMD
-        lProperties.put(Constants.EVENT_PROPERTY_REFRESH, "refresh");
-        getDispatcher().dispatch(Event.SEND, lProperties);
-    }
-
     /** Refresh the application's permissions. */
     protected void refreshPermissions() {
         getDispatcher().dispatch(Event.REFRESH_AUTHORIZATION, new ConcurrentHashMap<String, Object>());
@@ -319,12 +312,6 @@ public abstract class AbstractWebController extends AbstractController implement
         }
         return outKey;
     }
-
-    // protected Component forwardTo(final IForwardingController inAlias)
-    // throws NoControllerFoundException {
-    // return forwardTo(ForwardControllerRegistry.INSTANCE
-    // .getTargetOf(inAlias));
-    // }
 
     protected Locale getLocaleChecked() { // NOPMD
         try {

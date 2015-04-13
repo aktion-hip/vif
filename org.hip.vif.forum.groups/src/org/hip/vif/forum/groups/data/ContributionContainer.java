@@ -40,19 +40,21 @@ import com.vaadin.data.util.BeanItemContainer;
 
 /** Data container for contributions, i.e. questions, completions and texts.
  *
- * @author Luthiger Created: 03.07.2011 */
+ * @author Luthiger */
 @SuppressWarnings("serial")
-public class ContributionContainer extends BeanItemContainer<ContributionWrapper> {
+public final class ContributionContainer extends BeanItemContainer<ContributionWrapper> {
+    private static final String KEY_SORT = "sortValue"; //$NON-NLS-1$
+
     public static final String CONTRIBUTION_CHECK = "chk"; //$NON-NLS-1$
     public static final String CONTRIBUTION_CHECKED = "checked"; //$NON-NLS-1$
     public static final String CONTRIBUTION_TEXT = "contributionText"; //$NON-NLS-1$
     public static final Object[] NATURAL_COL_ORDER = new Object[] { CONTRIBUTION_CHECK,
-            "publicID", CONTRIBUTION_TEXT, "contributionState" }; //$NON-NLS-1$ //$NON-NLS-2$
+        "publicID", CONTRIBUTION_TEXT, "contributionState" }; //$NON-NLS-1$ //$NON-NLS-2$
     public static final String[] COL_HEADERS = new String[] {
-            "", "container.table.headers.nr", "container.table.headers.question", "container.table.headers.state" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        "", "container.table.headers.nr", "container.table.headers.question", "container.table.headers.state" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
     public static final Object[] NATURAL_COL_ORDER_WO_STATE = new Object[] { CONTRIBUTION_CHECK,
-            "publicID", CONTRIBUTION_TEXT }; //$NON-NLS-1$
+        "publicID", CONTRIBUTION_TEXT }; //$NON-NLS-1$
 
     private ContributionContainer() {
         super(ContributionWrapper.class);
@@ -103,14 +105,13 @@ public class ContributionContainer extends BeanItemContainer<ContributionWrapper
             final String lID = String.format(Text.FORMAT_ID_VERSION,
                     BeanWrapperHelper.getString(TextHome.KEY_ID, lEntry),
                     BeanWrapperHelper.getString(TextHome.KEY_VERSION, lEntry));
-            ;
             final String lReference = BeanWrapperHelper.getString(TextHome.KEY_REFERENCE, lEntry);
             out.addItem(ContributionWrapper.createItem(lEntry, EntryType.TEXT,
                     String.format("9_%s", lReference), lID, lReference, //$NON-NLS-1$
                     getBibliography(lEntry), inCodeList));
         }
 
-        out.sort(new String[] { "sortValue" }, new boolean[] { true }); //$NON-NLS-1$
+        out.sort(new String[] { KEY_SORT }, new boolean[] { true }); //$NON-NLS-1$
         return out;
     }
 
@@ -155,7 +156,8 @@ public class ContributionContainer extends BeanItemContainer<ContributionWrapper
                     String.format("0_%s_1", lDecimalID), //$NON-NLS-1$
                     BeanWrapperHelper.getString(CompletionHome.KEY_ID, lEntry),
                     String.format("(%s)", lDecimalID), //$NON-NLS-1$
-                    BeanWrapperHelper.getString(CompletionHome.KEY_COMPLETION, lEntry), inCodeList));
+                    RichTextSanitizer.removePara(BeanWrapperHelper.getString(CompletionHome.KEY_COMPLETION, lEntry)),
+                    inCodeList));
         }
         // texts
         while (inTexts.hasMoreElements()) {
@@ -163,7 +165,6 @@ public class ContributionContainer extends BeanItemContainer<ContributionWrapper
             final String lID = String.format(Text.FORMAT_ID_VERSION,
                     BeanWrapperHelper.getString(TextHome.KEY_ID, lEntry),
                     BeanWrapperHelper.getString(TextHome.KEY_VERSION, lEntry));
-            ;
             final String lReference = BeanWrapperHelper.getString(TextHome.KEY_REFERENCE, lEntry);
 
             lActive = WorkflowAwareContribution.STATE_WAITING_FOR_REVIEW.equals(lEntry.get(QuestionHome.KEY_STATE)
@@ -173,8 +174,8 @@ public class ContributionContainer extends BeanItemContainer<ContributionWrapper
                     getBibliography(lEntry), inCodeList));
         }
 
-        lWaitingForReview.sort(new String[] { "sortValue" }, new boolean[] { true }); //$NON-NLS-1$
-        lUnderRevision.sort(new String[] { "sortValue" }, new boolean[] { true }); //$NON-NLS-1$
+        lWaitingForReview.sort(new String[] { KEY_SORT }, new boolean[] { true }); //$NON-NLS-1$
+        lUnderRevision.sort(new String[] { KEY_SORT }, new boolean[] { true }); //$NON-NLS-1$
 
         return new ContributionContainer[] { lWaitingForReview, lUnderRevision };
     }
@@ -200,14 +201,13 @@ public class ContributionContainer extends BeanItemContainer<ContributionWrapper
             final String lID = String.format(Text.FORMAT_ID_VERSION,
                     BeanWrapperHelper.getString(TextHome.KEY_ID, lEntry),
                     BeanWrapperHelper.getString(TextHome.KEY_VERSION, lEntry));
-            ;
             final String lReference = BeanWrapperHelper.getString(TextHome.KEY_REFERENCE, lEntry);
             out.addItem(ContributionWrapper.createItem(lEntry, EntryType.TEXT,
                     String.format("9_%s", lReference), lID, lReference, //$NON-NLS-1$
                     getText(lEntry), inCodeList));
         }
 
-        out.sort(new String[] { "sortValue" }, new boolean[] { true }); //$NON-NLS-1$
+        out.sort(new String[] { KEY_SORT }, new boolean[] { true }); //$NON-NLS-1$
         return out;
     }
 

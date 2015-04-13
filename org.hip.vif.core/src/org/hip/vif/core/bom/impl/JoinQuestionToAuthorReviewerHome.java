@@ -34,7 +34,7 @@ import org.hip.vif.core.bom.ResponsibleHome;
  *
  * @author: Benno Luthiger */
 @SuppressWarnings("serial")
-public class JoinQuestionToAuthorReviewerHome extends JoinedDomainObjectHomeImpl {
+public class JoinQuestionToAuthorReviewerHome extends JoinedDomainObjectHomeImpl { // NOPMD
     // Every home has to know the class it handles. They provide access to
     // this name through the method <I>getObjectClassName</I>;
     private final static String JOIN_OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.JoinQuestionToAuthorReviewer";
@@ -54,7 +54,7 @@ public class JoinQuestionToAuthorReviewerHome extends JoinedDomainObjectHomeImpl
                     "<joinedObjectDef objectName='JoinQuestionToAuthorReviewer' parent='org.hip.kernel.bom.ReadOnlyDomainObject' version='1.0'>	\n"
                     +
                     "	<columnDefs>	\n" +
-                    "		<columnDef columnName='"
+                    "		<columnDef columnName='" // NOPMD
                     + QuestionAuthorReviewerHome.KEY_QUESTION_ID
                     + "' domainObject='org.hip.vif.core.bom.impl.QuestionAuthorReviewerImpl'/>	\n"
                     +
@@ -64,7 +64,7 @@ public class JoinQuestionToAuthorReviewerHome extends JoinedDomainObjectHomeImpl
                     +
                     "		<columnDef columnName='"
                     + MemberHome.KEY_ID
-                    + "' domainObject='org.hip.vif.core.bom.impl.MemberImpl'/>	\n"
+                    + "' domainObject='org.hip.vif.core.bom.impl.MemberImpl'/>	\n" // NOPMD
                     +
                     "		<columnDef columnName='"
                     + MemberHome.KEY_USER_ID
@@ -119,11 +119,6 @@ public class JoinQuestionToAuthorReviewerHome extends JoinedDomainObjectHomeImpl
                     "	</joinDef>	\n" +
                     "</joinedObjectDef>";
 
-    /** Constructor for JoinQuestionToAuthorReviewer. */
-    public JoinQuestionToAuthorReviewerHome() {
-        super();
-    }
-
     /** @see org.hip.kernel.bom.GeneralDomainObjectHome#getObjectClassName() */
     @Override
     public String getObjectClassName() {
@@ -137,27 +132,27 @@ public class JoinQuestionToAuthorReviewerHome extends JoinedDomainObjectHomeImpl
     }
 
     /** Returns the entry of the author responsible for the specified question.
-     * 
+     *
      * @param inQuestionID String
      * @return QueryResult
      * @throws VException
      * @throws SQLException */
     public QueryResult getAuthors(final String inQuestionID) throws VException, SQLException {
         final KeyObject lKey = new KeyObjectImpl();
-        lKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, new Long(inQuestionID));
+        lKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, Long.parseLong(inQuestionID));
         lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.AUTHOR.getValue());
         return select(lKey);
     }
 
     /** Returns the entry of the reviewer responsible for the specified question.
-     * 
+     *
      * @param inQuestionID String
      * @return QueryResult
      * @throws VException
      * @throws SQLException */
     public QueryResult getReviewers(final String inQuestionID) throws VException, SQLException {
         final KeyObject lKey = new KeyObjectImpl();
-        lKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, new Long(inQuestionID));
+        lKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, Long.parseLong(inQuestionID));
         lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER.getValue());
         return select(lKey);
     }

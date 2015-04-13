@@ -59,6 +59,7 @@ import org.hip.vif.core.bom.impl.GroupImpl;
 import org.hip.vif.core.bom.impl.JoinAuthorReviewerToCompletionHome;
 import org.hip.vif.core.bom.impl.JoinAuthorReviewerToQuestionHome;
 import org.hip.vif.core.bom.impl.JoinAuthorReviewerToTextHome;
+import org.hip.vif.core.bom.impl.JoinCompletionToAuthorReviewerHome;
 import org.hip.vif.core.bom.impl.JoinCompletionToMemberHome;
 import org.hip.vif.core.bom.impl.JoinCompletionToQuestionHome;
 import org.hip.vif.core.bom.impl.JoinQuestionToAuthorReviewerHome;
@@ -257,6 +258,10 @@ public class DataHouseKeeper {
 
     public JoinQuestionToAuthorReviewerHome getJoinQuestionToAuthorReviewerHome() {
         return BOMHelper.getJoinQuestionToAuthorReviewerHome();
+    }
+
+    public JoinCompletionToAuthorReviewerHome getJoinCompletionToAuthorReviewerHome() {
+        return BOMHelper.getJoinCompletionToAuthorReviewerHome();
     }
 
     public JoinQuestionToContributorsHome getJoinQuestionToContributorsHome() {
@@ -480,7 +485,7 @@ public class DataHouseKeeper {
             final Member lMember = (Member) getMemberHome().create();
             final Long outMemberID = lMember.ucNew(MEMBER_USER_ID + inNr, "NameT" + inNr, "VornameT" + inNr,
                     "StrasseT", "PLZ-T", "StadtT", "", "", inMail, "1", "de", "123", new String[] {
-                    ApplicationConstants.ROLE_ID_SU, ApplicationConstants.ROLE_ID_GROUP_ADMIN });
+                            ApplicationConstants.ROLE_ID_SU, ApplicationConstants.ROLE_ID_GROUP_ADMIN });
             return outMemberID.toString();
         } catch (final VException exc) {
             throw new BOMChangeValueException(exc.getMessage());

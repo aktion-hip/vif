@@ -26,12 +26,15 @@ import org.hip.kernel.bom.QueryResult;
 import org.hip.kernel.code.CodeList;
 import org.hip.kernel.exc.VException;
 import org.hip.vif.core.bom.Completion;
+import org.hip.vif.core.bom.CompletionHome;
 import org.hip.vif.core.bom.Group;
 import org.hip.vif.core.bom.GroupHome;
 import org.hip.vif.core.bom.Question;
 import org.hip.vif.core.bom.QuestionHome;
 import org.hip.vif.forum.groups.Activator;
 import org.hip.vif.forum.groups.data.CompletionsHelper;
+import org.hip.vif.forum.groups.util.AuthorReviewerRenderHelper;
+import org.hip.vif.forum.groups.util.AuthorReviewerRenderHelper.AuthorReviewerRenderer;
 import org.hip.vif.web.interfaces.IPluggableWithLookup;
 import org.hip.vif.web.util.BeanWrapperHelper;
 import org.hip.vif.web.util.VIFViewHelper;
@@ -51,29 +54,40 @@ public class ContributionReView extends AbstractQuestionView {
     /** Show the completion to review.
      *
      * @param inCompletion {@link Completion}
+     * @param inCAuthors {@link QueryResult} the question's authors
+     * @param inCReviewers {@link QueryResult} the question's reviewers
      * @param inGroup {@link Group}
      * @param inQuestion {@link Question} the question the completion belongs to
      * @param inCompletions {@link QueryResult} already published completions belonging to the same question
      * @param inBibliography {@link QueryResult} already published bibliography belonging to the same question
-     * @param inAuthors {@link QueryResult}
-     * @param inReviewers {@link QueryResult}
+     * @param inQAuthors {@link QueryResult} the question's authors
+     * @param inQReviewers {@link QueryResult} the question's reviewers
      * @param inCodeList {@link CodeList}
      * @param inTask {@link IPluggableWithLookup} the view's controlling task
      * @throws VException
      * @throws SQLException */
-    public ContributionReView(final Completion inCompletion, final Group inGroup, final Question inQuestion,
-            final QueryResult inCompletions,
-            final QueryResult inBibliography, final QueryResult inAuthors, final QueryResult inReviewers,
-            final CodeList inCodeList,
-            final IPluggableWithLookup inTask) throws VException, SQLException {
+    public ContributionReView(final Completion inCompletion, final QueryResult inCAuthors,
+            final QueryResult inCReviewers, final Group inGroup, final Question inQuestion,
+            final QueryResult inCompletions, final QueryResult inBibliography, final QueryResult inQAuthors,
+            final QueryResult inQReviewers,
+            final CodeList inCodeList, final IPluggableWithLookup inTask) throws VException, SQLException {
+        super();
 
         final IMessages lMessages = Activator.getMessages();
         final AbstractLayoutInitializer lInitializer = new LayoutInitializerQuery(inCompletions);
-        final VerticalLayout lLayout = lInitializer.getLayout(inGroup, inQuestion, inBibliography, inAuthors,
-                inReviewers, inCodeList, inTask, lMessages, "ui.question.view.title.question"); //$NON-NLS-1$
+        final VerticalLayout lLayout = lInitializer.getLayout(inGroup, inQuestion, inBibliography, inQAuthors,
+                inQReviewers, inCodeList, inTask, lMessages, "ui.question.view.title.question"); //$NON-NLS-1$
 
         // the new completion
-        lLayout.addComponent(createCompletion(inCompletion, inCodeList, lMessages));
+        final VerticalLayout lCompletionLayout = (VerticalLayout) createCompletion(inCompletion, inCodeList, lMessages);
+        // author/reviewer
+        final AuthorReviewerRenderer lRenderer = AuthorReviewerRenderHelper
+                .createRenderer(inCAuthors, inCReviewers, inTask, true);
+        lCompletionLayout.addComponent(lRenderer.render(lMessages.getMessage("ui.question.view.label.author"),
+                lMessages.getMessage("ui.question.view.label.reviewer"),
+                BeanWrapperHelper.getFormattedDate(CompletionHome.KEY_MUTATION, inCompletion)));
+
+        lLayout.addComponent(lCompletionLayout);
     }
 
     /** Show the question to review.
@@ -95,11 +109,12 @@ public class ContributionReView extends AbstractQuestionView {
             final List<CompletionsHelper.Completion> inCompletions, final QueryResult inBibliography,
             final CodeList inCodeList,
             final IPluggableWithLookup inTask) throws VException, SQLException {
+        super();
 
         final IMessages lMessages = Activator.getMessages();
         final AbstractLayoutInitializer lInitializer = new LayoutInitializerList(inCompletions);
-        final VerticalLayout lLayout = lInitializer.getLayout(inGroup, inQuestion, inBibliography, inAuthors,
-                inReviewers, inCodeList, inTask, lMessages, "ui.question.view.title.question.parent"); //$NON-NLS-1$
+        final VerticalLayout lLayout = lInitializer.getLayout(inGroup, inParent, inBibliography, inParentAuthors,
+                inParentReviewers, inCodeList, inTask, lMessages, "ui.question.view.title.question.parent"); //$NON-NLS-1$
 
         // the new question
         final String lLabel = String
@@ -110,8 +125,10 @@ public class ContributionReView extends AbstractQuestionView {
 
     // --- inner classes ---
 
-    private abstract class AbstractLayoutInitializer {
-        VerticalLayout getLayout(final Group inGroup, final Question inQuestion, final QueryResult inBibliography,
+    /** Helper class for initializing different layouts. */
+    private abstract class AbstractLayoutInitializer { // NOPMD
+        protected VerticalLayout getLayout(final Group inGroup, final Question inQuestion, // NOPMD
+                final QueryResult inBibliography,
                 final QueryResult inAuthors, final QueryResult inReviewers, final CodeList inCodeList,
                 final IPluggableWithLookup inTask, final IMessages inMessages, final String inKeyTitle)
                 throws VException, SQLException {
@@ -140,19 +157,20 @@ public class ContributionReView extends AbstractQuestionView {
             return outLayout;
         }
 
-        abstract protected void handleCompletions(VerticalLayout inLayout, CodeList inCodeList, IMessages inMessages,
+        abstract protected void handleCompletions(VerticalLayout inLayout, CodeList inCodeList, IMessages inMessages, // NOPMD
                 IPluggableWithLookup inTask) throws VException, SQLException;
     }
 
+    /** Helper to initialize the layout to display a list of entries. */
     private class LayoutInitializerList extends AbstractLayoutInitializer {
         private final List<CompletionsHelper.Completion> completions;
 
-        LayoutInitializerList(final List<CompletionsHelper.Completion> inCompletions) {
+        protected LayoutInitializerList(final List<CompletionsHelper.Completion> inCompletions) { // NOPMD
             completions = inCompletions;
         }
 
         @Override
-        protected void handleCompletions(final VerticalLayout inLayout, final CodeList inCodeList,
+        protected void handleCompletions(final VerticalLayout inLayout, final CodeList inCodeList, // NOPMD
                 final IMessages inMessages, final IPluggableWithLookup inTask) throws VException, SQLException {
             for (final CompletionsHelper.Completion lCompletion : completions) {
                 inLayout.addComponent(createCompletion(lCompletion, inCodeList, inMessages, false, inTask));
@@ -160,15 +178,17 @@ public class ContributionReView extends AbstractQuestionView {
         }
     }
 
+    /** Helper to initialize the layout to display a query result. */
     private class LayoutInitializerQuery extends AbstractLayoutInitializer {
         private final QueryResult completions;
 
         LayoutInitializerQuery(final QueryResult inCompletions) {
+            super();
             completions = inCompletions;
         }
 
         @Override
-        protected void handleCompletions(final VerticalLayout inLayout, final CodeList inCodeList,
+        protected void handleCompletions(final VerticalLayout inLayout, final CodeList inCodeList, // NOPMD
                 final IMessages inMessages, final IPluggableWithLookup inTask) throws VException, SQLException {
             while (completions.hasMoreElements()) {
                 inLayout.addComponent(createCompletion(completions.next(), inCodeList, inMessages, false, inTask));

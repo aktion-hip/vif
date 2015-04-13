@@ -30,21 +30,54 @@ import org.hip.vif.web.tasks.AbstractWebController;
 /** Abstract base class for tasks in the groups bundle.
  *
  * @author Luthiger Created: 27.07.2011 */
-public abstract class AbstractGroupsTask extends AbstractWebController {
+public abstract class AbstractGroupsTask extends AbstractWebController { // NOPMD
 
+    /** @param inQuestionID String
+     * @return {@link QueryResult} the question's authors
+     * @throws VException
+     * @throws SQLException */
     protected QueryResult getAuthors(final String inQuestionID) throws VException, SQLException {
         return BOMHelper.getJoinQuestionToAuthorReviewerHome().getAuthors(inQuestionID);
     }
 
+    /** @param inQuestionID String
+     * @return {@link QueryResult} the question's reviewers
+     * @throws VException
+     * @throws SQLException */
     protected QueryResult getReviewers(final String inQuestionID) throws VException, SQLException {
         return BOMHelper.getJoinQuestionToAuthorReviewerHome().getReviewers(inQuestionID);
     }
 
+    /** @param inCompletionID String
+     * @return {@link QueryResult} the completions's authors
+     * @throws VException
+     * @throws SQLException */
+    protected QueryResult getCompletionAuthors(final String inCompletionID) throws VException, SQLException {
+        return BOMHelper.getJoinCompletionToAuthorReviewerHome().getAuthors(inCompletionID);
+    }
+
+    /** @param inCompletionID String
+     * @return {@link QueryResult} the completions's reviewers
+     * @throws VException
+     * @throws SQLException */
+    protected QueryResult getCompletionReviewers(final String inCompletionID) throws VException, SQLException {
+        return BOMHelper.getJoinCompletionToAuthorReviewerHome().getReviewers(inCompletionID);
+    }
+
+    /** @param inQuestionID Long
+     * @return {@link QueryResult} the question's published completions.
+     * @throws NumberFormatException
+     * @throws VException
+     * @throws SQLException */
     protected QueryResult getPublishedCompletions(final Long inQuestionID) throws NumberFormatException, VException,
             SQLException {
         return BOMHelper.getJoinCompletionToMemberHome().selectPublishedWithResponsibles(inQuestionID);
     }
 
+    /** @param inQuestionID Long
+     * @return {@link QueryResult} the published bibliography entries linked to the specified question.
+     * @throws VException
+     * @throws SQLException */
     protected QueryResult getPublishedBibliography(final Long inQuestionID) throws VException, SQLException {
         return VifBOMHelper.getJoinQuestionToTextHome().selectPublished(inQuestionID);
     }

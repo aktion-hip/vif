@@ -27,7 +27,7 @@ import java.util.Map;
 public interface IVIFEventDispatcher {
     /** The event available in this application. */
     public enum Event {
-        SEND, LOOKUP, LOGIN, REFRESH_AUTHORIZATION;
+        LOOKUP, LOGIN, REFRESH_AUTHORIZATION;
     }
 
     /** Dispatches the specified event.

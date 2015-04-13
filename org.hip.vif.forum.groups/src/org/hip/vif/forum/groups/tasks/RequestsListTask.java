@@ -16,7 +16,7 @@
  License along with this library; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package org.hip.vif.forum.groups.tasks;
+package org.hip.vif.forum.groups.tasks; // NOPMD
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -67,14 +67,14 @@ import com.vaadin.ui.Table;
  * @author Luthiger */
 @SuppressWarnings("serial")
 @UseCaseController
-public class RequestsListTask extends ContributionsWorkflowTask implements ValueChangeListener {
+public class RequestsListTask extends ContributionsWorkflowTask implements ValueChangeListener { // NOPMD
     private static final Logger LOG = LoggerFactory.getLogger(RequestsListTask.class);
 
     private ContributionContainer[] contributions;
     private RequestsListView contributionsList;
 
     @Override
-    public Component runChecked() throws RiplaException {
+    public Component runChecked() throws RiplaException { // NOPMD
         final Long lGroupID = getGroupID();
         final Long lActorID = getActor().getActorID();
 
@@ -96,15 +96,13 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
                     BeanWrapperHelper.getString(GroupHome.KEY_NAME, VifBOMHelper.getGroupHome().getGroup(lGroupID)),
                     this);
             return contributionsList;
-        } catch (final VException exc) {
-            throw createContactAdminException(exc);
-        } catch (final Exception exc) {
+        } catch (final Exception exc) { // NOPMD
             throw createContactAdminException(exc);
         }
     }
 
     @Override
-    protected ContributionContainer getContributions() {
+    protected ContributionContainer getContributions() { // NOPMD
         return contributions[1];
     }
 
@@ -113,16 +111,16 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
         doProcess(contributions[0], WorkflowAwareContribution.TRANS_ACCEPT,
                 new IMailCreator() {
                     @Override
-            public IVIFMail createMail(final VIFMember inAuthor, final VIFMember inReviewer,
-                            final StringBuilder inNotificationText,
-                            final StringBuilder inNotificationTextHtml) throws VException, IOException {
+                    public IVIFMail createMail(final VIFMember inAuthor, final VIFMember inReviewer, // NOPMD
+                            final StringBuilder inNotificationText, final StringBuilder inNotificationTextHtml)
+                            throws VException, IOException {
                         return new AnswerAcceptMail(inAuthor, inReviewer, notificator.getNotificationText(),
                                 notificator.getNotificationTextHtml());
                     }
                 },
                 new IReviewerStateHandler() {
                     @Override
-            public void handleReviewerState(final Long inActorID, final ContributionsHelper inContributions)
+                    public void handleReviewerState(final Long inActorID, final ContributionsHelper inContributions) // NOPMD
                             throws VException, SQLException {
                         // intentionally left empty
                     }
@@ -134,7 +132,7 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
         doProcess(contributions[0], WorkflowAwareContribution.TRANS_REJECT_REVIEW,
                 new IMailCreator() {
                     @Override
-            public IVIFMail createMail(final VIFMember inAuthor, final VIFMember inReviewer,
+            public IVIFMail createMail(final VIFMember inAuthor, final VIFMember inReviewer, // NOPMD
                             final StringBuilder inNotificationText,
                             final StringBuilder inNotificationTextHtml) throws VException, IOException {
                         return new AnswerRefuseMail(inAuthor, inReviewer, notificator.getNotificationText(),
@@ -143,7 +141,7 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
                 },
                 new IReviewerStateHandler() {
                     @Override
-            public void handleReviewerState(final Long inActorID, final ContributionsHelper inContributions)
+                    public void handleReviewerState(final Long inActorID, final ContributionsHelper inContributions) // NOPMD
                             throws VException, SQLException {
                         updateReviewerState(inActorID, inContributions);
                     }
@@ -155,16 +153,16 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
         doProcess(contributions[1], WorkflowAwareContribution.TRANS_GIVE_BACK_REVIEW,
                 new IMailCreator() {
                     @Override
-            public IVIFMail createMail(final VIFMember inAuthor, final VIFMember inReviewer,
-                            final StringBuilder inNotificationText,
-                            final StringBuilder inNotificationTextHtml) throws VException, IOException {
+            public IVIFMail createMail(final VIFMember inAuthor, final VIFMember inReviewer, // NOPMD
+                            final StringBuilder inNotificationText, final StringBuilder inNotificationTextHtml)
+                            throws VException, IOException {
                         return new ProcessGiveBackMail(inAuthor, inReviewer, notificator.getNotificationText(),
                                 notificator.getNotificationTextHtml());
                     }
                 },
                 new IReviewerStateHandler() {
                     @Override
-            public void handleReviewerState(final Long inActorID, final ContributionsHelper inContributions)
+            public void handleReviewerState(final Long inActorID, final ContributionsHelper inContributions) // NOPMD
                             throws VException, SQLException {
                         updateReviewerState(inActorID, inContributions);
                     }
@@ -172,7 +170,7 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
     }
 
     @Override
-    public void valueChange(final ValueChangeEvent inEvent) {
+    public void valueChange(final ValueChangeEvent inEvent) { // NOPMD
         final Property<?> lProperty = inEvent.getProperty();
         if (contributionsList.checkSelectionSource(lProperty)) {
             if (lProperty instanceof Table) {
@@ -193,10 +191,13 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
                         if (lQuestionID != null) {
                             setQuestionID(getOwningQuestionID(lCompletionID));
                         }
-                        sendEvent(CompletionShowTask.class);
+                        sendEvent(CompletionReviewTask.class);
                         break;
                     case TEXT:
                         requestLookup(LookupType.BIBLIOGRAPHY, lID);
+                        break;
+                    default:
+                        // do nothing
                     }
                 }
             }

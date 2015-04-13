@@ -29,26 +29,19 @@ import org.hip.vif.web.util.LinkButtonHelper.LookupType;
 /** The event dispatcher for the forum part.
  *
  * @author lbenno */
-public class VIFEventDispatcher extends AbstractVIFEventDispatcher implements IVIFEventDispatcher {
+public class VIFEventDispatcher extends AbstractVIFEventDispatcher implements IVIFEventDispatcher { // NOPMD
 
     @Override
-    public void dispatch(final Event inType, final Map<String, Object> inProperties) {
-        switch (inType) {
-        case SEND:
-            //
-            break;
-        case LOOKUP:
+    public void dispatch(final Event inType, final Map<String, Object> inProperties) { // NOPMD
+        if (Event.LOOKUP.equals(inType)) {
             final LinkButtonHelper.LookupType lType = (LookupType) inProperties
-            .get(AbstractWebController.EVENT_PROPERTY_LOOKUP_TYPE);
+                    .get(AbstractWebController.EVENT_PROPERTY_LOOKUP_TYPE);
             LOG.debug("Lookup event {}.", lType);
             final AbstractWebController lController = (AbstractWebController) inProperties
                     .get(AbstractWebController.EVENT_PROPERTY_LOOKUP_CONTROLLER);
             doLookup(lType, inProperties.get(AbstractWebController.EVENT_PROPERTY_LOOKUP_ID).toString(), inProperties,
                     lController);
-            break;
-        default:
         }
-
     }
 
 }

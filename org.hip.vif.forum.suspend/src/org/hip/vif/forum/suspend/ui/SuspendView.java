@@ -61,6 +61,7 @@ public class SuspendView extends CustomComponent {
      * @param inDates {@link DatePrepare} an initial or earlier suspend period
      * @param inTask {@link SuspendTask} */
     public SuspendView(final GroupContainer inGroups, final DatePrepare inDates, final SuspendTask inTask) {
+        super();
         final VerticalLayout lLayout = new VerticalLayout();
         setCompositionRoot(lLayout);
 
@@ -88,7 +89,7 @@ public class SuspendView extends CustomComponent {
 
         lSuspend.addClickListener(new Button.ClickListener() {
             @Override
-            public void buttonClick(final ClickEvent inEvent) {
+            public void buttonClick(final ClickEvent inEvent) { // NOPMD
                 final DateFieldValidator lValidator = new DateFieldValidator(lFrom, lTo);
                 try {
                     lValidator.validate();
@@ -109,7 +110,7 @@ public class SuspendView extends CustomComponent {
 
         lClear.addClickListener(new Button.ClickListener() {
             @Override
-            public void buttonClick(final ClickEvent inEvent) {
+            public void buttonClick(final ClickEvent inEvent) { // NOPMD
                 if (inTask.clearSuspendDates()) {
                     Notification.show(lMessages.getMessage("msg.data.cleared"), Type.TRAY_NOTIFICATION); //$NON-NLS-1$
                     lFrom.setValue(new Date());
@@ -160,7 +161,7 @@ public class SuspendView extends CustomComponent {
         return outTable;
     }
 
-    private String[] getColumnHeaders(final String[] inKeys) {
+    private String[] getColumnHeaders(final String... inKeys) {
         final IMessages lMessages = Activator.getMessages();
         final String[] outHeaders = new String[inKeys.length];
         for (int i = 0; i < inKeys.length; i++) {
@@ -177,10 +178,11 @@ public class SuspendView extends CustomComponent {
 
     // ---
 
+    /** Validator for date fields. */
     private static class DateFieldValidator implements Validator {
         private final Date now;
         private DateField from;
-        private DateField to;
+        private DateField to; // NOPMD
 
         DateFieldValidator() {
             final Calendar lCal = Calendar.getInstance();
@@ -199,6 +201,8 @@ public class SuspendView extends CustomComponent {
             to = inTo;
         }
 
+        /** @param inValue Object
+         * @return boolean */
         public boolean isValid(final Object inValue) {
             if (noDateType(inValue)) {
                 return false;
@@ -210,17 +214,20 @@ public class SuspendView extends CustomComponent {
         }
 
         private boolean noDateType(final Object inValue) {
-            return (inValue == null || !(inValue instanceof Date));
+            return !(inValue instanceof Date);
         }
 
         @Override
-        public void validate(final Object inValue) throws InvalidValueException {
+        public void validate(final Object inValue) throws InvalidValueException { // NOPMD
             if (isValid(inValue)) {
                 return;
             }
             doFailed(inValue);
         }
 
+        /** Validates the date field.
+         *
+         * @throws InvalidValueException */
         public void validate() throws InvalidValueException {
             final Object lFrom = from.getValue();
             final Object lTo = to.getValue();
@@ -231,16 +238,17 @@ public class SuspendView extends CustomComponent {
         }
 
         private void doFailed(final Object inValue) throws InvalidValueException {
-            if (inValue == null || !(inValue instanceof Date)) {
-                throw new InvalidValueException("warning.input.incorrect"); //$NON-NLS-1$
+            final IMessages lMessages = Activator.getMessages();
+            if (!(inValue instanceof Date)) {
+                throw new InvalidValueException(lMessages.getMessage("warning.input.incorrect")); //$NON-NLS-1$
             }
             if (from == null || now.after(from.getValue())) {
-                throw new InvalidValueException("warning.input.starting"); //$NON-NLS-1$
+                throw new InvalidValueException(lMessages.getMessage("warning.input.starting")); //$NON-NLS-1$
             }
             if (!((Date) inValue).after(from.getValue())) {
-                throw new InvalidValueException("warning.input.ending"); //$NON-NLS-1$
+                throw new InvalidValueException(lMessages.getMessage("warning.input.ending")); //$NON-NLS-1$
             }
-            throw new InvalidValueException("errmsg.input"); //$NON-NLS-1$
+            throw new InvalidValueException(lMessages.getMessage("errmsg.input")); //$NON-NLS-1$
         }
 
     }

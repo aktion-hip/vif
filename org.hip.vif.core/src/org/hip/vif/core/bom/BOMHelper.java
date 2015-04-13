@@ -279,6 +279,14 @@ public final class BOMHelper {
                 .getHome(JoinQuestionToAuthorReviewer.HOME_CLASS_NAME);
     }
 
+    /** Returns the JoinCompletionToAuthorReviewerHome
+     *
+     * @return {@link JoinCompletionToAuthorReviewerHome} */
+    public static JoinCompletionToAuthorReviewerHome getJoinCompletionToAuthorReviewerHome() {
+        return (JoinCompletionToAuthorReviewerHome) VSys.homeManager
+                .getHome(JoinCompletionToAuthorReviewer.HOME_CLASS_NAME);
+    }
+
     /** @return JoinQuestionToContributorsHome */
     public static JoinQuestionToContributorsHome getJoinQuestionToContributorsHome() {
         return (JoinQuestionToContributorsHome) VSys.homeManager

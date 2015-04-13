@@ -20,8 +20,8 @@
 package org.hip.vif.admin.groupedit.tasks;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import org.hip.kernel.bom.QueryResult;
 import org.hip.kernel.exc.VException;
@@ -43,11 +43,11 @@ import com.vaadin.ui.Component;
  *
  * @author Luthiger Created: 16.11.2011 */
 @UseCaseController
-public class GroupAdminSelectTask extends ParticipantSelectTask {
+public class GroupAdminSelectTask extends ParticipantSelectTask { // NOPMD
 
     @SuppressWarnings("unchecked")
     @Override
-    protected Component runChecked() throws RiplaException {
+    protected Component runChecked() throws RiplaException { // NOPMD
         try {
             final ParameterObject lParameters = getParameters();
             final Collection<Long> lMemberIDs = getSelectedIDs((Collection<MemberBean>) lParameters
@@ -63,13 +63,13 @@ public class GroupAdminSelectTask extends ParticipantSelectTask {
     }
 
     private void setGroupAdmins(final Long inGroupID, final Collection<Long> inGroupAdmins) throws VException,
-    SQLException {
+            SQLException {
         boolean refreshAuthorization = false;
         final IActor lActor = getActor();
         final Long lActorID = lActor.getActorID();
         final GroupAdminHome lHome = BOMHelper.getGroupAdminHome();
         final Collection<Long> lAdminIDsBefore = getAdminIDsBefore(inGroupID);
-        final Collection<Long> lAdminIDsAfter = new Vector<Long>();
+        final Collection<Long> lAdminIDsAfter = new ArrayList<Long>();
 
         // process new selected: add group admins not already assigned
         final LinkMemberRoleHome lRoleHome = BOMHelper.getLinkMemberRoleHome();
@@ -80,7 +80,7 @@ public class GroupAdminSelectTask extends ParticipantSelectTask {
                 if (!lRoleHome.hasRoleGroupAdmin(lMemberID)) {
                     lRoleHome.createGroupAdminRole(lMemberID);
                 }
-                refreshAuthorization = refreshAuthorization || (lMemberID.equals(lActorID));
+                refreshAuthorization = refreshAuthorization || lMemberID.equals(lActorID);
             }
         }
 
@@ -94,12 +94,12 @@ public class GroupAdminSelectTask extends ParticipantSelectTask {
         // if actor is group admin, refresh the authorization to have the menu displayed updated
         if (refreshAuthorization) {
             lActor.refreshAuthorization();
-            refreshDash();
+            refreshBody();
         }
     }
 
     private Collection<Long> getAdminIDsBefore(final Long inGroupID) throws VException, SQLException {
-        final Collection<Long> outIDs = new Vector<Long>();
+        final Collection<Long> outIDs = new ArrayList<Long>();
         final QueryResult lAdmins = BOMHelper.getJoinGroupAdminToMemberHome().select(inGroupID);
         while (lAdmins.hasMoreElements()) {
             outIDs.add(BeanWrapperHelper.getLong(MemberHome.KEY_ID, lAdmins.nextAsDomainObject()));
