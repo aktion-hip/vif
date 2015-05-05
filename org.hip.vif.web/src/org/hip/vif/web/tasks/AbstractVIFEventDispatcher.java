@@ -1,6 +1,6 @@
 /**
     This package is part of the application VIF.
-    Copyright (C) 2003-2014, Benno Luthiger
+    Copyright (C) 2003-2015, Benno Luthiger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,9 +23,11 @@ import java.util.Map;
 import org.hip.vif.core.ApplicationConstants;
 import org.hip.vif.core.bom.Text;
 import org.hip.vif.web.Activator;
+import org.hip.vif.web.Constants;
 import org.hip.vif.web.controller.LookupManager;
 import org.hip.vif.web.interfaces.ILookupWindow;
 import org.hip.vif.web.util.LinkButtonHelper.LookupType;
+import org.hip.vif.web.util.VIFAppHelper;
 import org.ripla.exceptions.NoControllerFoundException;
 import org.ripla.util.ParameterObject;
 import org.ripla.web.util.Popup;
@@ -38,12 +40,19 @@ import com.vaadin.ui.VerticalLayout;
 /** Abstract event dispatcher implementation, provides the functionality for the lookup event.
  *
  * @author lbenno */
-public abstract class AbstractVIFEventDispatcher {
+public abstract class AbstractVIFEventDispatcher { // NOPMD by lbenno
     public static final Logger LOG = LoggerFactory.getLogger(AbstractVIFEventDispatcher.class);
 
     private static final String PARAMETER_KEY_ID = "key_id";
 
-    protected void doLookup(final LookupType inType, final String inId, final Map<String, Object> inProperties,
+    /** Calls the lookup window of the specified type.
+     *
+     * @param inType {@link LookupType}
+     * @param inId String the ID of the entry to display
+     * @param inProperties Map<String, Object> additional properties
+     * @param inController {@link AbstractWebController} the controller for the view of the content to display in the
+     *            lookup */
+    protected void doLookup(final LookupType inType, final String inId, final Map<String, Object> inProperties, // NOPMD
             final AbstractWebController inController) {
         ILookupWindow lLookup = null;
         switch (inType) {
@@ -52,10 +61,14 @@ public abstract class AbstractVIFEventDispatcher {
             if (lLookup == null) {
                 break;
             }
-            // TODO, see org.hip.vif.web.internal.handler.LookupEventHandler
             if (inId.contains(Text.DELIMITER_ID_VERSION)) {
+                final String[] lTextID = inId.split(Text.DELIMITER_ID_VERSION);
+                VIFAppHelper.setValueToSession(Constants.TEXT_ID_KEY, Long.parseLong(lTextID[0]));
+                VIFAppHelper.setValueToSession(Constants.TEXT_VERSION_ID_KEY, Long.parseLong(lTextID[1]));
             }
             else {
+                VIFAppHelper.setValueToSession(Constants.TEXT_ID_KEY, Long.parseLong(inId));
+                VIFAppHelper.setValueToSession(Constants.TEXT_VERSION_ID_KEY, -1l);
             }
             displayLookup(lLookup, "lookup.window.title.bibliography", inController); //$NON-NLS-1$
             break;

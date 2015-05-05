@@ -31,12 +31,12 @@ public class LookupBibliography implements ILookupWindow {
 
     @Override
     public int getWidth() {
-        return 500;
+        return 800;
     }
 
     @Override
     public int getHeight() {
-        return 500;
+        return 600;
     }
 
     @Override

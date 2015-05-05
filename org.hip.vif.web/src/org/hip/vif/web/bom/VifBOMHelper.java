@@ -57,4 +57,9 @@ public final class VifBOMHelper {
                 .getHome(JoinQuestionToText.HOME_CLASS_NAME);
     }
 
+    /** @return {@link JoinAuthorReviewerToTextHome} */
+    public static JoinAuthorReviewerToTextHome getJoinAuthorReviewerToTextHome() {
+        return (JoinAuthorReviewerToTextHome) VSys.homeManager.getHome(JoinAuthorReviewerToText.HOME_CLASS_NAME);
+    }
+
 }

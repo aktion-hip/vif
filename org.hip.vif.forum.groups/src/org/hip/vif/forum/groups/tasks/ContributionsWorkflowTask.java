@@ -1,6 +1,6 @@
 /**
  This package is part of the application VIF.
- Copyright (C) 2008-2014, Benno Luthiger
+ Copyright (C) 2008-2015, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -16,14 +16,16 @@
  License along with this library; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package org.hip.vif.forum.groups.tasks;
+package org.hip.vif.forum.groups.tasks; // NOPMD
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Vector;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.hip.kernel.bom.BOMException;
 import org.hip.kernel.bom.DomainObject;
 import org.hip.kernel.exc.VException;
 import org.hip.kernel.workflow.WorkflowAware;
@@ -72,10 +74,10 @@ import com.vaadin.ui.Notification.Type;
  * Created on 11.08.2003
  *
  * @author Luthiger */
-public abstract class ContributionsWorkflowTask extends AbstractWebController {
+public abstract class ContributionsWorkflowTask extends AbstractWebController { // NOPMD
     private static final Logger LOG = LoggerFactory.getLogger(ContributionsWorkflowTask.class);
 
-    protected NotificationTextCollector notificator;
+    protected transient NotificationTextCollector notificator;
 
     /** ContributionsWorkflowTask default constructor. */
     public ContributionsWorkflowTask() {
@@ -154,7 +156,7 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
             final VIFMember lReviewer = (VIFMember) BOMHelper.getMemberCacheHome().getMember(lReviewerID.toString());
             final StringBuilder lNotificationBody = new StringBuilder();
             final StringBuilder lNotificationBodyHtml = new StringBuilder();
-            final Collection<VIFMember> lResponsibles = new Vector<VIFMember>();
+            final Collection<VIFMember> lResponsibles = new ArrayList<VIFMember>();
             for (final AuthorsContributions lAuthorsContributions : lContributionsHandler.values()) {
                 final VIFMember lAuthor = lAuthorsContributions.getAuthor();
 
@@ -173,7 +175,7 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
             lResponsibles.add(lReviewer);
             doNotification(new ChangedNodes(lContributionsHandler.getContributions()), lResponsibles,
                     lNotificationBody, lNotificationBodyHtml, getGroupName(getGroupID()));
-        } catch (final Exception exc) {
+        } catch (final VException | IOException | SQLException | WorkflowException exc) {
             lMessage = lMessages.getMessage("errmsg.general"); //$NON-NLS-1$
             lNotificationType = Type.ERROR_MESSAGE;
             LOG.error("Error encountered while requesting a review for contributions.", exc); //$NON-NLS-1$
@@ -188,7 +190,7 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
             final Collection<String> inBibliographyIDs) throws SQLException, VException {
         // insert into RatingEvents
         final RatingEvents lEvent = (RatingEvents) BOMHelper.getRatingEventsHome().create();
-        lEvent.set(RatingEventsHome.KEY_COMPLETED, new Integer(0));
+        lEvent.set(RatingEventsHome.KEY_COMPLETED, Integer.valueOf(0));
         final Long lRatingID = lEvent.insert(true);
 
         // insert into Ratings
@@ -216,8 +218,8 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
             final DomainObject lEntry = lTextHome.create();
             lEntry.set(RatingsTextHome.KEY_RATINGEVENTS_ID, lRatingID);
             final String[] lIDParts = lBibliographyID.split(Text.DELIMITER_ID_VERSION);
-            lEntry.set(RatingsTextHome.KEY_TEXT_ID, new Long(lIDParts[0]));
-            lEntry.set(RatingsTextHome.KEY_VERSION, new Long(lIDParts[1]));
+            lEntry.set(RatingsTextHome.KEY_TEXT_ID, Long.parseLong(lIDParts[0]));
+            lEntry.set(RatingsTextHome.KEY_VERSION, Long.parseLong(lIDParts[1]));
             lEntry.insert(true);
         }
     }
@@ -227,14 +229,14 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
         inRating.set(RatingsHome.KEY_RATINGEVENTS_ID, lRatingID);
         inRating.set(RatingsHome.KEY_RATER_ID, inRater.getMemberID());
         inRating.set(RatingsHome.KEY_RATED_ID, inRated.getMemberID());
-        inRating.set(RatingsHome.KEY_ISAUTHOR, new Integer(isAuthor ? 1 : 0));
+        inRating.set(RatingsHome.KEY_ISAUTHOR, Integer.valueOf(isAuthor ? 1 : 0));
         inRating.insert(true);
     }
 
     private void createRatingContributionEntry(final DomainObject inEntry, final Long inRatingID, final String inName,
             final String inContributionID) throws SQLException, VException {
         inEntry.set(RatingsQuestionHome.KEY_RATINGEVENTS_ID, inRatingID);
-        inEntry.set(inName, new Long(inContributionID));
+        inEntry.set(inName, Long.parseLong(inContributionID));
         inEntry.insert(true);
     }
 
@@ -265,10 +267,10 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
                         notificator.getNotificationTextHtml());
                 lMail.send();
             }
-        } catch (final Exception exc) {
+        } catch (final VException | SQLException | WorkflowException | IOException exc) {
+            LOG.error("Error encountered during workflow transition!", exc);
             lMessage = lMessages.getMessage("errmsg.general"); //$NON-NLS-1$
             lNotificationType = Type.ERROR_MESSAGE;
-            LOG.error("Error encountered while requesting a review for contributions.", exc); //$NON-NLS-1$
         } finally {
             sendEvent(this.getClass());
             showNotification(lMessage, lNotificationType);
@@ -278,7 +280,9 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
     /** @return {@link ContributionContainer} the data ready for publication. */
     protected abstract ContributionContainer getContributions();
 
-    protected Member getMember() throws Exception {
+    /** @return {@link Member}
+     * @throws BOMException */
+    protected Member getMember() throws BOMException {
         return MemberUtility.INSTANCE.getActiveMemberSearcher().getMemberCacheHome().getMember(getActor().getActorID());
     }
 
@@ -328,7 +332,7 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
      * @throws VException
      * @throws SQLException */
     protected void createNotification(final Collection<VIFWorkflowAware> inContributions) throws VException,
-            SQLException {
+    SQLException {
         for (final VIFWorkflowAware lContribution : inContributions) {
             final QuestionHierachyAdapter lAdapter = new QuestionHierachyAdapter(lContribution);
             lAdapter.accept(notificator);
@@ -358,7 +362,7 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
      * @throws SQLException */
     protected void doNotification(final ChangedNodes inChangedNodes, final Collection<VIFMember> inResponsibles,
             final StringBuilder inMailBody, final StringBuilder inMailBodyHtml, final String inGroupName)
-            throws VException, SQLException {
+                    throws VException, SQLException {
         // - get the mail addresses of the subscribers
         // -- from the nodes above
         final SubscriberCollector lCollector = new SubscriberCollector(true);
@@ -391,9 +395,9 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
      * question) or some completions in it have been published.
      *
      * @author Benno Luthiger Created on Mar 3, 2004 */
-    protected class ChangedNodes extends Object {
-        private Collection<Long> changedNodeIDs;
-        private Collection<VIFWorkflowAware> changedNodes;
+    protected class ChangedNodes {
+        private transient Collection<Long> changedNodeIDs;
+        private transient Collection<VIFWorkflowAware> changedNodesList;
 
         /** ChangedNodes constuctor.
          *
@@ -411,22 +415,22 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
 
         /** @return Collection of changed nodes (Question) */
         public Collection<VIFWorkflowAware> getChangedNodes() {
-            return changedNodes;
+            return changedNodesList;
         }
 
         private void init(final Collection<VIFWorkflowAware> inContributions) throws VException {
-            changedNodeIDs = new Vector<Long>();
-            changedNodes = new Vector<VIFWorkflowAware>();
+            changedNodeIDs = new ArrayList<Long>();
+            changedNodesList = new ArrayList<VIFWorkflowAware>();
             for (final VIFWorkflowAware lContribution : inContributions) {
 
                 final Long lContributionID = lContribution.getNodeID();
                 if (!changedNodeIDs.contains(lContributionID)) {
                     changedNodeIDs.add(lContributionID);
                     if (lContribution.isNode()) {
-                        changedNodes.add(lContribution);
+                        changedNodesList.add(lContribution);
                     }
                     else {
-                        changedNodes.add((VIFWorkflowAware) ((Completion) lContribution).getOwningQuestion());
+                        changedNodesList.add((VIFWorkflowAware) ((Completion) lContribution).getOwningQuestion());
                     }
                 }
             }
@@ -436,8 +440,8 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
     /** Helper inner class to attach the contributions to their authors.
      *
      * @author Benno Luthiger Created on Mar 5, 2004 */
-    protected class AuthorsContributionsHandler extends Object {
-        private final HashMap<Long, AuthorsContributions> authorsContributions = new HashMap<Long, AuthorsContributions>();
+    protected class AuthorsContributionsHandler {
+        private transient final Map<Long, AuthorsContributions> authorsContributions = new ConcurrentHashMap<Long, AuthorsContributions>(); // NOPMD
 
         /** AuthorsContributionsHandler constructor.
          *
@@ -448,10 +452,15 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
          * @throws SQLException */
         public AuthorsContributionsHandler(final Collection<String> inQuestionIDs,
                 final Collection<String> inCompletionIDs, final Collection<String> inBibliographyIDs)
-                throws VException, SQLException {
+                        throws VException, SQLException {
             init(inQuestionIDs, inCompletionIDs, inBibliographyIDs);
         }
 
+        /** AuthorsContributionsHandler constructor.
+         *
+         * @param inContributions {@link ContributionsHelper}
+         * @throws VException
+         * @throws SQLException */
         public AuthorsContributionsHandler(final ContributionsHelper inContributions) throws VException, SQLException {
             init(inContributions.questionIDs, inContributions.completionIDs, inContributions.bibliographyIDs);
         }
@@ -478,7 +487,7 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
             lHome = (ResponsibleHome) BOMHelper.getTextAuthorReviewerHome();
             for (final String lID : inBibliographyIDs) {
                 final Long lAuthorID = lHome.getAuthor(lID).getResponsibleID();
-                final VIFWorkflowAware lContribution = (VIFWorkflowAware) BOMHelper.getTextHome().getText(lID);
+                final VIFWorkflowAware lContribution = (VIFWorkflowAware) VifBOMHelper.getTextHome().getText(lID);
                 processContribution(lAuthorID, lContribution);
             }
 
@@ -506,7 +515,7 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
          *
          * @return Collection<VIFWorkflowAware> */
         public Collection<VIFWorkflowAware> getContributions() {
-            final Collection<VIFWorkflowAware> outContributions = new Vector<VIFWorkflowAware>();
+            final Collection<VIFWorkflowAware> outContributions = new ArrayList<VIFWorkflowAware>();
             for (final AuthorsContributions lAuthor : values()) {
                 outContributions.addAll(lAuthor.getContributions());
             }
@@ -517,16 +526,21 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
     /** Helper inner class: an author with its contributions.
      *
      * @author Benno Luthiger Created on Mar 5, 2004 */
-    protected class AuthorsContributions extends Object {
-        private final Collection<VIFWorkflowAware> contributions = new Vector<VIFWorkflowAware>();
-        private final Long authorID;
+    protected class AuthorsContributions {
+        private transient final Collection<VIFWorkflowAware> contributions = new ArrayList<VIFWorkflowAware>();
+        private transient final Long authorID;
 
+        /** AuthorsContributions constructor.
+         *
+         * @param inAuthorID Long
+         * @param inContribution {@link VIFWorkflowAware} */
         public AuthorsContributions(final Long inAuthorID, final VIFWorkflowAware inContribution) {
             super();
             authorID = inAuthorID;
             contributions.add(inContribution);
         }
 
+        /** @param inContribution {@link VIFWorkflowAware} */
         public void add(final VIFWorkflowAware inContribution) {
             contributions.add(inContribution);
         }
@@ -541,8 +555,8 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
         /** Returns the author of the contributions.
          *
          * @return VIFMember
-         * @throws VException */
-        public VIFMember getAuthor() throws Exception {
+         * @throws BOMException */
+        public VIFMember getAuthor() throws BOMException {
             return (VIFMember) BOMHelper.getMemberCacheHome().getMember(authorID);
         }
     }
@@ -550,15 +564,17 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
     /** Parameter object
      *
      * @author Luthiger Created: 18.07.2010 */
-    protected static class ContributionsHelper extends Object {
-        Collection<String> questionIDs = new Vector<String>();
-        Collection<String> completionIDs = new Vector<String>();
-        Collection<String> bibliographyIDs = new Vector<String>();
+    protected static class ContributionsHelper {
+        private final transient Collection<String> questionIDs = new ArrayList<String>();
+        private final transient Collection<String> completionIDs = new ArrayList<String>();
+        private final transient Collection<String> bibliographyIDs = new ArrayList<String>();
 
         ContributionsHelper(final ContributionContainer inData) {
+            super();
             for (final ContributionWrapper lContribution : inData.getItemIds()) {
-                if (!lContribution.isChecked())
+                if (!lContribution.isChecked()) {
                     continue;
+                }
 
                 switch (lContribution.getEntryType()) {
                 case QUESTION:
@@ -569,25 +585,41 @@ public abstract class ContributionsWorkflowTask extends AbstractWebController {
                     break;
                 case TEXT:
                     bibliographyIDs.add(lContribution.getID());
+                    break;
+                default:
+                    // nothing to do
                 }
             }
         }
 
         /** @return boolean <code>true</code> if user selected more then one entry */
-        boolean hasMultipleSelection() {
+        protected boolean hasMultipleSelection() {
             return questionIDs.size() + completionIDs.size() + bibliographyIDs.size() > 1;
         }
     }
 
     // --- interfaces for generic contribution processing ---
 
-    protected static interface IMailCreator {
+    /** Inteface for classes to create notification mails. */
+    protected interface IMailCreator {
+        /** @param inAuthor {@link VIFMember}
+         * @param inReviewer {@link VIFMember}
+         * @param inNotificationText {@link StringBuilder}
+         * @param inNotificationTextHtml {@link StringBuilder}
+         * @return {@link IVIFMail} the created mail
+         * @throws VException
+         * @throws IOException */
         IVIFMail createMail(VIFMember inAuthor, VIFMember inReviewer,
                 StringBuilder inNotificationText, StringBuilder inNotificationTextHtml)
-                throws VException, IOException;
+                        throws VException, IOException;
     }
 
-    protected static interface IReviewerStateHandler {
+    /** Interface for classes handling the reviewer state. */
+    protected interface IReviewerStateHandler {
+        /** @param inActorID Long
+         * @param inContributions {@link ContributionsHelper}
+         * @throws VException
+         * @throws SQLException */
         void handleReviewerState(Long inActorID, ContributionsHelper inContributions) throws VException, SQLException;
     }
 

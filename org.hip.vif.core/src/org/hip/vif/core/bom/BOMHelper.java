@@ -503,12 +503,6 @@ public final class BOMHelper {
                 .getHome(TextQuestion.HOME_CLASS_NAME);
     }
 
-    /** @return {@link JoinAuthorReviewerToTextHome} */
-    public static JoinAuthorReviewerToTextHome getJoinAuthorReviewerToTextHome() {
-        return (JoinAuthorReviewerToTextHome) VSys.homeManager
-                .getHome(JoinAuthorReviewerToText.HOME_CLASS_NAME);
-    }
-
     /** @return {@link JoinTextToMemberHome} */
     public static JoinTextToMemberHome getJoinTextToMemberHome() {
         return (JoinTextToMemberHome) VSys.homeManager

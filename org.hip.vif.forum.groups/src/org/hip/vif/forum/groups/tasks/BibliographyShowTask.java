@@ -23,8 +23,9 @@ import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.MemberHome;
 import org.hip.vif.core.bom.Text;
 import org.hip.vif.core.bom.TextHome;
-import org.hip.vif.core.bom.impl.JoinAuthorReviewerToTextHome.PublishedText;
 import org.hip.vif.forum.groups.ui.BibliographyView;
+import org.hip.vif.web.bom.JoinAuthorReviewerToTextHome.PublishedText;
+import org.hip.vif.web.bom.VifBOMHelper;
 import org.ripla.annotations.UseCaseController;
 import org.ripla.exceptions.RiplaException;
 
@@ -34,16 +35,16 @@ import com.vaadin.ui.Component;
  *
  * @author Luthiger Created: 14.07.2010 */
 @UseCaseController
-public class BibliographyShowTask extends AbstractGroupsTask {
-    private BibliographyView textView;
+public class BibliographyShowTask extends AbstractGroupsTask { // NOPMD
+    private transient BibliographyView textView;
 
     @Override
-    protected String needsPermission() {
+    protected String needsPermission() { // NOPMD
         return ""; //$NON-NLS-1$
     }
 
     @Override
-    protected Component runChecked() throws RiplaException {
+    protected Component runChecked() throws RiplaException { // NOPMD
         try {
             final Long lTextID = getTextID();
             final Long lVersion = getTextVersion();
@@ -52,7 +53,7 @@ public class BibliographyShowTask extends AbstractGroupsTask {
                 // display published version of bibliography entry
 
                 // get text parameter object containing the published version of the requested text
-                final PublishedText lText = BOMHelper.getJoinAuthorReviewerToTextHome().getTextPublished(lTextID);
+                final PublishedText lText = VifBOMHelper.getJoinAuthorReviewerToTextHome().getTextPublished(lTextID);
                 final MemberHome lMemberHome = BOMHelper.getMemberCacheHome();
                 final GeneralDomainObject lTextBOM = lText.getText();
                 textView = new BibliographyView(lTextBOM, getDownloads(lTextID),
@@ -69,7 +70,7 @@ public class BibliographyShowTask extends AbstractGroupsTask {
                         TextHome.KEY_TYPE, false, this);
             }
             return textView;
-        } catch (final Exception exc) {
+        } catch (final Exception exc) { // NOPMD
             throw createContactAdminException(exc);
         }
     }

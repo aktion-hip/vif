@@ -308,14 +308,18 @@
 
 .vif-upload .v-textfield {
     background-color: transparent;
+    border-radius: 10px;
+    border: 4px dashed #8AC007;
 }
 .vif-upload .v-textfield:hover {
-    opacity:.6;
+    opacity:.7;
+    color: black;
+    border: solid #8AC007;
 }
 
 .vif-upload .v-textfield .vif-drop-hint {
-    margin-top:5px;
-    margin-left:5px;
+    padding-top: 5px;
+    padding-left: 15px;
 }
 
 .vif-view div.spacer,

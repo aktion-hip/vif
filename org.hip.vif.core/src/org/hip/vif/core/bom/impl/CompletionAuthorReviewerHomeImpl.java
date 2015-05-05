@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the persistency layer of the application VIF.
-	Copyright (C) 2003, Benno Luthiger
+	Copyright (C) 2003-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ import org.hip.vif.core.bom.ResponsibleHome;
  * @author: Benno Luthiger
  * @see org.hip.vif.core.bom.CompletionAuthorReviewerHome */
 @SuppressWarnings("serial")
-public class CompletionAuthorReviewerHomeImpl extends AbstractResponsibleHome implements CompletionAuthorReviewerHome {
+public class CompletionAuthorReviewerHomeImpl extends AbstractResponsibleHome implements CompletionAuthorReviewerHome { // NOPMD
     /*
      * Every home has to know the class it handles. They provide access to this name through the method
      * <I>getObjectClassName</I>;
@@ -63,13 +63,13 @@ public class CompletionAuthorReviewerHomeImpl extends AbstractResponsibleHome im
                     +
                     "	<propertyDefs>	\n"
                     +
-                    "		<propertyDef propertyName='"
+                    "		<propertyDef propertyName='" // NOPMD
                     + KEY_COMPLETION_ID
                     + "' valueType='Number' propertyType='simple'>	\n"
                     +
                     "			<mappingDef tableName='tblCompletionAuthorReviewer' columnName='CompletionID'/>	\n"
                     +
-                    "		</propertyDef>	\n"
+                    "		</propertyDef>	\n" // NOPMD
                     +
                     "		<propertyDef propertyName='"
                     + ResponsibleHome.KEY_MEMBER_ID
@@ -108,7 +108,7 @@ public class CompletionAuthorReviewerHomeImpl extends AbstractResponsibleHome im
     }
 
     /** Sets the specified member as author of the specified completion.
-     * 
+     *
      * @param inMemberID java.lang.Long
      * @param inCompletionID java.lang.Long
      * @throws org.hip.kernel.exc.VException
@@ -121,7 +121,7 @@ public class CompletionAuthorReviewerHomeImpl extends AbstractResponsibleHome im
     }
 
     /** Sets the specified member as reviewer of the specified completion.
-     * 
+     *
      * @param inMemberID java.lang.Long
      * @param inCompletionID java.lang.Long
      * @throws org.hip.kernel.exc.VException
@@ -141,14 +141,14 @@ public class CompletionAuthorReviewerHomeImpl extends AbstractResponsibleHome im
     }
 
     @Override
-    protected KeyObject getContributionKey(final Integer inContributionID) throws VException {
+    protected KeyObject getContributionKey(final String inContributionID) throws VException { // NOPMD
         final KeyObject outKey = new KeyObjectImpl();
-        outKey.setValue(KEY_COMPLETION_ID, inContributionID);
+        outKey.setValue(KEY_COMPLETION_ID, Long.parseLong(inContributionID));
         return outKey;
     }
 
     @Override
-    public void removeReviewer(final Long inReviewerID, final Long inCompletionID) throws VException, SQLException {
+    public void removeReviewer(final Long inReviewerID, final Long inCompletionID) throws VException, SQLException { // NOPMD
         final KeyObject lKey = new KeyObjectImpl();
         lKey.setValue(ResponsibleHome.KEY_MEMBER_ID, inReviewerID);
         lKey.setValue(CompletionAuthorReviewerHome.KEY_COMPLETION_ID, inCompletionID);
@@ -159,7 +159,7 @@ public class CompletionAuthorReviewerHomeImpl extends AbstractResponsibleHome im
     }
 
     @Override
-    public Member getAuthor(final Long inCompletionID) throws VException, Exception {
+    public Member getAuthor(final Long inCompletionID) throws VException { // NOPMD
         final KeyObject lKey = new KeyObjectImpl();
         lKey.setValue(CompletionAuthorReviewerHome.KEY_COMPLETION_ID, inCompletionID);
         lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.AUTHOR.getValue());
@@ -168,7 +168,7 @@ public class CompletionAuthorReviewerHomeImpl extends AbstractResponsibleHome im
     }
 
     @Override
-    public boolean checkRefused(final Long inReviewerID, final Long inCompletionID) throws VException, SQLException {
+    public boolean checkRefused(final Long inReviewerID, final Long inCompletionID) throws VException, SQLException { // NOPMD
         final KeyObject lKey = new KeyObjectImpl();
         lKey.setValue(CompletionAuthorReviewerHome.KEY_COMPLETION_ID, inCompletionID);
         lKey.setValue(ResponsibleHome.KEY_MEMBER_ID, inReviewerID);

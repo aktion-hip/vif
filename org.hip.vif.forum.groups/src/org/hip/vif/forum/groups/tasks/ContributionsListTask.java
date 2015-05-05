@@ -16,8 +16,9 @@
  License along with this library; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package org.hip.vif.forum.groups.tasks;
+package org.hip.vif.forum.groups.tasks; // NOPMD
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
 
@@ -72,14 +73,14 @@ import com.vaadin.ui.Table;
  * @author Luthiger */
 @SuppressWarnings("serial")
 @UseCaseController
-public class ContributionsListTask extends ContributionsWorkflowTask implements ValueChangeListener {
+public class ContributionsListTask extends ContributionsWorkflowTask implements ValueChangeListener { // NOPMD
     private static final Logger LOG = LoggerFactory.getLogger(ContributionsListTask.class);
 
     private ContributionContainer contributions;
     private ContributionsListView contributionsList;
 
     @Override
-    public Component runChecked() throws RiplaException {
+    public Component runChecked() throws RiplaException { // NOPMD
         final Long lActorID = getActor().getActorID();
         final Long lGroupID = getGroupID();
         try {
@@ -93,20 +94,19 @@ public class ContributionsListTask extends ContributionsWorkflowTask implements 
                     .getAuthorsUnpublishedQuestions(lActorID, lGroupID);
             final QueryResult lCompletions = BOMHelper.getJoinAuthorReviewerToCompletionHome()
                     .getAuthorsUnpublishedCompletions(lActorID, lGroupID);
-            final QueryResult lTexts = BOMHelper.getJoinAuthorReviewerToTextHome().getAuthorsUnpublishedTexts(lActorID);
+            final QueryResult lTexts = VifBOMHelper.getJoinAuthorReviewerToTextHome().getAuthorsUnpublishedTexts(
+                    lActorID);
             contributions = ContributionContainer.createData(lQuestions, lCompletions, lTexts, lCodeList);
             contributionsList = new ContributionsListView(contributions, getMember(),
                     BeanWrapperHelper.getString(GroupHome.KEY_NAME, lGroup), lNeedsReview, this);
             return contributionsList;
-        } catch (final VException exc) {
-            throw createContactAdminException(exc);
-        } catch (final Exception exc) {
+        } catch (final Exception exc) { // NOPMD
             throw createContactAdminException(exc);
         }
     }
 
     /** Callback function: Deletes the selected contributions. */
-    public void deleteContributions() {
+    public void deleteContributions() { // NOPMD
         final IMessages lMessages = Activator.getMessages();
         final QuestionBranchIterator lIterator = new QuestionBranchIterator();
         final ContributionDeletionHandler lVisitor = new ContributionDeletionHandler();
@@ -117,7 +117,7 @@ public class ContributionsListTask extends ContributionsWorkflowTask implements 
             // we iterate twice: first processing questions only
             for (final ContributionWrapper lContribution : contributions.getItemIds()) {
                 if (EntryType.QUESTION.equals(lContribution.getEntryType())) {
-                    lIterator.start(new Long(lContribution.getID()), true, true, lVisitor);
+                    lIterator.start(Long.parseLong(lContribution.getID()), true, true, lVisitor);
                     lDeletedCount++;
                 }
             }
@@ -126,7 +126,7 @@ public class ContributionsListTask extends ContributionsWorkflowTask implements 
                 if (!EntryType.QUESTION.equals(lContribution.getEntryType())) {
                     // completions: they may be already deleted as nodes of some deleted questions
                     if (EntryType.COMPLETION.equals(lContribution.getEntryType())) {
-                        final Long lCompletionID = new Long(lContribution.getID());
+                        final Long lCompletionID = Long.parseLong(lContribution.getID());
                         if (!lIterator.checkCompletion(lCompletionID)) {
                             ((QuestionHierarchyEntry) BOMHelper.getJoinCompletionToQuestionHome().getCompletion(
                                     lCompletionID)).accept(lVisitor);
@@ -170,7 +170,7 @@ public class ContributionsListTask extends ContributionsWorkflowTask implements 
     }
 
     @Override
-    protected ContributionContainer getContributions() {
+    protected ContributionContainer getContributions() { // NOPMD
         return contributions;
     }
 
@@ -190,7 +190,7 @@ public class ContributionsListTask extends ContributionsWorkflowTask implements 
                     WorkflowAwareContribution.convertToReviewable(lContributions));
 
             // set reviewer to contributions
-            final Long lReviewerID = new Long(lReviewer.getMemberID().toString());
+            final Long lReviewerID = Long.parseLong(lReviewer.getMemberID().toString());
             for (final VIFWorkflowAware lContribution : lContributions) {
                 ((IReviewable) lContribution).setReviewer(lReviewerID);
             }
@@ -208,7 +208,7 @@ public class ContributionsListTask extends ContributionsWorkflowTask implements 
                     .getFormattedMessage(
                             "msg.contributions.request", String.valueOf(lContributionsHandler.getContributions().size()), lReviewerMailAddress); //$NON-NLS-1$
             if (lFoundPrivate) {
-                lMessage += " " + lMessages.getMessage("msg.contributions.nopublish"); //$NON-NLS-1$ //$NON-NLS-2$
+                lMessage += " " + lMessages.getMessage("msg.contributions.nopublish"); // NOPMD //$NON-NLS-1$ //$NON-NLS-2$
             }
         } catch (final NoReviewerException exc) {
             lMessage = lMessages.getMessage("errmsg.no.reviewer"); //$NON-NLS-1$
@@ -219,7 +219,7 @@ public class ContributionsListTask extends ContributionsWorkflowTask implements 
             lMessage = lMessages.getMessage("errmsg.noMail"); //$NON-NLS-1$
             lNotificationType = Type.ERROR_MESSAGE;
             LOG.error("Error encountered while requesting a review for contributions.", exc); //$NON-NLS-1$
-        } catch (final Exception exc) {
+        } catch (final SQLException | IOException | VException | WorkflowException exc) {
             lMessage = lMessages.getMessage("errmsg.general"); //$NON-NLS-1$
             lNotificationType = Type.ERROR_MESSAGE;
             LOG.error("Error encountered while requesting a review for contributions.", exc); //$NON-NLS-1$
@@ -239,13 +239,13 @@ public class ContributionsListTask extends ContributionsWorkflowTask implements 
             final NoReviewerNotification lMail = new NoReviewerNotification(AddressAdapter.fill(lAdmins,
                     MemberHome.KEY_MAIL), getGroupName(lGroupID));
             lMail.send();
-        } catch (final Exception exc) {
+        } catch (final VException exc) {
             LOG.error("Error encountered while sending a mail to group adminstrators.", exc); //$NON-NLS-1$
         }
     }
 
     @Override
-    public void valueChange(final ValueChangeEvent inEvent) {
+    public void valueChange(final ValueChangeEvent inEvent) { // NOPMD
         final Property<?> lProperty = inEvent.getProperty();
         if (contributionsList.checkSelectionSource(lProperty)) {
             if (lProperty instanceof Table) {
@@ -266,6 +266,9 @@ public class ContributionsListTask extends ContributionsWorkflowTask implements 
                     case TEXT:
                         setTextID(lID);
                         sendEvent(BibliographyEditUnpublishedTask.class);
+                        break;
+                    default:
+                        // do nothing
                     }
                 }
             }

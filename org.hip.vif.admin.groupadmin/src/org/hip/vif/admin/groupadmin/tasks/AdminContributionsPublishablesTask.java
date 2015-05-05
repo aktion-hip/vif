@@ -16,7 +16,7 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package org.hip.vif.admin.groupadmin.tasks;
+package org.hip.vif.admin.groupadmin.tasks; // NOPMD
 
 import java.sql.SQLException;
 import java.util.Collection;
@@ -65,20 +65,20 @@ import com.vaadin.ui.Notification;
  * @author Luthiger Created: 23.11.2011 */
 @SuppressWarnings("serial")
 @UseCaseController
-public class AdminContributionsPublishablesTask extends AbstractWebController
-        implements Property.ValueChangeListener {
+public class AdminContributionsPublishablesTask extends AbstractWebController // NOPMD
+implements Property.ValueChangeListener {
     private static final Logger LOG = LoggerFactory
             .getLogger(AdminContributionsPublishablesTask.class);
 
     private ContributionContainer contributions;
 
     @Override
-    protected String needsPermission() {
+    protected String needsPermission() { // NOPMD
         return Constants.PERMISSION_QUESTION_PUBLISH;
     }
 
     @Override
-    protected Component runChecked() throws RiplaException {
+    protected Component runChecked() throws RiplaException { // NOPMD
         try {
             loadContextMenu(Constants.MENU_SET_ID_PUBLISH);
 
@@ -93,7 +93,7 @@ public class AdminContributionsPublishablesTask extends AbstractWebController
             final QueryResult lCompletions = BOMHelper
                     .getJoinAuthorReviewerToCompletionHome()
                     .getAuthorsUnpublishedCompletions(lActorID, lGroupID);
-            final QueryResult lTexts = BOMHelper
+            final QueryResult lTexts = VifBOMHelper
                     .getJoinAuthorReviewerToTextHome()
                     .getAuthorsUnpublishedTexts(lActorID);
             contributions = ContributionContainer.createData(lQuestions,
@@ -113,15 +113,15 @@ public class AdminContributionsPublishablesTask extends AbstractWebController
                     .getFormattedMessage(
                             "ui.contributions.process.title", lGroup.get(GroupHome.KEY_ID), lGroup.get(GroupHome.KEY_NAME)); //$NON-NLS-1$
             return new ContributionsListView(contributions, lTitle, this);
-        } catch (final Exception exc) {
+        } catch (final VException | SQLException exc) {
             throw createContactAdminException(exc);
         }
     }
 
     /** Callback method to publish the selected contributions.
-     * 
+     *
      * @return boolean <code>true</code> if successful */
-    public boolean publishContributions() {
+    public boolean publishContributions() { // NOPMD
         final QuestionHome lQuestionHome = BOMHelper.getQuestionHome();
         final CompletionHome lCompletionHome = BOMHelper.getCompletionHome();
         final TextHome lTextHome = BOMHelper.getTextHome();
@@ -161,9 +161,9 @@ public class AdminContributionsPublishablesTask extends AbstractWebController
                             if (((VIFWorkflowAware) lCompletion
                                     .getOwningQuestion()).isPublished()) {
                                 ((WorkflowAware) lCompletion)
-                                        .doTransition(
-                                                WorkflowAwareContribution.TRANS_ADMIN_PUBLISH,
-                                                lArguments);
+                                .doTransition(
+                                        WorkflowAwareContribution.TRANS_ADMIN_PUBLISH,
+                                        lArguments);
                                 lNumberOfPublished++;
                             } else {
                                 lHasUnpublishables = true;
@@ -172,9 +172,9 @@ public class AdminContributionsPublishablesTask extends AbstractWebController
                             final WorkflowAware lBibliography = (WorkflowAware) lTextHome
                                     .getText(lContribution.getID());
                             lBibliography
-                                    .doTransition(
-                                            WorkflowAwareContribution.TRANS_ADMIN_PUBLISH,
-                                            lArguments);
+                            .doTransition(
+                                    WorkflowAwareContribution.TRANS_ADMIN_PUBLISH,
+                                    lArguments);
                             lNumberOfPublished++;
                         }
                     }
@@ -201,9 +201,9 @@ public class AdminContributionsPublishablesTask extends AbstractWebController
     }
 
     /** Callback method to delete the selected contributions.
-     * 
+     *
      * @return boolean <code>true</code> if successful */
-    public boolean deleteContributions() {
+    public boolean deleteContributions() { // NOPMD
         final QuestionBranchIterator lIterator = new QuestionBranchIterator();
         final ContributionDeletionHandler lVisitor = new ContributionDeletionHandler();
         final JoinCompletionToQuestionHome lCompletionHome = BOMHelper
@@ -216,7 +216,7 @@ public class AdminContributionsPublishablesTask extends AbstractWebController
             for (final ContributionWrapper lContribution : contributions
                     .getItemIds()) {
                 if (EntryType.QUESTION.equals(lContribution.getEntryType())) {
-                    lIterator.start(new Long(lContribution.getID()), true,
+                    lIterator.start(Long.parseLong(lContribution.getID()), true,
                             true, lVisitor);
                     lDeletedCount++;
                 }
@@ -229,7 +229,7 @@ public class AdminContributionsPublishablesTask extends AbstractWebController
                     // deleted questions
                     if (EntryType.COMPLETION.equals(lContribution
                             .getEntryType())) {
-                        final Long lCompletionID = new Long(
+                        final Long lCompletionID = Long.parseLong(
                                 lContribution.getID());
                         if (!lIterator.checkCompletion(lCompletionID)) {
                             ((QuestionHierarchyEntry) lCompletionHome
@@ -268,7 +268,7 @@ public class AdminContributionsPublishablesTask extends AbstractWebController
     private void updateStateContributions(
             final Collection<VIFWorkflowAware> inContributions,
             final Long inAuthorID, final String inTransition)
-            throws SQLException, WorkflowException, VException {
+                    throws SQLException, WorkflowException, VException {
         for (final VIFWorkflowAware lContribution : inContributions) {
             ((WorkflowAware) lContribution).doTransition(inTransition,
                     new Object[] { inAuthorID });
@@ -284,18 +284,19 @@ public class AdminContributionsPublishablesTask extends AbstractWebController
             final ContributionWrapper lContribution = (ContributionWrapper) lSelected;
             switch (lContribution.getEntryType()) {
             case QUESTION:
-                setQuestionID(new Long(lContribution.getID()));
+                setQuestionID(Long.parseLong(lContribution.getID()));
                 sendEvent(AdminQuestionEditTask2.class);
                 break;
             case COMPLETION:
-                setCompletionID(new Long(lContribution.getID()));
+                setCompletionID(Long.parseLong(lContribution.getID()));
                 sendEvent(AdminCompletionEditTask.class);
                 break;
             case TEXT:
                 setTextID(lContribution.getID());
                 sendEvent(BibliographyEditUnpublishedTask.class);
                 break;
-
+            default:
+                // do nothing
             }
         }
     }

@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2003, Benno Luthiger
+	Copyright (C) 2003-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,18 +27,13 @@ import org.hip.vif.core.bom.Responsible;
 import org.hip.vif.core.bom.ResponsibleHome;
 
 /** Created on 15.08.2003
- * 
+ *
  * @author Luthiger */
 @SuppressWarnings("serial")
-public abstract class AbstractResponsibleHome extends DomainObjectHomeImpl implements ResponsibleHome {
-
-    /** AbstractResponsibleHome default constructor. */
-    public AbstractResponsibleHome() {
-        super();
-    }
+public abstract class AbstractResponsibleHome extends DomainObjectHomeImpl implements ResponsibleHome { // NOPMD
 
     /** Returns the entry identified by the specified values, i.e. either author or reviewer.
-     * 
+     *
      * @param inContributionID String
      * @param inMemberID Long
      * @return Responsible
@@ -46,29 +41,30 @@ public abstract class AbstractResponsibleHome extends DomainObjectHomeImpl imple
      * @throws SQLException */
     @Override
     public Responsible getResponsible(final String inContributionID, final Long inMemberID) throws VException,
-            SQLException {
-        final KeyObject lKey = getContributionKey(new Integer(inContributionID));
+    SQLException {
+        final KeyObject lKey = getContributionKey(inContributionID);
         lKey.setValue(ResponsibleHome.KEY_MEMBER_ID, inMemberID);
         return (Responsible) findByKey(lKey);
     }
 
     /** Returns the responsible author.
-     * 
+     *
      * @param inContributionID String
      * @return Responsible
      * @throws VException
      * @throws SQLException */
     @Override
     public Responsible getAuthor(final String inContributionID) throws VException, SQLException {
-        final KeyObject lKey = getContributionKey(new Integer(inContributionID));
+        final KeyObject lKey = getContributionKey(inContributionID);
         lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.AUTHOR.getValue());
         return (Responsible) findByKey(lKey);
     }
 
     /** Hook for subclasses. Returns a KeyObject initialized with the contribution ID.
-     * 
-     * @param inContributionID Integer
+     *
+     * @param inContributionID String may be a long or (in the case of a text contribution) something like
+     *            <code>12-2</code>
      * @return KeyObject
      * @throws VException */
-    protected abstract KeyObject getContributionKey(Integer inContributionID) throws VException;
+    protected abstract KeyObject getContributionKey(String inContributionID) throws VException;
 }

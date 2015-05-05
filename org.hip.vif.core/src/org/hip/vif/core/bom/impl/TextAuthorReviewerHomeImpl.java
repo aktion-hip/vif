@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the persistency layer of the application VIF.
-	Copyright (C) 2003, Benno Luthiger
+	Copyright (C) 2003-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ import org.hip.vif.core.bom.TextAuthorReviewerHome;
  * @author: Benno Luthiger
  * @see org.hip.vif.core.bom.TextAuthorReviewerHome */
 @SuppressWarnings("serial")
-public class TextAuthorReviewerHomeImpl extends AbstractResponsibleHome implements TextAuthorReviewerHome {
+public class TextAuthorReviewerHomeImpl extends AbstractResponsibleHome implements TextAuthorReviewerHome { // NOPMD
     /*
      * Every home has to know the class it handles. They provide access to this name through the method
      * <I>getObjectClassName</I>;
@@ -68,13 +68,13 @@ public class TextAuthorReviewerHomeImpl extends AbstractResponsibleHome implemen
                     +
                     "	<propertyDefs>	\n"
                     +
-                    "		<propertyDef propertyName='"
+                    "		<propertyDef propertyName='" // NOPMD
                     + KEY_TEXT_ID
                     + "' valueType='Long' propertyType='simple'>	\n"
                     +
                     "			<mappingDef tableName='tblTextAuthorReviewer' columnName='TextID'/>	\n"
                     +
-                    "		</propertyDef>	\n"
+                    "		</propertyDef>	\n" // NOPMD
                     +
                     "		<propertyDef propertyName='"
                     + KEY_VERSION
@@ -121,20 +121,20 @@ public class TextAuthorReviewerHomeImpl extends AbstractResponsibleHome implemen
     }
 
     @Override
-    public void setAuthor(final Long inMemberID, final Long inTextID, final int inVersion) throws VException,
-            SQLException {
+    public void setAuthor(final Long inMemberID, final Long inTextID, final int inVersion) throws VException, // NOPMD
+    SQLException {
         final DomainObject lAuthor = create();
         lAuthor.set(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.AUTHOR.getValue());
-        lAuthor.set(TextAuthorReviewerHome.KEY_VERSION, new Long(inVersion));
+        lAuthor.set(TextAuthorReviewerHome.KEY_VERSION, Long.valueOf(inVersion));
         setAuthorReviewer(lAuthor, inMemberID, inTextID);
     }
 
     @Override
-    public void setReviewer(final Long inMemberID, final Long inTextID, final int inVersion) throws VException,
-            SQLException {
+    public void setReviewer(final Long inMemberID, final Long inTextID, final int inVersion) throws VException, // NOPMD
+    SQLException {
         final DomainObject lReviwer = create();
         lReviwer.set(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER.getValue());
-        lReviwer.set(TextAuthorReviewerHome.KEY_VERSION, new Long(inVersion));
+        lReviwer.set(TextAuthorReviewerHome.KEY_VERSION, Long.valueOf(inVersion));
         setAuthorReviewer(lReviwer, inMemberID, inTextID);
     }
 
@@ -146,29 +146,29 @@ public class TextAuthorReviewerHomeImpl extends AbstractResponsibleHome implemen
     }
 
     @Override
-    protected KeyObject getContributionKey(final Integer inContributionID) throws VException {
+    protected KeyObject getContributionKey(final String inContributionID) throws VException { // NOPMD
+        final String[] lTextID = inContributionID.split("-");
         final KeyObject outKey = new KeyObjectImpl();
-        outKey.setValue(TextAuthorReviewerHome.KEY_TEXT_ID, inContributionID);
+        outKey.setValue(TextAuthorReviewerHome.KEY_TEXT_ID, Long.parseLong(lTextID[0]));
+        outKey.setValue(TextAuthorReviewerHome.KEY_VERSION, Long.parseLong(lTextID[1]));
         return outKey;
     }
 
     /** We have to override because the text contribution's id is something like <code>id-version</code> */
     @Override
     public Responsible getAuthor(final String inContributionID) throws VException, SQLException {
-        final String[] lTextID = inContributionID.split("-");
-        final KeyObject lKey = getContributionKey(new Integer(lTextID[0]));
-        lKey.setValue(TextAuthorReviewerHome.KEY_VERSION, new Long(lTextID[1]));
+        final KeyObject lKey = getContributionKey(inContributionID);
         lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.AUTHOR.getValue());
         return (Responsible) findByKey(lKey);
     }
 
     @Override
-    public void removeReviewer(final Long inReviewerID, final Long inTextID, final int inVersion) throws VException,
-            SQLException {
+    public void removeReviewer(final Long inReviewerID, final Long inTextID, final int inVersion) throws VException, // NOPMD
+    SQLException {
         final KeyObject lKey = new KeyObjectImpl();
         lKey.setValue(ResponsibleHome.KEY_MEMBER_ID, inReviewerID);
         lKey.setValue(TextAuthorReviewerHome.KEY_TEXT_ID, inTextID);
-        lKey.setValue(TextAuthorReviewerHome.KEY_VERSION, new Long(inVersion));
+        lKey.setValue(TextAuthorReviewerHome.KEY_VERSION, Long.valueOf(inVersion));
         lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER.getValue());
         final DomainObject lEntry = findByKey(lKey);
         lEntry.set(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER_REFUSED.getValue());
@@ -176,21 +176,21 @@ public class TextAuthorReviewerHomeImpl extends AbstractResponsibleHome implemen
     }
 
     @Override
-    public Member getAuthor(final Long inTextID, final int inVersion) throws Exception {
+    public Member getAuthor(final Long inTextID, final int inVersion) throws Exception { // NOPMD
         final KeyObject lKey = new KeyObjectImpl();
         lKey.setValue(TextAuthorReviewerHome.KEY_TEXT_ID, inTextID);
-        lKey.setValue(TextAuthorReviewerHome.KEY_VERSION, new Long(inVersion));
+        lKey.setValue(TextAuthorReviewerHome.KEY_VERSION, Long.valueOf(inVersion));
         lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.AUTHOR.getValue());
         final DomainObject lEntry = findByKey(lKey);
         return BOMHelper.getMemberCacheHome().getMember(lEntry.get(ResponsibleHome.KEY_MEMBER_ID).toString());
     }
 
     @Override
-    public boolean checkRefused(final Long inReviewerID, final Long inTextID, final int inVersion) throws VException,
-            SQLException {
+    public boolean checkRefused(final Long inReviewerID, final Long inTextID, final int inVersion) throws VException, // NOPMD
+    SQLException {
         final KeyObject lKey = new KeyObjectImpl();
         lKey.setValue(TextAuthorReviewerHome.KEY_TEXT_ID, inTextID);
-        lKey.setValue(TextAuthorReviewerHome.KEY_VERSION, new Long(inVersion));
+        lKey.setValue(TextAuthorReviewerHome.KEY_VERSION, Long.valueOf(inVersion));
         lKey.setValue(ResponsibleHome.KEY_MEMBER_ID, inReviewerID);
         lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER_REFUSED.getValue());
         return getCount(lKey) != 0;

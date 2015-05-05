@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the persistency layer of the application VIF.
-	Copyright (C) 2003, Benno Luthiger
+	Copyright (C) 2003-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ import org.hip.vif.core.bom.ResponsibleHome;
  * @author: Benno Luthiger
  * @see org.hip.vif.core.bom.QuestionAuthorReviewerHome */
 @SuppressWarnings("serial")
-public class QuestionAuthorReviewerHomeImpl extends AbstractResponsibleHome implements QuestionAuthorReviewerHome {
+public class QuestionAuthorReviewerHomeImpl extends AbstractResponsibleHome implements QuestionAuthorReviewerHome { // NOPMD
     /*
      * Every home has to know the class it handles. They provide access to this name through the method
      * <I>getObjectClassName</I>;
@@ -62,13 +62,13 @@ public class QuestionAuthorReviewerHomeImpl extends AbstractResponsibleHome impl
                     +
                     "	<propertyDefs>	\n"
                     +
-                    "		<propertyDef propertyName='"
+                    "		<propertyDef propertyName='" // NOPMD
                     + KEY_QUESTION_ID
                     + "' valueType='Long' propertyType='simple'>	\n"
                     +
                     "			<mappingDef tableName='tblQuestionAuthorReviewer' columnName='QuestionID'/>	\n"
                     +
-                    "		</propertyDef>	\n"
+                    "		</propertyDef>	\n" // NOPMD
                     +
                     "		<propertyDef propertyName='"
                     + ResponsibleHome.KEY_MEMBER_ID
@@ -94,11 +94,6 @@ public class QuestionAuthorReviewerHomeImpl extends AbstractResponsibleHome impl
                     "	</propertyDefs>	\n" +
                     "</objectDef>";
 
-    /** Constructor for QuestionAuthorReviewerHomeImpl. */
-    public QuestionAuthorReviewerHomeImpl() {
-        super();
-    }
-
     /** @see org.hip.kernel.bom.GeneralDomainObjectHome#getObjectClassName() */
     @Override
     public String getObjectClassName() {
@@ -112,7 +107,7 @@ public class QuestionAuthorReviewerHomeImpl extends AbstractResponsibleHome impl
     }
 
     /** Sets the specified member as author of the specified question.
-     * 
+     *
      * @param inMemberID java.lang.Long
      * @param inQuestionID java.lang.Long
      * @throws org.hip.kernel.exc.VException
@@ -125,13 +120,13 @@ public class QuestionAuthorReviewerHomeImpl extends AbstractResponsibleHome impl
     }
 
     /** Sets the specified member as reviewer of the specified question.
-     * 
+     *
      * @param inMemberID java.lang.Long
      * @param inQuestionID java.lang.Long
      * @throws org.hip.kernel.exc.VException
      * @throws java.sql.SQLException */
     @Override
-    public void setReviewer(final Long inMemberID, final Long inQuestionID) throws VException, SQLException {
+    public void setReviewer(final Long inMemberID, final Long inQuestionID) throws VException, SQLException { // NOPMD
         final DomainObject lReviewer = create();
         lReviewer.set(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.REVIEWER.getValue());
         setAuthorReviewer(lReviewer, inMemberID, inQuestionID);
@@ -145,14 +140,14 @@ public class QuestionAuthorReviewerHomeImpl extends AbstractResponsibleHome impl
     }
 
     @Override
-    protected KeyObject getContributionKey(final Integer inContributionID) throws VException {
+    protected KeyObject getContributionKey(final String inContributionID) throws VException { // NOPMD
         final KeyObject outKey = new KeyObjectImpl();
-        outKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inContributionID);
+        outKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, Long.parseLong(inContributionID));
         return outKey;
     }
 
     @Override
-    public void removeReviewer(final Long inMemberID, final Long inQuestionID) throws VException, SQLException {
+    public void removeReviewer(final Long inMemberID, final Long inQuestionID) throws VException, SQLException { // NOPMD
         final KeyObject lKey = new KeyObjectImpl();
         lKey.setValue(ResponsibleHome.KEY_MEMBER_ID, inMemberID);
         lKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inQuestionID);
@@ -163,7 +158,7 @@ public class QuestionAuthorReviewerHomeImpl extends AbstractResponsibleHome impl
     }
 
     @Override
-    public Member getAuthor(final Long inQuestionID) throws Exception {
+    public Member getAuthor(final Long inQuestionID) throws VException { // NOPMD
         final KeyObject lKey = new KeyObjectImpl();
         lKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inQuestionID);
         lKey.setValue(ResponsibleHome.KEY_TYPE, ResponsibleHome.Type.AUTHOR.getValue());
@@ -172,7 +167,7 @@ public class QuestionAuthorReviewerHomeImpl extends AbstractResponsibleHome impl
     }
 
     @Override
-    public boolean checkRefused(final Long inReviewerID, final Long inQuestionID) throws VException, SQLException {
+    public boolean checkRefused(final Long inReviewerID, final Long inQuestionID) throws VException, SQLException { // NOPMD
         final KeyObject lKey = new KeyObjectImpl();
         lKey.setValue(QuestionAuthorReviewerHome.KEY_QUESTION_ID, inQuestionID);
         lKey.setValue(ResponsibleHome.KEY_MEMBER_ID, inReviewerID);

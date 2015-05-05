@@ -89,7 +89,7 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
                     lActorID, lGroupID, lForReview);
             final QueryResult lCompletions = BOMHelper.getJoinAuthorReviewerToCompletionHome().getReviewersCompletions(
                     lActorID, lGroupID, lForReview);
-            final QueryResult lTexts = BOMHelper.getJoinAuthorReviewerToTextHome().getReviewersUnpublishedTexts(
+            final QueryResult lTexts = VifBOMHelper.getJoinAuthorReviewerToTextHome().getReviewersUnpublishedTexts(
                     lActorID);
             contributions = ContributionContainer.createDataSets(lQuestions, lCompletions, lTexts, lCodeList);
             contributionsList = new RequestsListView(contributions[0], contributions[1], getMember(),
@@ -194,6 +194,7 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
                         sendEvent(CompletionReviewTask.class);
                         break;
                     case TEXT:
+                        setTextID(lID);
                         requestLookup(LookupType.BIBLIOGRAPHY, lID);
                         break;
                     default:

@@ -39,6 +39,7 @@ import org.ripla.interfaces.IMessages;
 import org.ripla.web.util.Dialog;
 import org.ripla.web.util.Dialog.AbstractDialogWindow;
 import org.ripla.web.util.Dialog.DialogWindow;
+import org.ripla.web.util.RiplaViewHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -125,6 +126,11 @@ public class UploadComponent extends CustomComponent { // NOPMD
             layout.addComponent(lDownloadLink);
             lLast = lDownloadLink;
         }
+        else {
+            final Component lSpace = RiplaViewHelper.createSpacer();
+            layout.addComponent(lSpace);
+            lLast = lSpace;
+        }
         lLast.setWidth("100%"); //$NON-NLS-1$
         layout.setExpandRatio(lLast, 1);
         layout.setComponentAlignment(lLast, Alignment.MIDDLE_LEFT);
@@ -210,8 +216,8 @@ public class UploadComponent extends CustomComponent { // NOPMD
 
     private Component createDropBox(final IBibliographyTask inTask) {
         final CssLayout lDropPane = new CssLayout();
-        lDropPane.setWidth("150px"); //$NON-NLS-1$
-        lDropPane.setHeight("30px"); //$NON-NLS-1$
+        lDropPane.setWidth("200px"); //$NON-NLS-1$
+        lDropPane.setHeight("40px"); //$NON-NLS-1$
         lDropPane.addStyleName("v-textfield"); //$NON-NLS-1$
         final Label lHint = new Label(Activator.getMessages().getMessage("ui.upload.drop.box")); //$NON-NLS-1$
         lHint.setStyleName("vif-drop-hint"); //$NON-NLS-1$

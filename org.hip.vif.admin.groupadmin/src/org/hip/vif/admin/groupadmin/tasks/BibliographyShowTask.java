@@ -24,63 +24,61 @@ import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.MemberHome;
 import org.hip.vif.core.bom.Text;
 import org.hip.vif.core.bom.TextHome;
-import org.hip.vif.core.bom.impl.JoinAuthorReviewerToTextHome.PublishedText;
+import org.hip.vif.web.bom.JoinAuthorReviewerToTextHome.PublishedText;
+import org.hip.vif.web.bom.VifBOMHelper;
 import org.ripla.annotations.UseCaseController;
 import org.ripla.exceptions.RiplaException;
 
 import com.vaadin.ui.Component;
 
-/**
- * Task to show a bibliography entry.
- * 
- * @author Luthiger Created: 14.07.2010
- */
+/** Task to show a bibliography entry.
+ *
+ * @author Luthiger Created: 14.07.2010 */
 @UseCaseController
-public class BibliographyShowTask extends AbstractBibliographyTask {
+public class BibliographyShowTask extends AbstractBibliographyTask { // NOPMD
 
-	private BibliographyView textView;
+    private transient BibliographyView textView;
 
-	@Override
-	protected String needsPermission() {
-		return ""; //$NON-NLS-1$
-	}
+    @Override
+    protected String needsPermission() { // NOPMD
+        return ""; //$NON-NLS-1$
+    }
 
-	@Override
-	protected Component runChecked() throws RiplaException {
-		try {
-			final Long lTextID = getTextID();
-			final Long lVersion = getTextVersion();
+    @Override
+    protected Component runChecked() throws RiplaException { // NOPMD
+        try {
+            final Long lTextID = getTextID();
+            final Long lVersion = getTextVersion();
 
-			if (lVersion < 0) {
-				// display published version of bibliography entry
+            if (lVersion < 0) {
+                // display published version of bibliography entry
 
-				// get text parameter object containing the published version of
-				// the requested text
-				final PublishedText lText = BOMHelper
-						.getJoinAuthorReviewerToTextHome().getTextPublished(
-								lTextID);
-				final MemberHome lMemberHome = BOMHelper.getMemberCacheHome();
-				final GeneralDomainObject lTextBOM = lText.getText();
-				textView = new BibliographyView(lTextBOM,
-						getDownloads(lTextID), lMemberHome.getMember(lText
-								.getAuthorID()),
-						lText.getReviewerID() == null ? null : lMemberHome
-								.getMember(lText.getReviewerID()),
-						TextHome.KEY_BIBLIO_TYPE, getActor().isGuest(), this);
-			} else {
-				// display specified version of bibliography entry
-				final Text lText = BOMHelper.getTextHome().getText(lTextID,
-						lVersion.intValue());
-				textView = new BibliographyView(lText, getDownloads(lTextID),
-						BOMHelper.getTextAuthorReviewerHome().getAuthor(
-								lTextID, lVersion.intValue()), null,
-						TextHome.KEY_TYPE, false, this);
-			}
-			return textView;
-		}
-		catch (final Exception exc) {
-			throw createContactAdminException(exc);
-		}
-	}
+                // get text parameter object containing the published version of
+                // the requested text
+                final PublishedText lText = VifBOMHelper
+                        .getJoinAuthorReviewerToTextHome().getTextPublished(
+                                lTextID);
+                final MemberHome lMemberHome = BOMHelper.getMemberCacheHome();
+                final GeneralDomainObject lTextBOM = lText.getText();
+                textView = new BibliographyView(lTextBOM,
+                        getDownloads(lTextID), lMemberHome.getMember(lText
+                                .getAuthorID()),
+                        lText.getReviewerID() == null ? null : lMemberHome
+                                .getMember(lText.getReviewerID()),
+                        TextHome.KEY_BIBLIO_TYPE, getActor().isGuest(), this);
+            } else {
+                // display specified version of bibliography entry
+                final Text lText = BOMHelper.getTextHome().getText(lTextID,
+                        lVersion.intValue());
+                textView = new BibliographyView(lText, getDownloads(lTextID),
+                        BOMHelper.getTextAuthorReviewerHome().getAuthor(
+                                lTextID, lVersion.intValue()), null,
+                        TextHome.KEY_TYPE, false, this);
+            }
+            return textView;
+        } catch (final Exception exc) { // NOPMD
+            throw createContactAdminException(exc);
+        }
+    }
 
 }
