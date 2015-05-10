@@ -19,6 +19,7 @@
 package org.hip.vif.web.util;
 
 import java.io.File;
+import java.net.URI;
 import java.sql.SQLException;
 
 import org.hip.kernel.dbaccess.DataSourceRegistry;
@@ -143,15 +144,13 @@ public final class VIFAppHelper {
 
     /** @return String e.g. <code>http://localhost:8084/forum</code> */
     public static String getMainForumURL() {
-        final String outServletPath = UI.getCurrent().getPage().getLocation().toString();
-        return outServletPath.replaceAll(Constants.CONTEXT_ADMIN, Constants.CONTEXT_FORUM);
+        return new URLHelper(UI.getCurrent().getPage().getLocation(), true).getUrl();
 
     }
 
     /** @return String e.g. <code>http://localhost:8084/admin</code> */
     public static String getMainAdminURL() {
-        final String outServletPath = UI.getCurrent().getPage().getLocation().toString();
-        return outServletPath.replaceAll(Constants.CONTEXT_FORUM, Constants.CONTEXT_ADMIN);
+        return new URLHelper(UI.getCurrent().getPage().getLocation(), false).getUrl();
     }
 
     /** Creates an instance of <code>IAuthenticator</code> for the <code>org.ripla.interfaces.IAppConfiguration</code>.
@@ -184,6 +183,38 @@ public final class VIFAppHelper {
                 }
             }
         };
+    }
+
+    // ---
+
+    /** scheme://host:port/path */
+    private static class URLHelper {
+        private static final String TMPL = "%s://%s%s";
+        private static final String TMPL_PORT = "%s://%s:%s%s";
+        private final String url;
+
+        /** @param inURI {@link URI} the URI to evaluate
+         * @param inForum boolean <code>true</code> if the URL is created for the forum app, else for the admin app */
+        protected URLHelper(final URI inURI, final boolean inForum) {
+            if (inURI.getPort() == -1) {
+                url = String.format(TMPL, inURI.getScheme(), inURI.getHost(), getPath(inURI.getPath(), inForum));
+            }
+            else {
+                url = String.format(TMPL_PORT, inURI.getScheme(), inURI.getHost(), inURI.getPort(),
+                        getPath(inURI.getPath(), inForum));
+            }
+        }
+
+        private String getPath(final String inPath, final boolean inForum) {
+            if (inForum) {
+                return inPath.replaceAll(Constants.CONTEXT_ADMIN, Constants.CONTEXT_FORUM);
+            }
+            return inPath.replaceAll(Constants.CONTEXT_FORUM, Constants.CONTEXT_ADMIN);
+        }
+
+        private String getUrl() {
+            return url;
+        }
     }
 
 }
