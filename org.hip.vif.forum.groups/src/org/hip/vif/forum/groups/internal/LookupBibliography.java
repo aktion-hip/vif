@@ -27,30 +27,30 @@ import org.ripla.web.util.UseCaseHelper;
 /** This bundle's service provider for <code>IContentLookup</code>.
  *
  * @author Luthiger Created: 29.12.2011 */
-public class LookupBibliography implements ILookupWindow {
+public class LookupBibliography implements ILookupWindow { // NOPMD by lbenno 
 
     @Override
-    public int getWidth() {
+    public int getWidth() { // NOPMD by lbenno 
         return 800;
     }
 
     @Override
-    public int getHeight() {
+    public int getHeight() { // NOPMD by lbenno 
         return 600;
     }
 
     @Override
-    public String getControllerName() {
+    public String getControllerName() { // NOPMD by lbenno 
         return UseCaseHelper.createFullyQualifiedControllerName(BibliographyShowTask.class);
     }
 
     @Override
-    public boolean isForum() {
+    public boolean isForum() { // NOPMD by lbenno 
         return true;
     }
 
     @Override
-    public LookupType getType() {
+    public LookupType getType() { // NOPMD by lbenno 
         return LookupType.BIBLIOGRAPHY;
     }
 

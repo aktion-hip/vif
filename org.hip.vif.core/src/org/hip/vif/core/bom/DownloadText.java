@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the application VIF.
- Copyright (C) 2010, Benno Luthiger
+ Copyright (C) 2010-2015, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -25,55 +25,53 @@ import org.hip.kernel.exc.VException;
 import org.hip.kernel.servlet.impl.FileItem;
 import org.hip.vif.core.exc.ProhibitedFileException;
 
-/**
- * Interface of model to download files.
+/** Interface of model to download files.
  *
- * @author Luthiger
- * Created: 19.09.2010
- */
+ * @author Luthiger Created: 19.09.2010 */
 public interface DownloadText extends DomainObject {
 
-	/**
-	 * Create a new download entry.
-	 * 
-	 * @param inValues {@link IDownloadTextValues}
-	 * @return Long id of the newly created entry
-	 * @throws VException
-	 * @throws SQLException 
-	 */
-	Long ucNew(IDownloadTextValues inValues) throws VException, SQLException;
+    /** Create a new download entry.
+     *
+     * @param inValues {@link IDownloadTextValues}
+     * @return Long id of the newly created entry
+     * @throws VException
+     * @throws SQLException */
+    Long ucNew(IDownloadTextValues inValues) throws VException, SQLException;
 
-	/**
-	 * Sets the specified values to the model.
-	 * 
-	 * @param inValues {@link IDownloadTextValues}
-	 * @throws VException
-	 */
-	public void setValuesToModel(IDownloadTextValues inValues) throws VException;
-	
-// ---
-	
-	/**
-	 * Interface for parameter objects.
-	 * 
-	 * @author Luthiger
-	 */
-	public static interface IDownloadTextValues {
-		public void setTextID(Long inTextID);
-		public Long getTextID();
-		public String getLabel();
-		public String getUUID();
-		public String getMimetype();
-		public String getDoctype();
-		public Long getMemberID();
-		public FileItem getFile();
-		public boolean hasUpload();
-		/**
-		 * Checks the file type of the uploaded file.
-		 * @throws ProhibitedFileException
-		 */
-		public void checkType() throws ProhibitedFileException;
-	}
+    /** Sets the specified values to the model.
+     *
+     * @param inValues {@link IDownloadTextValues}
+     * @throws VException */
+    void setValuesToModel(IDownloadTextValues inValues) throws VException;
 
+    // ---
+
+    /** Interface for parameter objects.
+     *
+     * @author Luthiger */
+    interface IDownloadTextValues {
+        void setTextID(Long inTextID); // NOPMD
+
+        Long getTextID(); // NOPMD
+
+        String getLabel(); // NOPMD
+
+        String getUUID(); // NOPMD
+
+        String getMimetype(); // NOPMD
+
+        String getDoctype(); // NOPMD
+
+        Long getMemberID(); // NOPMD
+
+        FileItem getFile(); // NOPMD
+
+        boolean hasUpload(); // NOPMD
+
+        /** Checks the file type of the uploaded file.
+         *
+         * @throws ProhibitedFileException */
+        void checkType() throws ProhibitedFileException;
+    }
 
 }

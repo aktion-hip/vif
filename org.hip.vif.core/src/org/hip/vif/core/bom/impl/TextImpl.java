@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the persistency layer of the application VIF.
-	Copyright (C) 2010, Benno Luthiger
+	Copyright (C) 2010-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package org.hip.vif.core.bom.impl;
+package org.hip.vif.core.bom.impl; // NOPMD
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -60,7 +60,7 @@ import org.hip.vif.core.util.QuestionHierarchyEntry;
  * @author Luthiger Created: 14.06.2010 */
 @SuppressWarnings("serial")
 public class TextImpl extends WorkflowAwareContribution implements Text,
-        Indexable, QuestionHierarchyEntry {
+Indexable, QuestionHierarchyEntry {
     public final static String HOME_CLASS_NAME = "org.hip.vif.core.bom.impl.TextHomeImpl";
 
     private static final int LEN_REFERENCE = 20;
@@ -93,26 +93,24 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
             set(TextHome.KEY_REFERENCE,
                     createReference(inValues.getBiblioAuthor(),
                             inValues.getBiblioYear()));
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (VException | SQLException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
         return ucNew(0, inValues, inActorID);
     }
 
     @Override
-    public Long ucNew(final Long inActorID) throws BOMChangeValueException {
+    public Long ucNew(final Long inActorID) throws BOMChangeValueException { // NOPMD
         try {
             preCheck(get(TextHome.KEY_TITLE).toString(),
                     get(TextHome.KEY_AUTHOR).toString(), get(TextHome.KEY_YEAR)
-                            .toString());
-
+                    .toString());
+            set(TextHome.KEY_REMARK, get(TextHome.KEY_REMARK).toString().trim());
             set(TextHome.KEY_REFERENCE,
                     createReference(get(TextHome.KEY_AUTHOR).toString(),
                             get(TextHome.KEY_YEAR).toString()));
-            set(TextHome.KEY_VERSION, new Long(0));
-            set(TextHome.KEY_STATE, new Long(
+            set(TextHome.KEY_VERSION, 0l);
+            set(TextHome.KEY_STATE, Long.valueOf(
                     WorkflowAwareContribution.S_PRIVATE));
             final Long outTextID = insert(true);
 
@@ -121,15 +119,13 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
                     outTextID, 0);
 
             return outTextID;
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (VException | SQLException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
     @Override
-    public Long ucNew(final Long inTextID, final int inVersion,
+    public Long ucNew(final Long inTextID, final int inVersion, // NOPMD
             final String inReference, final ITextValues inValues,
             final Long inActorID) throws BOMChangeValueException {
         try {
@@ -137,7 +133,7 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
             set(TextHome.KEY_REFERENCE, inReference);
             return ucNew(inVersion, inValues, inActorID);
         } catch (final SettingException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
@@ -148,8 +144,8 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
 
         try {
             setValuesToModel(inValues);
-            set(TextHome.KEY_VERSION, new Long(inVersion));
-            set(TextHome.KEY_STATE, new Long(
+            set(TextHome.KEY_VERSION, Long.valueOf(inVersion));
+            set(TextHome.KEY_STATE, Long.valueOf(
                     WorkflowAwareContribution.S_PRIVATE));
             final Long outTextID = insert(true);
 
@@ -158,10 +154,8 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
                     outTextID, inVersion);
 
             return outTextID;
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (SQLException | VException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
@@ -196,12 +190,13 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
             // update text model
             setValuesToModel(inValues);
             if (inState != null) {
-                set(TextHome.KEY_STATE, new Long(inState));
+                set(TextHome.KEY_STATE, Long.valueOf(inState));
             }
 
             // save changes only if new values differ from old ones
-            if (!isChanged())
+            if (!isChanged()) {
                 return;
+            }
 
             final Timestamp lMutationDate = new Timestamp(
                     System.currentTimeMillis());
@@ -217,17 +212,15 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
             update(true);
 
             updateAuthor(inActorID);
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (VException | SQLException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
     private void updateAuthor(final Long inActorID) throws VException,
-            SQLException {
-        final Long lTextID = new Long(get(TextHome.KEY_ID).toString());
-        final Long lTextVersion = new Long(get(TextHome.KEY_VERSION).toString());
+    SQLException {
+        final Long lTextID = Long.parseLong(get(TextHome.KEY_ID).toString());
+        final Long lTextVersion = Long.parseLong(get(TextHome.KEY_VERSION).toString());
 
         final KeyObject lKey = new KeyObjectImpl();
         lKey.setValue(TextAuthorReviewerHome.KEY_TEXT_ID, lTextID);
@@ -236,7 +229,7 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
                 ResponsibleHome.Type.AUTHOR.getValue());
         final DomainObject lAuthor = BOMHelper.getTextAuthorReviewerHome()
                 .findByKey(lKey);
-        if (!(lAuthor.get(ResponsibleHome.KEY_MEMBER_ID)).equals(new Long(
+        if (!(lAuthor.get(ResponsibleHome.KEY_MEMBER_ID)).equals(Long.parseLong(
                 inActorID.toString()))) {
             lAuthor.set(ResponsibleHome.KEY_MEMBER_ID, inActorID);
             lAuthor.update(true);
@@ -244,13 +237,14 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
     }
 
     @Override
-    public void ucSave(final Long inActorID) throws BOMChangeValueException {
-        if (!isChanged())
+    public void ucSave(final Long inActorID) throws BOMChangeValueException { // NOPMD
+        if (!isChanged()) {
             return;
+        }
         try {
             preCheck(get(TextHome.KEY_TITLE).toString(),
                     get(TextHome.KEY_AUTHOR).toString(), get(TextHome.KEY_YEAR)
-                            .toString());
+                    .toString());
 
             // historize changes
             final Text lOriginal = BOMHelper.getTextHome().getText(
@@ -272,30 +266,26 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
             update(true);
 
             updateAuthor(inActorID);
-        } catch (final BOMException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (VException | SQLException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
     @Override
-    public Long createNewVersion(final Long inActorID)
+    public Long createNewVersion(final Long inActorID) // NOPMD
             throws BOMChangeValueException {
         try {
             preCheck(get(TextHome.KEY_TITLE).toString(),
                     get(TextHome.KEY_AUTHOR).toString(), get(TextHome.KEY_YEAR)
-                            .toString());
+                    .toString());
 
             int lVersion = 0;
             final Object lID = get(TextHome.KEY_ID);
             if (lID != null) {
                 lVersion = BOMHelper.getTextMaxHome().getMaxVersion((Long) lID) + 1;
             }
-            set(TextHome.KEY_VERSION, new Long(lVersion));
-            set(TextHome.KEY_STATE, new Long(
+            set(TextHome.KEY_VERSION, Long.valueOf(lVersion));
+            set(TextHome.KEY_STATE, Long.valueOf(
                     WorkflowAwareContribution.S_PRIVATE));
             set(TextHome.KEY_FROM, new Timestamp(System.currentTimeMillis()));
             set(TextHome.KEY_TO, null);
@@ -306,15 +296,13 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
                     outTextID, lVersion);
 
             return outTextID;
-        } catch (final VException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+        } catch (VException | SQLException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
     @Override
-    public void setValuesToModel(final ITextValues inValues)
+    public void setValuesToModel(final ITextValues inValues) // NOPMD
             throws SettingException {
         set(TextHome.KEY_TYPE, inValues.getBiblioType());
         set(TextHome.KEY_TITLE, inValues.getBiblioTitle());
@@ -334,14 +322,14 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
     private String createReference(final String inAuthor, final String inYear)
             throws VException, SQLException {
         final String[] lAuthorParts = inAuthor.split(",|\\s");
-        final String lAuthor = inAuthor.indexOf(",") == -1 ? lAuthorParts[lAuthorParts.length - 1]
+        final String lAuthor = inAuthor.indexOf(',') == -1 ? lAuthorParts[lAuthorParts.length - 1]
                 : lAuthorParts[0];
         final String lYear = inYear.trim();
         final String outReference = String.format(
                 "%s %s",
                 lAuthor.substring(0,
                         Math.min(LEN_REFERENCE - 5, lAuthor.length())),
-                lYear.substring(0, Math.min(4, lYear.length())));
+                        lYear.substring(0, Math.min(4, lYear.length())));
         final TextHome lHome = BOMHelper.getTextHome();
         return lHome.checkReference(outReference);
     }
@@ -362,30 +350,24 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
     }
 
     @Override
-    void addToIndex() throws WorkflowException {
+    protected void addToIndex() throws WorkflowException { // NOPMD
         try {
             final KeyObject lKey = createTextVersionKey();
             lKey.setValue(BOMHelper.getKeyPublished(TextHome.KEY_STATE));
             final VIFContentIndexer lIndexer = new VIFContentIndexer();
             lIndexer.addTextToIndex(lKey);
-        } catch (final VException exc) {
-            throw new WorkflowException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new WorkflowException(exc.getMessage());
-        } catch (final IOException exc) {
-            throw new WorkflowException(exc.getMessage());
+        } catch (VException | SQLException | IOException exc) {
+            throw new WorkflowException(exc);
         }
     }
 
     @Override
-    void removeFromIndex() throws WorkflowException {
+    protected void removeFromIndex() throws WorkflowException { // NOPMD
         try {
             final VIFContentIndexer lIndexer = new VIFContentIndexer();
             lIndexer.deleteTextInIndex(get(TextHome.KEY_ID).toString());
-        } catch (final VException exc) {
-            throw new WorkflowException(exc.getMessage());
-        } catch (final IOException exc) {
-            throw new WorkflowException(exc.getMessage());
+        } catch (VException | IOException exc) {
+            throw new WorkflowException(exc);
         }
     }
 
@@ -397,29 +379,29 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
     }
 
     @Override
-    String getActualStateValue() throws GettingException {
+    protected String getActualStateValue() throws GettingException { // NOPMD
         return get(TextHome.KEY_STATE).toString();
     }
 
     @Override
-    void setState(final int inNewState, final Long inAuthorID)
+    protected void setState(final int inNewState, final Long inAuthorID) // NOPMD
             throws BOMChangeValueException {
         try {
             insertHistoryEntry(BOMHelper.getTextHistoryHome().create(),
                     TextHome.KEY_TO, TextHistoryHome.KEY_MEMBER_ID, inAuthorID);
-            set(TextHome.KEY_STATE, new Long(inNewState));
-        } catch (final Exception exc) {
-            throw new BOMChangeValueException(exc.getMessage());
+            set(TextHome.KEY_STATE, Long.valueOf(inNewState));
+        } catch (final VException exc) {
+            throw new BOMChangeValueException(exc.getMessage(), exc);
         }
     }
 
     @Override
-    public Long getNodeID() throws VException {
-        return new Long(get(TextHome.KEY_ID).toString());
+    public Long getNodeID() throws VException { // NOPMD
+        return Long.parseLong(get(TextHome.KEY_ID).toString());
     }
 
     @Override
-    public boolean isNode() {
+    public boolean isNode() { // NOPMD
         return true;
     }
 
@@ -428,7 +410,7 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
      * @see Indexable#indexContent(IndexWriter) */
     @Override
     public void indexContent(final IndexWriter inWriter) throws IOException,
-            VException {
+    VException {
         final FullTextHelper lFullText = new FullTextHelper();
         final Document lDocument = new Document();
         lDocument.add(AbstractSearching.IndexField.BIBLIO_ID.createField(get(
@@ -468,33 +450,33 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
     }
 
     @Override
-    public void setReviewer(final Long inReviewerID) throws VException,
-            SQLException {
+    public void setReviewer(final Long inReviewerID) throws VException, // NOPMD
+    SQLException {
         BOMHelper.getTextAuthorReviewerHome().setReviewer(inReviewerID,
-                new Long(get(TextHome.KEY_ID).toString()),
+                Long.parseLong(get(TextHome.KEY_ID).toString()),
                 Integer.parseInt(get(TextHome.KEY_VERSION).toString()));
     }
 
     @Override
-    public void accept(final QuestionHierarchyVisitor inVisitor)
+    public void accept(final QuestionHierarchyVisitor inVisitor) // NOPMD
             throws VException, SQLException {
         inVisitor.visitText(this);
     }
 
     @Override
-    public String getIDVersion() throws VException {
+    public String getIDVersion() throws VException { // NOPMD
         return String.format(Text.FORMAT_ID_VERSION, get(TextHome.KEY_ID),
                 get(TextHome.KEY_VERSION));
     }
 
     @Override
-    public int getVersion() throws VException {
+    public int getVersion() throws VException { // NOPMD
         final Object out = get(TextHome.KEY_VERSION);
         return out == null ? 0 : Integer.parseInt(out.toString());
     }
 
     @Override
-    public void onTransition_Delete(final Long inAuthorID) {
+    public void onTransition_Delete(final Long inAuthorID) { // NOPMD
         super.onTransition_Delete(inAuthorID);
 
         try {
@@ -520,14 +502,14 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
     }
 
     @Override
-    public void onTransition_Publish(final Long inReviewerID)
+    public void onTransition_Publish(final Long inReviewerID) // NOPMD
             throws WorkflowException {
         processPublishedVersion(inReviewerID);
         super.onTransition_Publish(inReviewerID);
     }
 
     @Override
-    public void onTransition_AdminPublish(final Long inAuthorID)
+    public void onTransition_AdminPublish(final Long inAuthorID) // NOPMD
             throws WorkflowException {
         processPublishedVersion(inAuthorID);
         super.onTransition_AdminPublish(inAuthorID);
@@ -554,39 +536,35 @@ public class TextImpl extends WorkflowAwareContribution implements Text,
                             .getTextPublished(lTextID);
                     ((WorkflowAwareContribution) lPublished).doTransition(
                             TRANS_ADMIN_DELETE2, new Object[] { inReviewerID });
-                } catch (final BOMNotFoundException exc1) {
+                } catch (final BOMNotFoundException exc1) { // NOPMD
                     // intentionally left empty
                 }
             }
-        } catch (final VException exc) {
-            throw new WorkflowException(exc.getMessage());
-        } catch (final SQLException exc) {
-            throw new WorkflowException(exc.getMessage());
+        } catch (VException | SQLException exc) {
+            throw new WorkflowException(exc);
         }
     }
 
     @Override
-    public boolean checkRefused(final Long inReviewerID) throws VException,
-            SQLException {
+    public boolean checkRefused(final Long inReviewerID) throws VException, // NOPMD
+    SQLException {
         return BOMHelper.getTextAuthorReviewerHome().checkRefused(inReviewerID,
-                new Long(get(TextHome.KEY_ID).toString()), getVersion());
+                Long.parseLong(get(TextHome.KEY_ID).toString()), getVersion());
     }
 
     @Override
-    protected DomainObject getHistoryObject() throws BOMException {
+    protected DomainObject getHistoryObject() throws BOMException { // NOPMD
         return BOMHelper.getTextHistoryHome().create();
     }
 
     @Override
-    public boolean isValid() {
+    public boolean isValid() { // NOPMD
         try {
             preCheck(get(TextHome.KEY_TITLE).toString(),
                     get(TextHome.KEY_AUTHOR).toString(), get(TextHome.KEY_YEAR)
-                            .toString());
+                    .toString());
             return true;
-        } catch (final Exception exc) {
-            return false;
-        } catch (final AssertionFailedError exc) {
+        } catch (AssertionFailedError | VException exc) {
             return false;
         }
     }

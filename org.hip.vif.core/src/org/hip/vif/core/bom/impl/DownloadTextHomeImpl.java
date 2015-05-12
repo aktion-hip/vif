@@ -1,6 +1,6 @@
-/*
+/**
  This package is part of the application VIF.
- Copyright (C) 2010, Benno Luthiger
+ Copyright (C) 2010-2015, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -28,95 +28,83 @@ import org.hip.kernel.exc.VException;
 import org.hip.vif.core.bom.DownloadText;
 import org.hip.vif.core.bom.DownloadTextHome;
 
-/**
- * Home of models to download files.
+/** Home of models to download files.
  *
- * @author Luthiger
- * Created: 19.09.2010
- */
+ * @author Luthiger Created: 19.09.2010 */
 @SuppressWarnings("serial")
-public class DownloadTextHomeImpl extends DomainObjectHomeImpl implements DownloadTextHome {
-	private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.DownloadTextImpl";
-	
-	private final static String XML_OBJECT_DEF = 
-		"<?xml version='1.0' encoding='ISO-8859-1'?>	" +
-		"<objectDef objectName='DownloadTextImpl' parent='org.hip.kernel.bom.DomainObject' version='1.0'>	" +
-		"	<keyDefs>	" +
-		"		<keyDef>	" +
-		"			<keyItemDef seq='0' keyPropertyName='" + KEY_ID + "'/>	" +
-		"		</keyDef>	" +
-		"	</keyDefs>	" +
-		"	<propertyDefs>	" +
-		"		<propertyDef propertyName='" + KEY_ID + "' valueType='Long' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblDownloadText' columnName='DownloadID'/>	" +
-		"		</propertyDef>	" +
-		"		<propertyDef propertyName='" + KEY_LABEL + "' valueType='String' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblDownloadText' columnName='sLabel'/>	" +
-		"		</propertyDef>	" +
-		"		<propertyDef propertyName='" + KEY_UUID + "' valueType='String' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblDownloadText' columnName='sUUID'/>	" +
-		"		</propertyDef>	" +
-		"		<propertyDef propertyName='" + KEY_MIME + "' valueType='String' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblDownloadText' columnName='sMime'/>	" +
-		"		</propertyDef>	" +
-		"		<propertyDef propertyName='" + KEY_DOCTYPE + "' valueType='String' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblDownloadText' columnName='sDocType'/>	" +
-		"		</propertyDef>	" +
-		"		<propertyDef propertyName='" + KEY_TEXTID + "' valueType='Long' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblDownloadText' columnName='TextID'/>	" +
-		"		</propertyDef>	" +
-		"		<propertyDef propertyName='" + KEY_MEMBERID + "' valueType='Long' propertyType='simple'>	" +
-		"			<mappingDef tableName='tblDownloadText' columnName='MemberID'/>	" +
-		"		</propertyDef>	" +
-		"	</propertyDefs>	" +
-		"</objectDef>";
+public class DownloadTextHomeImpl extends DomainObjectHomeImpl implements DownloadTextHome { // NOPMD
+    private final static String OBJECT_CLASS_NAME = "org.hip.vif.core.bom.impl.DownloadTextImpl";
 
-	/**
-	 * Returns the name of the objects which this home can create.
-	 *
-	 * @return java.lang.String
-	 */
-	public String getObjectClassName() {
-		return OBJECT_CLASS_NAME;
-	}
+    private final static String XML_OBJECT_DEF =
+            "<?xml version='1.0' encoding='ISO-8859-1'?>	" +
+                    "<objectDef objectName='DownloadTextImpl' parent='org.hip.kernel.bom.DomainObject' version='1.0'>	"
+                    +
+                    "	<keyDefs>	" +
+                    "		<keyDef>	" +
+                    "			<keyItemDef seq='0' keyPropertyName='"
+                    + KEY_ID + "'/>	" +
+                    "		</keyDef>	" +
+                    "	</keyDefs>	" +
+                    "	<propertyDefs>	" +
+                    "		<propertyDef propertyName='" + KEY_ID + "' valueType='Long' propertyType='simple'>	" + // NOPMD
+                    "			<mappingDef tableName='tblDownloadText' columnName='DownloadID'/>	" +
+                    "		</propertyDef>	" + // NOPMD
+                    "		<propertyDef propertyName='" + KEY_LABEL + "' valueType='String' propertyType='simple'>	" + // NOPMD
+                    "			<mappingDef tableName='tblDownloadText' columnName='sLabel'/>	" +
+                    "		</propertyDef>	" +
+                    "		<propertyDef propertyName='" + KEY_UUID + "' valueType='String' propertyType='simple'>	" +
+                    "			<mappingDef tableName='tblDownloadText' columnName='sUUID'/>	" +
+                    "		</propertyDef>	" +
+                    "		<propertyDef propertyName='" + KEY_MIME + "' valueType='String' propertyType='simple'>	" +
+                    "			<mappingDef tableName='tblDownloadText' columnName='sMime'/>	" +
+                    "		</propertyDef>	" +
+                    "		<propertyDef propertyName='" + KEY_DOCTYPE + "' valueType='String' propertyType='simple'>	" +
+                    "			<mappingDef tableName='tblDownloadText' columnName='sDocType'/>	" +
+                    "		</propertyDef>	" +
+                    "		<propertyDef propertyName='" + KEY_TEXTID + "' valueType='Long' propertyType='simple'>	" +
+                    "			<mappingDef tableName='tblDownloadText' columnName='TextID'/>	" +
+                    "		</propertyDef>	" +
+                    "		<propertyDef propertyName='" + KEY_MEMBERID + "' valueType='Long' propertyType='simple'>	" +
+                    "			<mappingDef tableName='tblDownloadText' columnName='MemberID'/>	" +
+                    "		</propertyDef>	" +
+                    "	</propertyDefs>	" +
+                    "</objectDef>";
 
-	/**
-	 * Returns the object definition string of the class managed by this home.
-	 *
-	 * @return java.lang.String
-	 */
-	protected String getObjectDefString() {
-		return XML_OBJECT_DEF;
-	}
+    /** Returns the name of the objects which this home can create.
+     *
+     * @return java.lang.String */
+    @Override
+    public String getObjectClassName() {
+        return OBJECT_CLASS_NAME;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.bom.DownloadTextHome#getDownloads(Long)
-	 */
-	public QueryResult getDownloads(Long inTextID) throws VException, SQLException {
-		KeyObject lKey = new KeyObjectImpl();
-		lKey.setValue(DownloadTextHome.KEY_TEXTID, inTextID);
-		return select(lKey);
-	}
+    /** Returns the object definition string of the class managed by this home.
+     *
+     * @return java.lang.String */
+    @Override
+    protected String getObjectDefString() {
+        return XML_OBJECT_DEF;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.bom.DownloadTextHome#getDownload(java.lang.String)
-	 */
-	public DownloadText getDownload(String inDownloadID) throws VException {
-		KeyObject lKey = new KeyObjectImpl();
-		lKey.setValue(DownloadTextHome.KEY_ID, Long.parseLong(inDownloadID));
-		return (DownloadText) findByKey(lKey);
-	}
+    @Override
+    public QueryResult getDownloads(final Long inTextID) throws VException, SQLException { // NOPMD
+        final KeyObject lKey = new KeyObjectImpl();
+        lKey.setValue(DownloadTextHome.KEY_TEXTID, inTextID);
+        return select(lKey);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.hip.vif.bom.DownloadTextHome#deleteDownload(java.lang.String)
-	 */
-	public void deleteDownload(String inDownloadID) throws VException, SQLException {
-		KeyObject lKey = new KeyObjectImpl();
-		lKey.setValue(DownloadTextHome.KEY_ID, Long.parseLong(inDownloadID));
-		delete(lKey, true);
-	}
+    @Override
+    public DownloadText getDownload(final String inDownloadID) throws VException { // NOPMD
+        final KeyObject lKey = new KeyObjectImpl();
+        lKey.setValue(DownloadTextHome.KEY_ID, Long.parseLong(inDownloadID));
+        return (DownloadText) findByKey(lKey);
+    }
+
+    @Override
+    public void deleteDownload(final String inDownloadID) throws VException, SQLException { // NOPMD
+        final KeyObject lKey = new KeyObjectImpl();
+        lKey.setValue(DownloadTextHome.KEY_ID, Long.parseLong(inDownloadID));
+        delete(lKey, true);
+    }
 
 }

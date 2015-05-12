@@ -44,7 +44,13 @@ public abstract class HistorizableDomainObject extends DomainObjectImpl { // NOP
     protected void fillHistory(final DomainObject inHistory) throws BOMChangeValueException {
         try {
             for (final String lPropertyName : getPropertyNames2()) {
-                inHistory.set(lPropertyName, this.get(lPropertyName));
+                final Object lValue = this.get(lPropertyName);
+                if (lValue instanceof String) {
+                    inHistory.set(lPropertyName, ((String) lValue).trim());
+                }
+                else {
+                    inHistory.set(lPropertyName, this.get(lPropertyName));
+                }
             }
         } catch (final SettingException | GettingException exc) {
             throw new BOMChangeValueException("HistorizableDomainObject.fillHistory:  " + exc.getMessage(), exc);

@@ -21,7 +21,6 @@ package org.hip.vif.forum.groups.tasks;
 import java.io.File;
 import java.sql.SQLException;
 
-import org.hip.kernel.bom.BOMException;
 import org.hip.kernel.bom.QueryResult;
 import org.hip.kernel.code.CodeList;
 import org.hip.kernel.code.CodeListHome;
@@ -29,6 +28,7 @@ import org.hip.kernel.exc.VException;
 import org.hip.vif.core.bom.BOMHelper;
 import org.hip.vif.core.bom.DownloadText;
 import org.hip.vif.core.bom.DownloadText.IDownloadTextValues;
+import org.hip.vif.core.bom.DownloadTextHome;
 import org.hip.vif.core.bom.Text;
 import org.hip.vif.core.bom.TextHome;
 import org.hip.vif.core.code.QuestionState;
@@ -47,16 +47,17 @@ import com.vaadin.ui.Notification.Type;
 /** Functionality for bibliography tasks.
  *
  * @author Luthiger Created: 05.07.2010 */
-public abstract class AbstractBibliographyTask extends AbstractGroupsTask implements IBibliographyTask {
+public abstract class AbstractBibliographyTask extends AbstractGroupsTask implements IBibliographyTask { // NOPMD
     private static final Logger LOG = LoggerFactory.getLogger(AbstractBibliographyTask.class);
 
+    private static final Long PROV_TEXT_ID = -1l;
     protected static final String KEY_PARAMETER_TITLE = "biblio_title"; //$NON-NLS-1$
     protected static final String KEY_PARAMETER_AUTHOR = "biblio_author"; //$NON-NLS-1$
 
     protected static final String[] NODE_IDS = { "biblioTitle", "biblioAuthor" }; //$NON-NLS-1$ //$NON-NLS-2$
 
     @Override
-    protected String needsPermission() {
+    protected String needsPermission() { // NOPMD
         return Constants.PERMISSION_EDIT_BIBLIOGRAPHY;
     }
 
@@ -67,9 +68,10 @@ public abstract class AbstractBibliographyTask extends AbstractGroupsTask implem
      * @param inTextVersion int
      * @param inCreateVersion boolean <code>true</code> if the form should create a new (private) version of the
      *            published entry, <code>false</code> in case of editing an unpublished version.
-     * @throws Exception */
+     * @throws SQLException
+     * @throws VException */
     protected Component editBibliography(final Text inText, final Long inTextID, final int inTextVersion,
-            final boolean inCreateVersion) throws Exception {
+            final boolean inCreateVersion) throws VException, SQLException {
         final CodeList lCodeList = CodeListHome.instance().getCodeList(QuestionState.class,
                 getAppLocale().getLanguage());
         return new BibliographyView(inText, getDownloads(inTextID),
@@ -78,11 +80,11 @@ public abstract class AbstractBibliographyTask extends AbstractGroupsTask implem
                 lCodeList, inCreateVersion, this);
     }
 
-    protected QueryResult getAuthors(final Long inTextID, final int inTextVersion) throws VException, SQLException {
+    protected QueryResult getAuthors(final Long inTextID, final int inTextVersion) throws VException, SQLException { // NOPMD
         return BOMHelper.getJoinTextToAuthorReviewerHome().getAuthors(inTextID, inTextVersion);
     }
 
-    protected QueryResult getReviewers(final Long inTextID, final int inTextVersion) throws VException, SQLException {
+    protected QueryResult getReviewers(final Long inTextID, final int inTextVersion) throws VException, SQLException { // NOPMD
         return BOMHelper.getJoinTextToAuthorReviewerHome().getReviewers(inTextID, inTextVersion);
     }
 
@@ -98,8 +100,12 @@ public abstract class AbstractBibliographyTask extends AbstractGroupsTask implem
     public Long saveFileUpload(final File inTempUpload, final String inFileName, final String inMimeType,
             final boolean inDeleteDownloads) throws ProhibitedFileException {
         try {
+            Long lTextID = getTextID();
+            if (lTextID == null) {
+                lTextID = PROV_TEXT_ID; // provisional id of text item
+            }
             final IDownloadTextValues lDownloadValues = new BibliographyHelper.DownloadTextValues(inTempUpload,
-                    inFileName, inMimeType, getTextID(), getActor().getActorID());
+                    inFileName, inMimeType, lTextID, getActor().getActorID());
             lDownloadValues.checkType();
             if (inDeleteDownloads && !deleteDownloads()) {
                 return 0l;
@@ -109,11 +115,7 @@ public abstract class AbstractBibliographyTask extends AbstractGroupsTask implem
             inTempUpload.renameTo(BibliographyHelper.createUploadFile(lDownloadValues.getUUID(),
                     lDownloadValues.getDoctype()));
             return outID;
-        } catch (final BOMException exc) {
-            LOG.error("Error while uploading the file.", exc); //$NON-NLS-1$
-        } catch (final VException exc) {
-            LOG.error("Error while uploading the file.", exc); //$NON-NLS-1$
-        } catch (final SQLException exc) {
+        } catch (final VException | SQLException exc) {
             LOG.error("Error while uploading the file.", exc); //$NON-NLS-1$
         }
         return 0l;
@@ -127,18 +129,18 @@ public abstract class AbstractBibliographyTask extends AbstractGroupsTask implem
     @Override
     public boolean deleteDownloads() {
         try {
-            final QueryResult lDownloads = getDownloads(getTextID());
+            Long lTextID = getTextID();
+            if (lTextID == null) {
+                lTextID = PROV_TEXT_ID;
+            }
+            final QueryResult lDownloads = getDownloads(lTextID);
             while (lDownloads.hasMoreElements()) {
                 final DownloadText lDownload = (DownloadText) lDownloads.next();
                 BibliographyHelper.deleteUpload(lDownload);
                 lDownload.delete(true);
             }
             return true;
-        } catch (final BOMException exc) {
-            LOG.error("Error while deleting the download file.", exc); //$NON-NLS-1$
-        } catch (final VException exc) {
-            LOG.error("Error while deleting the download file.", exc); //$NON-NLS-1$
-        } catch (final SQLException exc) {
+        } catch (final VException | SQLException exc) {
             LOG.error("Error while deleting the download file.", exc); //$NON-NLS-1$
         }
         return false;
@@ -161,6 +163,8 @@ public abstract class AbstractBibliographyTask extends AbstractGroupsTask implem
                     final Long lTextID = inText.ucNew(getActor().getActorID());
                     // link bibliography entry
                     BOMHelper.getTextQuestionHome().createEntry(lTextID, getQuestionID().toString());
+                    // link uploaded file to bibliography entry
+                    linkUploaded(lTextID);
                 }
                 else {
                     inText.createNewVersion(getActor().getActorID());
@@ -173,12 +177,19 @@ public abstract class AbstractBibliographyTask extends AbstractGroupsTask implem
                     Activator.getMessages().getMessage("msg.task.data.changed"), Type.TRAY_NOTIFICATION); //$NON-NLS-1$
             sendEvent(ContributionsListTask.class);
             return true;
-        } catch (final VException exc) {
-            LOG.error("Error while saving the bibliography.", exc); //$NON-NLS-1$
-        } catch (final SQLException exc) {
+        } catch (final VException | SQLException exc) {
             LOG.error("Error while saving the bibliography.", exc); //$NON-NLS-1$
         }
         return false;
+    }
+
+    private void linkUploaded(final Long inTextID) throws VException, SQLException {
+        final QueryResult lDownloads = getDownloads(PROV_TEXT_ID);
+        while (lDownloads.hasMoreElements()) {
+            final DownloadText lDownload = (DownloadText) lDownloads.next();
+            lDownload.set(DownloadTextHome.KEY_TEXTID, inTextID);
+            lDownload.update(true);
+        }
     }
 
 }
