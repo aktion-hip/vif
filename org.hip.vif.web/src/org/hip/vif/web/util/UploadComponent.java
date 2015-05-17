@@ -146,7 +146,7 @@ public class UploadComponent extends CustomComponent { // NOPMD
                 if (inTask.deleteDownloads()) {
                     // update view component
                     layout.removeAllComponents();
-                    addComponents(dropBox, upload);
+                    addComponents(dropBox, upload, RiplaViewHelper.createSpacer());
                     hasDownloads = false;
                 } else {
                     Notification.show(
@@ -419,9 +419,6 @@ public class UploadComponent extends CustomComponent { // NOPMD
         super.attach();
         if (hasDownloads) {
             dialog.setVisible(false);
-            // if (dialog.isDisplayable()) {
-            // upload.getWindow().addWindow(dialog.getWindow());
-            // }
             dialog.center();
         }
     }

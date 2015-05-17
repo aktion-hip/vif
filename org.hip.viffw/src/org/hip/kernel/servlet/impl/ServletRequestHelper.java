@@ -180,7 +180,6 @@ public class ServletRequestHelper {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
         public void parse() throws RequestException { // NOPMD by lbenno
             final FileItemFactory lFactory = new DiskFileItemFactory();
             final ServletFileUpload lUpload = new ServletFileUpload(lFactory);

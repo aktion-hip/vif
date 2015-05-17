@@ -50,7 +50,6 @@ import com.vaadin.ui.Notification.Type;
 public abstract class AbstractBibliographyTask extends AbstractGroupsTask implements IBibliographyTask { // NOPMD
     private static final Logger LOG = LoggerFactory.getLogger(AbstractBibliographyTask.class);
 
-    private static final Long PROV_TEXT_ID = -1l;
     protected static final String KEY_PARAMETER_TITLE = "biblio_title"; //$NON-NLS-1$
     protected static final String KEY_PARAMETER_AUTHOR = "biblio_author"; //$NON-NLS-1$
 
@@ -100,12 +99,8 @@ public abstract class AbstractBibliographyTask extends AbstractGroupsTask implem
     public Long saveFileUpload(final File inTempUpload, final String inFileName, final String inMimeType,
             final boolean inDeleteDownloads) throws ProhibitedFileException {
         try {
-            Long lTextID = getTextID();
-            if (lTextID == null) {
-                lTextID = PROV_TEXT_ID; // provisional id of text item
-            }
             final IDownloadTextValues lDownloadValues = new BibliographyHelper.DownloadTextValues(inTempUpload,
-                    inFileName, inMimeType, lTextID, getActor().getActorID());
+                    inFileName, inMimeType, getTextIDChecked(), getActor().getActorID());
             lDownloadValues.checkType();
             if (inDeleteDownloads && !deleteDownloads()) {
                 return 0l;
@@ -129,11 +124,7 @@ public abstract class AbstractBibliographyTask extends AbstractGroupsTask implem
     @Override
     public boolean deleteDownloads() {
         try {
-            Long lTextID = getTextID();
-            if (lTextID == null) {
-                lTextID = PROV_TEXT_ID;
-            }
-            final QueryResult lDownloads = getDownloads(lTextID);
+            final QueryResult lDownloads = getDownloads(getTextIDChecked());
             while (lDownloads.hasMoreElements()) {
                 final DownloadText lDownload = (DownloadText) lDownloads.next();
                 BibliographyHelper.deleteUpload(lDownload);

@@ -78,6 +78,7 @@ public abstract class AbstractWebController extends AbstractController implement
     public static final String EVENT_PROPERTY_LOGIN_USER = "login.user"; //$NON-NLS-1$
     public static final String EVENT_PROPERTY_LOGIN_PWD = "login.pass"; //$NON-NLS-1$
     public static final String DFT_PATTERN = "MM/dd/yyyy"; //$NON-NLS-1$
+    protected static final Long PROV_TEXT_ID = -1l;
 
     /** Creates a view component displaying the message 'Please contact the administrator' after the application
      * encountered a serious problem.
@@ -161,6 +162,12 @@ public abstract class AbstractWebController extends AbstractController implement
      *         for a bibliography entry) */
     protected Long getTextID() {
         return VIFAppHelper.getValueFromSession(Constants.TEXT_ID_KEY);
+    }
+
+    /** @return Long the id of the bibliography entry or <code>PROV_TEXT_ID</code> in case this value is undefined yet */
+    protected Long getTextIDChecked() {
+        final Long out = getTextID();
+        return out == null ? PROV_TEXT_ID : out;
     }
 
     /** @return Long the version of the bibliography entry actually relevant for the user (e.g. because he clicked the

@@ -18,36 +18,51 @@
  */
 package org.hip.vif.admin.groupadmin.tasks;
 
+import java.sql.SQLException;
+
+import org.hip.kernel.exc.VException;
+import org.hip.vif.admin.groupadmin.Activator;
 import org.hip.vif.core.bom.BOMHelper;
+import org.hip.vif.core.bom.Group;
 import org.hip.vif.core.bom.Text;
 import org.hip.vif.core.bom.TextHome;
+import org.hip.vif.web.bom.GroupHome;
+import org.hip.vif.web.bom.VifBOMHelper;
 import org.ripla.annotations.UseCaseController;
 import org.ripla.exceptions.RiplaException;
 import org.ripla.util.ParameterObject;
 
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Notification;
 
-/**
- * Create a new bibliographical entry.
- * 
- * @author Luthiger Created: 26.09.2011
- */
+/** Create a new bibliographical entry.
+ *
+ * @author Luthiger Created: 26.09.2011 */
 @UseCaseController
-public class BibliographyNewTask extends AbstractBibliographyTask {
+public class BibliographyNewTask extends AbstractBibliographyTask { // NOPMD by lbenno 
 
-	@Override
-	protected Component runChecked() throws RiplaException {
-		try {
-			final ParameterObject lParameters = getParameters();
-			final Text lText = (Text) BOMHelper.getTextHome().create();
-			lText.set(TextHome.KEY_AUTHOR,
-					lParameters.get(KEY_PARAMETER_AUTHOR));
-			lText.set(TextHome.KEY_TITLE, lParameters.get(KEY_PARAMETER_TITLE));
-			return editBibliography(lText, 0l, 0, true); //$NON-NLS-1$
-		}
-		catch (final Exception exc) {
-			throw createContactAdminException(exc);
-		}
-	}
+    @Override
+    protected Component runChecked() throws RiplaException { // NOPMD by lbenno 
+        try {
+            final ParameterObject lParameters = getParameters();
+            if (lParameters == null) {
+                final Group lGroup = VifBOMHelper.getGroupHome().getGroup(getGroupID());
+                final String lMessage = Activator
+                        .getMessages()
+                        .getFormattedMessage(
+                                "ui.contributions.process.no.pending", lGroup.get(GroupHome.KEY_ID), lGroup.get(GroupHome.KEY_NAME)); //$NON-NLS-1$
+                return reDisplay(lMessage, Notification.Type.HUMANIZED_MESSAGE);
+            }
+            else {
+                final Text lText = (Text) BOMHelper.getTextHome().create();
+                lText.set(TextHome.KEY_AUTHOR,
+                        lParameters.get(KEY_PARAMETER_AUTHOR));
+                lText.set(TextHome.KEY_TITLE, lParameters.get(KEY_PARAMETER_TITLE));
+                return editBibliography(lText, 0l, 0, true); //$NON-NLS-1$
+            }
+        } catch (final VException | SQLException exc) {
+            throw createContactAdminException(exc);
+        }
+    }
 
 }

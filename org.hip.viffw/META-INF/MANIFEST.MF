@@ -38,3 +38,4 @@ Bundle-Activator: org.hip.kernel.sys.FWActivator
 Service-Component: OSGI-INF/dbaccess.xml
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: RelationWare
+Require-Bundle: org.apache.commons.fileupload

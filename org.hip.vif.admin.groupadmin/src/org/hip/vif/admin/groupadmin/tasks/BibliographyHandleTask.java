@@ -1,6 +1,6 @@
 /**
  This package is part of the application VIF.
- Copyright (C) 2008-2014, Benno Luthiger
+ Copyright (C) 2008-2015, Benno Luthiger
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -16,11 +16,11 @@
  License along with this library; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package org.hip.vif.admin.groupadmin.tasks;
+package org.hip.vif.admin.groupadmin.tasks; // NOPMD
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import org.hip.kernel.bom.KeyObject;
 import org.hip.kernel.bom.QueryResult;
@@ -62,7 +62,7 @@ import com.vaadin.ui.Table;
  * @author Luthiger Created: 14.06.2010 */
 @SuppressWarnings("serial")
 @UseCaseController
-public class BibliographyHandleTask extends AbstractBibliographyTask implements
+public class BibliographyHandleTask extends AbstractBibliographyTask implements // NOPMD
 ValueChangeListener {
     private static final Logger LOG = LoggerFactory
             .getLogger(BibliographyHandleTask.class);
@@ -70,12 +70,12 @@ ValueChangeListener {
     private ContributionContainer texts;
 
     @Override
-    protected String needsPermission() {
+    protected String needsPermission() { // NOPMD
         return Constants.PERMISSION_EDIT_BIBLIOGRAPHY;
     }
 
     @Override
-    protected Component runChecked() throws RiplaException {
+    protected Component runChecked() throws RiplaException { // NOPMD
         final IMessages lMessages = Activator.getMessages();
 
         try {
@@ -86,7 +86,7 @@ ValueChangeListener {
                         lMessages.getMessage("errmsg.not.participant"), Notification.Type.WARNING_MESSAGE); //$NON-NLS-1$
             }
 
-            loadContextMenu(Constants.MENU_SET_ID_GROUP_CONTENT);
+            loadContextMenu(Constants.MENU_SET_ID_CONTRIBUTION_EDIT);
 
             final String lQuestionID = getQuestionID().toString();
             final Question lQuestion = BOMHelper.getQuestionHome().getQuestion(
@@ -99,7 +99,7 @@ ValueChangeListener {
             return new BibliographySearchView(lQuestion, lGroup,
                     lHelper.getTitlesContainer(),
                     lHelper.getAuthorsContainer(), this);
-        } catch (final Exception exc) {
+        } catch (final VException | SQLException exc) {
             throw createContactAdminException(exc);
         }
     }
@@ -126,9 +126,7 @@ ValueChangeListener {
             } else {
                 return createNew(inTitle, inAuthor);
             }
-        } catch (final VException exc) {
-            LOG.error("Error while searching for bibliography items.", exc); //$NON-NLS-1$
-        } catch (final SQLException exc) {
+        } catch (VException | SQLException exc) {
             LOG.error("Error while searching for bibliography items.", exc); //$NON-NLS-1$
         }
         return false;
@@ -213,7 +211,7 @@ ValueChangeListener {
             }
             setTextID(lText.getID());
             sendEvent(BibliographyEditPublishedTask.class);
-            return;
+            return; // NOPMD
         }
     }
 
@@ -224,7 +222,7 @@ ValueChangeListener {
      * @return boolean <code>true</code> if successful */
     public boolean deleteBibliography() {
         try {
-            final Collection<Long> lIDs = new Vector<Long>();
+            final Collection<Long> lIDs = new ArrayList<Long>();
             for (final ContributionWrapper lText : texts.getItemIds()) {
                 if (lText.isChecked()) {
                     lIDs.add(BiblioDeleteHelper.getTextID(lText.getID()));
