@@ -94,7 +94,11 @@
 }
 
 .vif-table .v-table-cell-content {
-    vertical-align:text-top;
+    vertical-align: text-top;
+}
+.vif-table td .vif-cell {
+    vertical-align: text-top;
+    line-height: initial;	
 }
 
 .vif-view .v-label div.vif-description,
@@ -307,19 +311,24 @@
 }
 
 .vif-upload .v-textfield {
-    background-color: transparent;
+    background-image: inherit;
     border-radius: 10px;
     border: 4px dashed #8AC007;
 }
 .vif-upload .v-textfield:hover {
-    opacity:.7;
     color: black;
     border: solid #8AC007;
+    background-color: #D7E4D9;
 }
 
 .vif-upload .v-textfield .vif-drop-hint {
     padding-top: 5px;
     padding-left: 15px;
+}
+
+.vif-upload .vif-uploaded {
+	vertical-align: top;
+	padding-top: 5px;
 }
 
 .vif-view div.spacer,

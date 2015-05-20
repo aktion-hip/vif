@@ -109,7 +109,11 @@ div.popupContent .v-menubar-submenu .v-menubar-menuitem-selected {
 }
 
 .vif-table .v-table-cell-content {
-    vertical-align:text-top;
+    vertical-align: text-top;
+}
+.vif-table td .vif-cell {
+    vertical-align: text-top;
+    line-height: initial;	
 }
 
 .vif-view .v-label div.vif-description,
@@ -317,31 +321,23 @@ div.popupContent .v-menubar-submenu .v-menubar-menuitem-selected {
 }
 
 .vif-upload .v-textfield {
-    background-color: transparent;
+    background-image: inherit;
+    border-radius: 10px;
+    border: 4px dashed #8AC007;
 }
 .vif-upload .v-textfield:hover {
-    opacity:.6;
-}
-.vif-upload .v-textfield {
-    -moz-border-bottom-colors: none;
-    -moz-border-image: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    background: url("img/input-bg.png") repeat-x scroll 0 0 #FFFFFF;
-    border-color: rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.3);
-    border-radius: 2px 2px 2px 2px;
-    border-right: 1px solid rgba(0, 0, 0, 0.3);
-    border-style: solid;
-    border-width: 1px;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
-    line-height: normal;
-    margin: 0;
+    color: black;
+    border: solid #8AC007;
+    background-color: #D7E4D9;
 }
 
 .vif-upload .v-textfield .vif-drop-hint {
     margin-top:5px;
     margin-left:5px;
+}
+.vif-upload .vif-uploaded {
+	vertical-align: top;
+	padding-top: 5px;
 }
 
 .vif-view div.spacer,

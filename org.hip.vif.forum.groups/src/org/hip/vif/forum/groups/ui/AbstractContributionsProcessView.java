@@ -37,9 +37,15 @@ import com.vaadin.ui.VerticalLayout;
  *
  * @author Luthiger Created: 10.07.2011 */
 @SuppressWarnings("serial")
-public abstract class AbstractContributionsProcessView extends CustomComponent {
+public abstract class AbstractContributionsProcessView extends CustomComponent { // NOPMD
 
-    protected VerticalLayout initComponent(final String inFirstname, final String inFamilyname,
+    /** @param inFirstname String
+     * @param inFamilyname String
+     * @param inGroupTitle String
+     * @param inMessages {@link IMessages}
+     * @param inTitleKey String
+     * @return {@link VerticalLayout} */
+    protected VerticalLayout initComponent(final String inFirstname, final String inFamilyname, // NOPMD
             final String inGroupTitle, final IMessages inMessages, final String inTitleKey) {
         final VerticalLayout outLayout = new VerticalLayout();
         setCompositionRoot(outLayout);
@@ -70,13 +76,13 @@ public abstract class AbstractContributionsProcessView extends CustomComponent {
         // generate check box
         outTable.addGeneratedColumn(ContributionContainer.CONTRIBUTION_CHECK, new Table.ColumnGenerator() {
             @Override
-            public Component generateCell(final Table inSource, final Object inItemId, final Object inColumnId) {
+            public Component generateCell(final Table inSource, final Object inItemId, final Object inColumnId) { // NOPMD
                 final ContributionWrapper lContribution = (ContributionWrapper) inItemId;
                 // the check box is generated only if the contributions state is e.g. 'private' or 'waiting for review'
                 return lContribution.getState() == inCheckedState ? VIFViewHelper.createCheck(lContribution,
                         new VIFViewHelper.IConfirmationModeChecker() {
                     @Override
-                    public boolean inConfirmationMode() {
+                    public boolean inConfirmationMode() { // NOPMD
                         return isConfirmationMode();
                     }
                 }) : new Label();
@@ -85,8 +91,10 @@ public abstract class AbstractContributionsProcessView extends CustomComponent {
         // generate label component for html text
         outTable.addGeneratedColumn(ContributionContainer.CONTRIBUTION_TEXT, new Table.ColumnGenerator() {
             @Override
-            public Component generateCell(final Table inSource, final Object inItemId, final Object inColumnId) {
-                return new Label(((ContributionWrapper) inItemId).getContributionText(), ContentMode.HTML);
+            public Component generateCell(final Table inSource, final Object inItemId, final Object inColumnId) { // NOPMD
+                final Label out = new Label(((ContributionWrapper) inItemId).getContributionText(), ContentMode.HTML);
+                out.setStyleName("vif-cell");
+                return out;
             }
         });
 
@@ -105,6 +113,7 @@ public abstract class AbstractContributionsProcessView extends CustomComponent {
         return outTable;
     }
 
+    /** @return boolean */
     abstract protected boolean isConfirmationMode();
 
 }

@@ -32,94 +32,90 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
-/**
- * Base class for views displaying the list of contributions pending in the
- * workflow.
- * 
- * @author Luthiger Created: 26.11.2011
- */
+/** Base class for views displaying the list of contributions pending in the workflow.
+ *
+ * @author Luthiger Created: 26.11.2011 */
 @SuppressWarnings("serial")
-public abstract class AbstractContributionsProcessView extends CustomComponent {
+public abstract class AbstractContributionsProcessView extends CustomComponent { // NOPMD
 
-	protected VerticalLayout initComponent(final String inTitle) {
-		final VerticalLayout outLayout = new VerticalLayout();
-		setCompositionRoot(outLayout);
+    /** @param inTitle String
+     * @return {@link VerticalLayout} */
+    protected VerticalLayout initComponent(final String inTitle) {
+        final VerticalLayout outLayout = new VerticalLayout();
+        setCompositionRoot(outLayout);
 
-		outLayout.setStyleName("vif-view"); //$NON-NLS-1$
+        outLayout.setStyleName("vif-view"); //$NON-NLS-1$
 
-		outLayout.addComponent(new Label(
-				String.format(VIFViewHelper.TMPL_TITLE,
-						"vif-pagetitle", inTitle), ContentMode.HTML)); //$NON-NLS-1$
-		return outLayout;
-	}
+        outLayout.addComponent(new Label(
+                String.format(VIFViewHelper.TMPL_TITLE, "vif-pagetitle", inTitle), ContentMode.HTML)); //$NON-NLS-1$
+        return outLayout;
+    }
 
-	/**
-	 * Table | chk : Nr. : Question : Status |
-	 * 
-	 * @param inData
-	 *            {@link ContributionContainer}
-	 * @param inCheckedState
-	 *            int the contribution's workflow state (e.g.
-	 *            <code>WorkflowAwareContribution.S_PRIVATE</code>)
-	 * @param inListener
-	 *            {@link ValueChangeListener}
-	 * @return Table
-	 */
-	protected Table createTable(final ContributionContainer inData,
-			final int inCheckedState, final ValueChangeListener inListener) {
-		final Table outTable = new Table();
-		outTable.setStyleName("vif-table"); //$NON-NLS-1$
-		outTable.setWidth("100%"); //$NON-NLS-1$
+    /** Table | chk : Nr. : Question : Status |
+     *
+     * @param inData {@link ContributionContainer}
+     * @param inCheckedState int the contribution's workflow state (e.g.
+     *            <code>WorkflowAwareContribution.S_PRIVATE</code>)
+     * @param inListener {@link ValueChangeListener}
+     * @return Table */
+    protected Table createTable(final ContributionContainer inData,
+            final int inCheckedState, final ValueChangeListener inListener) {
+        final Table outTable = new Table();
+        outTable.setStyleName("vif-table"); //$NON-NLS-1$
+        outTable.setWidth("100%"); //$NON-NLS-1$
 
-		outTable.setContainerDataSource(inData);
-		// generate check box
-		outTable.addGeneratedColumn(ContributionContainer.CONTRIBUTION_CHECK,
-				new Table.ColumnGenerator() {
-					@Override
-					public Component generateCell(final Table inSource,
-							final Object inItemId, final Object inColumnId) {
-						final ContributionWrapper lContribution = (ContributionWrapper) inItemId;
-						// the check box is generated only if the contributions
-						// state is e.g. 'private' or 'waiting for review'
-						return lContribution.getState() == inCheckedState ? VIFViewHelper
-								.createCheck(
-										lContribution,
-										new VIFViewHelper.IConfirmationModeChecker() {
-											@Override
-											public boolean inConfirmationMode() {
-												return isConfirmationMode();
-											}
-										})
-								: new Label();
-					}
-				});
-		// generate label component for html text
-		outTable.addGeneratedColumn(ContributionContainer.CONTRIBUTION_TEXT,
-				new Table.ColumnGenerator() {
-					@Override
-					public Component generateCell(final Table inSource,
-							final Object inItemId, final Object inColumnId) {
-						return new Label(((ContributionWrapper) inItemId)
-								.getContributionText(), ContentMode.HTML);
-					}
-				});
+        outTable.setContainerDataSource(inData);
+        // generate check box
+        outTable.addGeneratedColumn(ContributionContainer.CONTRIBUTION_CHECK,
+                new Table.ColumnGenerator() {
+                    @Override
+                    public Component generateCell(final Table inSource, // NOPMD
+                            final Object inItemId, final Object inColumnId) {
+                        final ContributionWrapper lContribution = (ContributionWrapper) inItemId;
+                        // the check box is generated only if the contributions
+                        // state is e.g. 'private' or 'waiting for review'
+                        return lContribution.getState() == inCheckedState ? VIFViewHelper
+                                .createCheck(
+                                        lContribution,
+                                        new VIFViewHelper.IConfirmationModeChecker() {
+                                            @Override
+                                            public boolean inConfirmationMode() { // NOPMD
+                                                return isConfirmationMode();
+                                            }
+                                        })
+                                : new Label();
+                    }
+                });
+        // generate label component for html text
+        outTable.addGeneratedColumn(ContributionContainer.CONTRIBUTION_TEXT,
+                new Table.ColumnGenerator() {
+                    @Override
+                    public Component generateCell(final Table inSource, // NOPMD
+                            final Object inItemId, final Object inColumnId) {
+                        final Label out = new Label(((ContributionWrapper) inItemId).getContributionText(),
+                                ContentMode.HTML);
+                        out.setStyleName("vif-cell");
+                        return out;
+                    }
+                });
 
-		outTable.setColumnCollapsingAllowed(true);
-		outTable.setColumnReorderingAllowed(true);
-		outTable.setSelectable(true);
-		outTable.setImmediate(true);
-		outTable.setPageLength(0);
-		outTable.setColumnExpandRatio(ContributionContainer.CONTRIBUTION_TEXT,
-				1);
-		outTable.addValueChangeListener(inListener);
+        outTable.setColumnCollapsingAllowed(true);
+        outTable.setColumnReorderingAllowed(true);
+        outTable.setSelectable(true);
+        outTable.setImmediate(true);
+        outTable.setPageLength(0);
+        outTable.setColumnExpandRatio(ContributionContainer.CONTRIBUTION_TEXT,
+                1);
+        outTable.addValueChangeListener(inListener);
 
-		outTable.setVisibleColumns(ContributionContainer.NATURAL_COL_ORDER);
-		outTable.setColumnHeaders(VIFViewHelper.getColumnHeaders(
-				ContributionContainer.COL_HEADERS, Activator.getMessages()));
+        outTable.setVisibleColumns(ContributionContainer.NATURAL_COL_ORDER);
+        outTable.setColumnHeaders(VIFViewHelper.getColumnHeaders(
+                ContributionContainer.COL_HEADERS, Activator.getMessages()));
 
-		return outTable;
-	}
+        return outTable;
+    }
 
-	abstract protected boolean isConfirmationMode();
+    /** @return boolean */
+    abstract protected boolean isConfirmationMode();
 
 }

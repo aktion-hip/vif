@@ -46,6 +46,7 @@ public class DownloadFileLink extends Link {
         super();
         setWidthUndefined();
         setCaption(inCaption);
+        setStyleName("vif-uploaded");
         setDescription(Activator.getMessages().getMessage("download.link.description")); //$NON-NLS-1$
         setTargetName(TARGET_NAME);
         downloadID = inID;
