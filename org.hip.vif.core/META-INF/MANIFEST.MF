@@ -6,9 +6,9 @@ Bundle-Version: 1.2.0.qualifier
 Bundle-Vendor: RelationWare
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: ch.qos.logback.classic;version="[1.0.13,2.0.0)",
- ch.qos.logback.classic.spi;version="[1.0.13,2.0.0)",
+ ch.qos.logback.classic.spi;version="1.0.13",
  ch.qos.logback.core;version="[1.0.13,2.0.0)",
- ch.qos.logback.core.pattern;version="[1.0.13,2.0.0)",
+ ch.qos.logback.core.pattern;version="1.0.13",
  javax.mail,
  javax.mail.internet,
  javax.sql,
