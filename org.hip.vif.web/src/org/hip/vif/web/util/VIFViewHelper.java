@@ -18,19 +18,14 @@
  */
 package org.hip.vif.web.util;
 
-import org.hip.kernel.bom.DomainObject;
-import org.hip.kernel.bom.GeneralDomainObject;
 import org.hip.vif.core.interfaces.ISelectableBean;
 import org.hip.vif.web.Activator;
 import org.ripla.interfaces.IMessages;
 
-import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.validator.IntegerValidator;
-import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.CheckBox;
@@ -43,10 +38,14 @@ import com.vaadin.ui.TextField;
 /** Constants and templates useful for views in use case providing bundles.
  *
  * @author Luthiger Created: 01.07.2011 */
-public class VIFViewHelper {
+public final class VIFViewHelper {
     /** xhtml for a title tag with a specified class attribute */
     public static final String TMPL_TITLE = "<div class=\"%s\">%s</div>"; //$NON-NLS-1$
     public static final String TMPL_WARNING = "<div class=\"vif-warning\">%s</div>"; //$NON-NLS-1$
+
+    private VIFViewHelper() {
+        // prevent instantiation
+    }
 
     /** Convenience function:<br />
      * Checks whether the data is ready to be processed. Because the data is selectable, data processing makes sense
@@ -90,7 +89,7 @@ public class VIFViewHelper {
      * @param inTableSize int the amount of items to display in the table
      * @return int the size to set to the table, e.g. 0 */
     public static int getTablePageLength(final int inTableSize) {
-        final int lPageSize = 15;
+        final int lPageSize = 15; // NOPMD
         return inTableSize > lPageSize ? lPageSize : 0;
     }
 
@@ -108,41 +107,6 @@ public class VIFViewHelper {
             outHeaders[i] = lKey.isEmpty() ? "" : inMessages.getMessage(lKey);
         }
         return outHeaders;
-    }
-
-    /** Helper method to create a text field.
-     *
-     * @param inModel {@link GeneralDomainObject} the model to bind to the input field
-     * @param inKey String the field's key that has to be bound to the input field
-     * @param inWidth int the field width
-     * @return {@link TextField}
-     * @deprecated Use <code>org.ripla.web.util.RiplaViewHelper.createTextField()</code> instead */
-    @Deprecated
-    public static TextField createTextField(final GeneralDomainObject inModel,
-            final String inKey, final int inWidth) {
-        return createTextField(new BOProperty<String>((DomainObject) inModel,
-                inKey, String.class), inWidth);
-    }
-
-    /** Helper method to create a text field.<br/>
-     * Note: this method adds an <code>IntegerValidator</code> by default if the property passed has a numeric type.
-     *
-     * @param inProperty {@link Property} the Property to be edited with this editor
-     * @param inWidth int the field width
-     * @return {@link TextField}
-     * @deprecated Use <code>org.ripla.web.util.RiplaViewHelper.createTextField()</code> instead */
-    @Deprecated
-    public static TextField createTextField(final Property inProperty,
-            final int inWidth) {
-        final TextField out = new TextField(inProperty);
-        // add number validator for number type properties
-        if (Number.class.isAssignableFrom(inProperty.getType())) {
-            out.addValidator(new IntegerValidator(Activator.getMessages()
-                    .getMessage("errmsg.error.not.number"))); //$NON-NLS-1$
-        }
-        out.setWidth(inWidth, Sizeable.Unit.PIXELS);
-        out.setStyleName("vif-input"); //$NON-NLS-1$
-        return out;
     }
 
     /** Helper method to create a text field.
@@ -194,7 +158,7 @@ public class VIFViewHelper {
                 .inConfirmationMode());
         out.addValueChangeListener(new ValueChangeListener() {
             @Override
-            public void valueChange(final ValueChangeEvent inEvent) {
+            public void valueChange(final ValueChangeEvent inEvent) { // NOPMD
                 inEntry.setChecked(((CheckBox) inEvent.getProperty())
                         .getValue());
             }
@@ -208,7 +172,7 @@ public class VIFViewHelper {
      * @param inSource Object[]
      * @return Object[] */
     public static Object[] getModifiedArray(final String inFirst,
-            final Object[] inSource) {
+            final Object... inSource) {
         final Object[] out = new Object[inSource.length + 1];
         out[0] = inFirst;
         System.arraycopy(inSource, 0, out, 1, inSource.length);
@@ -253,7 +217,7 @@ public class VIFViewHelper {
         }
 
         @Override
-        public Object generateCell(final Table inSource, final Object inItemId,
+        public Object generateCell(final Table inSource, final Object inItemId, // NOPMD
                 final Object inColumnId) {
             return createCheck((ISelectableBean) inItemId,
                     confirmationModeChecker);
@@ -264,7 +228,7 @@ public class VIFViewHelper {
      * In confirmation mode, the check box should be displayed disabled.
      *
      * @author Luthiger Created: 16.11.2011 */
-    public static interface IConfirmationModeChecker {
+    public interface IConfirmationModeChecker {
         /** @return boolean <code>true</code> if the view is in confirmation mode */
         boolean inConfirmationMode();
     }

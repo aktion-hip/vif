@@ -39,10 +39,10 @@ public class RequestForReviewMail extends MailWithLink {
     private final static String KEY_TEXT2 = "mail.review.text2"; //$NON-NLS-1$
     private final static String KEY_TEXT3 = "mail.review.text3"; //$NON-NLS-1$
 
-    private final IMessages messages = Activator.getMessages();
+    private final transient IMessages messages = Activator.getMessages();
 
-    private final StringBuilder body = new StringBuilder();
-    private final StringBuilder bodyHtml = new StringBuilder();
+    private final StringBuilder body = new StringBuilder(); // NOPMD
+    private final StringBuilder bodyHtml = new StringBuilder(); // NOPMD
 
     /** RequestForReviewMail constructor.
      *
@@ -58,8 +58,6 @@ public class RequestForReviewMail extends MailWithLink {
         super(inReviewer, inAuthor);
         body.append(inNotificationText);
         bodyHtml.append(inNotificationTextHtml);
-        // TODO: URL is not ok:
-        // /forum?request=3Dorg.hip.vif.forum.groups/org.hip.vif.forum.groups.tasks.RequestsListTask&groupID=3D41
         baseURL = createRequestedURL(
                 ForwardControllerRegistry.INSTANCE.getController(ForwardControllerRegistry.Alias.FORWARD_REQUEST_LIST),
                 true);
@@ -76,12 +74,12 @@ public class RequestForReviewMail extends MailWithLink {
         else {
             outBody.append(messages.getFormattedMessage(KEY_TEXT1, baseURL));
         }
-        outBody.append("\n").append(messages.getMessage(KEY_TEXT3)); //$NON-NLS-1$
+        outBody.append('\n').append(messages.getMessage(KEY_TEXT3)); //$NON-NLS-1$
         return outBody;
     }
 
     @Override
-    protected StringBuilder getBodyHtml() {
+    protected StringBuilder getBodyHtml() { // NOPMD
         final StringBuilder outBody = new StringBuilder("<p>").append(messages.getMessage(KEY_INTRO)).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$
         outBody.append(HTML_HR).append(bodyHtml).append(HTML_HR).append("<p>"); //$NON-NLS-1$
         if (baseURL == null) {
