@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2011, Benno Luthiger
+	Copyright (C) 2011-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.quickstart;
 
@@ -29,85 +29,86 @@ import java.util.jar.JarFile;
 
 import org.hip.vif.quickstart.SplashWindow.ProgressBar;
 
-/**
- * Helper class to create the OSGi runtime environment.<br />
- * This class has to unzip the resources in the runtime part and copy them to the file system. 
- * 
- * @author Luthiger
- * Created: 19.01.2012
- */
-public class EnvironmentHelper {
-	
-	private EnvironmentHelper() {}
+/** Helper class to create the OSGi runtime environment.<br />
+ * This class has to unzip the resources in the runtime part and copy them to the file system.
+ *
+ * @author Luthiger Created: 19.01.2012 */
+public final class EnvironmentHelper { // NOPMD
 
-	/**
-	 * Factory method.
-	 * 
-	 * @return {@link EnvironmentHelper}
-	 */
-	public static EnvironmentHelper createHelper() {
-		return new EnvironmentHelper();
-	}
-	
-	/**
-	 * Creates the OSGi environment needed for the application by unzipping the libraries contained in the bundle.
-	 * 
-	 * @param inPort the port the http service should be configured to listen 
-	 * @param inProgress {@link ProgressBar} to signal unzipping progress
-	 * 
-	 * @throws IOException
-	 */
-	public void createEnvironment(String inPort, ProgressBar inProgress) throws IOException {
-		String lTargetDir = new File(".").getAbsolutePath();
-		JarFile lJar = new JarFile(getClass().getProtectionDomain().getCodeSource().getLocation().getPath().replaceAll("%20", " "));
-		
-		int lCount = 0;
-		Enumeration<JarEntry> lEntries = lJar.entries();
-		while (lEntries.hasMoreElements()) {
-			if (lEntries.nextElement().getName().startsWith(Constants.RUNTIME_DIR)) {
-				lCount++;
-			}
-		}
-		inProgress.setMaxValue(lCount);
+    private EnvironmentHelper() {
+        // prevent instantiation
+    }
 
-		InputStream lIn = null;
-		FileOutputStream lOut = null;
-		try {
-			lEntries = lJar.entries();
-			while (lEntries.hasMoreElements()) {
-				JarEntry lEntry = lEntries.nextElement();
-				if (!lEntry.getName().startsWith(Constants.RUNTIME_DIR)) {
-					continue;
-				}
-				String lEntryName = getName(lEntry);
-				File lFile = new File(lTargetDir + File.separator + lEntryName);
-				if (lFile.exists()) {
-					continue;
-				}
-				if (lEntry.isDirectory()) {
-					lFile.mkdir();
-					continue;
-				}
-				inProgress.echoExtracted(lEntryName);
-				lIn = lJar.getInputStream(lEntry);
-				lOut = new FileOutputStream(lFile);
-				while (lIn.available() > 0) {
-					lOut.write(lIn.read());
-				}
-				if (lEntry.getName().endsWith(Constants.CONFIG_INI_NAME)) {
-					lOut.write(String.format("org.osgi.service.http.port=%s%s", inPort, System.getProperty("line.separator")).getBytes());
-				}
-				inProgress.progress();
-			}
-		}
-		finally {
-			if (lIn != null) lIn.close();
-			if (lOut != null) lOut.close();
-		}
-	}
+    /** Factory method.
+     *
+     * @return {@link EnvironmentHelper} */
+    public static EnvironmentHelper createHelper() {
+        return new EnvironmentHelper();
+    }
 
-	private String getName(JarEntry inEntry) {
-		return inEntry.getName().substring(Constants.RUNTIME_DIR.length() + 1);
-	}
-	
+    /** Creates the OSGi environment needed for the application by unzipping the libraries contained in the bundle.
+     *
+     * @param inPort the port the http service should be configured to listen
+     * @param inProgress {@link ProgressBar} to signal unzipping progress
+     *
+     * @throws IOException */
+    public void createEnvironment(final String inPort, final ProgressBar inProgress) throws IOException { // NOPMD
+        final String lTargetDir = new File(".").getAbsolutePath();
+        final JarFile lJar = new JarFile(getClass().getProtectionDomain().getCodeSource().getLocation().getPath()
+                .replaceAll("%20", " "));
+
+        int lCount = 0;
+        Enumeration<JarEntry> lEntries = lJar.entries();
+        while (lEntries.hasMoreElements()) {
+            if (lEntries.nextElement().getName().startsWith(Constants.RUNTIME_DIR)) {
+                lCount++;
+            }
+        }
+        inProgress.setMaxValue(lCount);
+
+        InputStream lIn = null;
+        FileOutputStream lOut = null;
+        try {
+            lEntries = lJar.entries();
+            while (lEntries.hasMoreElements()) {
+                final JarEntry lEntry = lEntries.nextElement();
+                if (!lEntry.getName().startsWith(Constants.RUNTIME_DIR)) {
+                    continue;
+                }
+                final String lEntryName = getName(lEntry);
+                final File lFile = new File(lTargetDir + File.separator + lEntryName);
+                if (lFile.exists()) {
+                    continue;
+                }
+                if (lEntry.isDirectory()) {
+                    lFile.mkdir();
+                    continue;
+                }
+                inProgress.echoExtracted(lEntryName);
+                lIn = lJar.getInputStream(lEntry);
+                lOut = new FileOutputStream(lFile);
+                while (lIn.available() > 0) {
+                    lOut.write(lIn.read());
+                }
+                if (lEntry.getName().endsWith(Constants.CONFIG_INI_NAME)) {
+                    lOut.write(String.format("org.osgi.service.http.port=%s%s", inPort,
+                            System.getProperty("line.separator")).getBytes());
+                }
+                inProgress.progress();
+            }
+        } finally {
+            if (lIn != null) {
+                lIn.close();
+            }
+            if (lOut != null) {
+                lOut.close();
+            }
+            lJar.close();
+        }
+    }
+
+    private String getName(final JarEntry inEntry) {
+        return inEntry.getName().substring(Constants.RUNTIME_DIR.length() + 1);
+    }
+
 }

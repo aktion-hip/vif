@@ -1,1 +1,1 @@
-java -Dlogback.configurationFile=./logback.xml -jar org.eclipse.osgi_3.7.1.R37x_v20110808-1106.jar -console
+java -Dlogback.configurationFile=./logback.xml -jar org.eclipse.osgi_3.9.1.v20140110-1610.jar -console
