@@ -193,6 +193,10 @@ public class DBConfigurationPopup extends AbstractConfigurationPopup {
         public String getDbPasswd() { // NOPMD
             return getPropertyValue(ConfigurationItem.PropertyDef.DB_PASSWD.getPID());
         }
+
+        public void setDbPasswd(final String inValue) { // NOPMD
+            setPropertyValue(ConfigurationItem.PropertyDef.DB_PASSWD.getPID(), inValue);
+        }
     }
 
 }
