@@ -69,7 +69,7 @@ public final class VIFAppHelper {
         else {
             // OSGi in servlet container, e.g. Tomcat
             VSys.useConfPath(true);
-            VSys.setContextPath(lContextDir);
+            VSys.setContextPath(VaadinServlet.getCurrent().getServletContext().getRealPath(""));
         }
         DataSourceRegistry.INSTANCE.setActiveConfiguration(PreferencesHandler.INSTANCE.getDBConfiguration());
     }
@@ -162,7 +162,7 @@ public final class VIFAppHelper {
             @Override
             public User authenticate(final String inName, // NOPMD
                     final String inPassword, final UserAdmin inUserAdmin)
-                    throws LoginException {
+                            throws LoginException {
                 try {
                     // first we check whether the user can be authenticated
                     // this will create an OSGi user object when the VIF user is set to the context
@@ -173,8 +173,8 @@ public final class VIFAppHelper {
                 } catch (final InvalidAuthenticationException exc) {
                     final StringBuilder lLog = new StringBuilder(200);
                     lLog.append(NL).append("   Note: Invalid try to authenticate:").append(NL).append("   User: ")
-                    .append(inName).append(NL).append("   IP number: ")
-                    .append(Page.getCurrent().getWebBrowser().getAddress()).append(NL);
+                            .append(inName).append(NL).append("   IP number: ")
+                            .append(Page.getCurrent().getWebBrowser().getAddress()).append(NL);
                     LOG.warn(new String(lLog));
                     throw new LoginException(exc.getMessage()); // NOPMD
                 } catch (final VException | SQLException exc) {

@@ -198,11 +198,19 @@ public enum PreferencesHandler {
     }
 
     /** Checks whether the application is started in embedded mode.<br />
-     * Embedded mode is indicated by empty DB username and password.
+     * Embedded mode is indicated by empty DB username and password, given DB driver and server are defined.
      *
      * @return boolean <code>true</code> if the application is started with database and http server embedded. */
     public boolean isEmbedded() {
         try {
+            final String lDriver = get(KEY_DB_DRIVER);
+            if (lDriver == null || lDriver.isEmpty()) {
+                return false;
+            }
+            final String lServer = get(KEY_DB_SERVER);
+            if (lServer == null || lServer.isEmpty()) {
+                return false;
+            }
             final String lUserID = get(KEY_DB_USER);
             final String lPWrd = get(KEY_DB_PW);
             return lUserID == null ? true : lUserID.length() == 0 && lPWrd == null ? true : lPWrd.length() == 0;
