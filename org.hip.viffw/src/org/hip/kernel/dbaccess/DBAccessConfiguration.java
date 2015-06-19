@@ -102,6 +102,23 @@ public class DBAccessConfiguration {
         return out;
     }
 
+    /** @return boolean <code>true</code> if the config is accessible */
+    public boolean isAccessible(final boolean isEmbedded) {
+        if (!checkState(DBAccessConfiguration.State.INITIALIZED)) {
+            return false;
+        }
+        // State.INITIALIZED
+        if (dbSourceID == null || dbSourceID.isEmpty()) {
+            return false;
+        }
+        if (!isEmbedded) {
+            if (server == null || server.isEmpty()) {
+                return false;
+            }
+        }
+        return user == null ? true : user.length() == 0 && password == null ? true : password.length() == 0;
+    }
+
     @Override
     public String toString() { // NOPMD by lbenno
         return String.format("DBAccessConfiguration[server=%s, schema=%s, user=%s]", server, schema, user);

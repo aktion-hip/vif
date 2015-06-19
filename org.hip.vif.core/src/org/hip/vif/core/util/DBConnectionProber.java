@@ -57,9 +57,8 @@ public class DBConnectionProber {
             LOG.trace("Probing with configuration {}.", lConfig);
             LOG.trace("DB configuration state is {}.", lConfig.getState());
             state = ProbingState.NO_ACCESS;
-            if (lConfig.checkState(DBAccessConfiguration.State.CONFIGURED) ||
-                    lConfig.checkState(DBAccessConfiguration.State.INITIALIZED) && PreferencesHandler.INSTANCE
-                            .isEmbedded()) {
+            if (lConfig.checkState(DBAccessConfiguration.State.CONFIGURED)
+                    || lConfig.isAccessible(EmbeddedDBHelper.checkEmbedded(lConfig.getDBSourceID()))) {
                 state = ProbingState.ACCESS;
             }
             LOG.trace("Connection prober in state {}.", state);
@@ -74,9 +73,7 @@ public class DBConnectionProber {
             if (lConnection != null && hasTables(lConnection)) {
                 state = ProbingState.READY;
             }
-        } catch (final SQLException exc) { // NOPMD by lbenno
-            // intentionally left empty
-        } catch (final IOException exc) { // NOPMD by lbenno
+        } catch (final SQLException | IOException exc) { // NOPMD by lbenno
             // intentionally left empty
         }
         LOG.trace("Connection state after proping is {}.", state);

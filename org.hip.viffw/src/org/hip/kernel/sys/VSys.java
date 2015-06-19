@@ -1,6 +1,6 @@
 /**
 	This package is part of the servlet framework used for the application VIF.
-	Copyright (C) 2001-2014, Benno Luthiger
+	Copyright (C) 2001-2015, Benno Luthiger
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -230,7 +230,7 @@ public class VSys extends VObject { // NOPMD by lbenno
      * @return String the property value */
     public static String getBundleProperty(final String inKey) {
         // without context path set, we try to retrieve the properties file from the bundle
-        if (cContextPath.length() == 0) {
+        if (cContextPath.isEmpty()) {
             try {
                 final ResourceBundle lBundle = ResourceBundle.getBundle(cSysName);
                 return lBundle == null ? null : (String) lBundle.getObject(inKey);
@@ -258,16 +258,15 @@ public class VSys extends VObject { // NOPMD by lbenno
      * @param inContextPath java.lang.String
      * @see javax.servlet.GenericServlet */
     public static void setContextPath(final String inContextPath) {
-        if (inContextPath == null) {
-            return;
+        if (inContextPath != null) {
+            cContextPath = inContextPath;
         }
-        cContextPath = inContextPath;
     }
 
     /** Returns the servlet context's real path.
      *
-     * @return a <code>String</code> specifying the servlet context's real path, or <code>null</code> if the translation
-     *         cannot be performed
+     * @return a <code>String</code> specifying the servlet context's real path, or <code>empty</code> if the
+     *         translation cannot be performed
      * @see ServletContext.getRealPath() */
     public static String getContextPath() {
         return cContextPath;
