@@ -55,7 +55,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import com.vaadin.server.Page;
+import com.vaadin.server.VaadinServlet;
+import com.vaadin.server.VaadinServletService;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 
@@ -225,6 +230,7 @@ public class DBAccessWorkflowItems {
         public void runStep() throws WorkflowException { // NOPMD
             final DBConnectionProber lProber = new DBConnectionProber();
             setOutcome(!lProber.needsDBConfiguration());
+            Notification.show(Activator.getMessages().getMessage("errmsg.dbaccess.connect"), Type.WARNING_MESSAGE);
             runNext();
         }
     }
@@ -408,6 +414,10 @@ public class DBAccessWorkflowItems {
         @Override
         public void runStep() throws WorkflowException { // NOPMD
             runNext();
+            final String lAppLocation = VaadinServlet.getCurrent().getServletContext().getContextPath()
+                    + VaadinServletService.getCurrentServletRequest()
+                            .getServletPath();
+            Page.getCurrent().setLocation(lAppLocation);
         }
     }
 
