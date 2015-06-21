@@ -1,6 +1,6 @@
 /**
 	This package is part of the application VIF.
-	Copyright (C) 2012-2014, Benno Luthiger
+	Copyright (C) 2012-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -79,11 +79,13 @@ public class ConfigTask extends AbstractWebController implements IWorkflowListen
     public boolean save(final ConfigurationItem inConfiguration) {
         configHelper = new ConfigurationHelper(inConfiguration);
 
+        final boolean lOutcome = inConfiguration.saveChanges(); // NOPMD
         switch (configHelper.getConfigurationTask()) {
         case DB:
             handleDBAccess(configHelper);
             return false;
         case INDEX:
+            inConfiguration.saveChanges();
             showNotification(
                     Activator.getMessages().getMessage("admin.config.language.feedback"), Notification.Type.HUMANIZED_MESSAGE); //$NON-NLS-1$
             sendEvent(RefreshIndexTask.class);
@@ -91,7 +93,7 @@ public class ConfigTask extends AbstractWebController implements IWorkflowListen
         case NONE:
         default:
         }
-        return inConfiguration.saveChanges();
+        return lOutcome;
     }
 
     private void handleDBAccess(final ConfigurationHelper inHelper) {
@@ -169,7 +171,7 @@ public class ConfigTask extends AbstractWebController implements IWorkflowListen
             }
         });
         lLayout.addComponent(lOk);
-        Popup.newPopup(lMessages.getMessage("admin.config.sub.database"), lLayout, 320, 180).setClosable(false).build();
+        Popup.newPopup(lMessages.getMessage("admin.config.sub.database"), lLayout, 400, 220).setClosable(false).build();
     }
 
 }

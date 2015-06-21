@@ -259,11 +259,13 @@ public class ConfigView extends AbstractAdminView {
                 outTable.addRow(createSubtitle("admin.config.sub.logging", lMessages)); //$NON-NLS-1$
                 outTable.addRow(
                         lMessages.getMessage("admin.config.label.logging.path"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_LOG_PATH), "admin.config.desc.logging.path", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                outTable.addEmtpyRow();
                 outTable.addRow(
                         lMessages.getMessage("admin.config.label.logging.level"), //$NON-NLS-1$
                         lViewHelper.createInput(
                                 createSelect(InputWrapper.KEY_LOG_LEVEL, ApplicationConstants.LOG_LEVELS,
                                         WIDTH, false), "admin.config.desc.logging.level", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                outTable.addEmtpyRow();
                 outTable.addRow(
                         lMessages.getMessage("admin.config.label.logging.config"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_LOG_CONFIG), "admin.config.desc.logging.config", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
             }
