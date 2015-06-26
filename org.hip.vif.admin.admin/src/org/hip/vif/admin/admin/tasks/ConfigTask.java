@@ -85,7 +85,6 @@ public class ConfigTask extends AbstractWebController implements IWorkflowListen
             handleDBAccess(configHelper);
             return false;
         case INDEX:
-            inConfiguration.saveChanges();
             showNotification(
                     Activator.getMessages().getMessage("admin.config.language.feedback"), Notification.Type.HUMANIZED_MESSAGE); //$NON-NLS-1$
             sendEvent(RefreshIndexTask.class);
@@ -102,8 +101,8 @@ public class ConfigTask extends AbstractWebController implements IWorkflowListen
             PreferencesHandler.INSTANCE.setEmbeddedDB();
         }
         DataSourceRegistry.INSTANCE
-                .setActiveConfiguration(PreferencesHandler.INSTANCE
-                        .getDBConfiguration());
+        .setActiveConfiguration(PreferencesHandler.INSTANCE
+                .getDBConfiguration());
 
         // evaluate the new DB access settings
         final DBConnectionProber lProber = new DBConnectionProber();

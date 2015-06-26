@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2012, Benno Luthiger
+	Copyright (C) 2012-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package org.hip.vif.core.internal.service;
 
@@ -25,39 +25,32 @@ import org.hip.vif.core.service.UpgradeRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * The client for the application's upgrade service <code>IVIFUpgradeService</code>.
- * 
- * @author Luthiger
- * Created: 16.02.2012
- */
+/** The client for the application's upgrade service <code>IVIFUpgradeService</code>.
+ *
+ * @author Luthiger Created: 16.02.2012 */
 public class UpgradeService {
-	private static final Logger LOG = LoggerFactory.getLogger(UpgradeService.class);
-	
-	/**
-	 * Binding the provided upgrade services.
-	 * 
-	 * @param inService {@link IVIFUpgradeService}
-	 */
-	public void registerUpgrader(IVIFUpgradeService inService) {
-		UpgradeRegistry lRegistry = UpgradeRegistry.INSTANCE;
-		for (IVIFUpgrade lUpgrade : inService.getUpgraders()) {
-			lRegistry.registerUpgrader(lUpgrade);
-		}
-		LOG.debug("Registered upgrade service {}.", inService);
-	}
+    private static final Logger LOG = LoggerFactory.getLogger(UpgradeService.class);
 
-	/**
-	 * Unbinding the provided upgrade services.
-	 * 
-	 * @param inService {@link IVIFUpgradeService}
-	 */
-	public void unregisterUpgrader(IVIFUpgradeService inService) {
-		UpgradeRegistry lRegistry = UpgradeRegistry.INSTANCE;
-		for (IVIFUpgrade lUpgrade : inService.getUpgraders()) {
-			lRegistry.unregisterUpgrader(lUpgrade);
-		}
-		LOG.debug("Unregistered upgrade service {}.", inService);
-	}
+    /** Binding the provided upgrade services.
+     * 
+     * @param inService {@link IVIFUpgradeService} */
+    public void registerUpgrader(final IVIFUpgradeService inService) {
+        final UpgradeRegistry lRegistry = UpgradeRegistry.INSTANCE;
+        for (final IVIFUpgrade lUpgrade : inService.getUpgraders()) {
+            lRegistry.registerUpgrader(lUpgrade);
+        }
+        LOG.debug("Registered upgrade service {}.", inService);
+    }
+
+    /** Unbinding the provided upgrade services.
+     * 
+     * @param inService {@link IVIFUpgradeService} */
+    public void unregisterUpgrader(final IVIFUpgradeService inService) {
+        final UpgradeRegistry lRegistry = UpgradeRegistry.INSTANCE;
+        for (final IVIFUpgrade lUpgrade : inService.getUpgraders()) {
+            lRegistry.unregisterUpgrader(lUpgrade);
+        }
+        LOG.debug("Unregistered upgrade service {}.", inService);
+    }
 
 }

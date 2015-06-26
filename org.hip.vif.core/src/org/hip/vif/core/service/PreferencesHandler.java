@@ -43,6 +43,7 @@ public enum PreferencesHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(PreferencesHandler.class);
 
+    private static final String INDICATOR = "__vif_initialized__";
     // keys
     public static final String KEY_LANGUAGE_DFT = "org.hip.vif.dftLanguage";
     public static final String KEY_LANGUAGE_CONTENT = "org.hip.vif.content.language";
@@ -97,7 +98,7 @@ public enum PreferencesHandler {
      * configuration settings) or, if none are defined yet, from the application's properties file.
      *
      * @param inKey String
-     * @return String the property's value
+     * @return String the property's value, may be <code>null</code>.
      * @throws IOException */
     public String get(final String inKey) throws IOException {
         final String lValue = VSys.getVSysProperties().getProperty(inKey);
@@ -265,6 +266,14 @@ public enum PreferencesHandler {
             // intentionally left empty
         }
         return DBAccessConfiguration.getEmptyConfiguration();
+    }
+
+    public boolean isVifInitialized() {
+        return !get(INDICATOR, "").isEmpty();
+    }
+
+    public void setVifInitialization(final boolean inInitialize) {
+        set(INDICATOR, inInitialize ? "initialized" : "");
     }
 
 }

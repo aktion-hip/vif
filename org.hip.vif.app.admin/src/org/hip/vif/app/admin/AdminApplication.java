@@ -83,7 +83,8 @@ public class AdminApplication extends RiplaApplication { // NOPMD
         } finally {
             VaadinSession.getCurrent().getLockInstance().unlock();
         }
-        if (!new DBConnectionProber().needsDBConfiguration()) {
+        final DBConnectionProber lDBProber = new DBConnectionProber();
+        if (!lDBProber.isUndefined() && !lDBProber.needsDBConfiguration()) {
             initializePermissions();
         }
         super.beforeInitializeLayout();

@@ -29,6 +29,7 @@ import org.hip.vif.core.ApplicationConstants;
 import org.hip.vif.core.exc.InvalidAuthenticationException;
 import org.hip.vif.core.service.MemberUtility;
 import org.hip.vif.core.service.PreferencesHandler;
+import org.hip.vif.core.util.WorkspaceHelper;
 import org.hip.vif.web.Constants;
 import org.osgi.service.useradmin.User;
 import org.osgi.service.useradmin.UserAdmin;
@@ -59,19 +60,34 @@ public final class VIFAppHelper {
      * This method sets the servlet's context path to <code>VSys</code> and initializes the
      * <code>DataSourceRegistry</code> singleton. */
     public static void initializeContext() {
-        final String lContextDir = VaadinServlet.getCurrent().getServletContext().getContextPath();
-        if (lContextDir.length() <= 1) { // NOPMD by lbenno
-            // embedded app, i.e. Jetty
-            VSys.useConfPath(false);
-            final String lConfigPath = new File("").getAbsolutePath(); //$NON-NLS-1$
-            VSys.setContextPath(lConfigPath);
+        final PreferencesHandler lPreferences = PreferencesHandler.INSTANCE;
+        if (!lPreferences.isVifInitialized()) {
+            final String lContextDir = VaadinServlet.getCurrent().getServletContext().getContextPath();
+            if (lContextDir.length() <= 1) { // NOPMD by lbenno
+                // embedded app, i.e. Jetty
+                VSys.useConfPath(false);
+                final String lConfigPath = new File("").getAbsolutePath(); //$NON-NLS-1$
+                VSys.setContextPath(lConfigPath);
+            }
+            else {
+                // OSGi in servlet container, e.g. Tomcat
+                VSys.useConfPath(true);
+                VSys.setContextPath(VaadinServlet.getCurrent().getServletContext().getRealPath(""));
+            }
+            DataSourceRegistry.INSTANCE.setActiveConfiguration(lPreferences.getDBConfiguration());
+            setLogDir();
+            lPreferences.setVifInitialization(true);
         }
-        else {
-            // OSGi in servlet container, e.g. Tomcat
-            VSys.useConfPath(true);
-            VSys.setContextPath(VaadinServlet.getCurrent().getServletContext().getRealPath(""));
+    }
+
+    private static void setLogDir() {
+        String lPath = PreferencesHandler.INSTANCE.get(PreferencesHandler.KEY_LOG_PATH,
+                ApplicationConstants.LOG_DESTINATION_DFT);
+        if (lPath.charAt(0) == '.') { // NOPMD
+            lPath = lPath.substring(1);
         }
-        DataSourceRegistry.INSTANCE.setActiveConfiguration(PreferencesHandler.INSTANCE.getDBConfiguration());
+        lPath = WorkspaceHelper.getRootDir() + lPath; // NOPMD
+        System.setProperty(ApplicationConstants.LOG_DESTINATION, lPath);
     }
 
     /** Set generic parameters.<br/>
@@ -162,7 +178,7 @@ public final class VIFAppHelper {
             @Override
             public User authenticate(final String inName, // NOPMD
                     final String inPassword, final UserAdmin inUserAdmin)
-                            throws LoginException {
+                    throws LoginException {
                 try {
                     // first we check whether the user can be authenticated
                     // this will create an OSGi user object when the VIF user is set to the context
@@ -173,8 +189,8 @@ public final class VIFAppHelper {
                 } catch (final InvalidAuthenticationException exc) {
                     final StringBuilder lLog = new StringBuilder(200);
                     lLog.append(NL).append("   Note: Invalid try to authenticate:").append(NL).append("   User: ")
-                            .append(inName).append(NL).append("   IP number: ")
-                            .append(Page.getCurrent().getWebBrowser().getAddress()).append(NL);
+                    .append(inName).append(NL).append("   IP number: ")
+                    .append(Page.getCurrent().getWebBrowser().getAddress()).append(NL);
                     LOG.warn(new String(lLog));
                     throw new LoginException(exc.getMessage()); // NOPMD
                 } catch (final VException | SQLException exc) {

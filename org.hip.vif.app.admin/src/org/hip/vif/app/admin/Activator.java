@@ -1,5 +1,6 @@
 package org.hip.vif.app.admin;
 
+import org.hip.vif.core.service.PreferencesHandler;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.ripla.interfaces.IMessages;
@@ -16,6 +17,7 @@ public class Activator implements BundleActivator {
     @Override
     public void start(final BundleContext inContext) throws Exception { // NOPMD
         cMessages = new Messages();
+        PreferencesHandler.INSTANCE.setVifInitialization(false);
         LOG.debug("{} started.", inContext.getBundle().getSymbolicName()); //$NON-NLS-1$
     }
 

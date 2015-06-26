@@ -57,7 +57,7 @@ public final class WorkspaceHelper {
         }
 
         try {
-            outRootDir = getFile(PreferencesHandler.INSTANCE.get(PreferencesHandler.KEY_DOCS_ROOT));
+            outRootDir = getFile(getDocsRootChkd());
             if (outRootDir != null) {
                 return outRootDir.getParent();
             }
@@ -68,13 +68,18 @@ public final class WorkspaceHelper {
         final String lProperty = ServletContainer.getInstance().getBasePath();
         try {
             if (lProperty != null) {
-                outRootDir = getFile(PreferencesHandler.INSTANCE.get(PreferencesHandler.KEY_DOCS_ROOT), lProperty);
+                outRootDir = getFile(getDocsRootChkd(), lProperty);
             }
             return outRootDir.getParent();
         } catch (final IOException exc) {
             LOG.error("Error encountered while retrieving the application's doc root!", exc);
         }
         return ".";
+    }
+
+    private static String getDocsRootChkd() throws IOException {
+        final String out = PreferencesHandler.INSTANCE.get(PreferencesHandler.KEY_DOCS_ROOT);
+        return out == null ? "." : out;
     }
 
     private static String getWorkspaceDir(final File inDir) {
