@@ -268,10 +268,15 @@ public enum PreferencesHandler {
         return DBAccessConfiguration.getEmptyConfiguration();
     }
 
+    /** @return boolean <code>true</code> if the VIF application has completed initialization */
     public boolean isVifInitialized() {
         return !get(INDICATOR, "").isEmpty();
     }
 
+    /** Setter for the <code>initialized</code> flag. If the application is restarted, it should be set to
+     * <code>initialized=false</code>.
+     *
+     * @param inInitialize boolean */
     public void setVifInitialization(final boolean inInitialize) {
         set(INDICATOR, inInitialize ? "initialized" : "");
     }
