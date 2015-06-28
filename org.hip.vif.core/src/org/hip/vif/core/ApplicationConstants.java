@@ -26,10 +26,10 @@ public final class ApplicationConstants {
     public static final String DFLT_USER_ID = "Guest"; //$NON-NLS-1$
     public static final String FOOTER_TEXT = "&copy; Aktion HIP";
 
-    public static String PROCESSING_INSTRUCTION = "version=\"1.0\" encoding=\"UTF-8\""; //$NON-NLS-1$
-    public static String HEADER = "<?xml " + PROCESSING_INSTRUCTION + "?>"; //$NON-NLS-1$ //$NON-NLS-2$
-    public static String ROOT_BEGIN = "<Root>"; //$NON-NLS-1$
-    public static String ROOT_END = "</Root>"; //$NON-NLS-1$
+    public static final String PROCESSING_INSTRUCTION = "version=\"1.0\" encoding=\"UTF-8\""; //$NON-NLS-1$
+    public static final String HEADER = "<?xml " + PROCESSING_INSTRUCTION + "?>"; //$NON-NLS-1$ //$NON-NLS-2$
+    public static final String ROOT_BEGIN = "<Root>"; //$NON-NLS-1$
+    public static final String ROOT_END = "</Root>"; //$NON-NLS-1$
 
     public static final String ROLE_ID_SU = "1"; //$NON-NLS-1$
     public static final String ROLE_ID_ADMIN = "2"; //$NON-NLS-1$
@@ -66,7 +66,7 @@ public final class ApplicationConstants {
 
     // logging
     public static final String[] LOG_LEVELS = { "trace", "debug", "info",
-            "warn", "error", "fatal" };
+        "warn", "error", "fatal" };
     public static final String LOG_DESTINATION = "log.destination";
     public static final String LOG_DESTINATION_DFT = "./vif_logs";
     public static final String LOG_LEVEL = "log.level";

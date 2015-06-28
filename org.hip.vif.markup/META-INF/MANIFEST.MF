@@ -5,9 +5,9 @@ Bundle-SymbolicName: org.hip.vif.markup
 Bundle-Version: 1.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .,
- lib/org.eclipse.mylyn.wikitext.core_1.5.0.v20110608-1400.jar,
- lib/org.eclipse.mylyn.wikitext.textile.core_1.5.0.v20110608-1400.jar,
- lib/jtidy-r938.jar
+ lib/jtidy-r938.jar,
+ lib/org.eclipse.mylyn.wikitext.core_2.1.0.v20140513-1929.jar,
+ lib/org.eclipse.mylyn.wikitext.textile.core_2.1.0.v20140325-2210.jar
 Export-Package: org.hip.vif.markup;version="1.0.0",
  org.hip.vif.markup.html;version="1.0.0",
  org.hip.vif.markup.serializer;version="1.0.0"
