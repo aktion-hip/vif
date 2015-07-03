@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2010, Benno Luthiger
+	Copyright (C) 2010-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 public enum VIFIndexing {
     INSTANCE;
 
-    private final Logger LOG = LoggerFactory.getLogger(VIFIndexing.class);
+    private final Logger LOG = LoggerFactory.getLogger(VIFIndexing.class); // NOPMD
 
     private static final String ERROR_MSG = "Can't access the index in %s!";
 
@@ -60,26 +60,35 @@ public enum VIFIndexing {
 
     private final DirectoryFactory directoryFactory = new FileSystemDirectoryFactory();
 
-    private Directory contentDir = null;
-    private Directory memberDir = null;
-    private IndexWriter contentIndexWriter = null;
-    private IndexWriter memberIndexWriter = null;
-    private IndexReader contentIndexReader = null;
-    private IndexReader memberIndexReader = null;
+    private Directory contentDir;
+    private Directory memberDir;
+    private IndexWriter contentIndexWriter;
+    private IndexWriter memberIndexWriter;
+    private IndexReader contentIndexReader;
+    private IndexReader memberIndexReader;
 
     VIFIndexing() {
         try {
             contentDir = directoryFactory.getDirectory(CONTENT_INDEX);
-            contentIndexWriter = new IndexWriter(contentDir, createConfiguration(false));
+            contentIndexWriter = createChecked(contentDir);
 
             memberDir = directoryFactory.getDirectory(MEMBER_INDEX);
-            memberIndexWriter = new IndexWriter(memberDir, createConfiguration(false));
+            memberIndexWriter = createChecked(memberDir);
 
             contentIndexReader = DirectoryReader.open(contentDir);
             memberIndexReader = DirectoryReader.open(memberDir);
-        } catch (final Exception exc) {
+        } catch (final IOException exc) {
             LOG.error("Errer encountered while initializing the Lucene indexes.", exc);
         }
+    }
+
+    private IndexWriter createChecked(final Directory inDir) throws IOException {
+        if (inDir.listAll().length == 0) {
+            final IndexWriter lNew = new IndexWriter(inDir, createConfiguration(false));
+            lNew.commit();
+            lNew.close();
+        }
+        return new IndexWriter(inDir, createConfiguration(false));
     }
 
     protected IndexWriterConfig createConfiguration(final boolean inCreateNew) {
@@ -93,7 +102,7 @@ public enum VIFIndexing {
      *
      * @return boolean <code>true</code> if both the content and member indexer have successfully been created. */
     public boolean checkIndex() {
-        return (contentIndexWriter != null) && (memberIndexWriter != null);
+        return contentIndexWriter != null && memberIndexWriter != null;
     }
 
     /** Returns the <code>IndexWriter</code> to index the the content.
@@ -108,8 +117,9 @@ public enum VIFIndexing {
      * @throws IOException
      * @throws LockObtainFailedException */
     public IndexWriter getContentIndexWriter(final boolean inCreate) throws LockObtainFailedException, IOException {
-        if (contentIndexWriter == null)
+        if (contentIndexWriter == null) {
             throw new CorruptIndexException(String.format(ERROR_MSG, createPath(CONTENT_INDEX)));
+        }
         if (!inCreate) {
             return contentIndexWriter;
         }
@@ -128,7 +138,7 @@ public enum VIFIndexing {
      * @return {@link IndexReader}
      * @throws CorruptIndexException
      * @throws IOException */
-    public synchronized IndexReader createContentIndexReader() throws CorruptIndexException, IOException {
+    public synchronized IndexReader createContentIndexReader() throws CorruptIndexException, IOException { // NOPMD
         final IndexReader outReader = DirectoryReader.openIfChanged((DirectoryReader) contentIndexReader);
         if (outReader != null) {
             contentIndexReader.close();
@@ -158,8 +168,9 @@ public enum VIFIndexing {
      * @throws IOException
      * @throws LockObtainFailedException */
     public IndexWriter getMemberIndexWriter(final boolean inCreate) throws LockObtainFailedException, IOException {
-        if (memberIndexWriter == null)
+        if (memberIndexWriter == null) {
             throw new CorruptIndexException(String.format(ERROR_MSG, createPath(CONTENT_INDEX)));
+        }
         if (!inCreate) {
             return memberIndexWriter;
         }
@@ -178,7 +189,7 @@ public enum VIFIndexing {
      * @return {@link IndexReader}
      * @throws CorruptIndexException
      * @throws IOException */
-    public synchronized IndexReader createMemberIndexReader() throws CorruptIndexException, IOException {
+    public synchronized IndexReader createMemberIndexReader() throws CorruptIndexException, IOException { // NOPMD
         final IndexReader outReader = DirectoryReader.openIfChanged((DirectoryReader) memberIndexReader);
         if (outReader != null) {
             memberIndexReader.close();
@@ -224,21 +235,21 @@ public enum VIFIndexing {
     public void close() throws CorruptIndexException, IOException {
         if (memberIndexWriter != null) {
             memberIndexWriter.close();
-            memberIndexWriter = null;
+            memberIndexWriter = null; // NOPMD
         }
         if (contentIndexWriter != null) {
             contentIndexWriter.close();
-            contentIndexWriter = null;
+            contentIndexWriter = null; // NOPMD
         }
 
         if (memberIndexReader != null) {
             memberIndexReader.close();
-            memberIndexReader = null;
+            memberIndexReader = null; // NOPMD
         }
 
         if (contentIndexReader != null) {
             contentIndexReader.close();
-            contentIndexReader = null;
+            contentIndexReader = null; // NOPMD
         }
     }
 
@@ -249,7 +260,7 @@ public enum VIFIndexing {
     // --- inner class ---
 
     private class FileSystemDirectoryFactory implements DirectoryFactory {
-        private final Logger LOG = LoggerFactory.getLogger(FileSystemDirectoryFactory.class);
+        private final Logger LOG = LoggerFactory.getLogger(FileSystemDirectoryFactory.class); // NOPMD
 
         @Override
         public Directory getDirectory(final String inIndexName) throws IOException {
