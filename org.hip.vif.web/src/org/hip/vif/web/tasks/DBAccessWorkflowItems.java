@@ -67,7 +67,7 @@ import com.vaadin.ui.Window.CloseListener;
 /** Helper class providing the worklow items (i.e. single workflow steps) to configure the DB access.
  *
  * @author Luthiger Created: 14.02.2012 */
-public class DBAccessWorkflowItems {
+public class DBAccessWorkflowItems { // NOPMD
     private static final Logger LOG = LoggerFactory
             .getLogger(DBAccessWorkflowItems.class);
 
@@ -229,8 +229,13 @@ public class DBAccessWorkflowItems {
         @Override
         public void runStep() throws WorkflowException { // NOPMD
             final DBConnectionProber lProber = new DBConnectionProber();
-            setOutcome(!lProber.needsDBConfiguration());
-            Notification.show(Activator.getMessages().getMessage("errmsg.dbaccess.connect"), Type.WARNING_MESSAGE);
+            if (lProber.needsDBConfiguration()) {
+                setOutcome(false);
+                Notification.show(Activator.getMessages().getMessage("errmsg.dbaccess.connect"), Type.WARNING_MESSAGE);
+            }
+            else {
+                setOutcome(true);
+            }
             runNext();
         }
     }
