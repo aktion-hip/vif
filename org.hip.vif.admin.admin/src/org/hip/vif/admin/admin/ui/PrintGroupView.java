@@ -1,6 +1,6 @@
 /**
 	This package is part of the application VIF.
-	Copyright (C) 2011-2014, Benno Luthiger
+	Copyright (C) 2011-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,11 +19,9 @@
 
 package org.hip.vif.admin.admin.ui;
 
-import java.util.Collection;
-
 import org.hip.vif.admin.admin.Activator;
 import org.hip.vif.admin.admin.data.GroupContainer;
-import org.hip.vif.admin.admin.data.GroupWrapper;
+import org.hip.vif.admin.admin.print.FileDownloaderExtension;
 import org.hip.vif.admin.admin.tasks.PrintGroupTask;
 import org.ripla.interfaces.IMessages;
 import org.ripla.web.util.LabelValueTable;
@@ -32,11 +30,8 @@ import org.ripla.web.util.RiplaViewHelper;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.ListSelect;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.VerticalLayout;
 
 /** View to select the discussion groups to print out.
@@ -48,7 +43,7 @@ public class PrintGroupView extends AbstractAdminView {
     private static final String VIF_STYLE = "vif-send-mail"; //$NON-NLS-1$
 
     /** Constructor
-     * 
+     *
      * @param inGroups {@link GroupContainer}
      * @param inTask {@link PrintGroupTask} */
     public PrintGroupView(final GroupContainer inGroups,
@@ -73,31 +68,11 @@ public class PrintGroupView extends AbstractAdminView {
                 lMessages.getMessage("admin.send.mail.label.select"), lGroups); //$NON-NLS-1$
         lLayout.addComponent(lTable);
 
+        final FileDownloaderExtension lDownloader = new FileDownloaderExtension(lGroups, inTask);
         final Button lPrint = new Button(
                 lMessages.getMessage("admin.print.button.print")); //$NON-NLS-1$
-        lPrint.addClickListener(new Button.ClickListener() {
-            @Override
-            @SuppressWarnings("unchecked")
-            public void buttonClick(final ClickEvent inEvent) {
-                if (!isValid(lGroups)) {
-                    Notification.show(
-                            lMessages.getMessage("admin.print.msg.not.valid"), Type.WARNING_MESSAGE); //$NON-NLS-1$
-                } else {
-                    if (!inTask.printGroups(
-                            (Collection<GroupWrapper>) lGroups.getValue(),
-                            lPrint)) {
-                        Notification.show(
-                                lMessages.getMessage("errmsg.print"), Type.WARNING_MESSAGE); //$NON-NLS-1$
-                    }
-                }
-            }
-        });
+        lDownloader.extend(lPrint);
         lLayout.addComponent(lPrint);
-    }
-
-    @SuppressWarnings("unchecked")
-    private boolean isValid(final ListSelect inGroups) {
-        return !((Collection<GroupWrapper>) inGroups.getValue()).isEmpty();
     }
 
 }
