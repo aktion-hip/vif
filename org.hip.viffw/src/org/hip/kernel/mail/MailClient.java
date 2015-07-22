@@ -32,8 +32,8 @@ import javax.naming.NamingException;
 import org.hip.kernel.exc.VException;
 import org.hip.kernel.util.Debug;
 
-/** This is a simple mail client, which can be used to send <code>HMultipartMessages </code> (MimeMessages with Mulitpart
- * content).
+/** This is a simple mail client, which can be used to send <code>HMultipartMessages </code> (MimeMessages with
+ * Mulitpart content).
  *
  * The SMTP mail host is either set manually or retrieved from the JNDI context (JNDI resource "mail/Session").
  *
@@ -60,15 +60,40 @@ public class MailClient {
 
     /** Sends the specified message via the configured mail host.
      *
-     * @param inMessage org.hip.kernel.mail.VMultiPartMessage
+     * @param inMessage {@link VMultiPartMessage}
      * @throws NamingException */
     public void sendMail(final VMultiPartMessage inMessage) throws MessagingException, NamingException {
-
         // pre: at least a primary receiver has to be specifed
         if (inMessage.getToAddresses() == null || inMessage.getToAddresses().length == 0) {
             throw new MessagingException("Primary Receivers (TO) not specified ");
         }
 
+        Transport.send(createMessage(inMessage));
+    }
+
+    /** Sends the specified message asynchronously via the configured mail host.
+     *
+     * @param inMessage {@link VMultiPartMessage}
+     * @param inCallback {@link ExceptionCallback} the callback to excecute in case of an error
+     * @throws MessagingException
+     * @throws NamingException */
+    public void sendMail(final VMultiPartMessage inMessage, final ExceptionCallback inCallback)
+            throws MessagingException, NamingException {
+        // pre: at least a primary receiver has to be specifed
+        if (inMessage.getToAddresses() == null || inMessage.getToAddresses().length == 0) {
+            throw new MessagingException("Primary Receivers (TO) not specified ");
+        }
+
+        final MimeMessage lMessage = createMessage(inMessage);
+        final MailSender lSender = new MailSender(lMessage, inCallback);
+        (new Thread(lSender)).start();
+    }
+
+    /** @param inMessage {@link VMultiPartMessage}
+     * @return {@link MimeMessage}
+     * @throws NamingException
+     * @throws MessagingException */
+    private MimeMessage createMessage(final VMultiPartMessage inMessage) throws NamingException, MessagingException {
         final Session lSession = createSession();
         final MimeMessage lMessage = new MimeMessage(lSession);
         lMessage.setRecipients(MimeMessage.RecipientType.TO, inMessage.getToAddresses());
@@ -85,8 +110,7 @@ public class MailClient {
         lMessage.setSentDate(new Date());
         lMessage.setContent(inMessage.getContent());
         lMessage.saveChanges();
-
-        Transport.send(lMessage);
+        return lMessage;
     }
 
     private Session createSession() throws NamingException {
@@ -115,4 +139,27 @@ public class MailClient {
     public String toString() {
         return Debug.classMarkupString(this, "mailHost='" + (mailHost == null ? "null" : mailHost) + "'");
     }
+
+    // ---
+
+    /** Helper class to send the mail asynchronously. */
+    private static class MailSender implements Runnable {
+        private final MimeMessage message;
+        private final ExceptionCallback callback;
+
+        protected MailSender(final MimeMessage inMessage, final ExceptionCallback inCallback) {
+            message = inMessage;
+            callback = inCallback;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Transport.send(message);
+            } catch (final MessagingException exc) {
+                callback.handleException(exc);
+            }
+        }
+    }
+
 }
