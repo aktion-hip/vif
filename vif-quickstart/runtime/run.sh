@@ -2,4 +2,4 @@
 # VIF Quickstart
 # (c) Benno Luthiger, Aktion HIP
 
-java -Dlogback.configurationFile=./logback.xml -jar org.eclipse.osgi_3.9.1.v20140110-1610.jar -console
+java -Dlogback.configurationFile=./logback.xml -jar org.eclipse.osgi_3.10.2.v20150203-1939.jar -console
