@@ -28,7 +28,6 @@ import org.ripla.interfaces.IMessages;
 import org.ripla.web.util.LabelValueTable;
 import org.ripla.web.util.RiplaViewHelper;
 
-import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Button;
@@ -87,7 +86,7 @@ public class SendMailView extends AbstractAdminView {
         lLayout.addComponent(lTable);
 
         send = new Button(lMessages.getMessage("admin.send.mail.button.send")); //$NON-NLS-1$
-        send.setClickShortcut(KeyCode.ENTER);
+        // send.setClickShortcut(KeyCode.ENTER);
         send.addClickListener(new Button.ClickListener() {
             @Override
             @SuppressWarnings("unchecked")
@@ -95,12 +94,13 @@ public class SendMailView extends AbstractAdminView {
                 if (!isValid(lGroups, lSubject, lBody)) {
                     Notification.show(
                             lMessages
-                                    .getMessage("admin.send.mail.msg.not.valid"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+                                    .getMessage("admin.send.mail.msg.not.valid"), //$NON-NLS-1$
+                            Type.WARNING_MESSAGE);
                     return;
                 }
                 if (!inTask.processGroups((Collection<GroupWrapper>) lGroups
                         .getValue(), lSubject.getValue().toString(), lBody
-                        .getValue())) {
+                                .getValue())) {
                     Notification.show(
                             lMessages.getMessage("admin.send.mail.msg.errmsg"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                 }
@@ -114,7 +114,7 @@ public class SendMailView extends AbstractAdminView {
             final TextField inSubject, final RichTextArea inBody) {
         return !(((Collection<GroupWrapper>) inGroups.getValue()).isEmpty()
                 || inSubject.getValue().toString().trim().length() == 0 || inBody
-                .getValue().trim().length() == 0);
+                        .getValue().trim().length() == 0);
     }
 
 }
