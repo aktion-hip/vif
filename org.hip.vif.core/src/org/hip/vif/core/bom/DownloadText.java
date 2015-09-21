@@ -22,7 +22,6 @@ import java.sql.SQLException;
 
 import org.hip.kernel.bom.DomainObject;
 import org.hip.kernel.exc.VException;
-import org.hip.kernel.servlet.impl.FileItem;
 import org.hip.vif.core.exc.ProhibitedFileException;
 
 /** Interface of model to download files.
@@ -63,8 +62,6 @@ public interface DownloadText extends DomainObject {
         String getDoctype(); // NOPMD
 
         Long getMemberID(); // NOPMD
-
-        FileItem getFile(); // NOPMD
 
         boolean hasUpload(); // NOPMD
 

@@ -37,9 +37,6 @@ import ch.qos.logback.core.ConsoleAppender;
  *
  * @author Luthiger Created: 24.03.2012 */
 public final class LoggingHelper {
-    // we have to duplicate the log constants from PreferencesHandler here for that we can remove any references to
-    // PreferencesHandler
-    private static final String KEY_LOG_PATH = "org.hip.vif.log.path";
     private static final String KEY_LOG_LEVEL = "org.hip.vif.log.level";
     private static final String KEY_LOG_CONFIG = "org.hip.vif.log.config";
     private static final String NAME_LOGBACK_CONFIG = "logback.xml";
@@ -57,8 +54,6 @@ public final class LoggingHelper {
     public static void setLoggingEnvironment(final PreferencesService inPreferences) {
         final Preferences lPreferences = inPreferences.getSystemPreferences();
         try {
-            setValueChecked(ApplicationConstants.LOG_DESTINATION,
-                    lPreferences.get(KEY_LOG_PATH, ApplicationConstants.LOG_DESTINATION_DFT));
             setValueChecked(ApplicationConstants.LOG_LEVEL,
                     lPreferences.get(KEY_LOG_LEVEL, ApplicationConstants.LOG_LEVEL_DFT));
             setConfigurationFile(lPreferences);

@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.hip.kernel.exc.VException;
@@ -82,7 +83,11 @@ public enum UsertasksRegistry {
      *
      * @param inUserTask IUserTask */
     public void unregisterUserTask(final IUserTask inUserTask) {
-        registry.remove(inUserTask);
+        for (final Entry<String, IUserTask> lEntry : registry.entrySet()) {
+            if (lEntry.getValue().equals(inUserTask)) {
+                registry.remove(lEntry.getKey());
+            }
+        }
     }
 
 }

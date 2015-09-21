@@ -50,8 +50,7 @@ public final class WorkspaceHelper {
         if (outRootDir != null) {
             if (PreferencesHandler.INSTANCE.isEmbedded()) {
                 return getWorkspaceDir(outRootDir);
-            }
-            else {
+            } else {
                 return outRootDir.getParent();
             }
         }
@@ -70,7 +69,7 @@ public final class WorkspaceHelper {
             if (lProperty != null) {
                 outRootDir = getFile(getDocsRootChkd(), lProperty);
             }
-            return outRootDir.getParent();
+            return outRootDir == null ? "." : outRootDir.getParent();
         } catch (final IOException exc) {
             LOG.error("Error encountered while retrieving the application's doc root!", exc);
         }
