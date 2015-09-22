@@ -42,7 +42,8 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractMemberTask extends AbstractWebController {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractMemberTask.class);
 
-    private static final char[] saltChars = ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./".toCharArray()); //$NON-NLS-1$
+    private static final char[] saltChars = ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./" //$NON-NLS-1$
+            .toCharArray());
 
     @Override
     protected String needsPermission() {
@@ -96,8 +97,9 @@ public abstract class AbstractMemberTask extends AbstractWebController {
         final Random randomGenerator = new Random();
         final int numSaltChars = saltChars.length;
         final StringBuffer outPassword = new StringBuffer();
-        for (int i = 0; i < 6; i++)
-            outPassword.append(saltChars[Math.abs(randomGenerator.nextInt()) % numSaltChars]);
+        for (int i = 0; i < 6; i++) {
+            outPassword.append(saltChars[randomGenerator.nextInt(Integer.MAX_VALUE) % numSaltChars]);
+        }
 
         return new String(outPassword);
     }

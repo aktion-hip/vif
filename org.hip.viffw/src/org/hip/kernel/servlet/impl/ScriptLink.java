@@ -54,11 +54,9 @@ public class ScriptLink extends AbstractResourceLink {
      * &lt;script type="text/javascript" src="c:/vif/website/css/my.js">&lt;/script>
      * </pre>
      *
-     * .
-     *
      * @return java.lang.String */
     @Override
     public String toString() {
-        return String.format(TMPL_LINK, WEB_CSS_ROOT, getHref());
+        return String.format(TMPL_LINK, getWebCssRoot(), getHref());
     }
 }

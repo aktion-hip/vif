@@ -33,7 +33,6 @@ import org.ripla.web.util.LabelValueTable;
 import org.ripla.web.util.RiplaViewHelper;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
@@ -131,7 +130,7 @@ public class MemberSearchView extends CustomComponent {
 
         void createLayout() {
             final HorizontalLayout lInput = new HorizontalLayout();
-            lInput.setWidth(SIZE_UNDEFINED, Unit.PIXELS);
+            lInput.setWidthUndefined();
             lInput.setMargin(new MarginInfo(true, true, true, false));
             final Label lLabel = new Label(
                     String.format("%s:&#160;", messages.getMessage("ui.member.search.label.quick")), ContentMode.HTML); //$NON-NLS-1$ //$NON-NLS-2$
@@ -168,14 +167,16 @@ public class MemberSearchView extends CustomComponent {
             layout.addComponent(new Label(
                     String.format(
                             VIFViewHelper.TMPL_TITLE,
-                            "vif-title", messages.getMessage("ui.member.search.label.detailed")), ContentMode.HTML)); //$NON-NLS-1$ //$NON-NLS-2$
+                            "vif-title", messages.getMessage("ui.member.search.label.detailed")), //$NON-NLS-1$ //$NON-NLS-2$
+                    ContentMode.HTML));
 
             final FieldHandler lFields = new FieldHandler();
             final LabelValueTable lTable = new LabelValueTable();
             lTable.addRow(
                     messages.getMessage("ui.member.label.name"), lFields.createTextField("name", DFT_WIDTH_INPUT)); //$NON-NLS-1$ //$NON-NLS-2$
             lTable.addRow(
-                    messages.getMessage("ui.member.label.firstname"), lFields.createTextField("firstname", DFT_WIDTH_INPUT)); //$NON-NLS-1$ //$NON-NLS-2$
+                    messages.getMessage("ui.member.label.firstname"), //$NON-NLS-1$
+                    lFields.createTextField("firstname", DFT_WIDTH_INPUT)); //$NON-NLS-1$
             lTable.addRow(
                     messages.getMessage("ui.member.label.street"), lFields.createTextField("street", DFT_WIDTH_INPUT)); //$NON-NLS-1$ //$NON-NLS-2$
             lTable.addRow(
@@ -184,7 +185,7 @@ public class MemberSearchView extends CustomComponent {
                     messages.getMessage("ui.member.label.city"), lFields.createTextField("city", DFT_WIDTH_INPUT)); //$NON-NLS-1$ //$NON-NLS-2$
             lTable.addRow(
                     messages.getMessage("ui.member.label.mail"), lFields.createTextField("mail", DFT_WIDTH_INPUT)); //$NON-NLS-1$ //$NON-NLS-2$
-            lTable.setHeight(Sizeable.SIZE_UNDEFINED, Unit.PIXELS);
+            lTable.setHeightUndefined();
             layout.addComponent(lTable);
 
             layout.addComponent(RiplaViewHelper.createSpacer());
@@ -198,7 +199,8 @@ public class MemberSearchView extends CustomComponent {
                                 messages.getMessage("errmsg.search.no.input"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                     } else {
                         if (!task.search(
-                                lFields.get("name"), lFields.get("firstname"), lFields.get("street"), lFields.get("zip"), lFields.get("city"), lFields.get("mail"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+                                lFields.get("name"), lFields.get("firstname"), lFields.get("street"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                                lFields.get("zip"), lFields.get("city"), lFields.get("mail"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                             Notification.show(messages.getMessage("errmsg.search.process"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                         }
                     }

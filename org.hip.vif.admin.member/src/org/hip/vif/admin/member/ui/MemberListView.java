@@ -87,9 +87,8 @@ public class MemberListView extends CustomComponent {
             lTable.setVisibleColumns(VIFViewHelper.getModifiedArray(MemberContainer.MEMBER_CHECK,
                     MemberContainer.NATURAL_COL_ORDER));
             lTable.setColumnHeaders(VIFViewHelper.getColumnHeaders(
-                    VIFViewHelper.getModifiedArray("", MemberContainer.COL_HEADERS), lMessages)); //$NON-NLS-1$
-        }
-        else {
+                    VIFViewHelper.getModifiedArray("", (Object) MemberContainer.COL_HEADERS), lMessages)); //$NON-NLS-1$
+        } else {
             lTable.setVisibleColumns(MemberContainer.NATURAL_COL_ORDER);
             lTable.setColumnHeaders(VIFViewHelper.getColumnHeaders(MemberContainer.COL_HEADERS, lMessages));
         }
@@ -117,8 +116,7 @@ public class MemberListView extends CustomComponent {
                             Notification.show(
                                     lMessages.getMessage("errmsg.process.delete"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                         }
-                    }
-                    else {
+                    } else {
                         if (VIFViewHelper.processAction(inMembers)) {
                             confirmationMode = true;
                             inMembers.addContainerFilter(new SelectedFilter());

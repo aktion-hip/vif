@@ -38,7 +38,7 @@ public abstract class AbstractResourceLink extends VObject implements Serializab
     public final static String MEDIA_ALL = "all";
 
     /** Root-Directory of the css stylesheets */
-    protected static String WEB_CSS_ROOT = ""; // NOPMD
+    protected String webCssRoot = ""; // NOPMD
 
     /** Id of css-rootdirectory property */
     private static final String WEB_CSS_ROOT_PROPERTY_NAME = "org.hip.vif.website.root";
@@ -75,15 +75,20 @@ public abstract class AbstractResourceLink extends VObject implements Serializab
 
         href = inHref;
         // we initialize the stylesheets root only when a relative path has been provided
-        if (isAbsolute()) {
-            WEB_CSS_ROOT = "";
+        if (isAbsolute(href)) {
+            webCssRoot = "";
             return;
         }
         try {
-            WEB_CSS_ROOT = VSys.getVSysProperties().getProperty(WEB_CSS_ROOT_PROPERTY_NAME);
+            webCssRoot = VSys.getVSysProperties().getProperty(WEB_CSS_ROOT_PROPERTY_NAME);
         } catch (final IOException exc) {
             throw new VError("AbstractResourceLink.initialize(): error during getting css root properties", exc);
         }
+    }
+
+    /** @return String */
+    protected String getWebCssRoot() {
+        return webCssRoot;
     }
 
     /** CssLinks are equal if their Media and Href is equal.
@@ -121,8 +126,8 @@ public abstract class AbstractResourceLink extends VObject implements Serializab
         return getHref().hashCode() ^ getMedia().hashCode();
     }
 
-    private boolean isAbsolute() {
-        return href.startsWith("http://") || href.startsWith("https://");
+    private boolean isAbsolute(final String inHref) {
+        return inHref.startsWith("http://") || inHref.startsWith("https://");
     }
 
     /** Sets the media for which the stylesheet is used.

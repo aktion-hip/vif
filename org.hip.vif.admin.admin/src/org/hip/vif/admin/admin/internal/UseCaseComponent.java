@@ -51,7 +51,6 @@ public class UseCaseComponent implements IUseCase, IPermissionRecords {
 
     @Override
     public IMenuItem getMenu() {
-        new ExtendibleMenu();
         return new ExtendibleMenu();
     }
 
@@ -92,10 +91,10 @@ public class UseCaseComponent implements IUseCase, IPermissionRecords {
             return new ExtendibleMenuMarker[] {
                     new ExtendibleMenuMarker(
                             Constants.EXTENDIBLE_MENU_POSITION_START),
-                            new ExtendibleMenuMarker(
-                                    Constants.EXTENDIBLE_MENU_POSITION_ADDITIONS),
-                                    new ExtendibleMenuMarker(
-                                            Constants.EXTENDIBLE_MENU_POSITION_END) };
+                    new ExtendibleMenuMarker(
+                            Constants.EXTENDIBLE_MENU_POSITION_ADDITIONS),
+                    new ExtendibleMenuMarker(
+                            Constants.EXTENDIBLE_MENU_POSITION_END) };
         }
 
         @Override
@@ -117,11 +116,11 @@ public class UseCaseComponent implements IUseCase, IPermissionRecords {
         outRecords[2] = new PermissionRecord(Constants.PERMISSION_SEND_MAIL,
                 "Administration: Send mail to members or participants.", //$NON-NLS-1$
                 new int[] { RolesConstants.ADMINISTRATOR,
-                RolesConstants.GROUP_ADMINISTRATOR });
+                        RolesConstants.GROUP_ADMINISTRATOR });
         outRecords[3] = new PermissionRecord(Constants.PERMISSION_PRINT_GROUP,
                 "Administration: Print content of discussion group.", //$NON-NLS-1$
                 new int[] { RolesConstants.ADMINISTRATOR,
-                RolesConstants.GROUP_ADMINISTRATOR });
+                        RolesConstants.GROUP_ADMINISTRATOR });
         outRecords[4] = new PermissionRecord(
                 Constants.PERMISSION_CONFIGURATION, "Administration: Application configuration.", //$NON-NLS-1$
                 new int[] { RolesConstants.SU, RolesConstants.ADMINISTRATOR });

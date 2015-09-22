@@ -33,7 +33,7 @@ public class InObjectImpl<T> implements SQLRange {
     /** InObjectImpl constructor
      *
      * @param inValues T[] the values that make up the range. */
-    public InObjectImpl(final T[] inValues) { // NOPMD by lbenno 
+    public InObjectImpl(final T[] inValues) { // NOPMD by lbenno
         values = new ArrayList<T>();
         Collections.addAll(values, inValues);
     }
@@ -82,6 +82,11 @@ public class InObjectImpl<T> implements SQLRange {
         return new String(out);
     }
 
+    /** @param inConverter {@link ValueConverter} */
+    public void setConverter(final ValueConverter inConverter) {
+        converter = inConverter;
+    }
+
     private ValueConverter getConverter(final T inValue) {
         if (converter != null) {
             return converter;
@@ -89,8 +94,7 @@ public class InObjectImpl<T> implements SQLRange {
 
         if (inValue instanceof String) {
             return new StringValueConverter();
-        }
-        else if (inValue instanceof Number) {
+        } else if (inValue instanceof Number) {
             return new NumberValueConverter();
         }
         return new StringValueConverter();

@@ -260,7 +260,7 @@ abstract public class AbstractHtmlPage extends AbstractHtmlView implements IPage
         try {
             renderElementsToWriter(new PrintWriter(new OutputStreamWriter(inStream, "")), inSessionID);
         } catch (final UnsupportedEncodingException exc) {
-            new VError(
+            throw new VError(
                     "Something went wrong in AbstractHtmlPage:renderToStream(), while writting the html-page to the servlet-outputstream"
                             + exc);
         }
@@ -288,7 +288,8 @@ abstract public class AbstractHtmlPage extends AbstractHtmlView implements IPage
             // either there are no messages or they havn't written to the output stream yet
             // (because there was no XSL to handle them) so add them to the HTML view now
             if (!"".equals(getStatusMessage())) { // NOPMD
-                inWriter.println("<b><font face='Arial' color='#0000cc' size='3'>" + getStatusMessage() + "</font></b>");
+                inWriter.println(
+                        "<b><font face='Arial' color='#0000cc' size='3'>" + getStatusMessage() + "</font></b>");
             }
             if (!"".equals(getErrorMessage())) { // NOPMD
                 inWriter.println("<b><font face='Arial' color='#cc0000' size='3'>" + getErrorMessage() + "</font></b>");
@@ -439,8 +440,7 @@ abstract public class AbstractHtmlPage extends AbstractHtmlView implements IPage
             if (lOther.views != null) {
                 return false;
             }
-        }
-        else {
+        } else {
             final List<HtmlView> lOtherViews = lOther.views;
             if (lOtherViews == null) {
                 return false;

@@ -38,7 +38,7 @@ import org.hip.kernel.exc.VError;
 /** This is the abstract implementation of prepared Statements.
  *
  * @author Benno Luthiger */
-public abstract class SqlPreparedStatement extends CommittableStatement { // NOPMD by lbenno 
+public abstract class SqlPreparedStatement extends CommittableStatement { // NOPMD by lbenno
     protected transient DomainObjectHome home;
     protected transient PreparedStatement statement;
 
@@ -58,22 +58,17 @@ public abstract class SqlPreparedStatement extends CommittableStatement { // NOP
     protected int convertToSqlType(final String inValueType) {
         int outValue;
 
-        if (inValueType == TypeDef.Date) {
+        if (TypeDef.Date.equals(inValueType)) {
             outValue = Types.DATE;
-        }
-        else if (inValueType == TypeDef.Timestamp) {
+        } else if (TypeDef.Timestamp.equals(inValueType)) {
             outValue = Types.DATE;
-        }
-        else if (inValueType == TypeDef.String) {
+        } else if (TypeDef.String.equals(inValueType)) {
             outValue = Types.CHAR;
-        }
-        else if (inValueType == TypeDef.Number) {
+        } else if (TypeDef.Number.equals(inValueType)) {
             outValue = Types.INTEGER;
-        }
-        else if (inValueType == TypeDef.Binary) {
+        } else if (TypeDef.Binary.equals(inValueType)) {
             outValue = Types.BINARY;
-        }
-        else {
+        } else {
             throw new Error("Value type : " + inValueType + " defined in " + home.toString() + " not supported");
         }
 
@@ -91,7 +86,7 @@ public abstract class SqlPreparedStatement extends CommittableStatement { // NOP
             throw new Error("Table not defined for : " + home.toString());
         }
         // TODO: at the moment this class does not support more than one table per ObjectDef
-        if (lTables.size() > 1) { // NOPMD by lbenno 
+        if (lTables.size() > 1) { // NOPMD by lbenno
             throw new Error("More than one table defined for : " + home.toString());
         }
         return outTable;
@@ -100,43 +95,35 @@ public abstract class SqlPreparedStatement extends CommittableStatement { // NOP
     /** Sets a value to the statement after doing type check
      *
      * @param inValue java.lang.Object */
-    protected void setValueToStatement(final Object inValue, final int inPosition) { // NOPMD by lbenno 
+    protected void setValueToStatement(final Object inValue, final int inPosition) { // NOPMD by lbenno
         String lValueString;
         try {
             if (inValue instanceof Timestamp) {
                 statement.setTimestamp(inPosition, (Timestamp) inValue);
-            }
-            else if (inValue instanceof Date) {
+            } else if (inValue instanceof Date) {
                 statement.setDate(inPosition, (Date) inValue);
-            }
-            else if (inValue instanceof Number) {
+            } else if (inValue instanceof Number) {
                 lValueString = ((Number) inValue).toString();
                 if (inValue instanceof BigDecimal) {
                     statement.setBigDecimal(inPosition, (BigDecimal) inValue);
-                }
-                else {
+                } else {
                     statement.setInt(inPosition, ((Number) inValue).intValue());
                 }
-            }
-            else if (inValue instanceof String) {
+            } else if (inValue instanceof String) {
                 lValueString = (String) inValue;
                 statement.setString(inPosition, lValueString);
-            }
-            else if (inValue instanceof File) {
+            } else if (inValue instanceof File) {
                 final File lFile = (File) inValue;
                 try {
                     statement.setBinaryStream(inPosition, new FileInputStream(lFile), (int) lFile.length());
                 } catch (final FileNotFoundException exc) {
                     throw new VError(exc.getMessage(), exc);
                 }
-            }
-            else if (inValue instanceof Blob) {
+            } else if (inValue instanceof Blob) {
                 statement.setBlob(inPosition, (Blob) inValue);
-            }
-            else if (inValue instanceof byte[]) {
+            } else if (inValue instanceof byte[]) {
                 statement.setBytes(inPosition, (byte[]) inValue);
-            }
-            else {
+            } else {
                 throw new Error("Value : " + inValue.toString() + " (class " + inValue.getClass().getName()
                         + ") defined as key in " + home.toString() + " not supported");
             }

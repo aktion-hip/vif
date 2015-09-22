@@ -47,7 +47,7 @@ public class XMLSerializer extends AbstractSerializer implements Serializable {
 
     // Instance variables
     private final DecimalFormat decimalFormat = new DecimalFormat();
-    private XMLCharacterFilter xmlCharFilter;
+    private transient XMLCharacterFilter xmlCharFilter;
     protected Locale locale = VSys.dftLocale;
 
     /** XMLSerializer default constructor. */
@@ -124,13 +124,11 @@ public class XMLSerializer extends AbstractSerializer implements Serializable {
             synchronized (this) {
                 getBuffer2().append(getNullString());
             }
-        }
-        else {
+        } else {
             synchronized (this) {
                 if (xmlCharFilter == null) {
                     getBuffer2().append(inObject);
-                }
-                else {
+                } else {
                     getBuffer2().append(xmlCharFilter.filter(inObject.toString()));
                 }
             }
@@ -254,8 +252,7 @@ public class XMLSerializer extends AbstractSerializer implements Serializable {
             if (lFormatPattern == null) {
                 emitText(NumberFormat.getNumberInstance().format(lValue));
                 return;
-            }
-            else {
+            } else {
                 if (" ".equals(lFormatPattern) && ((Number) lValue).intValue() == 0) { // NOPMD by lbenno
                     return;
                 }

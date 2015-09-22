@@ -140,7 +140,7 @@ public class VException extends Exception implements VThrowable {
      *
      * @return java.lang.Throwable */
     @Override
-    public final Throwable getRootCause() {
+    public synchronized final Throwable getRootCause() {
         return rootCause;
     }
 

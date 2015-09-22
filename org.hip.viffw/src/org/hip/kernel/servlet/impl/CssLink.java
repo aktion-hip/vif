@@ -42,14 +42,14 @@ public class CssLink extends AbstractResourceLink {
     }
 
     /** Returns HTML-String-Representation of a css-link, e.g.
-     * 
+     *
      * <pre>
      * &lt;link rel="stylesheet" media="screen" type="text/css" href="c:/vif/website/css/my.css">
      * </pre>
-     * 
+     *
      * @return java.lang.String */
     @Override
     public String toString() {
-        return String.format(TMPL_LINK, getMedia(), WEB_CSS_ROOT, getHref());
+        return String.format(TMPL_LINK, getMedia(), getWebCssRoot(), getHref());
     }
 }

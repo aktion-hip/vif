@@ -63,8 +63,7 @@ public class DownloadFile extends FileResource {
 
     private static final String DEFAULT_MIME_TYPE = "application/vnd.oasis.opendocument.text"; //$NON-NLS-1$
     private static final String DEFAULT_FILE_NAME = "vif_out_%s.odt"; //$NON-NLS-1$
-    private static final DateFormat FORMAT_FILE_NAME = new SimpleDateFormat(
-            "yyyy-MM-dd"); //$NON-NLS-1$
+    private static final String FORMAT_FILE_NAME = "yyyy-MM-dd"; //$NON-NLS-1$
 
     private final static String MANIFEST = "manifest.xml"; //$NON-NLS-1$
     private final static String MIMETYPE = "mimetype"; //$NON-NLS-1$
@@ -300,7 +299,7 @@ public class DownloadFile extends FileResource {
     /** @return String the created file's name */
     public static String getFileName() {
         return String.format(DEFAULT_FILE_NAME,
-                FORMAT_FILE_NAME.format(new Date()));
+                new SimpleDateFormat(FORMAT_FILE_NAME).format(new Date()));
     }
 
     /** @return String the file's MIME type */

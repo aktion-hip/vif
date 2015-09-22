@@ -66,7 +66,7 @@ import org.hip.kernel.sys.VSys;
 @SuppressWarnings("serial")
 abstract public class AbstractDomainObjectHome extends VObject implements GeneralDomainObjectHome, Serializable { // NOPMD
     // Instance variables
-    private List<Object> testObjList;
+    private volatile List<Object> testObjList;
     private List<GeneralDomainObject> releasedObjList;
     private Map<String, XMLSerializer> visitorMap;
 
@@ -113,7 +113,8 @@ abstract public class AbstractDomainObjectHome extends VObject implements Genera
      * @throws org.hip.kernel.bom.BOMException */
     protected abstract String createSelectString(KeyObject inKey) throws BOMException;
 
-    /** Creates the select string to fetch all domain objects matching the specified key ordered by the specified object.
+    /** Creates the select string to fetch all domain objects matching the specified key ordered by the specified
+     * object.
      *
      * @return java.lang.String
      * @param inKey org.hip.kernel.bom.KeyObject
@@ -145,7 +146,8 @@ abstract public class AbstractDomainObjectHome extends VObject implements Genera
      * @throws org.hip.kernel.bom.BOMException */
     protected abstract String createSelectString(OrderObject inOrder) throws BOMException;
 
-    /** Creates the select string to fetch all domain objects matching the specified key limitied by the specified limit.
+    /** Creates the select string to fetch all domain objects matching the specified key limitied by the specified
+     * limit.
      *
      * @param inKey KeyObject
      * @param inLimit LimitObject
@@ -361,8 +363,8 @@ abstract public class AbstractDomainObjectHome extends VObject implements Genera
         return useCache;
     }
 
-    /** Returns an instance of the visitor named inKey. This visitor can be used to serialize the DomainObject managed by
-     * the Home class.
+    /** Returns an instance of the visitor named inKey. This visitor can be used to serialize the DomainObject managed
+     * by the Home class.
      *
      * @return org.hip.kernel.bom.DomainObjectVisitor
      * @param inKey java.lang.String */
@@ -450,8 +452,8 @@ abstract public class AbstractDomainObjectHome extends VObject implements Genera
         return this.select(lStatement);
     }
 
-    /** This method selects all domain objects of the corresponding table matching the specified key. The returned domain
-     * objects are ordered by the table's natural order.
+    /** This method selects all domain objects of the corresponding table matching the specified key. The returned
+     * domain objects are ordered by the table's natural order.
      *
      * @return org.hip.kernel.bom.QueryResult
      * @param inKey org.hip.kernel.bom.KeyObject
@@ -464,8 +466,8 @@ abstract public class AbstractDomainObjectHome extends VObject implements Genera
         return this.select(lStatement);
     }
 
-    /** This method selects all domain objects of the corresponding table matching the specified key. The returned domain
-     * objects are ordered according the specified order object.
+    /** This method selects all domain objects of the corresponding table matching the specified key. The returned
+     * domain objects are ordered according the specified order object.
      *
      * @return org.hip.kernel.bom.QueryResult
      * @param inKey org.hip.kernel.bom.KeyObject
@@ -556,7 +558,7 @@ abstract public class AbstractDomainObjectHome extends VObject implements Genera
      * @param inObject org.hip.kernel.bom.GeneralDomainObject
      * @param inResult java.sql.ResultSet */
     protected void setFromResultSet(final GeneralDomainObject inObject, final ResultSet inResult) throws SQLException, // NOPMD
-    SettingException {
+            SettingException {
 
         final ResultSetMetaData lMetaData = inResult.getMetaData();
 
@@ -570,26 +572,19 @@ abstract public class AbstractDomainObjectHome extends VObject implements Genera
 
                     if (lType == TypeDef.String) {
                         inObject.set(lName, inResult.getString(i));
-                    }
-                    else if (lType == TypeDef.LongVarchar) {
+                    } else if (lType == TypeDef.LongVarchar) {
                         inObject.set(lName, inResult.getAsciiStream(i));
-                    }
-                    else if (lType == TypeDef.Date) {
+                    } else if (lType == TypeDef.Date) {
                         inObject.set(lName, inResult.getDate(i));
-                    }
-                    else if (lType == TypeDef.Timestamp) {
+                    } else if (lType == TypeDef.Timestamp) {
                         inObject.set(lName, inResult.getTimestamp(i));
-                    }
-                    else if (lType == TypeDef.Integer) {
+                    } else if (lType == TypeDef.Integer) {
                         inObject.set(lName, Integer.valueOf(inResult.getInt(i)));
-                    }
-                    else if (lType == TypeDef.BigInteger) {
+                    } else if (lType == TypeDef.BigInteger) {
                         inObject.set(lName, new java.math.BigInteger(inResult.getString(i)));
-                    }
-                    else if (lType == TypeDef.BigDecimal) {
+                    } else if (lType == TypeDef.BigDecimal) {
                         inObject.set(lName, new java.math.BigDecimal(inResult.getString(i)));
-                    }
-                    else if (lType == TypeDef.Number) {
+                    } else if (lType == TypeDef.Number) {
                         inObject.set(lName, new java.math.BigDecimal(inResult.getString(i)));
                     }
                 } catch (final GettingException exc) {

@@ -19,6 +19,7 @@
 package org.hip.vif.admin.admin.print;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
@@ -77,7 +78,7 @@ public class GroupContentRenderer {
     private final IMessages messages;
 
     /** GroupContentRenderer constructor.
-     * 
+     *
      * @param inGroup GroupExtent
      * @param inLocale Locale
      * @throws Exception */
@@ -139,7 +140,7 @@ public class GroupContentRenderer {
     }
 
     /** Renders the content of the group formated as OOorg document to the output stream.
-     * 
+     *
      * @param inJar JarOutputStream
      * @throws XSLProcessingException */
     public void renderAsOO(final JarOutputStream inJar)
@@ -147,7 +148,8 @@ public class GroupContentRenderer {
         // first render the group information
         final TransformerProxy lTransformer = new TransformerProxy(new XSL(
                 XSL_GROUP), new XMLRepresentation(String.format(XML_TEMPLATE,
-                content)), createStyleSheetParamter("GroupLbl", getMessage("admin.print.lbl.group"))); //$NON-NLS-1$ //$NON-NLS-2$
+                        content)),
+                createStyleSheetParamter("GroupLbl", getMessage("admin.print.lbl.group"))); //$NON-NLS-1$ //$NON-NLS-2$
         lTransformer.renderToStream(inJar, ""); //$NON-NLS-1$
         LOG.debug(String.format(XML_TEMPLATE, content));
 
@@ -191,7 +193,7 @@ public class GroupContentRenderer {
 
         CompletionRenderer(
                 final JoinQuestionToCompletionAndContributors inCompletion)
-                throws VException {
+                        throws VException {
             questionID = inCompletion.getQuestionID();
             addContributor(inCompletion.getContributor());
 
@@ -216,8 +218,9 @@ public class GroupContentRenderer {
             lParameters.put("ReviewerLbl", getMessage("admin.print.lbl.reviewer")); //$NON-NLS-1$ //$NON-NLS-2$
             final TransformerProxy lTransformer = new TransformerProxy(new XSL(
                     XSL_COMPLETION), new XMLRepresentation(String.format(
-                    XML_COMPLETION, content,
-                    serializeContributors(contributors))), lParameters);
+                            XML_COMPLETION, content,
+                            serializeContributors(contributors))),
+                    lParameters);
             lTransformer.renderToStream(inJar, ""); //$NON-NLS-1$
             LOG.debug(String.format(XML_COMPLETION, content,
                     serializeContributors(contributors)));
@@ -279,7 +282,8 @@ public class GroupContentRenderer {
             final TransformerProxy lTransformer = new TransformerProxy(new XSL(
                     XSL_QUESTION),
                     new XMLRepresentation(String.format(XML_QUESTION, content,
-                            serializeContributors(contributors))), lParameters);
+                            serializeContributors(contributors))),
+                    lParameters);
             lTransformer.renderToStream(inJar, ""); //$NON-NLS-1$
             LOG.debug(String.format(XML_QUESTION, content,
                     serializeContributors(contributors)));
@@ -311,8 +315,9 @@ public class GroupContentRenderer {
 
         public void renderAsOO(final JarOutputStream inJar)
                 throws XSLProcessingException {
-            if (texts.length() == 0)
+            if (texts.length() == 0) {
                 return;
+            }
 
             final TransformerProxy lTransformer = new TransformerProxy(
                     new XSL(XSL_BIBLIOGRAPHY),
@@ -335,11 +340,14 @@ public class GroupContentRenderer {
         @Override
         public Source createSource() throws IOException {
             final Bundle lBundle = FrameworkUtil.getBundle(this.getClass());
-            return new StreamSource(
-                    lBundle.getEntry(
-                            String.format("%s/%s", Constants.LOCAL_RESOURCES_DIR, xslName)).openStream(), //$NON-NLS-1$
-                    lBundle.getEntry(Constants.LOCAL_RESOURCES_DIR)
-                            .toExternalForm());
+            final URL streamName = lBundle.getEntry(String.format("%s/%s", Constants.LOCAL_RESOURCES_DIR, xslName));//$NON-NLS-1$
+            final URL resources = lBundle.getEntry(Constants.LOCAL_RESOURCES_DIR);
+            if (streamName == null || resources == null) {
+                throw new IOException(String.format("Unable to open '%s' and/or '%s'!",
+                        String.format("%s/%s", Constants.LOCAL_RESOURCES_DIR, xslName),
+                        Constants.LOCAL_RESOURCES_DIR));
+            }
+            return new StreamSource(streamName.openStream(), resources.toExternalForm());
         }
 
         @Override

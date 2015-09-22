@@ -70,7 +70,9 @@ public class ParticipantListView extends CustomComponent {
         lLayout.addComponent(new Label(
                 String.format(
                         VIFViewHelper.TMPL_TITLE,
-                        "vif-pagetitle", lMessages.getFormattedMessage("ui.group.participants.view.title.page", inGroupName)), ContentMode.HTML)); //$NON-NLS-1$ //$NON-NLS-2$
+                        "vif-pagetitle", //$NON-NLS-1$
+                        lMessages.getFormattedMessage("ui.group.participants.view.title.page", inGroupName)), //$NON-NLS-1$
+                ContentMode.HTML));
 
         final Label lSubtitle = new Label(String.format(SUBTITLE_WARNING,
                 lMessages.getMessage("ui.participants.delete.warning")), ContentMode.HTML); //$NON-NLS-1$
@@ -95,9 +97,8 @@ public class ParticipantListView extends CustomComponent {
             lTable.setVisibleColumns(VIFViewHelper.getModifiedArray(ParticipantContainer.ENTRY_CHECK,
                     ParticipantContainer.NATURAL_COL_ORDER));
             lTable.setColumnHeaders(VIFViewHelper.getColumnHeaders(
-                    VIFViewHelper.getModifiedArray("", ParticipantContainer.COL_HEADERS), lMessages)); //$NON-NLS-1$
-        }
-        else {
+                    VIFViewHelper.getModifiedArray("", (Object) ParticipantContainer.COL_HEADERS), lMessages)); //$NON-NLS-1$
+        } else {
             lTable.setVisibleColumns(ParticipantContainer.NATURAL_COL_ORDER);
             lTable.setColumnHeaders(VIFViewHelper.getColumnHeaders(ParticipantContainer.COL_HEADERS, lMessages));
         }
@@ -122,8 +123,7 @@ public class ParticipantListView extends CustomComponent {
                         if (!inTask.deleteParticipants()) {
                             Notification.show(lMessages.getMessage("errmsg.process.delete"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                         }
-                    }
-                    else {
+                    } else {
                         if (VIFViewHelper.processAction(inParticipants)) {
                             confirmationMode = true;
                             inParticipants.addContainerFilter(new SelectedFilter());
@@ -138,14 +138,14 @@ public class ParticipantListView extends CustomComponent {
         }
     }
 
-    private CheckBox createCheck(final ParticipantBean inEntry, final VIFViewHelper.IConfirmationModeChecker inChecker) {
+    private CheckBox createCheck(final ParticipantBean inEntry,
+            final VIFViewHelper.IConfirmationModeChecker inChecker) {
         final CheckBox out = new CheckBox();
         out.setImmediate(true);
         out.setValue(inEntry.isChecked());
         if (inEntry.isAdmin()) {
             out.setEnabled(false);
-        }
-        else {
+        } else {
             out.setEnabled(!inChecker.inConfirmationMode());
         }
         out.addValueChangeListener(new Property.ValueChangeListener() {

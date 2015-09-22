@@ -148,7 +148,7 @@ public enum DataSourceRegistry {
      * @param inActiveConfiguration {@link DBAccessConfiguration} */
     public void setActiveConfiguration(final DBAccessConfiguration inActiveConfiguration) {
         activeConfiguration = inActiveConfiguration;
-        synchronized (activeFactory) {
+        synchronized (this) {
             final FactoryProperties lFactory = factories.get(activeConfiguration.getDBSourceID());
             if (lFactory != null) {
                 activeFactory = lFactory.getFactory();

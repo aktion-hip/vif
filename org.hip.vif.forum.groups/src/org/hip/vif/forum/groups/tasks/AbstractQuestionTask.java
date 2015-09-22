@@ -34,6 +34,7 @@ import org.hip.vif.forum.groups.Activator;
 import org.hip.vif.forum.groups.Constants;
 import org.hip.vif.forum.groups.ui.QuestionEditor;
 import org.hip.vif.web.bom.VifBOMHelper;
+import org.hip.vif.web.exc.VIFWebException;
 import org.hip.vif.web.tasks.AbstractWebController;
 import org.ripla.exceptions.RiplaException;
 import org.ripla.interfaces.IMessages;
@@ -77,6 +78,9 @@ public abstract class AbstractQuestionTask extends AbstractWebController {
             Question lParentQuestion = null;
             if (lParentID != 0) {
                 lParentQuestion = BOMHelper.getQuestionHome().getQuestion(lParentID.toString());
+            }
+            if (lParentQuestion == null) {
+                throw new VIFWebException("Unable to retrieve parent question with ID=" + lParentID.toString());
             }
 
             if (!WorkflowAwareContribution.STATE_OPEN.equals(lParentQuestion.get(QuestionHome.KEY_STATE).toString())) {
