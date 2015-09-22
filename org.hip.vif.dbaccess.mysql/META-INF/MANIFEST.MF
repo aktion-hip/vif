@@ -4,8 +4,7 @@ Bundle-Name: MySQL DB Access
 Bundle-SymbolicName: org.hip.vif.dbaccess.mysql
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: RelationWare
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
- J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Service-Component: OSGI-INF/dbaccess.xml
 Import-Package: com.mysql.jdbc;version="[5.1.18,6.0.0)",
  com.mysql.jdbc.jdbc2.optional;version="[5.1.18,6.0.0)",

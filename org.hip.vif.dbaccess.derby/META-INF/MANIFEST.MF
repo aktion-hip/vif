@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Derby DB Access
 Bundle-SymbolicName: org.hip.vif.dbaccess.derby
 Bundle-Version: 1.0.1.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: javax.sql,
  org.apache.derby.jdbc;version="[10.9.1.0,11.0.0)",
  org.osgi.service.jdbc;version="[1.0.0,2.0.0)"

@@ -48,5 +48,5 @@ Import-Package: com.vaadin.data;version="[7.4.0,8.0.0)",
 Bundle-Activator: org.hip.vif.admin.member.Activator
 Bundle-ClassPath: .
 Service-Component: OSGI-INF/useCase.xml, OSGI-INF/lookupMember.xml, OSGI-INF/lookupSearch.xml, OSGI-INF/lookupSelect.xml
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: RelationWare
