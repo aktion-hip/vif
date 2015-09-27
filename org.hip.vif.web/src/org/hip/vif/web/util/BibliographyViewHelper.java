@@ -82,15 +82,19 @@ public class BibliographyViewHelper {
         lTable.addRow(
                 lMessages.getMessage("ui.bibliography.label.typ"), TextType.getOption(lType)); //$NON-NLS-1$
         lTable.addRowEmphasized(
-                lMessages.getMessage("ui.bibliography.label.title"), BeanWrapperHelper.getString(TextHome.KEY_TITLE, inText)); //$NON-NLS-1$
+                lMessages.getMessage("ui.bibliography.label.title"), //$NON-NLS-1$
+                BeanWrapperHelper.getString(TextHome.KEY_TITLE, inText));
         lTable.addRow(
-                lMessages.getMessage("ui.bibliography.label.subtitle"), BeanWrapperHelper.getString(TextHome.KEY_SUBTITLE, inText)); //$NON-NLS-1$
+                lMessages.getMessage("ui.bibliography.label.subtitle"), //$NON-NLS-1$
+                BeanWrapperHelper.getString(TextHome.KEY_SUBTITLE, inText));
         lTable.addRowEmphasized(
-                lMessages.getMessage("ui.bibliography.label.author"), BeanWrapperHelper.getString(TextHome.KEY_AUTHOR, inText)); //$NON-NLS-1$
+                lMessages.getMessage("ui.bibliography.label.author"), //$NON-NLS-1$
+                BeanWrapperHelper.getString(TextHome.KEY_AUTHOR, inText));
         lTable.addRow(lLabels.label1,
                 BeanWrapperHelper.getString(TextHome.KEY_COAUTHORS, inText));
         lTable.addRow(
-                lMessages.getMessage("ui.bibliography.label.year"), BeanWrapperHelper.getString(TextHome.KEY_YEAR, inText)); //$NON-NLS-1$
+                lMessages.getMessage("ui.bibliography.label.year"), //$NON-NLS-1$
+                BeanWrapperHelper.getString(TextHome.KEY_YEAR, inText));
         String lPublicationValue = BeanWrapperHelper.getString(
                 TextHome.KEY_PUBLICATION, inText);
         if (new BibliographyAdapter(inText, inKeyType).hasWebPageUrl()) {
@@ -98,17 +102,22 @@ public class BibliographyViewHelper {
         }
         lTable.addRow(lLabels.label2, lPublicationValue);
         lTable.addRow(
-                lMessages.getMessage("ui.bibliography.label.publisher"), BeanWrapperHelper.getString(TextHome.KEY_PUBLISHER, inText)); //$NON-NLS-1$
+                lMessages.getMessage("ui.bibliography.label.publisher"), //$NON-NLS-1$
+                BeanWrapperHelper.getString(TextHome.KEY_PUBLISHER, inText));
         lTable.addRow(lLabels.label3,
                 BeanWrapperHelper.getString(TextHome.KEY_PLACE, inText));
         lTable.addRow(
-                lMessages.getMessage("ui.bibliography.label.pages"), BeanWrapperHelper.getString(TextHome.KEY_PAGES, inText)); //$NON-NLS-1$
+                lMessages.getMessage("ui.bibliography.label.pages"), //$NON-NLS-1$
+                BeanWrapperHelper.getString(TextHome.KEY_PAGES, inText));
         lTable.addRow(
-                lMessages.getMessage("ui.bibliography.label.volume"), BeanWrapperHelper.getString(TextHome.KEY_VOLUME, inText)); //$NON-NLS-1$
+                lMessages.getMessage("ui.bibliography.label.volume"), //$NON-NLS-1$
+                BeanWrapperHelper.getString(TextHome.KEY_VOLUME, inText));
         lTable.addRow(
-                lMessages.getMessage("ui.bibliography.label.number"), BeanWrapperHelper.getString(TextHome.KEY_NUMBER, inText)); //$NON-NLS-1$
+                lMessages.getMessage("ui.bibliography.label.number"), //$NON-NLS-1$
+                BeanWrapperHelper.getString(TextHome.KEY_NUMBER, inText));
         lTable.addRow(
-                lMessages.getMessage("ui.bibliography.label.remarks"), BeanWrapperHelper.getString(TextHome.KEY_REMARK, inText)); //$NON-NLS-1$
+                lMessages.getMessage("ui.bibliography.label.remarks"), //$NON-NLS-1$
+                BeanWrapperHelper.getString(TextHome.KEY_REMARK, inText));
 
         final String lLabel = lMessages
                 .getMessage("ui.bibliography.label.upload"); //$NON-NLS-1$
@@ -118,12 +127,13 @@ public class BibliographyViewHelper {
 
     private static void createDownloadLinks(final QueryResult inDownloads,
             final LabelValueTable inTable, final String inLabel)
-            throws SQLException, BOMException {
+                    throws SQLException, BOMException {
         while (inDownloads.hasMoreElements()) {
             final GeneralDomainObject lDownload = inDownloads.next();
             final DownloadFileLink lDownloadButton = new DownloadFileLink(
                     BeanWrapperHelper.getString(DownloadTextHome.KEY_LABEL,
-                            lDownload), BeanWrapperHelper.getLong(
+                            lDownload),
+                    BeanWrapperHelper.getLong(
                             DownloadTextHome.KEY_ID, lDownload));
             inTable.addRow(inLabel, lDownloadButton);
         }
@@ -131,7 +141,8 @@ public class BibliographyViewHelper {
 
     private static String createLink(final String inPublicationValue) {
         final String lHref = String
-                .format(" href=\"%s\"", inPublicationValue.startsWith("www.") ? "http://" + inPublicationValue : inPublicationValue); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                .format(" href=\"%s\"", //$NON-NLS-1$
+                        inPublicationValue.startsWith("www.") ? "http://" + inPublicationValue : inPublicationValue); //$NON-NLS-1$ //$NON-NLS-2$
         return String.format("<a target=\"_blank\"%s>%s</a>", lHref, inPublicationValue); //$NON-NLS-1$
     }
 
@@ -176,32 +187,33 @@ public class BibliographyViewHelper {
             author = RiplaViewHelper.createTextField(DFT_WIDTH_INPUT);
             focusInit();
             table.addRowEmphasized(lFieldLabel,
-                    addFieldRequired(TextBean.FN_AUTHOR, author, lFieldLabel)); //$NON-NLS-1$
+                    VIFViewHelper.addWrapped(addFieldRequired(TextBean.FN_AUTHOR, author, lFieldLabel))); // $NON-NLS-1$
             // dynamic label handling
             label1 = table.addRow(lLabels.label1, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT));
             // title
             lFieldLabel = messages.getMessage("ui.bibliography.label.title"); //$NON-NLS-1$
             table.addRowEmphasized(
                     lFieldLabel,
-                    addFieldRequired(
-                            TextBean.FN_TITLE, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel)); //$NON-NLS-1$
+                    VIFViewHelper.addWrapped(addFieldRequired(
+                            TextBean.FN_TITLE, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel))); // $NON-NLS-1$
             table.addRow(
                     messages.getMessage("ui.bibliography.label.subtitle"),
                     addField(TextBean.FN_SUBTITLE, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT)));
             lFieldLabel = messages.getMessage("ui.bibliography.label.year"); //$NON-NLS-1$
-            table.addRowEmphasized(lFieldLabel, addFieldRequired(
-                    TextBean.FN_YEAR, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel)); //$NON-NLS-1$
+            table.addRowEmphasized(lFieldLabel, VIFViewHelper.addWrapped(addFieldRequired(
+                    TextBean.FN_YEAR, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel))); // $NON-NLS-1$
             // dynamic label handling
             label2 = table.addRow(lLabels.label2,
                     addField(TextBean.FN_PUBLICATION, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT)));
             table.addRow(
                     messages.getMessage("ui.bibliography.label.pages"), createPageVolNoFields(messages)); //$NON-NLS-1$
             table.addRow(
-                    messages.getMessage("ui.bibliography.label.publisher"), addField(TextBean.FN_PUBLISHER, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); //$NON-NLS-1$
+                    messages.getMessage("ui.bibliography.label.publisher"), //$NON-NLS-1$
+                    addField(TextBean.FN_PUBLISHER, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT)));
             // dynamic label handling
             label3 = table
                     .addRow(lLabels.label3,
-                            addField(TextBean.FN_PLACE, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); //$NON-NLS-1$
+                            addField(TextBean.FN_PLACE, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); // $NON-NLS-1$
             table.addRow(addField(TextBean.FN_REMARKS, createEditField(180)));
 
             table.addRow(
@@ -285,7 +297,8 @@ public class BibliographyViewHelper {
 
         DynamicLabels(final int inType, final IMessages inMessages) {
             label1 = inType == 2 ? inMessages
-                    .getMessage("ui.bibliography.label.editor") : inMessages.getMessage("ui.bibliography.label.coauthor"); //$NON-NLS-1$ //$NON-NLS-2$
+                    .getMessage("ui.bibliography.label.editor") //$NON-NLS-1$
+                    : inMessages.getMessage("ui.bibliography.label.coauthor"); //$NON-NLS-1$
 
             label2 = inMessages.getMessage("ui.bibliography.label.publication"); //$NON-NLS-1$
             if (inType == 2) {

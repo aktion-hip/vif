@@ -29,6 +29,9 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Field;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.RichTextArea;
@@ -176,6 +179,17 @@ public final class VIFViewHelper {
         final Object[] out = new Object[inSource.length + 1];
         out[0] = inFirst;
         System.arraycopy(inSource, 0, out, 1, inSource.length);
+        return out;
+    }
+
+    /** Wraps a field into a <code>HorizontalLayout</code>. This is needed to place the indicator for a required field
+     * adjacent to the input field.
+     *
+     * @param inField {@link Field}
+     * @return {@link Component} */
+    public static Component addWrapped(final Field<?> inField) {
+        final HorizontalLayout out = new HorizontalLayout();
+        out.addComponent(inField);
         return out;
     }
 

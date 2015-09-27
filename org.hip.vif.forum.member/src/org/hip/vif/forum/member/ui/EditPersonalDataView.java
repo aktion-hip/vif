@@ -62,7 +62,8 @@ public class EditPersonalDataView extends CustomComponent {
      * @param inMember {@link Member} the member model to display
      * @param inRatings {@link RatingsHelper} the helper object containing the ratings to display
      * @param inTask {@link PersonalDataEditTask} the task controlling this view */
-    public EditPersonalDataView(final Member inMember, final RatingsHelper inRatings, final PersonalDataEditTask inTask) {
+    public EditPersonalDataView(final Member inMember, final RatingsHelper inRatings,
+            final PersonalDataEditTask inTask) {
         final VerticalLayout lLayout = new VerticalLayout();
         setCompositionRoot(lLayout);
 
@@ -73,7 +74,9 @@ public class EditPersonalDataView extends CustomComponent {
                         "vif-pagetitle", //$NON-NLS-1$
                         lMessages
                                 .getFormattedMessage(
-                                        "ui.member.view.title.page", BeanWrapperHelper.getString(MemberHome.KEY_USER_ID, inMember))), ContentMode.HTML)); //$NON-NLS-1$ //$NON-NLS-2$
+                                        "ui.member.view.title.page", //$NON-NLS-1$
+                                        BeanWrapperHelper.getString(MemberHome.KEY_USER_ID, inMember))),
+                ContentMode.HTML)); //$NON-NLS-2$
 
         final FormCreator lForm = new FormCreator(inMember);
         lLayout.addComponent(lForm.createForm());
@@ -90,12 +93,10 @@ public class EditPersonalDataView extends CustomComponent {
                     if (inTask.saveMember(inMember)) {
                         Notification.show(
                                 lMessages.getMessage("msg.task.data.changed"), Type.TRAY_NOTIFICATION); //$NON-NLS-1$
-                    }
-                    else {
+                    } else {
                         Notification.show(lMessages.getMessage("errmsg.save.general"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                     }
-                }
-                catch (final CommitException exc) {
+                } catch (final CommitException exc) {
                     // intentionally left empty
                 }
             }
@@ -138,26 +139,30 @@ public class EditPersonalDataView extends CustomComponent {
             String lFieldLabel = messages.getMessage("ui.member.editor.label.firstname");
             final TextField lFirstField = RiplaViewHelper.createTextField(DFT_WIDTH_INPUT);
             lFirstField.focus();
-            outTable.addRowEmphasized(lFieldLabel, addFieldRequired(MemberBean.FN_FIRSTNAME, lFirstField, lFieldLabel));
+            outTable.addRowEmphasized(lFieldLabel,
+                    VIFViewHelper.addWrapped(addFieldRequired(MemberBean.FN_FIRSTNAME, lFirstField, lFieldLabel)));
 
             lFieldLabel = messages.getMessage("ui.member.editor.label.name"); //$NON-NLS-1$
             outTable.addRowEmphasized(lFieldLabel,
-                    addFieldRequired(MemberBean.FN_NAME, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel)); //$NON-NLS-1$
+                    VIFViewHelper.addWrapped(addFieldRequired(MemberBean.FN_NAME,
+                            RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel))); // $NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.street"); //$NON-NLS-1$
             outTable.addRowEmphasized(
                     lFieldLabel,
-                    addFieldRequired(MemberBean.FN_STREET, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT),
-                            lFieldLabel));
+                    VIFViewHelper.addWrapped(
+                            addFieldRequired(MemberBean.FN_STREET, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT),
+                                    lFieldLabel)));
             lFieldLabel = messages.getMessage("ui.member.editor.label.city"); //$NON-NLS-1$
-            outTable.addRowEmphasized(lFieldLabel, createZipCityFields(lFieldLabel)); //$NON-NLS-1$
+            outTable.addRowEmphasized(lFieldLabel, createZipCityFields(lFieldLabel)); // $NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.phone"); //$NON-NLS-1$
             outTable.addRow(lFieldLabel,
-                    addField(MemberBean.FN_PHONE, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); //$NON-NLS-1$
+                    addField(MemberBean.FN_PHONE, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); // $NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.fax"); //$NON-NLS-1$
-            outTable.addRow(lFieldLabel, addField(MemberBean.FN_FAX, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); //$NON-NLS-1$
+            outTable.addRow(lFieldLabel, addField(MemberBean.FN_FAX, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); // $NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.mail"); //$NON-NLS-1$
             outTable.addRowEmphasized(lFieldLabel,
-                    addFieldRequired(MemberBean.FN_MAIL, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); //$NON-NLS-1$
+                    VIFViewHelper.addWrapped(
+                            addFieldRequired(MemberBean.FN_MAIL, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT)))); // $NON-NLS-1$
 
             return outTable;
         }
@@ -169,7 +174,7 @@ public class EditPersonalDataView extends CustomComponent {
             lZip.addStyleName("no-indicator");
             outLayout.addComponent(lZip);
             outLayout
-            .addComponent(addFieldRequired(MemberBean.FN_CITY, RiplaViewHelper.createTextField(WIDTH_CITY),
+                    .addComponent(addFieldRequired(MemberBean.FN_CITY, RiplaViewHelper.createTextField(WIDTH_CITY),
                             inFieldLabel));
             return outLayout;
         }

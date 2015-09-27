@@ -110,11 +110,9 @@ public class GroupView extends CustomComponent {
                         Notification.show(inMessages
                                 .getMessage("errmsg.save.general"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                     }
-                }
-                catch (final CommitException exc) {
+                } catch (final CommitException exc) {
                     // intentionally left empty
-                }
-                catch (final ExternIDNotUniqueException exc) {
+                } catch (final ExternIDNotUniqueException exc) {
                     inForm.focusInit();
                     Notification.show(inMessages
                             .getMessage("errmsg.group.not.unique"), Type.WARNING_MESSAGE); //$NON-NLS-1$
@@ -147,7 +145,8 @@ public class GroupView extends CustomComponent {
         lLayout.addComponent(RiplaViewHelper.createSpacer());
         lLayout.addComponent(new Label(
                 String.format(
-                        VIFViewHelper.TMPL_TITLE, "vif-title", lMessages.getMessage("ui.group.editor.subtitle.state")), ContentMode.HTML)); //$NON-NLS-1$ //$NON-NLS-2$
+                        VIFViewHelper.TMPL_TITLE, "vif-title", lMessages.getMessage("ui.group.editor.subtitle.state")), //$NON-NLS-1$ //$NON-NLS-2$
+                ContentMode.HTML));
         final TransitionRenderer lTransitions = new TransitionRenderer(inGroup,
                 inTask, lMessages);
         for (final TransitionComponent lTransition : lTransitions.getTtransitions()) {
@@ -158,7 +157,8 @@ public class GroupView extends CustomComponent {
         lLayout.addComponent(RiplaViewHelper.createSpacer());
         lLayout.addComponent(new Label(
                 String.format(
-                        VIFViewHelper.TMPL_TITLE, "vif-title", lMessages.getMessage("ui.group.editor.subtitle.admins")), ContentMode.HTML)); //$NON-NLS-1$ //$NON-NLS-2$
+                        VIFViewHelper.TMPL_TITLE, "vif-title", lMessages.getMessage("ui.group.editor.subtitle.admins")), //$NON-NLS-1$ //$NON-NLS-2$
+                ContentMode.HTML));
 
         final boolean lHasAdmins = inAdmins.getItemIds().size() != 0;
         if (lHasAdmins) {
@@ -262,7 +262,8 @@ public class GroupView extends CustomComponent {
         outLayout
                 .addComponent(new Label(
                         String.format(
-                                VIFViewHelper.TMPL_TITLE, "vif-pagetitle", inMessages.getMessage(inTitleKey)), ContentMode.HTML)); //$NON-NLS-1$ //$NON-NLS-2$
+                                VIFViewHelper.TMPL_TITLE, "vif-pagetitle", inMessages.getMessage(inTitleKey)), //$NON-NLS-1$
+                        ContentMode.HTML)); //$NON-NLS-2$
         return outLayout;
     }
 
@@ -298,14 +299,18 @@ public class GroupView extends CustomComponent {
 
             String lFieldLabel = messages
                     .getMessage("ui.group.editor.label.name"); //$NON-NLS-1$
-            table.addRowEmphasized(lFieldLabel, addFieldRequired(GroupBean.FN_NAME, name, lFieldLabel));
+            table.addRowEmphasized(lFieldLabel,
+                    VIFViewHelper.addWrapped(addFieldRequired(GroupBean.FN_NAME, name, lFieldLabel)));
             lFieldLabel = messages
                     .getMessage("ui.group.editor.label.description"); //$NON-NLS-1$
             table.addRowEmphasized(
-                    lFieldLabel, //$NON-NLS-1$
-                    addFieldRequired(GroupBean.FN_DESC, createTextArea(GroupBean.FN_DESC), lFieldLabel)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lFieldLabel, // $NON-NLS-1$
+                    VIFViewHelper.addWrapped(
+                            addFieldRequired(GroupBean.FN_DESC, createTextArea(GroupBean.FN_DESC), lFieldLabel))); // $NON-NLS-1$
+                                                                                                                   // //$NON-NLS-2$
             table.addRow(
-                    messages.getMessage("ui.group.editor.label.number.reviewers"), createSelect(GroupBean.FN_REVIEWERS)); //$NON-NLS-1$ //$NON-NLS-2$
+                    messages.getMessage("ui.group.editor.label.number.reviewers"), //$NON-NLS-1$
+                    createSelect(GroupBean.FN_REVIEWERS)); //$NON-NLS-2$
 
             final CheckBox lPrivateCheck = createCheckBox(GroupBean.FN_PRIVATE);
             lPrivateCheck.setImmediate(true);
@@ -315,12 +320,14 @@ public class GroupView extends CustomComponent {
             final TextField lGuestDepth = RiplaViewHelper.createTextField(DEF_SIZE,
                     RiplaViewHelper.ConversionType.STRING_TO_NUMBER);
             table.addRow(
-                    messages.getMessage("ui.group.editor.label.guest.depth"), addField(GroupBean.FN_GUEST_DEPTH, lGuestDepth)); //$NON-NLS-1$ //$NON-NLS-2$
+                    messages.getMessage("ui.group.editor.label.guest.depth"), //$NON-NLS-1$
+                    addField(GroupBean.FN_GUEST_DEPTH, lGuestDepth)); //$NON-NLS-2$
 
             final TextField lMinGroupSize = RiplaViewHelper.createTextField(DEF_SIZE,
                     RiplaViewHelper.ConversionType.STRING_TO_NUMBER);
             table.addRow(
-                    messages.getMessage("ui.group.editor.label.group.size"), new AnnotatetField(addField(GroupBean.FN_GROUP_SIZE, lMinGroupSize), annotation)); //$NON-NLS-1$ //$NON-NLS-2$
+                    messages.getMessage("ui.group.editor.label.group.size"), //$NON-NLS-1$
+                    new AnnotatetField(addField(GroupBean.FN_GROUP_SIZE, lMinGroupSize), annotation)); //$NON-NLS-2$
 
             // handle changes of value 'isPrivate'
             lPrivateCheck.addValueChangeListener(new Property.ValueChangeListener() {

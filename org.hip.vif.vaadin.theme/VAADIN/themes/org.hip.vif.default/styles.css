@@ -217,6 +217,7 @@
 
 .vif-view div.ripla-label-table .vif-input,
 .vif-view div.ripla-label-table .ripla-input,
+.vif-view div.ripla-label-table .ripla-required-field,
 .vif-view div.ripla-label-table .ripla-label,
 .vif-view div.ripla-label-table .ripla-value-emphasized,
 .vif-search div.ripla-label-table .vif-input,
@@ -233,9 +234,11 @@
 .ripla-lookup div.ripla-label-table .vif-value, 
 .vif-view div.ripla-label-table .ripla-value,
 .vif-view div.ripla-label-table .ripla-input, 
+.vif-view div.ripla-label-table .ripla-required-field, 
 .vif-view div.ripla-label-table .vif-input, 
 .vif-search div.ripla-label-table .ripla-value,
 .vif-search div.ripla-label-table .ripla-input,
+.vif-search div.ripla-label-table .ripla-required-field, 
 .vif-search div.ripla-label-table .vif-input {
     margin-left:5px;    
     margin-right:5px;    
@@ -245,7 +248,7 @@
 	margin-left:5px;
 }
 
-.vif-view .ripla-form .v-slot-ripla-input .v-caption-no-indicator {
+.vif-view .ripla-form .v-slot-ripla-required-field .v-caption-no-indicator {
 	display: none;
 }
 

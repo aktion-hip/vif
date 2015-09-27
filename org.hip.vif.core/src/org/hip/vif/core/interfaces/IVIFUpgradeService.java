@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2012, Benno Luthiger
+	Copyright (C) 2012-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,16 +19,11 @@
 
 package org.hip.vif.core.interfaces;
 
-/**
- * Interface for OSGi services providing to the application's upgrade registry.
- * 
- * @author Luthiger
- * Created: 16.02.2012
- */
+/** Interface for OSGi services providing to the application's upgrade registry.
+ *
+ * @author Luthiger Created: 16.02.2012 */
 public interface IVIFUpgradeService {
 
-	/**
-	 * @return IVIFUpgrade[] array of upgrader instances to register to the application's upgrade registry
-	 */
-	IVIFUpgrade[] getUpgraders();
+    /** @return IVIFUpgrade[] array of upgrader instances to register to the application's upgrade registry */
+    IVIFUpgrade[] getUpgraders();
 }

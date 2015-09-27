@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2012, Benno Luthiger
+	Copyright (C) 2012-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,20 +22,15 @@ package org.hip.vif.core.upgrade;
 import org.hip.vif.core.interfaces.IVIFUpgrade;
 import org.hip.vif.core.interfaces.IVIFUpgradeService;
 
-/**
- * The upgrade provider to upgrade the application to version 1.1.
- * 
- * @author Luthiger
- * Created: 16.02.2012
- */
+/** The upgrade provider to upgrade the application to version 1.1.
+ *
+ * @author Luthiger Created: 16.02.2012 */
 public class Upgrade11 implements IVIFUpgradeService {
-	public static final String VERSION = "1.1";
+    public static final String VERSION = "1.1";
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.core.interfaces.IVIFUpgradeService#getUpgraders()
-	 */
-	public IVIFUpgrade[] getUpgraders() {
-		return new IVIFUpgrade[] {new UpgradeStyledContent(), new UpgradeDB10()};
-	}
+    @Override
+    public IVIFUpgrade[] getUpgraders() {
+        return new IVIFUpgrade[] { new UpgradeStyledContent(), new UpgradeDB10() };
+    }
 
 }

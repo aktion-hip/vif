@@ -78,11 +78,13 @@ public class PermissionEditView extends CustomComponent {
         lLayout.setStyleName("vif-table"); //$NON-NLS-1$
         lLayout.addComponent(new Label(
                 String.format(
-                        VIFViewHelper.TMPL_TITLE, "vif-pagetitle", lMessages.getMessage("component.menu.title")), ContentMode.HTML)); //$NON-NLS-1$ //$NON-NLS-2$
+                        VIFViewHelper.TMPL_TITLE, "vif-pagetitle", lMessages.getMessage("component.menu.title")), //$NON-NLS-1$ //$NON-NLS-2$
+                ContentMode.HTML));
 
         final Label lSubtitle = new Label(
                 String.format(SUBTITLE_WARNING,
-                        lMessages.getMessage("ui.permission.remark.delete")), ContentMode.HTML); //$NON-NLS-1$
+                        lMessages.getMessage("ui.permission.remark.delete")), //$NON-NLS-1$
+                ContentMode.HTML);
         lLayout.addComponent(lSubtitle);
         lSubtitle.setVisible(false);
 
@@ -104,11 +106,11 @@ public class PermissionEditView extends CustomComponent {
                         return VIFViewHelper.createCheck(
                                 (ISelectableBean) inItemId,
                                 new VIFViewHelper.IConfirmationModeChecker() {
-                                    @Override
-                                    public boolean inConfirmationMode() {
-                                        return confirmationMode;
-                                    }
-                                });
+                            @Override
+                            public boolean inConfirmationMode() {
+                                return confirmationMode;
+                            }
+                        });
                     }
                 });
         // generate column label
@@ -163,7 +165,8 @@ public class PermissionEditView extends CustomComponent {
                 if (!inTask.saveChanges()) {
                     Notification.show(
                             lMessages
-                                    .getMessage("errmsg.permissions.save"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+                                    .getMessage("errmsg.permissions.save"), //$NON-NLS-1$
+                            Type.WARNING_MESSAGE);
                 }
             }
         });
@@ -181,7 +184,8 @@ public class PermissionEditView extends CustomComponent {
                     if (!inTask.deletePermissions()) {
                         Notification.show(
                                 lMessages
-                                .getMessage("errmsg.permissions.delete"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+                                        .getMessage("errmsg.permissions.delete"), //$NON-NLS-1$
+                                Type.WARNING_MESSAGE);
                     }
                 } else {
                     if (VIFViewHelper.processAction(inPermissions)) {
@@ -204,7 +208,8 @@ public class PermissionEditView extends CustomComponent {
         out.setStyleName("vif-view"); //$NON-NLS-1$
         out.addComponent(new Label(
                 String.format(
-                        VIFViewHelper.TMPL_TITLE, "vif-title", inMessages.getMessage("ui.permission.subtitle.create")), ContentMode.HTML)); //$NON-NLS-1$ //$NON-NLS-2$
+                        VIFViewHelper.TMPL_TITLE, "vif-title", inMessages.getMessage("ui.permission.subtitle.create")), //$NON-NLS-1$ //$NON-NLS-2$
+                ContentMode.HTML));
 
         final PermissionBean lPermission = new PermissionBean();
         final FormCreator lForm = new FormCreator(lPermission);
@@ -221,13 +226,14 @@ public class PermissionEditView extends CustomComponent {
                             lPermission.getDescription())) {
                         Notification.show(
                                 inMessages
-                                .getMessage("errmsg.permissions.create"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+                                        .getMessage("errmsg.permissions.create"), //$NON-NLS-1$
+                                Type.WARNING_MESSAGE);
                     }
-                }
-                catch (final ExternIDNotUniqueException exc) {
+                } catch (final ExternIDNotUniqueException exc) {
                     Notification.show(
                             inMessages
-                                    .getMessage("errmsg.permissions.not.unique"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+                                    .getMessage("errmsg.permissions.not.unique"), //$NON-NLS-1$
+                            Type.WARNING_MESSAGE);
                 } catch (final CommitException exc) {
                     // intentionally left empty
                 }
@@ -254,7 +260,7 @@ public class PermissionEditView extends CustomComponent {
     // --- private classes ---
 
     private static class ColumnCheckBoxGenerator implements
-    Table.ColumnGenerator {
+            Table.ColumnGenerator {
         private final Role role;
 
         ColumnCheckBoxGenerator(final Role inRole) {
@@ -311,9 +317,13 @@ public class PermissionEditView extends CustomComponent {
             final IMessages lMessages = Activator.getMessages();
             final LabelValueTable outTable = new LabelValueTable();
             outTable.addRow(
-                    lMessages.getMessage("ui.permission.label.label"), addFieldRequired("label", RiplaViewHelper.createTextField(180), lMessages.getMessage("ui.permission.label.label"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                    lMessages.getMessage("ui.permission.label.label"), //$NON-NLS-1$
+                    VIFViewHelper.addWrapped(addFieldRequired("label", RiplaViewHelper.createTextField(180), //$NON-NLS-1$
+                            lMessages.getMessage("ui.permission.label.label")))); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("ui.permission.label.description"), addFieldRequired("description", RiplaViewHelper.createTextField(500), lMessages.getMessage("ui.permission.label.description"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                    lMessages.getMessage("ui.permission.label.description"), //$NON-NLS-1$
+                    VIFViewHelper.addWrapped(addFieldRequired("description", RiplaViewHelper.createTextField(500), //$NON-NLS-1$
+                            lMessages.getMessage("ui.permission.label.description")))); //$NON-NLS-1$
             return outTable;
         }
     }

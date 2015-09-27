@@ -1,6 +1,6 @@
-/*
+/**
 	This package is part of the application VIF.
-	Copyright (C) 2012, Benno Luthiger
+	Copyright (C) 2012-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,76 +30,65 @@ import org.hip.vif.core.service.UpgradeRegistry.ProgressIndicator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Upgrader to adjust the tables according to the needs of VIF 1.1.
- * 
- * @author Luthiger
- * Created: 15.04.2012
- */
+/** Upgrader to adjust the tables according to the needs of VIF 1.1.
+ *
+ * @author Luthiger Created: 15.04.2012 */
 public class UpgradeDB10 implements IVIFUpgrade {
-	private static final Logger LOG = LoggerFactory.getLogger(UpgradeDB10.class);
-	
-	private static final String DESCRIPTION = "Upgrades the tables from 1.0 to 1.1.";
-	
-	private static final String STATEMENT_MYSQL_1 = "CREATE TABLE tblAppVersion (	VersionID	varchar(15) not null,	PRIMARY KEY (VersionID))";
-	private static final String STATEMENT_MYSQL_2 = "ALTER TABLE tblQuestionHierarchy ADD COLUMN GroupID INT UNSIGNED NOT NULL";
-	private static final String STATEMENT_MYSQL_3 = "CREATE INDEX idxQuestionHierarchy_03 ON tblQuestionHierarchy (GroupID)";
-	private static final String STATEMENT_MYSQL_4 = "ALTER TABLE tblMember ADD COLUMN sSettings TEXT";
-	private static final String STATEMENT_MYSQL_5 = "ALTER TABLE tblMemberHistory ADD COLUMN sSettings TEXT";
-	private static final String[] STATEMENTS = {STATEMENT_MYSQL_1, 
-												STATEMENT_MYSQL_2, 
-												STATEMENT_MYSQL_3, 
-												STATEMENT_MYSQL_4, 
-												STATEMENT_MYSQL_5};
-	
-	/* (non-Javadoc)
-	 * @see org.hip.vif.core.interfaces.IVIFUpgrade#version()
-	 */
-	public String version() {
-		return Upgrade11.VERSION;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.hip.vif.core.interfaces.IVIFUpgrade#getDescription()
-	 */
-	public String getDescription() {
-		return DESCRIPTION;
-	}
+    private static final Logger LOG = LoggerFactory.getLogger(UpgradeDB10.class);
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.core.interfaces.IVIFUpgrade#execute(org.hip.vif.core.service.UpgradeRegistry.ProgressIndicator)
-	 */
-	public void execute(ProgressIndicator inIndicator) throws UpgradeException {
-		try {
-			LOG.trace("We don't upgrade a Derby database!");
-			if (PreferencesHandler.INSTANCE.isDerbyDB()) return;
-		}
-		catch (IOException exc) {
-			throw new UpgradeException(exc);
-		}
-		
-		UpgradeException lFailure = null;
-		DefaultStatement lSQL = new DefaultStatement();
-		for (String lStatement : STATEMENTS) {
-			try {
-				lSQL.execute(lStatement);
-				inIndicator.nextStep();
-			}
-			catch (SQLException exc) {
-				LOG.error("Could not process statment '{}'!", lStatement, exc);
-				lFailure = new UpgradeException(exc);
-			}
-		}
-		if (lFailure != null) {
-			throw lFailure;
-		}
-	}
+    private static final String DESCRIPTION = "Upgrades the tables from 1.0 to 1.1.";
 
-	/* (non-Javadoc)
-	 * @see org.hip.vif.core.interfaces.IVIFUpgrade#getNumberOfSteps()
-	 */
-	public int getNumberOfSteps() {
-		return 5;
-	}
+    private static final String STATEMENT_MYSQL_1 = "CREATE TABLE IF NOT EXISTS tblAppVersion (	VersionID	varchar(15) not null,	PRIMARY KEY (VersionID))";
+    private static final String STATEMENT_MYSQL_2 = "ALTER TABLE tblQuestionHierarchy ADD COLUMN GroupID INT UNSIGNED NOT NULL";
+    private static final String STATEMENT_MYSQL_3 = "CREATE INDEX idxQuestionHierarchy_03 ON tblQuestionHierarchy (GroupID)";
+    private static final String STATEMENT_MYSQL_4 = "ALTER TABLE tblMember ADD COLUMN sSettings TEXT";
+    private static final String STATEMENT_MYSQL_5 = "ALTER TABLE tblMemberHistory ADD COLUMN sSettings TEXT";
+    private static final String[] STATEMENTS = { STATEMENT_MYSQL_1,
+            STATEMENT_MYSQL_2,
+            STATEMENT_MYSQL_3,
+            STATEMENT_MYSQL_4,
+            STATEMENT_MYSQL_5 };
+
+    @Override
+    public String version() {
+        return Upgrade11.VERSION;
+    }
+
+    @Override
+    public String getDescription() {
+        return DESCRIPTION;
+    }
+
+    @Override
+    public void execute(final ProgressIndicator inIndicator) throws UpgradeException {
+        try {
+            LOG.trace("We don't upgrade a Derby database!");
+            if (PreferencesHandler.INSTANCE.isDerbyDB()) {
+                return;
+            }
+        } catch (final IOException exc) {
+            throw new UpgradeException(exc);
+        }
+
+        UpgradeException lFailure = null;
+        final DefaultStatement lSQL = new DefaultStatement();
+        for (final String lStatement : STATEMENTS) {
+            try {
+                lSQL.execute(lStatement);
+                inIndicator.nextStep();
+            } catch (final SQLException exc) {
+                LOG.error("Could not process statment '{}'!", lStatement, exc);
+                lFailure = new UpgradeException(exc);
+            }
+        }
+        if (lFailure != null) {
+            throw lFailure;
+        }
+    }
+
+    @Override
+    public int getNumberOfSteps() {
+        return 5;
+    }
 
 }

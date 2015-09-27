@@ -26,6 +26,7 @@ import org.hip.vif.web.member.MemberBean;
 import org.hip.vif.web.tasks.DBAccessWorkflowItems.CreateSU;
 import org.hip.vif.web.util.MemberViewHelper;
 import org.hip.vif.web.util.PasswordInputChecker;
+import org.hip.vif.web.util.VIFViewHelper;
 import org.ripla.interfaces.IMessages;
 import org.ripla.web.util.AbstractFormCreator;
 import org.ripla.web.util.LabelValueTable;
@@ -89,11 +90,9 @@ public class CreateSUPopup extends AbstractConfigurationPopup {
                     if (lForm.checkPassword()) {
                         inController.save(inMember);
                     }
-                }
-                catch (final CommitException exc) { // NOPMD
+                } catch (final CommitException exc) { // NOPMD
                     // intentionally left empty
-                }
-                catch (final VException exc) {
+                } catch (final VException exc) {
                     LOG.error("Error encountered while storing the SU's address.", exc); //$NON-NLS-1$
                 }
             }
@@ -137,39 +136,42 @@ public class CreateSUPopup extends AbstractConfigurationPopup {
             focusInit();
 
             final LabelValueTable outTable = new LabelValueTable();
-            outTable.addRowEmphasized(lFieldLabel, addFieldRequired(MemberBean.FN_USER_ID, firstfield, lFieldLabel)); //$NON-NLS-1$
+            outTable.addRowEmphasized(lFieldLabel,
+                    VIFViewHelper.addWrapped(addFieldRequired(MemberBean.FN_USER_ID, firstfield, lFieldLabel))); // $NON-NLS-1$
 
             lFieldLabel = messages.getMessage("ui.member.editor.label.pass.set"); //$NON-NLS-1$
             pass1 = createPasswordField(MemberBean.FN_PASSWORD, DFT_WIDTH_INPUT, lFieldLabel);
-            outTable.addRowEmphasized(lFieldLabel, pass1); //$NON-NLS-1$
+            outTable.addRowEmphasized(lFieldLabel, pass1); // $NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.pass.confirm"); //$NON-NLS-1$
             pass2 = createPasswordField(null, DFT_WIDTH_INPUT, lFieldLabel);
-            outTable.addRowEmphasized(lFieldLabel, pass2); //$NON-NLS-1$
+            outTable.addRowEmphasized(lFieldLabel, pass2); // $NON-NLS-1$
             outTable.addEmtpyRow();
 
             outTable.addRow(messages.getMessage("ui.member.editor.label.address"), getAddress()); //$NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.firstname"); //$NON-NLS-1$
-            outTable.addRowEmphasized(lFieldLabel, addFieldRequired(MemberBean.FN_FIRSTNAME,
+            outTable.addRowEmphasized(lFieldLabel, VIFViewHelper.addWrapped(addFieldRequired(MemberBean.FN_FIRSTNAME,
                     RiplaViewHelper.createTextField(DFT_WIDTH_INPUT),
-                    lFieldLabel)); //$NON-NLS-1$
+                    lFieldLabel))); // $NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.name"); //$NON-NLS-1$
-            outTable.addRowEmphasized(lFieldLabel, addFieldRequired(MemberBean.FN_NAME,
-                    RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel)); //$NON-NLS-1$
+            outTable.addRowEmphasized(lFieldLabel, VIFViewHelper.addWrapped(addFieldRequired(MemberBean.FN_NAME,
+                    RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel))); // $NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.street"); //$NON-NLS-1$
             outTable.addRowEmphasized(
                     lFieldLabel,
-                    addFieldRequired(MemberBean.FN_STREET,
-                            RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel)); //$NON-NLS-1$
+                    VIFViewHelper.addWrapped(addFieldRequired(MemberBean.FN_STREET,
+                            RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel))); // $NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.city"); //$NON-NLS-1$
             outTable.addRowEmphasized(
                     messages.getMessage("ui.member.editor.label.city"), createZipCityFields(lFieldLabel)); //$NON-NLS-1$
             outTable.addRow(
-                    messages.getMessage("ui.member.editor.label.phone"), RiplaViewHelper.createTextField(DFT_WIDTH_INPUT)); //$NON-NLS-1$
+                    messages.getMessage("ui.member.editor.label.phone"), //$NON-NLS-1$
+                    RiplaViewHelper.createTextField(DFT_WIDTH_INPUT));
             outTable.addRow(
-                    messages.getMessage("ui.member.editor.label.fax"), RiplaViewHelper.createTextField(DFT_WIDTH_INPUT)); //$NON-NLS-1$
+                    messages.getMessage("ui.member.editor.label.fax"), //$NON-NLS-1$
+                    RiplaViewHelper.createTextField(DFT_WIDTH_INPUT));
             lFieldLabel = messages.getMessage("ui.member.editor.label.mail"); //$NON-NLS-1$
-            outTable.addRowEmphasized(lFieldLabel, addFieldRequired(MemberBean.FN_MAIL,
-                    RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel)); //$NON-NLS-1$
+            outTable.addRowEmphasized(lFieldLabel, VIFViewHelper.addWrapped(addFieldRequired(MemberBean.FN_MAIL,
+                    RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel))); // $NON-NLS-1$
             return outTable;
         }
 
@@ -180,7 +182,7 @@ public class CreateSUPopup extends AbstractConfigurationPopup {
             lZip.addStyleName("no-indicator");
             outLayout.addComponent(lZip);
             outLayout
-            .addComponent(addFieldRequired(MemberBean.FN_CITY, RiplaViewHelper.createTextField(WIDTH_CITY),
+                    .addComponent(addFieldRequired(MemberBean.FN_CITY, RiplaViewHelper.createTextField(WIDTH_CITY),
                             inFieldLabel));
             return outLayout;
         }

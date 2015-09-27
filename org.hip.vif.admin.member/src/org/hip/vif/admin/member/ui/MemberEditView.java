@@ -31,6 +31,7 @@ import org.hip.vif.web.member.RoleContainer;
 import org.hip.vif.web.util.BeanWrapperHelper;
 import org.hip.vif.web.util.MemberViewHelper;
 import org.hip.vif.web.util.RatingsTable;
+import org.hip.vif.web.util.VIFViewHelper;
 import org.ripla.interfaces.IMessages;
 import org.ripla.web.util.AbstractFormCreator;
 import org.ripla.web.util.LabelValueTable;
@@ -117,11 +118,9 @@ public class MemberEditView extends AbstractMemberView {
                         Notification.show(lMessages
                                 .getMessage("errmsg.save.general"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                     }
-                }
-                catch (final CommitException exc) {
+                } catch (final CommitException exc) {
                     // intentionally left empty
-                }
-                catch (final ExternIDNotUniqueException exc) {
+                } catch (final ExternIDNotUniqueException exc) {
                     inForm.focusInit();
                     Notification.show(lMessages
                             .getMessage("errmsg.member.not.unique"), Type.WARNING_MESSAGE); //$NON-NLS-1$
@@ -193,7 +192,7 @@ public class MemberEditView extends AbstractMemberView {
             final String lFieldLabel = messages
                     .getMessage("ui.member.editor.label.firstname"); //$NON-NLS-1$
             table.addRowEmphasized(lFieldLabel,
-                    addFieldRequired(MemberBean.FN_FIRSTNAME, firstfield, lFieldLabel));
+                    VIFViewHelper.addWrapped(addFieldRequired(MemberBean.FN_FIRSTNAME, firstfield, lFieldLabel)));
 
             return fillTable(table);
         }
@@ -203,28 +202,35 @@ public class MemberEditView extends AbstractMemberView {
                     .getMessage("ui.member.editor.label.name"); //$NON-NLS-1$
             inTable.addRowEmphasized(
                     lFieldLabel,
-                    addFieldRequired(MemberBean.FN_NAME, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel)); //$NON-NLS-1$
+                    VIFViewHelper.addWrapped(
+                            addFieldRequired(MemberBean.FN_NAME, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT),
+                                    lFieldLabel))); // $NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.street"); //$NON-NLS-1$
             inTable.addRowEmphasized(
                     lFieldLabel,
-                    addFieldRequired(MemberBean.FN_STREET, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT),
-                            lFieldLabel));
+                    VIFViewHelper.addWrapped(
+                            addFieldRequired(MemberBean.FN_STREET, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT),
+                                    lFieldLabel)));
             lFieldLabel = messages.getMessage("ui.member.editor.label.city"); //$NON-NLS-1$
-            inTable.addRowEmphasized(lFieldLabel, createZipCityFields(lFieldLabel)); //$NON-NLS-1$
+            inTable.addRowEmphasized(lFieldLabel, createZipCityFields(lFieldLabel)); // $NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.phone");
-            inTable.addRow(lFieldLabel, addField(MemberBean.FN_PHONE, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); //$NON-NLS-1$
+            inTable.addRow(lFieldLabel,
+                    addField(MemberBean.FN_PHONE, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); // $NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.fax");
-            inTable.addRow(lFieldLabel, addField(MemberBean.FN_FAX, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); //$NON-NLS-1$
+            inTable.addRow(lFieldLabel, addField(MemberBean.FN_FAX, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT))); // $NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.mail"); //$NON-NLS-1$
             inTable.addRowEmphasized(
                     lFieldLabel,
-                    addFieldRequired(MemberBean.FN_MAIL, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT), lFieldLabel));
+                    VIFViewHelper.addWrapped(
+                            addFieldRequired(MemberBean.FN_MAIL, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT),
+                                    lFieldLabel)));
             // option group for the roles
             final OptionGroup lRoles = createRolesOptions(roles);
             lRoles.setRequiredError(messages
                     .getMessage("errmsg.member.role.empty")); //$NON-NLS-1$
             inTable.addRowEmphasized(
-                    messages.getMessage("ui.member.editor.label.role"), addFieldRequired(MemberBean.FN_ROLES, lRoles)); //$NON-NLS-1$
+                    messages.getMessage("ui.member.editor.label.role"), //$NON-NLS-1$
+                    VIFViewHelper.addWrapped(addFieldRequired(MemberBean.FN_ROLES, lRoles)));
             return inTable;
         }
 
@@ -235,7 +241,7 @@ public class MemberEditView extends AbstractMemberView {
             lZip.addStyleName("no-indicator");
             outLayout.addComponent(lZip);
             outLayout
-            .addComponent(addFieldRequired(MemberBean.FN_CITY, RiplaViewHelper.createTextField(WIDTH_CITY),
+                    .addComponent(addFieldRequired(MemberBean.FN_CITY, RiplaViewHelper.createTextField(WIDTH_CITY),
                             inFieldLabel));
             return outLayout;
         }
@@ -262,15 +268,16 @@ public class MemberEditView extends AbstractMemberView {
             String lFieldLabel = messages
                     .getMessage("ui.member.editor.label.userid"); //$NON-NLS-1$
             table.addRowEmphasized(lFieldLabel,
-                    addFieldRequired(MemberBean.FN_USER_ID, firstfield, lFieldLabel));
+                    VIFViewHelper.addWrapped(addFieldRequired(MemberBean.FN_USER_ID, firstfield, lFieldLabel)));
             table.addRow(
                     messages.getMessage("ui.member.editor.label.address"), getAddress()); //$NON-NLS-1$
             lFieldLabel = messages
                     .getMessage("ui.member.editor.label.firstname"); //$NON-NLS-1$
             table.addRowEmphasized(
                     lFieldLabel,
-                    addFieldRequired(MemberBean.FN_FIRSTNAME, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT),
-                            lFieldLabel));
+                    VIFViewHelper.addWrapped(
+                            addFieldRequired(MemberBean.FN_FIRSTNAME, RiplaViewHelper.createTextField(DFT_WIDTH_INPUT),
+                                    lFieldLabel)));
 
             return fillTable(table);
         }

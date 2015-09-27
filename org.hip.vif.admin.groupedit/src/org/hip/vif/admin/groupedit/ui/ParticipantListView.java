@@ -97,7 +97,7 @@ public class ParticipantListView extends CustomComponent {
             lTable.setVisibleColumns(VIFViewHelper.getModifiedArray(ParticipantContainer.ENTRY_CHECK,
                     ParticipantContainer.NATURAL_COL_ORDER));
             lTable.setColumnHeaders(VIFViewHelper.getColumnHeaders(
-                    VIFViewHelper.getModifiedArray("", (Object) ParticipantContainer.COL_HEADERS), lMessages)); //$NON-NLS-1$
+                    VIFViewHelper.getModifiedArray("", (Object[]) ParticipantContainer.COL_HEADERS), lMessages)); //$NON-NLS-1$
         } else {
             lTable.setVisibleColumns(ParticipantContainer.NATURAL_COL_ORDER);
             lTable.setColumnHeaders(VIFViewHelper.getColumnHeaders(ParticipantContainer.COL_HEADERS, lMessages));

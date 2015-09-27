@@ -87,7 +87,7 @@ public class MemberListView extends CustomComponent {
             lTable.setVisibleColumns(VIFViewHelper.getModifiedArray(MemberContainer.MEMBER_CHECK,
                     MemberContainer.NATURAL_COL_ORDER));
             lTable.setColumnHeaders(VIFViewHelper.getColumnHeaders(
-                    VIFViewHelper.getModifiedArray("", (Object) MemberContainer.COL_HEADERS), lMessages)); //$NON-NLS-1$
+                    VIFViewHelper.getModifiedArray("", (Object[]) MemberContainer.COL_HEADERS), lMessages)); //$NON-NLS-1$
         } else {
             lTable.setVisibleColumns(MemberContainer.NATURAL_COL_ORDER);
             lTable.setColumnHeaders(VIFViewHelper.getColumnHeaders(MemberContainer.COL_HEADERS, lMessages));

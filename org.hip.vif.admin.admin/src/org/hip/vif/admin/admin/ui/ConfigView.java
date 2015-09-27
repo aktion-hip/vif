@@ -200,7 +200,8 @@ public class ConfigView extends AbstractAdminView {
             lDatePattern.addValidator(new DatePatternValidator(lMessages
                     .getMessage("errmsg.admin.config.valid.date"))); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.date.pattern"), lViewHelper.createInput(lDatePattern, "admin.config.desc.date.pattern", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.date.pattern"), //$NON-NLS-1$
+                    lViewHelper.createInput(lDatePattern, "admin.config.desc.date.pattern", lMessages)); //$NON-NLS-1$
 
             // database connection
             outTable.addRow(createSubtitle("admin.config.sub.database", lMessages)); //$NON-NLS-1$
@@ -208,86 +209,134 @@ public class ConfigView extends AbstractAdminView {
             final ComboBox lSelect = DBDriverSelect.getDBDriverSelection(WIDTH, false, lViewHelper.createProcessor());
             addField(InputWrapper.KEY_DB_DRIVER, lSelect);
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.db.driver"), lViewHelper.createInput(lSelect, "admin.config.desc.db.driver", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
-            outTable.addRow(lViewHelper.getServerField(), lViewHelper.getServer());
-            outTable.addRow(lViewHelper.getSchemaField(), lViewHelper.getSchema());
-            outTable.addRow(lViewHelper.getUserField(), lViewHelper.getUser());
-            outTable.addRow(lViewHelper.getPasswordField(), lViewHelper.getPassword());
+                    lMessages.getMessage("admin.config.label.db.driver"), //$NON-NLS-1$
+                    lViewHelper.createInput(lSelect, "admin.config.desc.db.driver", lMessages)); //$NON-NLS-1$
+            outTable.addRow(lViewHelper.getServerField(), VIFViewHelper.addWrapped(lViewHelper.getServer()));
+            outTable.addRow(lViewHelper.getSchemaField(), VIFViewHelper.addWrapped(lViewHelper.getSchema()));
+            outTable.addRow(lViewHelper.getUserField(), VIFViewHelper.addWrapped(lViewHelper.getUser()));
+            outTable.addRow(lViewHelper.getPasswordField(), VIFViewHelper.addWrapped(lViewHelper.getPassword()));
 
             outTable.addRow(createSubSubtitle("admin.config.sub.database.ext", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.dbx.driver"), lViewHelper.createInput(addField(InputWrapper.KEY_DBX_DRIVER, DBDriverSelect.getDBDriverSelection(WIDTH, true, null)), "admin.config.desc.db.driver", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.dbx.driver"), //$NON-NLS-1$
+                    lViewHelper.createInput(
+                            addField(InputWrapper.KEY_DBX_DRIVER,
+                                    DBDriverSelect.getDBDriverSelection(WIDTH, true, null)),
+                            "admin.config.desc.db.driver", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.dbx.server"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_DBX_SERVER), "admin.config.desc.db.external", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$ // NOPMD
+                    lMessages.getMessage("admin.config.label.dbx.server"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_DBX_SERVER),
+                            "admin.config.desc.db.external", lMessages)); //$NON-NLS-1$ // NOPMD
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.db.schema"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_DBX_SCHEMA), "admin.config.desc.db.external", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.db.schema"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_DBX_SCHEMA),
+                            "admin.config.desc.db.external", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.db.user"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_DBX_USER), "admin.config.desc.db.external", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.db.user"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_DBX_USER),
+                            "admin.config.desc.db.external", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.db.password"), lViewHelper.createInput(lViewHelper.createPassword(InputWrapper.KEY_DBX_PASSWD, null), "admin.config.desc.db.external", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.db.password"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createPassword(InputWrapper.KEY_DBX_PASSWD, null),
+                            "admin.config.desc.db.external", lMessages)); //$NON-NLS-1$
 
             outTable.addRow(createSubSubtitle("admin.config.sub.database.ldap", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.ldap.url"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_LDAP_URL), "admin.config.desc.ldap", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.ldap.url"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_LDAP_URL),
+                            "admin.config.desc.ldap", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.ldap.dn"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_LDAP_MANAGER_DN), "admin.config.desc.ldap", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.ldap.dn"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_LDAP_MANAGER_DN),
+                            "admin.config.desc.ldap", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.ldap.passwrd"), lViewHelper.createInput(lViewHelper.createPassword(InputWrapper.KEY_LDAP_MANAGER_PW, null), "admin.config.desc.ldap", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.ldap.passwrd"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createPassword(InputWrapper.KEY_LDAP_MANAGER_PW, null),
+                            "admin.config.desc.ldap", lMessages)); //$NON-NLS-1$
 
             // searching and authentication
             outTable.addRow(createSubtitle("admin.config.sub.searchers", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.search"), lViewHelper.createInput(createSelect(InputWrapper.KEY_MEMBER_SEARCHER, MemberUtility.INSTANCE.getContributionNames(), WIDTH, false), "admin.config.desc.search", lMessages)); //$NON-NLS-1$
+                    lMessages.getMessage("admin.config.label.search"), //$NON-NLS-1$
+                    lViewHelper.createInput(
+                            createSelect(InputWrapper.KEY_MEMBER_SEARCHER,
+                                    MemberUtility.INSTANCE.getContributionNames(), WIDTH, false),
+                            "admin.config.desc.search", lMessages));
 
             // mail and notification
             outTable.addRow(createSubtitle("admin.config.sub.mail", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.mail.term"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_FORUM_NAME), "admin.config.desc.mail.term", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.mail.term"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_FORUM_NAME),
+                            "admin.config.desc.mail.term", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.mail.host"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_MAIL_HOST), "admin.config.desc.mail.host", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.mail.host"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_MAIL_HOST),
+                            "admin.config.desc.mail.host", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.mail.address"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_MAIL_ADDRESS), "admin.config.desc.mail.address", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.mail.address"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_MAIL_ADDRESS),
+                            "admin.config.desc.mail.address", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.mail.subj.id"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_MAIL_SUBJECT_ID), "admin.config.desc.mail.subj.id", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.mail.subj.id"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_MAIL_SUBJECT_ID),
+                            "admin.config.desc.mail.subj.id", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.mail.subj.txt"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_MAIL_SUBJECT_TEXT), "admin.config.desc.mail.subj.txt", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.mail.subj.txt"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_MAIL_SUBJECT_TEXT),
+                            "admin.config.desc.mail.subj.txt", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.mail.sender"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_MAIL_NAMING), "admin.config.desc.mail.sender", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.mail.sender"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_MAIL_NAMING),
+                            "admin.config.desc.mail.sender", lMessages)); //$NON-NLS-1$
 
             if (!PreferencesHandler.INSTANCE.isEmbedded()) {
                 // logging
                 outTable.addRow(createSubtitle("admin.config.sub.logging", lMessages)); //$NON-NLS-1$
                 outTable.addRow(
-                        lMessages.getMessage("admin.config.label.logging.path"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_LOG_PATH), "admin.config.desc.logging.path", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                        lMessages.getMessage("admin.config.label.logging.path"), //$NON-NLS-1$
+                        lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_LOG_PATH),
+                                "admin.config.desc.logging.path", lMessages)); //$NON-NLS-1$
                 outTable.addEmtpyRow();
                 outTable.addRow(
                         lMessages.getMessage("admin.config.label.logging.level"), //$NON-NLS-1$
                         lViewHelper.createInput(
                                 createSelect(InputWrapper.KEY_LOG_LEVEL, ApplicationConstants.LOG_LEVELS,
-                                        WIDTH, false), "admin.config.desc.logging.level", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                                        WIDTH, false),
+                                "admin.config.desc.logging.level", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
                 outTable.addEmtpyRow();
                 outTable.addRow(
-                        lMessages.getMessage("admin.config.label.logging.config"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_LOG_CONFIG), "admin.config.desc.logging.config", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                        lMessages.getMessage("admin.config.label.logging.config"), //$NON-NLS-1$
+                        lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_LOG_CONFIG),
+                                "admin.config.desc.logging.config", lMessages)); //$NON-NLS-1$
             }
 
             // various
             outTable.addRow(createSubtitle("admin.config.sub.sundry", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.url.logout"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_LOGOUT_URL), "admin.config.desc.url.logout", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.url.logout"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_LOGOUT_URL),
+                            "admin.config.desc.url.logout", lMessages)); //$NON-NLS-1$
             final TextField lUpload = lViewHelper.createInputField(InputWrapper.KEY_UPLOAD_QUOTA);
             lUpload.setConverter(Integer.class);
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.div.quota"), lViewHelper.createInput(lUpload, "admin.config.desc.div.quota", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.div.quota"), //$NON-NLS-1$
+                    lViewHelper.createInput(lUpload, "admin.config.desc.div.quota", lMessages)); //$NON-NLS-1$
             final TextField lLatency = lViewHelper.createInputField(InputWrapper.KEY_LATENCY_DAYS);
             lLatency.setConverter(Integer.class);
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.div.latency"), lViewHelper.createInput(lLatency, "admin.config.desc.div.latency", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.div.latency"), //$NON-NLS-1$
+                    lViewHelper.createInput(lLatency, "admin.config.desc.div.latency", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.docs.root"), lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_DOCS_ROOT), "admin.config.desc.docs.root", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.docs.root"), //$NON-NLS-1$
+                    lViewHelper.createInput(lViewHelper.createInputField(InputWrapper.KEY_DOCS_ROOT),
+                            "admin.config.desc.docs.root", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.div.guests"), lViewHelper.createInput(createCheck(InputWrapper.KEY_GUEST_ALLOW), "admin.config.desc.div.guests", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.div.guests"), lViewHelper.createInput( //$NON-NLS-1$
+                            createCheck(InputWrapper.KEY_GUEST_ALLOW), "admin.config.desc.div.guests", lMessages)); //$NON-NLS-1$
             outTable.addRow(
-                    lMessages.getMessage("admin.config.label.div.password"), lViewHelper.createInput(createCheck(InputWrapper.KEY_PW_DISPLAY), "admin.config.desc.div.password", lMessages)); //$NON-NLS-1$ //$NON-NLS-2$
+                    lMessages.getMessage("admin.config.label.div.password"), lViewHelper.createInput( //$NON-NLS-1$
+                            createCheck(InputWrapper.KEY_PW_DISPLAY), "admin.config.desc.div.password", lMessages)); //$NON-NLS-1$
 
             return outTable;
         }
@@ -295,13 +344,15 @@ public class ConfigView extends AbstractAdminView {
         private Label createSubtitle(final String inMsgKey,
                 final IMessages inMessages) {
             return new Label(
-                    String.format(VIFViewHelper.TMPL_TITLE, "vif-title", inMessages.getMessage(inMsgKey)), ContentMode.HTML); //$NON-NLS-1$
+                    String.format(VIFViewHelper.TMPL_TITLE, "vif-title", inMessages.getMessage(inMsgKey)), //$NON-NLS-1$
+                    ContentMode.HTML);
         }
 
         private Label createSubSubtitle(final String inMsgKey,
                 final IMessages inMessages) {
             return new Label(
-                    String.format(VIFViewHelper.TMPL_TITLE, "vif-emphasized", inMessages.getMessage(inMsgKey)), ContentMode.HTML); //$NON-NLS-1$
+                    String.format(VIFViewHelper.TMPL_TITLE, "vif-emphasized", inMessages.getMessage(inMsgKey)), //$NON-NLS-1$
+                    ContentMode.HTML);
         }
 
         private CheckBox createCheck(final String inKey) {
@@ -318,8 +369,7 @@ public class ConfigView extends AbstractAdminView {
             inInput.setStyleName("vif-input-config"); //$NON-NLS-1$
             if (inRequiredFieldLbl == null) {
                 addField(inKey, inInput);
-            }
-            else {
+            } else {
                 addFieldRequired(inKey, inInput, inRequiredFieldLbl);
             }
             return inInput;

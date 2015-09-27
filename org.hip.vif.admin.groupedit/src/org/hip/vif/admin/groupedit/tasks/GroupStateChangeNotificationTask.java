@@ -1,6 +1,6 @@
 /**
     This package is part of the application VIF.
-    Copyright (C) 2011-2014, Benno Luthiger
+    Copyright (C) 2011-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ import org.hip.vif.admin.groupedit.Activator;
 import org.hip.vif.admin.groupedit.Constants;
 import org.hip.vif.admin.groupedit.ui.GroupStateChangeNotificationView;
 import org.hip.vif.core.bom.Group;
+import org.hip.vif.core.bom.GroupHome;
 import org.hip.vif.web.bom.VifBOMHelper;
 import org.hip.vif.web.mail.GroupStateChangeNotification;
 import org.hip.vif.web.tasks.AbstractWebController;
@@ -41,8 +42,8 @@ import org.slf4j.LoggerFactory;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification.Type;
 
-/** Controller for the view to ask the administrator whether to notify the participants about the group's state change or
- * not.
+/** Controller for the view to ask the administrator whether to notify the participants about the group's state change
+ * or not.
  *
  * @author Luthiger Created: 13.11.2011 */
 @UseCaseController
@@ -75,21 +76,18 @@ public class GroupStateChangeNotificationTask extends AbstractWebController {
             try {
                 final GroupStateChangeNotification lMail = new GroupStateChangeNotification(
                         lGroup.getParticipantsMail(), true);
-                lMail.setSubject(inSubject);
+                lMail.setSubject(String.format("%s: %s", lGroup.get(GroupHome.KEY_NAME), inSubject));
                 lMail.setBody(inBody);
                 lMail.send();
                 showNotification(
-                        Activator.getMessages().getMessage("admin.group.state.notification.sent"), Type.TRAY_NOTIFICATION); //$NON-NLS-1$
+                        Activator.getMessages().getMessage("admin.group.state.notification.sent"), //$NON-NLS-1$
+                        Type.TRAY_NOTIFICATION);
             } catch (final MailGenerationException exc) {
                 LOG.error("Error while preparing the state change notification!", exc); //$NON-NLS-1$
             }
             sendEvent(GroupShowListTask.class);
             return true;
-        } catch (final VException exc) {
-            LOG.error("Error while preparing the state change notification!", exc); //$NON-NLS-1$
-        } catch (final AddressException exc) {
-            LOG.error("Error while preparing the state change notification!", exc); //$NON-NLS-1$
-        } catch (final SQLException exc) {
+        } catch (VException | AddressException | SQLException exc) {
             LOG.error("Error while preparing the state change notification!", exc); //$NON-NLS-1$
         }
         return false;

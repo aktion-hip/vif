@@ -85,7 +85,8 @@ public final class RoleHelper {
      * @param inUserAdmin {@link UserAdmin}
      * @param inPermission {@link Group} the permission group to link to the role group
      * @param inRoles Collection of VIF roles the permission group has to be added as member */
-    private static void addRoles(final UserAdmin inUserAdmin, final Group inPermission, final Collection<Role> inRoles) {
+    private static void addRoles(final UserAdmin inUserAdmin, final Group inPermission,
+            final Collection<Role> inRoles) {
         for (final Role lRole : inRoles) {
             final org.osgi.service.useradmin.Role lOSGiRole = inUserAdmin.getRole(lRole.getElementID());
             if (lOSGiRole != null) {
@@ -118,14 +119,16 @@ public final class RoleHelper {
                         PermissionHome.KEY_ID).toString()));
                 final Collection<org.osgi.service.useradmin.Role> lRolesNew = getRolesNew(lRoles, inUserAdmin);
                 final org.osgi.service.useradmin.Role[] lRolesOld = lPermission.getMembers();
-                for (final org.osgi.service.useradmin.Role lRoleOld : lRolesOld) {
-                    // if the new role is an old role, we ignore it
-                    if (lRolesNew.contains(lRoleOld)) {
-                        lRolesNew.remove(lRoleOld);
-                    }
-                    // else, the old role has to be removed
-                    else {
-                        lPermission.removeMember(lRoleOld);
+                if (lRolesOld != null) {
+                    for (final org.osgi.service.useradmin.Role lRoleOld : lRolesOld) {
+                        // if the new role is an old role, we ignore it
+                        if (lRolesNew.contains(lRoleOld)) {
+                            lRolesNew.remove(lRoleOld);
+                        }
+                        // else, the old role has to be removed
+                        else {
+                            lPermission.removeMember(lRoleOld);
+                        }
                     }
                 }
                 // finally, add the remaining new roles

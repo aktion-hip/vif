@@ -62,7 +62,7 @@ import com.vaadin.ui.Notification.Type;
 @SuppressWarnings("serial")
 @UseCaseController
 public class GroupEditTask extends AbstractGroupTask implements
-Property.ValueChangeListener {
+        Property.ValueChangeListener {
     private static final Logger LOG = LoggerFactory
             .getLogger(GroupEditTask.class);
 
@@ -92,7 +92,8 @@ Property.ValueChangeListener {
             return new GroupView(lGroup, VifBOMHelper.getParticipantHome()
                     .getParticipantsOfGroup(lGroupID),
                     lCodeList.getLabel(BeanWrapperHelper.getString(
-                            GroupHome.KEY_STATE, lGroup)), admins, this);
+                            GroupHome.KEY_STATE, lGroup)),
+                    admins, this);
         } catch (final SQLException exc) {
             throw createContactAdminException(exc);
         } catch (final VException exc) {
@@ -110,9 +111,7 @@ Property.ValueChangeListener {
             return true;
         } catch (final ExternIDNotUniqueException exc) {
             throw exc;
-        } catch (final VException exc) {
-            LOG.error("Error while saving the member data.", exc); //$NON-NLS-1$
-        } catch (final WorkflowException exc) {
+        } catch (final VException | WorkflowException exc) {
             LOG.error("Error while saving the member data.", exc); //$NON-NLS-1$
         }
         return false;
@@ -234,9 +233,9 @@ Property.ValueChangeListener {
             lParameters.set(Constants.KEY_PARAMETER_SUBTITLE_SELECT, lMessages
                     .getFormattedMessage("ui.group.lookup.sub2.title.page", lGroupName)); //$NON-NLS-1$
             lParameters
-            .set(Constants.KEY_PARAMETER_RIGHT_COLUMN,
-                    lMessages
-                    .getFormattedMessage("ui.group.lookup.selected.participants", lGroupName)); //$NON-NLS-1$
+                    .set(Constants.KEY_PARAMETER_RIGHT_COLUMN,
+                            lMessages
+                                    .getFormattedMessage("ui.group.lookup.selected.participants", lGroupName)); //$NON-NLS-1$
             lParameters.set(Constants.KEY_PARAMETER_SELECTED,
                     new Vector<ParticipantBean>());
             lParameters.set(Constants.KEY_PARAMETER_PROCESSING,
