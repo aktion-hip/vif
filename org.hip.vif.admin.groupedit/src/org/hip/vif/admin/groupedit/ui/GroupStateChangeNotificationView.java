@@ -1,6 +1,6 @@
 /**
     This package is part of the application VIF.
-    Copyright (C) 2011-2014, Benno Luthiger
+    Copyright (C) 2011-2015, Benno Luthiger
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,13 +28,14 @@ import org.ripla.web.util.RiplaViewHelper;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Form;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
@@ -50,6 +51,9 @@ import com.vaadin.ui.VerticalLayout;
 public class GroupStateChangeNotificationView extends CustomComponent {
     private static final int DEF_WIDTH = 700;
     private static final int DEF_HEIGHT = 250;
+
+    private static final String FLD_SUBJECT = "subject";
+    private static final String FLD_BODY = "body";
 
     /** View constructor.
      *
@@ -68,15 +72,18 @@ public class GroupStateChangeNotificationView extends CustomComponent {
         lLayout.addComponent(new Label(
                 String.format(
                         VIFViewHelper.TMPL_TITLE,
-                        "vif-pagetitle", lMessages.getFormattedMessage("ui.group.notify.view.title.page", inGroupName)), ContentMode.HTML)); //$NON-NLS-1$ //$NON-NLS-2$
+                        "vif-pagetitle", lMessages.getFormattedMessage("ui.group.notify.view.title.page", inGroupName)), //$NON-NLS-1$ //$NON-NLS-2$
+                ContentMode.HTML));
 
         lLayout.addComponent(new Label(
                 String.format(
-                        VIFViewHelper.TMPL_TITLE, "vif-remark", lMessages.getMessage("ui.group.notify.label.remark")), ContentMode.HTML)); //$NON-NLS-1$ //$NON-NLS-2$
+                        VIFViewHelper.TMPL_TITLE, "vif-remark", lMessages.getMessage("ui.group.notify.label.remark")), //$NON-NLS-1$ //$NON-NLS-2$
+                ContentMode.HTML));
 
-        final Form lFormOld = new Form();
-        final FieldGroup lForm = new FieldGroup();
-        lFormOld.setLayout(new VerticalLayout());
+        final PropertysetItem lMail = new PropertysetItem();
+        lMail.addItemProperty(FLD_SUBJECT, new ObjectProperty<String>(""));
+        lMail.addItemProperty(FLD_BODY, new ObjectProperty<String>(""));
+        final FieldGroup lForm = new FieldGroup(lMail);
         final VerticalLayout lFormLayout = new VerticalLayout();
 
         String lLabel = lMessages.getMessage("ui.group.notify.label.subject"); //$NON-NLS-1$
@@ -84,7 +91,7 @@ public class GroupStateChangeNotificationView extends CustomComponent {
                 new Label(String.format(VIFViewHelper.TMPL_TITLE, "vif-title", lLabel), ContentMode.HTML)); //$NON-NLS-1$
         final TextField lSubject = RiplaViewHelper.createTextField(inSubject,
                 DEF_WIDTH, new NotEmptyValidator(lLabel, lMessages));
-        addField(lLabel, lSubject, lForm, lMessages);
+        addField(lLabel, lSubject, lFormLayout, lMessages);
 
         lLabel = lMessages.getMessage("ui.group.notify.label.body"); //$NON-NLS-1$
         lFormLayout.addComponent(
@@ -92,8 +99,9 @@ public class GroupStateChangeNotificationView extends CustomComponent {
         final RichTextArea lBody = VIFViewHelper
                 .createTextArea(inBody, DEF_WIDTH, DEF_HEIGHT,
                         new NotEmptyValidator(lLabel, lMessages));
-        addField(lLabel, lBody, lForm, lMessages);
-        // lLayout.addComponent(lFormOld);
+        addField(lLabel, lBody, lFormLayout, lMessages);
+        lForm.bind(lSubject, FLD_SUBJECT);
+        lForm.bind(lBody, FLD_BODY);
         lLayout.addComponent(lFormLayout);
 
         final Button lNotify = new Button(
@@ -102,17 +110,13 @@ public class GroupStateChangeNotificationView extends CustomComponent {
             @Override
             public void buttonClick(final ClickEvent inEvent) {
                 try {
-                    // lFormOld.commit();
                     lForm.commit();
-                    if (!inTask.doNotification(lSubject.getValue().toString(),
-                            lBody.getValue().toString())) {
+                    if (!inTask.doNotification(lMail.getItemProperty(FLD_SUBJECT).getValue().toString(),
+                            lMail.getItemProperty(FLD_BODY).getValue().toString())) {
                         Notification.show(lMessages
                                 .getMessage("errmsg.notification.send"), Type.WARNING_MESSAGE); //$NON-NLS-1$
                     }
-                }
-                catch (final InvalidValueException exc) {
-                    // intentionally left empty
-                } catch (final CommitException exc) {
+                } catch (InvalidValueException | CommitException exc) {
                     // intentionally left empty
                 }
             }
@@ -128,10 +132,9 @@ public class GroupStateChangeNotificationView extends CustomComponent {
         lLayout.addComponent(RiplaViewHelper.createButtons(lNotify, lContinue));
     }
 
-    private void addField(final String inFieldID, final AbstractField inField, final FieldGroup inForm,
+    private void addField(final String inFieldID, final AbstractField<?> inField, final VerticalLayout inFormLayout,
             final IMessages inMessages) {
-        // inForm.addField(inFieldID, inField);
-        inForm.bind(inField, inFieldID);
+        inFormLayout.addComponent(inField);
         inField.setRequiredError(inMessages.getFormattedMessage("errmsg.field.not.empty", inFieldID)); //$NON-NLS-1$
         inField.setRequired(true);
         inField.setImmediate(true);
