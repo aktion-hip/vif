@@ -69,7 +69,7 @@ public class CreateSUPopup extends AbstractConfigurationPopup {
         final IMessages lMessages = Activator.getMessages();
         final VerticalLayout lLayout = createLayout();
         lLayout.addComponent(getCreateForm(inMember, lMessages, inCreateSU));
-        popup = Popup.displayPopup(lMessages.getMessage("ui.member.editor.title"), lLayout, 590, 420);
+        popup = Popup.displayPopup(lMessages.getMessage("ui.member.editor.title"), lLayout, 590, 450);
     }
 
     @SuppressWarnings("serial")
@@ -127,6 +127,7 @@ public class CreateSUPopup extends AbstractConfigurationPopup {
             // member = inMember;
             messages = Activator.getMessages();
             address = MemberViewHelper.getMemberAddress(inMember);
+            address.setStyleName("ripla-input");
         }
 
         @Override
@@ -141,10 +142,10 @@ public class CreateSUPopup extends AbstractConfigurationPopup {
 
             lFieldLabel = messages.getMessage("ui.member.editor.label.pass.set"); //$NON-NLS-1$
             pass1 = createPasswordField(MemberBean.FN_PASSWORD, DFT_WIDTH_INPUT, lFieldLabel);
-            outTable.addRowEmphasized(lFieldLabel, pass1); // $NON-NLS-1$
+            outTable.addRowEmphasized(lFieldLabel, VIFViewHelper.addWrapped(pass1)); // $NON-NLS-1$
             lFieldLabel = messages.getMessage("ui.member.editor.label.pass.confirm"); //$NON-NLS-1$
             pass2 = createPasswordField(null, DFT_WIDTH_INPUT, lFieldLabel);
-            outTable.addRowEmphasized(lFieldLabel, pass2); // $NON-NLS-1$
+            outTable.addRowEmphasized(lFieldLabel, VIFViewHelper.addWrapped(pass2)); // $NON-NLS-1$
             outTable.addEmtpyRow();
 
             outTable.addRow(messages.getMessage("ui.member.editor.label.address"), getAddress()); //$NON-NLS-1$
@@ -197,7 +198,7 @@ public class CreateSUPopup extends AbstractConfigurationPopup {
             out.setRequiredError(messages.getFormattedMessage("errmsg.error.not.empty", inRequiredFieldLbl)); //$NON-NLS-1$
             out.setRequired(true);
             out.setImmediate(true);
-            out.setStyleName("vif-input"); //$NON-NLS-1$
+            out.setStyleName("ripla-input"); //$NON-NLS-1$
             return out;
         }
 

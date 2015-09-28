@@ -240,12 +240,16 @@ div.popupContent .v-menubar-submenu .v-menubar-menuitem-selected {
 .vif-search div.ripla-label-table .ripla-label,
 .vif-search div.ripla-label-table .ripla-value-emphasized,
 .ripla-lookup div.ripla-label-table .ripla-label,
+.ripla-lookup div.ripla-label-table .ripla-input,
+.ripla-lookup div.ripla-label-table .ripla-required-field,
 .ripla-lookup div.ripla-label-table .ripla-value, 
 .ripla-lookup div.ripla-label-table .vif-value, 
 .ripla-lookup div.ripla-label-table .ripla-value-emphasized {
     margin-top:3px;
 }
 
+.ripla-lookup div.ripla-label-table .ripla-input,
+.ripla-lookup div.ripla-label-table .ripla-required-field,
 .ripla-lookup div.ripla-label-table .vif-value, 
 .vif-view div.ripla-label-table .ripla-value,
 .vif-view div.ripla-label-table .ripla-input, 
@@ -259,6 +263,7 @@ div.popupContent .v-menubar-submenu .v-menubar-menuitem-selected {
     margin-right:5px;    
 }
 
+.ripla-lookup .ripla-form .v-slot-ripla-required-field .v-caption-no-indicator,
 .vif-view .ripla-form div.ripla-label-table .vif-value-emphasized {
 	margin-left:5px;
 }
