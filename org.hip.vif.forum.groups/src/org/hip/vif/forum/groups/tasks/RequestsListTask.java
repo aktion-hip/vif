@@ -32,6 +32,7 @@ import org.hip.vif.core.bom.GroupHome;
 import org.hip.vif.core.bom.VIFMember;
 import org.hip.vif.core.bom.impl.WorkflowAwareContribution;
 import org.hip.vif.core.code.QuestionState;
+import org.hip.vif.forum.groups.Activator;
 import org.hip.vif.forum.groups.Constants;
 import org.hip.vif.forum.groups.data.ContributionContainer;
 import org.hip.vif.forum.groups.data.ContributionWrapper;
@@ -52,6 +53,7 @@ import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Table;
 
 /** <p>
@@ -80,6 +82,9 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
 
         try {
             loadContextMenu(Constants.MENU_SET_ID_GROUP_CONTENT);
+            if (!VifBOMHelper.getGroupHome().getGroup(lGroupID).isActive()) {
+                return reDisplay(Activator.getMessages().getMessage("errmsg.not.active2"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+            }
 
             final CodeList lCodeList = CodeListHome.instance().getCodeList(QuestionState.class,
                     getAppLocale().getLanguage());
@@ -113,7 +118,7 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
                     @Override
                     public IVIFMail createMail(final VIFMember inAuthor, final VIFMember inReviewer, // NOPMD
                             final StringBuilder inNotificationText, final StringBuilder inNotificationTextHtml)
-                            throws VException, IOException {
+                                    throws VException, IOException {
                         return new AnswerAcceptMail(inAuthor, inReviewer, notificator.getNotificationText(),
                                 notificator.getNotificationTextHtml());
                     }
@@ -132,7 +137,7 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
         doProcess(contributions[0], WorkflowAwareContribution.TRANS_REJECT_REVIEW,
                 new IMailCreator() {
                     @Override
-            public IVIFMail createMail(final VIFMember inAuthor, final VIFMember inReviewer, // NOPMD
+                    public IVIFMail createMail(final VIFMember inAuthor, final VIFMember inReviewer, // NOPMD
                             final StringBuilder inNotificationText,
                             final StringBuilder inNotificationTextHtml) throws VException, IOException {
                         return new AnswerRefuseMail(inAuthor, inReviewer, notificator.getNotificationText(),
@@ -153,16 +158,16 @@ public class RequestsListTask extends ContributionsWorkflowTask implements Value
         doProcess(contributions[1], WorkflowAwareContribution.TRANS_GIVE_BACK_REVIEW,
                 new IMailCreator() {
                     @Override
-            public IVIFMail createMail(final VIFMember inAuthor, final VIFMember inReviewer, // NOPMD
+                    public IVIFMail createMail(final VIFMember inAuthor, final VIFMember inReviewer, // NOPMD
                             final StringBuilder inNotificationText, final StringBuilder inNotificationTextHtml)
-                            throws VException, IOException {
+                                    throws VException, IOException {
                         return new ProcessGiveBackMail(inAuthor, inReviewer, notificator.getNotificationText(),
                                 notificator.getNotificationTextHtml());
                     }
                 },
                 new IReviewerStateHandler() {
                     @Override
-            public void handleReviewerState(final Long inActorID, final ContributionsHelper inContributions) // NOPMD
+                    public void handleReviewerState(final Long inActorID, final ContributionsHelper inContributions) // NOPMD
                             throws VException, SQLException {
                         updateReviewerState(inActorID, inContributions);
                     }

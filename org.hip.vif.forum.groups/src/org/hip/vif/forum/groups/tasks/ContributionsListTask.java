@@ -65,8 +65,8 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Table;
 
-/** Task to display the author's yet unpublished and pending contributions for that they can be deleted or selected to be
- * reviewed.
+/** Task to display the author's yet unpublished and pending contributions for that they can be deleted or selected to
+ * be reviewed.
  *
  * Created on 11.08.2003
  *
@@ -87,6 +87,10 @@ public class ContributionsListTask extends ContributionsWorkflowTask implements 
             final Group lGroup = VifBOMHelper.getGroupHome().getGroup(lGroupID);
             final boolean lNeedsReview = lGroup.needsReview();
             loadContextMenu(lNeedsReview ? Constants.MENU_SET_ID_GROUP_CONTENT : Constants.MENU_SET_ID_CONTRIBUTE);
+
+            if (!VifBOMHelper.getGroupHome().getGroup(lGroupID).isActive()) {
+                return reDisplay(Activator.getMessages().getMessage("errmsg.not.active2"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+            }
 
             final CodeList lCodeList = CodeListHome.instance().getCodeList(QuestionState.class,
                     getAppLocale().getLanguage());
@@ -136,7 +140,7 @@ public class ContributionsListTask extends ContributionsWorkflowTask implements 
                     // texts
                     else {
                         ((QuestionHierarchyEntry) BOMHelper.getTextHome().getText(lContribution.getID()))
-                        .accept(lVisitor);
+                                .accept(lVisitor);
                         lDeletedCount++;
                     }
                 }
@@ -160,8 +164,7 @@ public class ContributionsListTask extends ContributionsWorkflowTask implements 
             String lMessage = ""; //$NON-NLS-1$
             if (lNotificationType == Type.ERROR_MESSAGE) {
                 lMessage = lMessages.getMessage("errmsg.delete"); //$NON-NLS-1$
-            }
-            else {
+            } else {
                 lMessage = lMessages
                         .getMessage(lDeletedCount == 1 ? "msg.contributions.deleteS" : "msg.contributions.deleteP"); //$NON-NLS-1$ //$NON-NLS-2$
             }
@@ -206,7 +209,8 @@ public class ContributionsListTask extends ContributionsWorkflowTask implements 
             final String lReviewerMailAddress = lMail.getMailTo();
             lMessage = lMessages
                     .getFormattedMessage(
-                            "msg.contributions.request", String.valueOf(lContributionsHandler.getContributions().size()), lReviewerMailAddress); //$NON-NLS-1$
+                            "msg.contributions.request", //$NON-NLS-1$
+                            String.valueOf(lContributionsHandler.getContributions().size()), lReviewerMailAddress);
             if (lFoundPrivate) {
                 lMessage += " " + lMessages.getMessage("msg.contributions.nopublish"); // NOPMD //$NON-NLS-1$ //$NON-NLS-2$
             }

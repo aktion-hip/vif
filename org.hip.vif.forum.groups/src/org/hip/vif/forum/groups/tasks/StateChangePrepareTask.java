@@ -76,6 +76,10 @@ public class StateChangePrepareTask extends AbstractWebController { // extends A
             final Long lQuestionID = getQuestionID();
             final Question lQuestion = retrieveQuestion(lQuestionID);
 
+            if (!VifBOMHelper.getGroupHome().getGroup(lGroupID).isActive()) {
+                return reDisplay(Activator.getMessages().getMessage("errmsg.not.active2"), Type.WARNING_MESSAGE); //$NON-NLS-1$
+            }
+
             if (isAnswered(lQuestion)) {
                 if (isGroupAdmin(getActor().getActorID(), lGroupID)) {
                     stateChangeProcessor = new SetReopenProcessor();
@@ -83,16 +87,14 @@ public class StateChangePrepareTask extends AbstractWebController { // extends A
                             "ui.state.change.label.reopen.change", //$NON-NLS-1$
                             "ui.state.change.button.reopen", //$NON-NLS-1$
                             this);
-                }
-                else {
+                } else {
                     stateChangeProcessor = new RequestReopenProcessor();
                     return new StateChangeView(lQuestion, "ui.state.change.title.reopen", //$NON-NLS-1$
                             "ui.state.change.label.reopen.request", //$NON-NLS-1$
                             "ui.state.change.button.reopen", //$NON-NLS-1$
                             this);
                 }
-            }
-            else {
+            } else {
                 if (isOpen(lQuestion)) {
                     if (isAnswerable(lQuestionID)) {
                         if (isGroupAdmin(getActor().getActorID(), lGroupID)) {
@@ -101,20 +103,17 @@ public class StateChangePrepareTask extends AbstractWebController { // extends A
                                     "ui.state.change.label.answered.change", //$NON-NLS-1$
                                     "ui.state.change.button.answered", //$NON-NLS-1$
                                     this);
-                        }
-                        else {
+                        } else {
                             stateChangeProcessor = new RequestAnsweredProcessor();
                             return new StateChangeView(lQuestion, "ui.state.change.title.answered", //$NON-NLS-1$
                                     "ui.state.change.label.answered.request", //$NON-NLS-1$
                                     "ui.state.change.button.answered", //$NON-NLS-1$
                                     this);
                         }
-                    }
-                    else {
+                    } else {
                         return noAction("msg.question.unanswered.followups"); //$NON-NLS-1$
                     }
-                }
-                else {
+                } else {
                     return noAction("msg.question.not.open"); //$NON-NLS-1$
                 }
             }
@@ -181,7 +180,7 @@ public class StateChangePrepareTask extends AbstractWebController { // extends A
 
         void showSuccess() {
             showNotification(Activator.getMessages().getMessage(getSuccessMsgKey()),
-                    Type.TRAY_NOTIFICATION); //$NON-NLS-1$
+                    Type.TRAY_NOTIFICATION); // $NON-NLS-1$
         }
 
         protected Object[] getArgs() {
@@ -227,8 +226,9 @@ public class StateChangePrepareTask extends AbstractWebController { // extends A
             }
 
             // pre
-            if (lFirst == null)
+            if (lFirst == null) {
                 return;
+            }
 
             final Collection<GeneralDomainObject> lAdditional = new Vector<GeneralDomainObject>();
             while (lAdmins.hasMoreElements()) {
