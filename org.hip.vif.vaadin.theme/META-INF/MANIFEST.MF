@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: VIF Default Skin
 Bundle-SymbolicName: org.hip.vif.vaadin.theme
-Bundle-Version: 1.2.0
+Bundle-Version: 1.2.0.qualifier
 Bundle-Vendor: RelationWare
 Fragment-Host: com.vaadin.server;bundle-version="7.4"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
