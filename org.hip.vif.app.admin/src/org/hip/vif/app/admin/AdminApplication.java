@@ -84,7 +84,7 @@ public class AdminApplication extends RiplaApplication { // NOPMD
             VaadinSession.getCurrent().getLockInstance().unlock();
         }
         final DBConnectionProber lDBProber = new DBConnectionProber();
-        if (!lDBProber.isUndefined() && !lDBProber.needsDBConfiguration()) {
+        if (lDBProber.isReady()) {
             initializePermissions();
         }
         super.beforeInitializeLayout();
@@ -99,18 +99,15 @@ public class AdminApplication extends RiplaApplication { // NOPMD
                 inBodyView.addComponent(getDftView(inConfiguration));
                 DBAccessWorkflow.getInitialWorkflow(inWorkflowListener, getUserAdmin()).startWorkflow();
                 return false;
-            }
-            else if (lProber.needsTableCreation()) {
+            } else if (lProber.needsTableCreation()) {
                 inBodyView.addComponent(getDftView(inConfiguration));
                 DBAccessWorkflow.getInitialTblCreation(inWorkflowListener, getUserAdmin()).startWorkflow();
                 return false;
-            }
-            else if (lProber.needsSUCreation()) {
+            } else if (lProber.needsSUCreation()) {
                 inBodyView.addComponent(getDftView(inConfiguration));
                 DBAccessWorkflow.getCreateSUWorkflow(inWorkflowListener).startWorkflow();
                 return false;
-            }
-            else if (lProber.isUndefined()) {
+            } else if (lProber.isUndefined()) {
                 LOG.error("Undefined problem encountered while trying to access the DB connection!"); //$NON-NLS-1$
                 Notification.show(Activator.getMessages().getMessage("errmsg.init.dbaccess"), Type.ERROR_MESSAGE); //$NON-NLS-1$
             }

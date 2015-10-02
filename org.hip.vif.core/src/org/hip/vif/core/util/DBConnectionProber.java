@@ -105,6 +105,11 @@ public class DBConnectionProber {
         return state == ProbingState.ACCESS;
     }
 
+    /** @return boolean <code>true</code> if the probing indicates db configuration and access is ready */
+    public boolean isReady() {
+        return state == ProbingState.READY;
+    }
+
     /** @return boolean <code>true</code> if the probing indicates that the application's member table is empty
      * @throws SQLException
      * @throws BOMException */
