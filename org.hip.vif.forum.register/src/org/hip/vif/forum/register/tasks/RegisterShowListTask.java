@@ -20,8 +20,8 @@
 package org.hip.vif.forum.register.tasks;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import org.hip.kernel.bom.KeyObject;
 import org.hip.kernel.bom.KeyObject.BinaryBooleanOperator;
@@ -35,7 +35,6 @@ import org.hip.vif.core.bom.ParticipantHome;
 import org.hip.vif.core.bom.VIFGroupWorkflow;
 import org.hip.vif.core.bom.impl.NestedGroupHome;
 import org.hip.vif.core.code.GroupState;
-import org.hip.vif.core.exc.BOMChangeValueException;
 import org.hip.vif.forum.register.Activator;
 import org.hip.vif.forum.register.Constants;
 import org.hip.vif.forum.register.data.GroupContainer;
@@ -99,7 +98,7 @@ public class RegisterShowListTask extends AbstractWebController {
      *
      * @return {@link Feedback} */
     public Feedback saveRegisterings() {
-        final Collection<Long> lRegisterings = new Vector<Long>();
+        final Collection<Long> lRegisterings = new ArrayList<Long>();
         for (final GroupWrapper lGroup : groups.getItemIds()) {
             if (lGroup.isChecked()) {
                 lRegisterings.add(lGroup.getGroupID());
@@ -111,7 +110,7 @@ public class RegisterShowListTask extends AbstractWebController {
             final Long lActorID = getActor().getActorID();
             final ParticipantHome lHome = VifBOMHelper.getParticipantHome();
             final boolean isParticipantStart = lHome.isParticipant(lActorID);
-            final Collection<Long> lForbidden = lHome.saveRegisterings(lActorID, new Vector<Long>(lRegisterings));
+            final Collection<Long> lForbidden = lHome.saveRegisterings(lActorID, new ArrayList<Long>(lRegisterings));
             final boolean isParticipantEnd = lHome.isParticipant(lActorID);
 
             // actualize participant role
@@ -133,13 +132,7 @@ public class RegisterShowListTask extends AbstractWebController {
             }
             return new Feedback(
                     lMessages.getMessage("ui.register.feedback.saved"), Notification.Type.TRAY_NOTIFICATION, groups); //$NON-NLS-1$
-        } catch (final BOMChangeValueException exc) {
-            LOG.error("Error while saving the registerings!", exc); //$NON-NLS-1$
-            return new Feedback(lMessages.getMessage("errmsg.general"), Notification.Type.ERROR_MESSAGE, groups); //$NON-NLS-1$
-        } catch (final VException exc) {
-            LOG.error("Error while saving the registerings!", exc); //$NON-NLS-1$
-            return new Feedback(lMessages.getMessage("errmsg.general"), Notification.Type.ERROR_MESSAGE, groups); //$NON-NLS-1$
-        } catch (final SQLException exc) {
+        } catch (VException | SQLException exc) {
             LOG.error("Error while saving the registerings!", exc); //$NON-NLS-1$
             return new Feedback(lMessages.getMessage("errmsg.general"), Notification.Type.ERROR_MESSAGE, groups); //$NON-NLS-1$
         }

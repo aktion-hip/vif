@@ -182,7 +182,7 @@ public abstract class AbstractNotification extends VObject implements IVIFMail {
 
     protected static StringBuffer getSubjectID() {
         final String out = getPreference(PreferencesHandler.KEY_MAIL_SUBJECT_ID);
-        return new StringBuffer(out.length() == 0 ? DEFAULT_SUBJECT_ID : out);
+        return new StringBuffer(out.isEmpty() ? DEFAULT_SUBJECT_ID : out);
     }
 
     /** Creates the greetings of the mail. Subclasses may overwrite this method.

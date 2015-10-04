@@ -42,7 +42,7 @@ public class GroupStateChangeNotification extends AbstractNotification
 
     /** GroupStateChangeNotification constructor. This constructor should be used if the mail subject and body are set
      * manually.
-     * 
+     *
      * @param inReceiverMails InternetAddress[]
      * @param isBcc boolean True if receiver addresses are set in the mailBcc, else they are set in the mailTo
      * @throws MailGenerationException */
@@ -53,7 +53,7 @@ public class GroupStateChangeNotification extends AbstractNotification
     }
 
     /** GroupStateChangeNotification constructor to create the automatic notification mail.
-     * 
+     *
      * @param inReceiverMails InternetAddress[]
      * @param inMessage String The message explaining the new state of the group.
      * @param inGroupName String
@@ -64,12 +64,12 @@ public class GroupStateChangeNotification extends AbstractNotification
             final String inGroupName, final boolean isBcc)
                     throws MailGenerationException {
         super(inReceiverMails, isBcc);
-        subject = getSubject(inGroupName);
+        subject = messages.getFormattedMessage(KEY_SUBJECT, inGroupName);
         body = getBody(inGroupName, inMessage);
     }
 
     /** Creates the default subject text for the notification of group state changes.
-     * 
+     *
      * @param inGroupName String
      * @return String */
     public static String getSubject(final String inGroupName) {
@@ -85,7 +85,7 @@ public class GroupStateChangeNotification extends AbstractNotification
     }
 
     /** Creates the default message for the notification of group state changes.
-     * 
+     *
      * @param inGroupName String
      * @param inMessage String The message explaining the new state of the group.
      * @return String */
@@ -110,14 +110,14 @@ public class GroupStateChangeNotification extends AbstractNotification
     }
 
     /** Method to set the mail's message body manually.
-     * 
+     *
      * @param inBody String */
     public void setBody(final String inBody) {
         body = inBody;
     }
 
     /** Method to set the mail's subject manually.
-     * 
+     *
      * @param inSubject String */
     public void setSubject(final String inSubject) {
         subject = inSubject;
